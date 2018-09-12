@@ -1,0 +1,87 @@
+/*******************************************************************************
+* Instrument: <instrument name>
+*
+* %I
+* Written by: <your name (email)>
+* Date: <current date>
+* Origin: <your institution>
+* %INSTRUMENT_SITE: Templates
+*
+* <instrument short description>
+*
+* %D
+* <instrument description>
+*
+* Example: <parameters=values>
+*
+* %P
+* <parameter1>: [<unit>] <parameter1 description>
+* ...
+*
+* %L
+* <reference/HTML link>
+*
+* %E
+*******************************************************************************/
+DEFINE INSTRUMENT template_body_simple(Par1=1)
+
+DECLARE
+%{
+double DM         = 3.355;   /* Monochromator d-spacing in Angs */
+%}
+
+INITIALIZE
+%{
+%}
+
+TRACE
+
+COMPONENT origin = Progress_bar()
+AT (0, 0, 0) RELATIVE ABSOLUTE
+
+// insert components here (e.g. Insert -> Source -> ...)
+
+COMPONENT source_simple = Source_simple(
+    radius=1e-6, 
+    dist=1.2, 
+    focus_xw=0.0115, 
+    focus_yh=0.0115, 
+    E0=20)
+AT (0, 0, 0) RELATIVE PREVIOUS
+
+COMPONENT Mono_Cradle = Arm()
+  AT (0, 0, 1) RELATIVE PREVIOUS  
+
+COMPONENT monochromator_flat = Monochromator_flat(
+    mosaich=36, 
+    mosaicv=36, 
+    r0=0.029, 
+    DM=DM)
+AT (0, 0, 0) RELATIVE Mono_Cradle
+
+/*                                on mono, pointing towards sample */
+COMPONENT Mono_Out = Arm()
+  AT (0,0,0.0002) RELATIVE Mono_Cradle ROTATED (0, 17.5421/180*PI, 0) RELATIVE PREVIOUS
+
+COMPONENT beamstop = Beamstop(
+    xmin=-0.0005, 
+    xmax=0.0005, 
+    ymin=-0.0005, 
+    ymax=0.0005)
+AT (0, 0, 0.2) RELATIVE PREVIOUS
+
+COMPONENT psd_monitor = PSD_monitor(
+    filename="test_fil_analyser")
+AT (0,0,1) RELATIVE PREVIOUS
+
+
+
+
+
+
+
+FINALLY
+%{
+%}
+
+END
