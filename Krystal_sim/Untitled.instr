@@ -50,32 +50,36 @@ COMPONENT source_simple = Source_simple(
 AT (0, 0, 0) RELATIVE PREVIOUS
 
 COMPONENT Mono_Cradle = Arm()
-  AT (0, 0, 1) RELATIVE PREVIOUS  
+  AT (0.0, 0.001, 1) RELATIVE PREVIOUS  ROTATED (0,-95, 0) RELATIVE PREVIOUS
 
-COMPONENT monochromator_flat = Monochromator_flat(
-    mosaich=36, 
-    mosaicv=36, 
-    r0=0.029, 
-    DM=DM)
-AT (0, 0, 0) RELATIVE Mono_Cradle
+//COMPONENT monochromator_flat = Monochromator_flat(
+//    mosaich=36, 
+//    mosaicv=36, 
+//    r0=0.029, 
+//    DM=DM)
+//AT (0, 0, 0) RELATIVE Mono_Cradle
+COMPONENT mirror = Mirror(
+    xwidth=0.1, 
+    yheight=0.1)
+AT (0, 0, 0) RELATIVE PREVIOUS
 
 /*                                on mono, pointing towards sample */
 COMPONENT Mono_Out = Arm()
-  AT (0,0,0.0002) RELATIVE Mono_Cradle ROTATED (0, 17.5421/180*PI, 0) RELATIVE PREVIOUS
+  AT (0,0,0.0002) RELATIVE Mono_Cradle ROTATED(0,17.5421,0) RELATIVE PREVIOUS
 
 COMPONENT beamstop = Beamstop(
     xmin=-0.0005, 
     xmax=0.0005, 
     ymin=-0.0005, 
     ymax=0.0005)
-AT (0, 0, 0.2) RELATIVE PREVIOUS
-
+AT (0, 0, 0.9) RELATIVE PREVIOUS
 COMPONENT psd_monitor = PSD_monitor(
-    filename="test_fil_analyser")
-AT (0,0,1) RELATIVE PREVIOUS
-
-
-
+    filename="test_fil_analyser""0", 
+    xmin=-0.01, 
+    xmax=0.01, 
+    ymin=-0.01, 
+    ymax=0.01)
+AT (0, 0, 0.1) RELATIVE PREVIOUS
 
 
 
