@@ -2,7 +2,7 @@
  * Format:     ANSI C source code
  * Creator:    McStas <http://www.mcstas.org>
  * Instrument: Untitled.instr (template_body_simple)
- * Date:       Mon Sep 10 12:50:18 2018
+ * Date:       Thu Sep 20 10:50:58 2018
  * File:       ./Untitled.c
  * Compile:    cc -o template_body_simple.out ./Untitled.c 
  * CFLAGS=
@@ -5256,12 +5256,14 @@ double Gauss_W[] = {0.030753241996117, 0.070366047488108, 0.107159220467172,
 #line 5256 "./Untitled.c"
 
 /* Instrument parameters. */
-MCNUM mcipPar1;
+MCNUM mcipOMA;
+MCNUM mcipTTA;
 
-#define mcNUMIPAR 1
-int mcnumipar = 1;
+#define mcNUMIPAR 2
+int mcnumipar = 2;
 struct mcinputtable_struct mcinputtable[mcNUMIPAR+1] = {
-  "Par1", &mcipPar1, instr_type_double, "1", 
+  "OMA", &mcipOMA, instr_type_double, "37.072", 
+  "TTA", &mcipTTA, instr_type_double, "74.144", 
   NULL, NULL, instr_type_double, ""
 };
 
@@ -5270,11 +5272,14 @@ struct mcinputtable_struct mcinputtable[mcNUMIPAR+1] = {
 #define mccompcurtype  INSTRUMENT
 #define mccompcurindex 0
 #define mcposatemplate_body_simple coords_set(0,0,0)
-#define Par1 mcipPar1
+#define OMA mcipOMA
+#define TTA mcipTTA
 #line 30 "Untitled.instr"
 double DM         = 3.355;   /* Monochromator d-spacing in Angs */
-#line 5276 "./Untitled.c"
-#undef Par1
+double wi		  = 0.01; 	/* Monochromator width*/
+#line 5280 "./Untitled.c"
+#undef TTA
+#undef OMA
 #undef mcposatemplate_body_simple
 #undef mccompcurindex
 #undef mccompcurtype
@@ -5282,17 +5287,17 @@ double DM         = 3.355;   /* Monochromator d-spacing in Angs */
 
 /* neutron state table at each component input (local coords) */
 /* [x, y, z, vx, vy, vz, t, sx, sy, sz, p] */
-MCNUM mccomp_storein[11*9];
+MCNUM mccomp_storein[11*16];
 /* Components position table (absolute and relative coords) */
-Coords mccomp_posa[9];
-Coords mccomp_posr[9];
+Coords mccomp_posa[16];
+Coords mccomp_posr[16];
 /* Counter for each comp to check for inactive ones */
-MCNUM  mcNCounter[9];
-MCNUM  mcPCounter[9];
-MCNUM  mcP2Counter[9];
-#define mcNUMCOMP 8 /* number of components */
+MCNUM  mcNCounter[16];
+MCNUM  mcPCounter[16];
+MCNUM  mcP2Counter[16];
+#define mcNUMCOMP 15 /* number of components */
 /* Counter for PROP ABSORB */
-MCNUM  mcAbsorbProp[9];
+MCNUM  mcAbsorbProp[16];
 /* Flag true when previous component acted on the neutron (SCATTER) */
 MCNUM mcScattered=0;
 /* Flag true when neutron should be restored (RESTORE) */
@@ -5320,7 +5325,7 @@ MCNUM mccsource_simple_flux;
 MCNUM mccsource_simple_gauss;
 int mccsource_simple_target_index;
 
-/* Setting parameters for component 'monochromator_flat' [4]. */
+/* Setting parameters for component 'monochromator_flat' [5]. */
 MCNUM mccmonochromator_flat_zmin;
 MCNUM mccmonochromator_flat_zmax;
 MCNUM mccmonochromator_flat_ymin;
@@ -5333,7 +5338,85 @@ MCNUM mccmonochromator_flat_r0;
 MCNUM mccmonochromator_flat_Q;
 MCNUM mccmonochromator_flat_DM;
 
-/* Setting parameters for component 'beamstop' [6]. */
+/* Setting parameters for component 'monochromator2' [6]. */
+MCNUM mccmonochromator2_zmin;
+MCNUM mccmonochromator2_zmax;
+MCNUM mccmonochromator2_ymin;
+MCNUM mccmonochromator2_ymax;
+MCNUM mccmonochromator2_zwidth;
+MCNUM mccmonochromator2_yheight;
+MCNUM mccmonochromator2_mosaich;
+MCNUM mccmonochromator2_mosaicv;
+MCNUM mccmonochromator2_r0;
+MCNUM mccmonochromator2_Q;
+MCNUM mccmonochromator2_DM;
+
+/* Setting parameters for component 'monochromator3' [7]. */
+MCNUM mccmonochromator3_zmin;
+MCNUM mccmonochromator3_zmax;
+MCNUM mccmonochromator3_ymin;
+MCNUM mccmonochromator3_ymax;
+MCNUM mccmonochromator3_zwidth;
+MCNUM mccmonochromator3_yheight;
+MCNUM mccmonochromator3_mosaich;
+MCNUM mccmonochromator3_mosaicv;
+MCNUM mccmonochromator3_r0;
+MCNUM mccmonochromator3_Q;
+MCNUM mccmonochromator3_DM;
+
+/* Setting parameters for component 'monochromator4' [8]. */
+MCNUM mccmonochromator4_zmin;
+MCNUM mccmonochromator4_zmax;
+MCNUM mccmonochromator4_ymin;
+MCNUM mccmonochromator4_ymax;
+MCNUM mccmonochromator4_zwidth;
+MCNUM mccmonochromator4_yheight;
+MCNUM mccmonochromator4_mosaich;
+MCNUM mccmonochromator4_mosaicv;
+MCNUM mccmonochromator4_r0;
+MCNUM mccmonochromator4_Q;
+MCNUM mccmonochromator4_DM;
+
+/* Setting parameters for component 'monochromator5' [9]. */
+MCNUM mccmonochromator5_zmin;
+MCNUM mccmonochromator5_zmax;
+MCNUM mccmonochromator5_ymin;
+MCNUM mccmonochromator5_ymax;
+MCNUM mccmonochromator5_zwidth;
+MCNUM mccmonochromator5_yheight;
+MCNUM mccmonochromator5_mosaich;
+MCNUM mccmonochromator5_mosaicv;
+MCNUM mccmonochromator5_r0;
+MCNUM mccmonochromator5_Q;
+MCNUM mccmonochromator5_DM;
+
+/* Setting parameters for component 'monochromator6' [10]. */
+MCNUM mccmonochromator6_zmin;
+MCNUM mccmonochromator6_zmax;
+MCNUM mccmonochromator6_ymin;
+MCNUM mccmonochromator6_ymax;
+MCNUM mccmonochromator6_zwidth;
+MCNUM mccmonochromator6_yheight;
+MCNUM mccmonochromator6_mosaich;
+MCNUM mccmonochromator6_mosaicv;
+MCNUM mccmonochromator6_r0;
+MCNUM mccmonochromator6_Q;
+MCNUM mccmonochromator6_DM;
+
+/* Setting parameters for component 'monochromator7' [11]. */
+MCNUM mccmonochromator7_zmin;
+MCNUM mccmonochromator7_zmax;
+MCNUM mccmonochromator7_ymin;
+MCNUM mccmonochromator7_ymax;
+MCNUM mccmonochromator7_zwidth;
+MCNUM mccmonochromator7_yheight;
+MCNUM mccmonochromator7_mosaich;
+MCNUM mccmonochromator7_mosaicv;
+MCNUM mccmonochromator7_r0;
+MCNUM mccmonochromator7_Q;
+MCNUM mccmonochromator7_DM;
+
+/* Setting parameters for component 'beamstop' [13]. */
 MCNUM mccbeamstop_xmin;
 MCNUM mccbeamstop_xmax;
 MCNUM mccbeamstop_ymin;
@@ -5342,10 +5425,10 @@ MCNUM mccbeamstop_xwidth;
 MCNUM mccbeamstop_yheight;
 MCNUM mccbeamstop_radius;
 
-/* Definition parameters for component 'psd_monitor' [7]. */
+/* Definition parameters for component 'psd_monitor' [14]. */
 #define mccpsd_monitor_nx 90
 #define mccpsd_monitor_ny 90
-/* Setting parameters for component 'psd_monitor' [7]. */
+/* Setting parameters for component 'psd_monitor' [14]. */
 char mccpsd_monitor_filename[16384];
 MCNUM mccpsd_monitor_xmin;
 MCNUM mccpsd_monitor_xmax;
@@ -5380,7 +5463,7 @@ double IntermediateCnts;
 time_t StartTime;
 time_t EndTime;
 time_t CurrentTime;
-#line 5383 "./Untitled.c"
+#line 5466 "./Untitled.c"
 #undef minutes
 #undef flag_save
 #undef percent
@@ -5416,7 +5499,7 @@ time_t CurrentTime;
 #line 60 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../sources/Source_simple.comp"
 double pmul, srcArea;
 int square;
-#line 5419 "./Untitled.c"
+#line 5502 "./Untitled.c"
 #undef target_index
 #undef gauss
 #undef flux
@@ -5445,10 +5528,18 @@ int square;
 #undef mccompcurtype
 #undef mccompcurindex
 
-/* User declarations for component 'monochromator_flat' [4]. */
+/* User declarations for component 'XY_ARM' [4]. */
+#define mccompcurname  XY_ARM
+#define mccompcurtype  Arm
+#define mccompcurindex 4
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'monochromator_flat' [5]. */
 #define mccompcurname  monochromator_flat
 #define mccompcurtype  Monochromator_flat
-#define mccompcurindex 4
+#define mccompcurindex 5
 #define mos_rms_y mccmonochromator_flat_mos_rms_y
 #define mos_rms_z mccmonochromator_flat_mos_rms_z
 #define mos_rms_max mccmonochromator_flat_mos_rms_max
@@ -5469,7 +5560,7 @@ int square;
   double mos_rms_z;
   double mos_rms_max;
   double mono_Q;
-#line 5472 "./Untitled.c"
+#line 5563 "./Untitled.c"
 #undef DM
 #undef Q
 #undef r0
@@ -5489,18 +5580,282 @@ int square;
 #undef mccompcurtype
 #undef mccompcurindex
 
-/* User declarations for component 'Mono_Out' [5]. */
-#define mccompcurname  Mono_Out
-#define mccompcurtype  Arm
-#define mccompcurindex 5
+/* User declarations for component 'monochromator2' [6]. */
+#define mccompcurname  monochromator2
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 6
+#define mos_rms_y mccmonochromator2_mos_rms_y
+#define mos_rms_z mccmonochromator2_mos_rms_z
+#define mos_rms_max mccmonochromator2_mos_rms_max
+#define mono_Q mccmonochromator2_mono_Q
+#define zmin mccmonochromator2_zmin
+#define zmax mccmonochromator2_zmax
+#define ymin mccmonochromator2_ymin
+#define ymax mccmonochromator2_ymax
+#define zwidth mccmonochromator2_zwidth
+#define yheight mccmonochromator2_yheight
+#define mosaich mccmonochromator2_mosaich
+#define mosaicv mccmonochromator2_mosaicv
+#define r0 mccmonochromator2_r0
+#define Q mccmonochromator2_Q
+#define DM mccmonochromator2_DM
+#line 95 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+  double mos_rms_y; /* root-mean-square of mosaic, in radians */
+  double mos_rms_z;
+  double mos_rms_max;
+  double mono_Q;
+#line 5607 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
 #undef mccompcurname
 #undef mccompcurtype
 #undef mccompcurindex
 
-/* User declarations for component 'beamstop' [6]. */
+/* User declarations for component 'monochromator3' [7]. */
+#define mccompcurname  monochromator3
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 7
+#define mos_rms_y mccmonochromator3_mos_rms_y
+#define mos_rms_z mccmonochromator3_mos_rms_z
+#define mos_rms_max mccmonochromator3_mos_rms_max
+#define mono_Q mccmonochromator3_mono_Q
+#define zmin mccmonochromator3_zmin
+#define zmax mccmonochromator3_zmax
+#define ymin mccmonochromator3_ymin
+#define ymax mccmonochromator3_ymax
+#define zwidth mccmonochromator3_zwidth
+#define yheight mccmonochromator3_yheight
+#define mosaich mccmonochromator3_mosaich
+#define mosaicv mccmonochromator3_mosaicv
+#define r0 mccmonochromator3_r0
+#define Q mccmonochromator3_Q
+#define DM mccmonochromator3_DM
+#line 95 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+  double mos_rms_y; /* root-mean-square of mosaic, in radians */
+  double mos_rms_z;
+  double mos_rms_max;
+  double mono_Q;
+#line 5651 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'monochromator4' [8]. */
+#define mccompcurname  monochromator4
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 8
+#define mos_rms_y mccmonochromator4_mos_rms_y
+#define mos_rms_z mccmonochromator4_mos_rms_z
+#define mos_rms_max mccmonochromator4_mos_rms_max
+#define mono_Q mccmonochromator4_mono_Q
+#define zmin mccmonochromator4_zmin
+#define zmax mccmonochromator4_zmax
+#define ymin mccmonochromator4_ymin
+#define ymax mccmonochromator4_ymax
+#define zwidth mccmonochromator4_zwidth
+#define yheight mccmonochromator4_yheight
+#define mosaich mccmonochromator4_mosaich
+#define mosaicv mccmonochromator4_mosaicv
+#define r0 mccmonochromator4_r0
+#define Q mccmonochromator4_Q
+#define DM mccmonochromator4_DM
+#line 95 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+  double mos_rms_y; /* root-mean-square of mosaic, in radians */
+  double mos_rms_z;
+  double mos_rms_max;
+  double mono_Q;
+#line 5695 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'monochromator5' [9]. */
+#define mccompcurname  monochromator5
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 9
+#define mos_rms_y mccmonochromator5_mos_rms_y
+#define mos_rms_z mccmonochromator5_mos_rms_z
+#define mos_rms_max mccmonochromator5_mos_rms_max
+#define mono_Q mccmonochromator5_mono_Q
+#define zmin mccmonochromator5_zmin
+#define zmax mccmonochromator5_zmax
+#define ymin mccmonochromator5_ymin
+#define ymax mccmonochromator5_ymax
+#define zwidth mccmonochromator5_zwidth
+#define yheight mccmonochromator5_yheight
+#define mosaich mccmonochromator5_mosaich
+#define mosaicv mccmonochromator5_mosaicv
+#define r0 mccmonochromator5_r0
+#define Q mccmonochromator5_Q
+#define DM mccmonochromator5_DM
+#line 95 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+  double mos_rms_y; /* root-mean-square of mosaic, in radians */
+  double mos_rms_z;
+  double mos_rms_max;
+  double mono_Q;
+#line 5739 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'monochromator6' [10]. */
+#define mccompcurname  monochromator6
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 10
+#define mos_rms_y mccmonochromator6_mos_rms_y
+#define mos_rms_z mccmonochromator6_mos_rms_z
+#define mos_rms_max mccmonochromator6_mos_rms_max
+#define mono_Q mccmonochromator6_mono_Q
+#define zmin mccmonochromator6_zmin
+#define zmax mccmonochromator6_zmax
+#define ymin mccmonochromator6_ymin
+#define ymax mccmonochromator6_ymax
+#define zwidth mccmonochromator6_zwidth
+#define yheight mccmonochromator6_yheight
+#define mosaich mccmonochromator6_mosaich
+#define mosaicv mccmonochromator6_mosaicv
+#define r0 mccmonochromator6_r0
+#define Q mccmonochromator6_Q
+#define DM mccmonochromator6_DM
+#line 95 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+  double mos_rms_y; /* root-mean-square of mosaic, in radians */
+  double mos_rms_z;
+  double mos_rms_max;
+  double mono_Q;
+#line 5783 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'monochromator7' [11]. */
+#define mccompcurname  monochromator7
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 11
+#define mos_rms_y mccmonochromator7_mos_rms_y
+#define mos_rms_z mccmonochromator7_mos_rms_z
+#define mos_rms_max mccmonochromator7_mos_rms_max
+#define mono_Q mccmonochromator7_mono_Q
+#define zmin mccmonochromator7_zmin
+#define zmax mccmonochromator7_zmax
+#define ymin mccmonochromator7_ymin
+#define ymax mccmonochromator7_ymax
+#define zwidth mccmonochromator7_zwidth
+#define yheight mccmonochromator7_yheight
+#define mosaich mccmonochromator7_mosaich
+#define mosaicv mccmonochromator7_mosaicv
+#define r0 mccmonochromator7_r0
+#define Q mccmonochromator7_Q
+#define DM mccmonochromator7_DM
+#line 95 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+  double mos_rms_y; /* root-mean-square of mosaic, in radians */
+  double mos_rms_z;
+  double mos_rms_max;
+  double mono_Q;
+#line 5827 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'Mono_Out' [12]. */
+#define mccompcurname  Mono_Out
+#define mccompcurtype  Arm
+#define mccompcurindex 12
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+/* User declarations for component 'beamstop' [13]. */
 #define mccompcurname  beamstop
 #define mccompcurtype  Beamstop
-#define mccompcurindex 6
+#define mccompcurindex 13
 #define xmin mccbeamstop_xmin
 #define xmax mccbeamstop_xmax
 #define ymin mccbeamstop_ymin
@@ -5519,10 +5874,10 @@ int square;
 #undef mccompcurtype
 #undef mccompcurindex
 
-/* User declarations for component 'psd_monitor' [7]. */
+/* User declarations for component 'psd_monitor' [14]. */
 #define mccompcurname  psd_monitor
 #define mccompcurtype  PSD_monitor
-#define mccompcurindex 7
+#define mccompcurindex 14
 #define nx mccpsd_monitor_nx
 #define ny mccpsd_monitor_ny
 #define PSD_N mccpsd_monitor_PSD_N
@@ -5540,7 +5895,7 @@ int square;
 double PSD_N[nx][ny];
 double PSD_p[nx][ny];
 double PSD_p2[nx][ny];
-#line 5543 "./Untitled.c"
+#line 5898 "./Untitled.c"
 #undef restore_neutron
 #undef yheight
 #undef xwidth
@@ -5564,8 +5919,22 @@ Coords mcposasource_simple, mcposrsource_simple;
 Rotation mcrotasource_simple, mcrotrsource_simple;
 Coords mcposaMono_Cradle, mcposrMono_Cradle;
 Rotation mcrotaMono_Cradle, mcrotrMono_Cradle;
+Coords mcposaXY_ARM, mcposrXY_ARM;
+Rotation mcrotaXY_ARM, mcrotrXY_ARM;
 Coords mcposamonochromator_flat, mcposrmonochromator_flat;
 Rotation mcrotamonochromator_flat, mcrotrmonochromator_flat;
+Coords mcposamonochromator2, mcposrmonochromator2;
+Rotation mcrotamonochromator2, mcrotrmonochromator2;
+Coords mcposamonochromator3, mcposrmonochromator3;
+Rotation mcrotamonochromator3, mcrotrmonochromator3;
+Coords mcposamonochromator4, mcposrmonochromator4;
+Rotation mcrotamonochromator4, mcrotrmonochromator4;
+Coords mcposamonochromator5, mcposrmonochromator5;
+Rotation mcrotamonochromator5, mcrotrmonochromator5;
+Coords mcposamonochromator6, mcposrmonochromator6;
+Rotation mcrotamonochromator6, mcrotrmonochromator6;
+Coords mcposamonochromator7, mcposrmonochromator7;
+Rotation mcrotamonochromator7, mcrotrmonochromator7;
 Coords mcposaMono_Out, mcposrMono_Out;
 Rotation mcrotaMono_Out, mcrotrMono_Out;
 Coords mcposabeamstop, mcposrbeamstop;
@@ -5582,8 +5951,10 @@ void mcinit(void) {
 #define mccompcurtype  INSTRUMENT
 #define mccompcurindex 0
 #define mcposatemplate_body_simple coords_set(0,0,0)
-#define Par1 mcipPar1
-#undef Par1
+#define OMA mcipOMA
+#define TTA mcipTTA
+#undef TTA
+#undef OMA
 #undef mcposatemplate_body_simple
 #undef mccompcurindex
 #undef mccompcurtype
@@ -5609,23 +5980,23 @@ void mcinit(void) {
   mccorigin_flag_save = 0;
 #line 39 "Untitled.instr"
   mccorigin_minutes = 0;
-#line 5612 "./Untitled.c"
+#line 5983 "./Untitled.c"
 
   SIG_MESSAGE("origin (Init:Place/Rotate)");
   rot_set_rotation(mcrotaorigin,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5619 "./Untitled.c"
+#line 5990 "./Untitled.c"
   rot_copy(mcrotrorigin, mcrotaorigin);
   mcposaorigin = coords_set(
-#line 40 "Untitled.instr"
+#line 41 "Untitled.instr"
     0,
-#line 40 "Untitled.instr"
+#line 41 "Untitled.instr"
     0,
-#line 40 "Untitled.instr"
+#line 41 "Untitled.instr"
     0);
-#line 5628 "./Untitled.c"
+#line 5999 "./Untitled.c"
   mctc1 = coords_neg(mcposaorigin);
   mcposrorigin = rot_apply(mcrotaorigin, mctc1);
   mcDEBUG_COMPONENT("origin", mcposaorigin, mcrotaorigin)
@@ -5636,20 +6007,20 @@ void mcinit(void) {
     /* Component source_simple. */
   /* Setting parameters for component source_simple. */
   SIG_MESSAGE("source_simple (Init:SetPar)");
-#line 45 "Untitled.instr"
+#line 46 "Untitled.instr"
   mccsource_simple_radius = 1e-6;
 #line 52 "Untitled.instr"
   mccsource_simple_yheight = 0;
 #line 52 "Untitled.instr"
   mccsource_simple_xwidth = 0;
-#line 46 "Untitled.instr"
-  mccsource_simple_dist = 1.2;
 #line 47 "Untitled.instr"
-  mccsource_simple_focus_xw = 0.0115;
+  mccsource_simple_dist = 1.2;
 #line 48 "Untitled.instr"
-  mccsource_simple_focus_yh = 0.0115;
+  mccsource_simple_focus_xw = 0.05;
 #line 49 "Untitled.instr"
-  mccsource_simple_E0 = 20;
+  mccsource_simple_focus_yh = 0.1;
+#line 50 "Untitled.instr"
+  mccsource_simple_E0 = 5;
 #line 54 "Untitled.instr"
   mccsource_simple_dE = 0;
 #line 54 "Untitled.instr"
@@ -5662,25 +6033,25 @@ void mcinit(void) {
   mccsource_simple_gauss = 0;
 #line 55 "Untitled.instr"
   mccsource_simple_target_index = + 1;
-#line 5665 "./Untitled.c"
+#line 6036 "./Untitled.c"
 
   SIG_MESSAGE("source_simple (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5672 "./Untitled.c"
+#line 6043 "./Untitled.c"
   rot_mul(mctr1, mcrotaorigin, mcrotasource_simple);
   rot_transpose(mcrotaorigin, mctr1);
   rot_mul(mcrotasource_simple, mctr1, mcrotrsource_simple);
   mctc1 = coords_set(
-#line 50 "Untitled.instr"
+#line 51 "Untitled.instr"
     0,
-#line 50 "Untitled.instr"
+#line 51 "Untitled.instr"
     0,
-#line 50 "Untitled.instr"
+#line 51 "Untitled.instr"
     0);
-#line 5683 "./Untitled.c"
+#line 6054 "./Untitled.c"
   rot_transpose(mcrotaorigin, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposasource_simple = coords_add(mcposaorigin, mctc2);
@@ -5697,21 +6068,24 @@ void mcinit(void) {
 
   SIG_MESSAGE("Mono_Cradle (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
-    (0.0)*DEG2RAD,
-    (0.0)*DEG2RAD,
-    (0.0)*DEG2RAD);
-#line 5703 "./Untitled.c"
+#line 54 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 54 "Untitled.instr"
+    (mcipOMA)*DEG2RAD,
+#line 54 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6077 "./Untitled.c"
   rot_mul(mctr1, mcrotasource_simple, mcrotaMono_Cradle);
   rot_transpose(mcrotasource_simple, mctr1);
   rot_mul(mcrotaMono_Cradle, mctr1, mcrotrMono_Cradle);
   mctc1 = coords_set(
-#line 53 "Untitled.instr"
-    0,
-#line 53 "Untitled.instr"
-    0,
-#line 53 "Untitled.instr"
-    1);
-#line 5714 "./Untitled.c"
+#line 54 "Untitled.instr"
+    0.0,
+#line 54 "Untitled.instr"
+    0.0,
+#line 54 "Untitled.instr"
+    1.2);
+#line 6088 "./Untitled.c"
   rot_transpose(mcrotasource_simple, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaMono_Cradle = coords_add(mcposasource_simple, mctc2);
@@ -5722,6 +6096,37 @@ void mcinit(void) {
   mccomp_posr[3] = mcposrMono_Cradle;
   mcNCounter[3]  = mcPCounter[3] = mcP2Counter[3] = 0;
   mcAbsorbProp[3]= 0;
+    /* Component XY_ARM. */
+  /* Setting parameters for component XY_ARM. */
+  SIG_MESSAGE("XY_ARM (Init:SetPar)");
+
+  SIG_MESSAGE("XY_ARM (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+    (0.0)*DEG2RAD,
+    (0.0)*DEG2RAD,
+    (0.0)*DEG2RAD);
+#line 6108 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotaXY_ARM);
+  rot_transpose(mcrotaMono_Cradle, mctr1);
+  rot_mul(mcrotaXY_ARM, mctr1, mcrotrXY_ARM);
+  mctc1 = coords_set(
+#line 57 "Untitled.instr"
+    0.0,
+#line 57 "Untitled.instr"
+    0.0,
+#line 57 "Untitled.instr"
+    1.2);
+#line 6119 "./Untitled.c"
+  rot_transpose(mcrotasource_simple, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposaXY_ARM = coords_add(mcposasource_simple, mctc2);
+  mctc1 = coords_sub(mcposaMono_Cradle, mcposaXY_ARM);
+  mcposrXY_ARM = rot_apply(mcrotaXY_ARM, mctc1);
+  mcDEBUG_COMPONENT("XY_ARM", mcposaXY_ARM, mcrotaXY_ARM)
+  mccomp_posa[4] = mcposaXY_ARM;
+  mccomp_posr[4] = mcposrXY_ARM;
+  mcNCounter[4]  = mcPCounter[4] = mcP2Counter[4] = 0;
+  mcAbsorbProp[4]= 0;
     /* Component monochromator_flat. */
   /* Setting parameters for component monochromator_flat. */
   SIG_MESSAGE("monochromator_flat (Init:SetPar)");
@@ -5733,93 +6138,435 @@ void mcinit(void) {
   mccmonochromator_flat_ymin = -0.05;
 #line 64 "Untitled.instr"
   mccmonochromator_flat_ymax = 0.05;
-#line 65 "Untitled.instr"
-  mccmonochromator_flat_zwidth = 0;
-#line 65 "Untitled.instr"
-  mccmonochromator_flat_yheight = 0;
-#line 56 "Untitled.instr"
+#line 62 "Untitled.instr"
+  mccmonochromator_flat_zwidth = wi;
+#line 63 "Untitled.instr"
+  mccmonochromator_flat_yheight = 0.231;
+#line 60 "Untitled.instr"
   mccmonochromator_flat_mosaich = 36;
-#line 57 "Untitled.instr"
+#line 61 "Untitled.instr"
   mccmonochromator_flat_mosaicv = 36;
-#line 58 "Untitled.instr"
-  mccmonochromator_flat_r0 = 0.029;
+#line 64 "Untitled.instr"
+  mccmonochromator_flat_r0 = 0.7;
 #line 66 "Untitled.instr"
   mccmonochromator_flat_Q = 1.8734;
-#line 59 "Untitled.instr"
+#line 65 "Untitled.instr"
   mccmonochromator_flat_DM = DM;
-#line 5750 "./Untitled.c"
+#line 6155 "./Untitled.c"
 
   SIG_MESSAGE("monochromator_flat (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5757 "./Untitled.c"
+#line 6162 "./Untitled.c"
   rot_mul(mctr1, mcrotaMono_Cradle, mcrotamonochromator_flat);
-  rot_transpose(mcrotaMono_Cradle, mctr1);
+  rot_transpose(mcrotaXY_ARM, mctr1);
   rot_mul(mcrotamonochromator_flat, mctr1, mcrotrmonochromator_flat);
   mctc1 = coords_set(
-#line 60 "Untitled.instr"
+#line 66 "Untitled.instr"
     0,
-#line 60 "Untitled.instr"
+#line 66 "Untitled.instr"
     0,
-#line 60 "Untitled.instr"
+#line 66 "Untitled.instr"
     0);
-#line 5768 "./Untitled.c"
+#line 6173 "./Untitled.c"
   rot_transpose(mcrotaMono_Cradle, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposamonochromator_flat = coords_add(mcposaMono_Cradle, mctc2);
-  mctc1 = coords_sub(mcposaMono_Cradle, mcposamonochromator_flat);
+  mctc1 = coords_sub(mcposaXY_ARM, mcposamonochromator_flat);
   mcposrmonochromator_flat = rot_apply(mcrotamonochromator_flat, mctc1);
   mcDEBUG_COMPONENT("monochromator_flat", mcposamonochromator_flat, mcrotamonochromator_flat)
-  mccomp_posa[4] = mcposamonochromator_flat;
-  mccomp_posr[4] = mcposrmonochromator_flat;
-  mcNCounter[4]  = mcPCounter[4] = mcP2Counter[4] = 0;
-  mcAbsorbProp[4]= 0;
+  mccomp_posa[5] = mcposamonochromator_flat;
+  mccomp_posr[5] = mcposrmonochromator_flat;
+  mcNCounter[5]  = mcPCounter[5] = mcP2Counter[5] = 0;
+  mcAbsorbProp[5]= 0;
+    /* Component monochromator2. */
+  /* Setting parameters for component monochromator2. */
+  SIG_MESSAGE("monochromator2 (Init:SetPar)");
+#line 64 "Untitled.instr"
+  mccmonochromator2_zmin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator2_zmax = 0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator2_ymin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator2_ymax = 0.05;
+#line 71 "Untitled.instr"
+  mccmonochromator2_zwidth = wi;
+#line 72 "Untitled.instr"
+  mccmonochromator2_yheight = 0.231;
+#line 69 "Untitled.instr"
+  mccmonochromator2_mosaich = 36;
+#line 70 "Untitled.instr"
+  mccmonochromator2_mosaicv = 36;
+#line 73 "Untitled.instr"
+  mccmonochromator2_r0 = 0.7;
+#line 66 "Untitled.instr"
+  mccmonochromator2_Q = 1.8734;
+#line 74 "Untitled.instr"
+  mccmonochromator2_DM = DM;
+#line 6209 "./Untitled.c"
+
+  SIG_MESSAGE("monochromator2 (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+#line 75 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 75 "Untitled.instr"
+    (36.643)*DEG2RAD,
+#line 75 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6219 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotamonochromator2);
+  rot_transpose(mcrotamonochromator_flat, mctr1);
+  rot_mul(mcrotamonochromator2, mctr1, mcrotrmonochromator2);
+  mctc1 = coords_set(
+#line 75 "Untitled.instr"
+    -0.008906,
+#line 75 "Untitled.instr"
+    0,
+#line 75 "Untitled.instr"
+    -0.0104);
+#line 6230 "./Untitled.c"
+  rot_transpose(mcrotaXY_ARM, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposamonochromator2 = coords_add(mcposaXY_ARM, mctc2);
+  mctc1 = coords_sub(mcposamonochromator_flat, mcposamonochromator2);
+  mcposrmonochromator2 = rot_apply(mcrotamonochromator2, mctc1);
+  mcDEBUG_COMPONENT("monochromator2", mcposamonochromator2, mcrotamonochromator2)
+  mccomp_posa[6] = mcposamonochromator2;
+  mccomp_posr[6] = mcposrmonochromator2;
+  mcNCounter[6]  = mcPCounter[6] = mcP2Counter[6] = 0;
+  mcAbsorbProp[6]= 0;
+    /* Component monochromator3. */
+  /* Setting parameters for component monochromator3. */
+  SIG_MESSAGE("monochromator3 (Init:SetPar)");
+#line 64 "Untitled.instr"
+  mccmonochromator3_zmin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator3_zmax = 0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator3_ymin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator3_ymax = 0.05;
+#line 80 "Untitled.instr"
+  mccmonochromator3_zwidth = wi;
+#line 81 "Untitled.instr"
+  mccmonochromator3_yheight = 0.231;
+#line 78 "Untitled.instr"
+  mccmonochromator3_mosaich = 36;
+#line 79 "Untitled.instr"
+  mccmonochromator3_mosaicv = 36;
+#line 82 "Untitled.instr"
+  mccmonochromator3_r0 = 0.7;
+#line 66 "Untitled.instr"
+  mccmonochromator3_Q = 1.8734;
+#line 83 "Untitled.instr"
+  mccmonochromator3_DM = DM;
+#line 6266 "./Untitled.c"
+
+  SIG_MESSAGE("monochromator3 (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+#line 84 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 84 "Untitled.instr"
+    (36.214)*DEG2RAD,
+#line 84 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6276 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotamonochromator3);
+  rot_transpose(mcrotamonochromator2, mctr1);
+  rot_mul(mcrotamonochromator3, mctr1, mcrotrmonochromator3);
+  mctc1 = coords_set(
+#line 84 "Untitled.instr"
+    -0.017655,
+#line 84 "Untitled.instr"
+    0,
+#line 84 "Untitled.instr"
+    -0.020935);
+#line 6287 "./Untitled.c"
+  rot_transpose(mcrotaXY_ARM, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposamonochromator3 = coords_add(mcposaXY_ARM, mctc2);
+  mctc1 = coords_sub(mcposamonochromator2, mcposamonochromator3);
+  mcposrmonochromator3 = rot_apply(mcrotamonochromator3, mctc1);
+  mcDEBUG_COMPONENT("monochromator3", mcposamonochromator3, mcrotamonochromator3)
+  mccomp_posa[7] = mcposamonochromator3;
+  mccomp_posr[7] = mcposrmonochromator3;
+  mcNCounter[7]  = mcPCounter[7] = mcP2Counter[7] = 0;
+  mcAbsorbProp[7]= 0;
+    /* Component monochromator4. */
+  /* Setting parameters for component monochromator4. */
+  SIG_MESSAGE("monochromator4 (Init:SetPar)");
+#line 64 "Untitled.instr"
+  mccmonochromator4_zmin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator4_zmax = 0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator4_ymin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator4_ymax = 0.05;
+#line 89 "Untitled.instr"
+  mccmonochromator4_zwidth = wi;
+#line 90 "Untitled.instr"
+  mccmonochromator4_yheight = 0.231;
+#line 87 "Untitled.instr"
+  mccmonochromator4_mosaich = 36;
+#line 88 "Untitled.instr"
+  mccmonochromator4_mosaicv = 36;
+#line 91 "Untitled.instr"
+  mccmonochromator4_r0 = 0.7;
+#line 66 "Untitled.instr"
+  mccmonochromator4_Q = 1.8734;
+#line 92 "Untitled.instr"
+  mccmonochromator4_DM = DM;
+#line 6323 "./Untitled.c"
+
+  SIG_MESSAGE("monochromator4 (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+#line 93 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 93 "Untitled.instr"
+    (35.785)*DEG2RAD,
+#line 93 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6333 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotamonochromator4);
+  rot_transpose(mcrotamonochromator3, mctr1);
+  rot_mul(mcrotamonochromator4, mctr1, mcrotrmonochromator4);
+  mctc1 = coords_set(
+#line 93 "Untitled.instr"
+    -0.026246,
+#line 93 "Untitled.instr"
+    0,
+#line 93 "Untitled.instr"
+    -0.031598);
+#line 6344 "./Untitled.c"
+  rot_transpose(mcrotaXY_ARM, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposamonochromator4 = coords_add(mcposaXY_ARM, mctc2);
+  mctc1 = coords_sub(mcposamonochromator3, mcposamonochromator4);
+  mcposrmonochromator4 = rot_apply(mcrotamonochromator4, mctc1);
+  mcDEBUG_COMPONENT("monochromator4", mcposamonochromator4, mcrotamonochromator4)
+  mccomp_posa[8] = mcposamonochromator4;
+  mccomp_posr[8] = mcposrmonochromator4;
+  mcNCounter[8]  = mcPCounter[8] = mcP2Counter[8] = 0;
+  mcAbsorbProp[8]= 0;
+    /* Component monochromator5. */
+  /* Setting parameters for component monochromator5. */
+  SIG_MESSAGE("monochromator5 (Init:SetPar)");
+#line 64 "Untitled.instr"
+  mccmonochromator5_zmin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator5_zmax = 0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator5_ymin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator5_ymax = 0.05;
+#line 98 "Untitled.instr"
+  mccmonochromator5_zwidth = wi;
+#line 99 "Untitled.instr"
+  mccmonochromator5_yheight = 0.231;
+#line 96 "Untitled.instr"
+  mccmonochromator5_mosaich = 36;
+#line 97 "Untitled.instr"
+  mccmonochromator5_mosaicv = 36;
+#line 100 "Untitled.instr"
+  mccmonochromator5_r0 = 0.7;
+#line 66 "Untitled.instr"
+  mccmonochromator5_Q = 1.8734;
+#line 101 "Untitled.instr"
+  mccmonochromator5_DM = DM;
+#line 6380 "./Untitled.c"
+
+  SIG_MESSAGE("monochromator5 (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+#line 102 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 102 "Untitled.instr"
+    (37.5)*DEG2RAD,
+#line 102 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6390 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotamonochromator5);
+  rot_transpose(mcrotamonochromator4, mctr1);
+  rot_mul(mcrotamonochromator5, mctr1, mcrotrmonochromator5);
+  mctc1 = coords_set(
+#line 102 "Untitled.instr"
+    0.009061,
+#line 102 "Untitled.instr"
+    0,
+#line 102 "Untitled.instr"
+    0.010267);
+#line 6401 "./Untitled.c"
+  rot_transpose(mcrotaXY_ARM, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposamonochromator5 = coords_add(mcposaXY_ARM, mctc2);
+  mctc1 = coords_sub(mcposamonochromator4, mcposamonochromator5);
+  mcposrmonochromator5 = rot_apply(mcrotamonochromator5, mctc1);
+  mcDEBUG_COMPONENT("monochromator5", mcposamonochromator5, mcrotamonochromator5)
+  mccomp_posa[9] = mcposamonochromator5;
+  mccomp_posr[9] = mcposrmonochromator5;
+  mcNCounter[9]  = mcPCounter[9] = mcP2Counter[9] = 0;
+  mcAbsorbProp[9]= 0;
+    /* Component monochromator6. */
+  /* Setting parameters for component monochromator6. */
+  SIG_MESSAGE("monochromator6 (Init:SetPar)");
+#line 64 "Untitled.instr"
+  mccmonochromator6_zmin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator6_zmax = 0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator6_ymin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator6_ymax = 0.05;
+#line 107 "Untitled.instr"
+  mccmonochromator6_zwidth = wi;
+#line 108 "Untitled.instr"
+  mccmonochromator6_yheight = 0.231;
+#line 105 "Untitled.instr"
+  mccmonochromator6_mosaich = 36;
+#line 106 "Untitled.instr"
+  mccmonochromator6_mosaicv = 36;
+#line 109 "Untitled.instr"
+  mccmonochromator6_r0 = 0.7;
+#line 66 "Untitled.instr"
+  mccmonochromator6_Q = 1.8734;
+#line 110 "Untitled.instr"
+  mccmonochromator6_DM = DM;
+#line 6437 "./Untitled.c"
+
+  SIG_MESSAGE("monochromator6 (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+#line 111 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 111 "Untitled.instr"
+    (37.929)*DEG2RAD,
+#line 111 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6447 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotamonochromator6);
+  rot_transpose(mcrotamonochromator5, mctr1);
+  rot_mul(mcrotamonochromator6, mctr1, mcrotrmonochromator6);
+  mctc1 = coords_set(
+#line 111 "Untitled.instr"
+    0.018274,
+#line 111 "Untitled.instr"
+    0,
+#line 111 "Untitled.instr"
+    0.020397);
+#line 6458 "./Untitled.c"
+  rot_transpose(mcrotaXY_ARM, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposamonochromator6 = coords_add(mcposaXY_ARM, mctc2);
+  mctc1 = coords_sub(mcposamonochromator5, mcposamonochromator6);
+  mcposrmonochromator6 = rot_apply(mcrotamonochromator6, mctc1);
+  mcDEBUG_COMPONENT("monochromator6", mcposamonochromator6, mcrotamonochromator6)
+  mccomp_posa[10] = mcposamonochromator6;
+  mccomp_posr[10] = mcposrmonochromator6;
+  mcNCounter[10]  = mcPCounter[10] = mcP2Counter[10] = 0;
+  mcAbsorbProp[10]= 0;
+    /* Component monochromator7. */
+  /* Setting parameters for component monochromator7. */
+  SIG_MESSAGE("monochromator7 (Init:SetPar)");
+#line 64 "Untitled.instr"
+  mccmonochromator7_zmin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator7_zmax = 0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator7_ymin = -0.05;
+#line 64 "Untitled.instr"
+  mccmonochromator7_ymax = 0.05;
+#line 116 "Untitled.instr"
+  mccmonochromator7_zwidth = wi;
+#line 117 "Untitled.instr"
+  mccmonochromator7_yheight = 0.231;
+#line 114 "Untitled.instr"
+  mccmonochromator7_mosaich = 36;
+#line 115 "Untitled.instr"
+  mccmonochromator7_mosaicv = 36;
+#line 118 "Untitled.instr"
+  mccmonochromator7_r0 = 0.7;
+#line 66 "Untitled.instr"
+  mccmonochromator7_Q = 1.8734;
+#line 119 "Untitled.instr"
+  mccmonochromator7_DM = DM;
+#line 6494 "./Untitled.c"
+
+  SIG_MESSAGE("monochromator7 (Init:Place/Rotate)");
+  rot_set_rotation(mctr1,
+#line 120 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 120 "Untitled.instr"
+    (38.358)*DEG2RAD,
+#line 120 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6504 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotamonochromator7);
+  rot_transpose(mcrotamonochromator6, mctr1);
+  rot_mul(mcrotamonochromator7, mctr1, mcrotrmonochromator7);
+  mctc1 = coords_set(
+#line 120 "Untitled.instr"
+    0.027638,
+#line 120 "Untitled.instr"
+    0,
+#line 120 "Untitled.instr"
+    0.030387);
+#line 6515 "./Untitled.c"
+  rot_transpose(mcrotaXY_ARM, mctr1);
+  mctc2 = rot_apply(mctr1, mctc1);
+  mcposamonochromator7 = coords_add(mcposaXY_ARM, mctc2);
+  mctc1 = coords_sub(mcposamonochromator6, mcposamonochromator7);
+  mcposrmonochromator7 = rot_apply(mcrotamonochromator7, mctc1);
+  mcDEBUG_COMPONENT("monochromator7", mcposamonochromator7, mcrotamonochromator7)
+  mccomp_posa[11] = mcposamonochromator7;
+  mccomp_posr[11] = mcposrmonochromator7;
+  mcNCounter[11]  = mcPCounter[11] = mcP2Counter[11] = 0;
+  mcAbsorbProp[11]= 0;
     /* Component Mono_Out. */
   /* Setting parameters for component Mono_Out. */
   SIG_MESSAGE("Mono_Out (Init:SetPar)");
 
   SIG_MESSAGE("Mono_Out (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
-#line 64 "Untitled.instr"
+#line 132 "Untitled.instr"
     (0)*DEG2RAD,
-#line 64 "Untitled.instr"
-    (17.5421 / 180 * PI)*DEG2RAD,
-#line 64 "Untitled.instr"
+#line 132 "Untitled.instr"
+    (mcipTTA)*DEG2RAD,
+#line 132 "Untitled.instr"
     (0)*DEG2RAD);
-#line 5791 "./Untitled.c"
-  rot_mul(mctr1, mcrotamonochromator_flat, mcrotaMono_Out);
-  rot_transpose(mcrotamonochromator_flat, mctr1);
+#line 6538 "./Untitled.c"
+  rot_mul(mctr1, mcrotasource_simple, mcrotaMono_Out);
+  rot_transpose(mcrotamonochromator7, mctr1);
   rot_mul(mcrotaMono_Out, mctr1, mcrotrMono_Out);
   mctc1 = coords_set(
-#line 64 "Untitled.instr"
+#line 132 "Untitled.instr"
     0,
-#line 64 "Untitled.instr"
+#line 132 "Untitled.instr"
     0,
-#line 64 "Untitled.instr"
-    0.0002);
-#line 5802 "./Untitled.c"
+#line 132 "Untitled.instr"
+    0);
+#line 6549 "./Untitled.c"
   rot_transpose(mcrotaMono_Cradle, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
   mcposaMono_Out = coords_add(mcposaMono_Cradle, mctc2);
-  mctc1 = coords_sub(mcposamonochromator_flat, mcposaMono_Out);
+  mctc1 = coords_sub(mcposamonochromator7, mcposaMono_Out);
   mcposrMono_Out = rot_apply(mcrotaMono_Out, mctc1);
   mcDEBUG_COMPONENT("Mono_Out", mcposaMono_Out, mcrotaMono_Out)
-  mccomp_posa[5] = mcposaMono_Out;
-  mccomp_posr[5] = mcposrMono_Out;
-  mcNCounter[5]  = mcPCounter[5] = mcP2Counter[5] = 0;
-  mcAbsorbProp[5]= 0;
+  mccomp_posa[12] = mcposaMono_Out;
+  mccomp_posr[12] = mcposrMono_Out;
+  mcNCounter[12]  = mcPCounter[12] = mcP2Counter[12] = 0;
+  mcAbsorbProp[12]= 0;
     /* Component beamstop. */
   /* Setting parameters for component beamstop. */
   SIG_MESSAGE("beamstop (Init:SetPar)");
-#line 67 "Untitled.instr"
+#line 136 "Untitled.instr"
   mccbeamstop_xmin = -0.0005;
-#line 68 "Untitled.instr"
+#line 137 "Untitled.instr"
   mccbeamstop_xmax = 0.0005;
-#line 69 "Untitled.instr"
+#line 138 "Untitled.instr"
   mccbeamstop_ymin = -0.0005;
-#line 70 "Untitled.instr"
+#line 139 "Untitled.instr"
   mccbeamstop_ymax = 0.0005;
 #line 45 "Untitled.instr"
   mccbeamstop_xwidth = 0;
@@ -5827,83 +6574,85 @@ void mcinit(void) {
   mccbeamstop_yheight = 0;
 #line 45 "Untitled.instr"
   mccbeamstop_radius = 0;
-#line 5830 "./Untitled.c"
+#line 6577 "./Untitled.c"
 
   SIG_MESSAGE("beamstop (Init:Place/Rotate)");
-  rot_set_rotation(mctr1,
-    (0.0)*DEG2RAD,
-    (0.0)*DEG2RAD,
-    (0.0)*DEG2RAD);
-#line 5837 "./Untitled.c"
-  rot_mul(mctr1, mcrotaMono_Out, mcrotabeamstop);
+  rot_set_rotation(mcrotabeamstop,
+#line 141 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 141 "Untitled.instr"
+    (0)*DEG2RAD,
+#line 141 "Untitled.instr"
+    (0)*DEG2RAD);
+#line 6587 "./Untitled.c"
   rot_transpose(mcrotaMono_Out, mctr1);
   rot_mul(mcrotabeamstop, mctr1, mcrotrbeamstop);
   mctc1 = coords_set(
-#line 71 "Untitled.instr"
+#line 140 "Untitled.instr"
     0,
-#line 71 "Untitled.instr"
+#line 140 "Untitled.instr"
     0,
-#line 71 "Untitled.instr"
-    0.2);
-#line 5848 "./Untitled.c"
-  rot_transpose(mcrotaMono_Out, mctr1);
+#line 140 "Untitled.instr"
+    2);
+#line 6597 "./Untitled.c"
+  rot_transpose(mcrotasource_simple, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
-  mcposabeamstop = coords_add(mcposaMono_Out, mctc2);
+  mcposabeamstop = coords_add(mcposasource_simple, mctc2);
   mctc1 = coords_sub(mcposaMono_Out, mcposabeamstop);
   mcposrbeamstop = rot_apply(mcrotabeamstop, mctc1);
   mcDEBUG_COMPONENT("beamstop", mcposabeamstop, mcrotabeamstop)
-  mccomp_posa[6] = mcposabeamstop;
-  mccomp_posr[6] = mcposrbeamstop;
-  mcNCounter[6]  = mcPCounter[6] = mcP2Counter[6] = 0;
-  mcAbsorbProp[6]= 0;
+  mccomp_posa[13] = mcposabeamstop;
+  mccomp_posr[13] = mcposrbeamstop;
+  mcNCounter[13]  = mcPCounter[13] = mcP2Counter[13] = 0;
+  mcAbsorbProp[13]= 0;
     /* Component psd_monitor. */
   /* Setting parameters for component psd_monitor. */
   SIG_MESSAGE("psd_monitor (Init:SetPar)");
-#line 74 "Untitled.instr"
+#line 144 "Untitled.instr"
   if("test_fil_analyser") strncpy(mccpsd_monitor_filename, "test_fil_analyser" ? "test_fil_analyser" : "", 16384); else mccpsd_monitor_filename[0]='\0';
-#line 49 "Untitled.instr"
-  mccpsd_monitor_xmin = -0.05;
-#line 49 "Untitled.instr"
-  mccpsd_monitor_xmax = 0.05;
-#line 49 "Untitled.instr"
-  mccpsd_monitor_ymin = -0.05;
-#line 49 "Untitled.instr"
-  mccpsd_monitor_ymax = 0.05;
+#line 145 "Untitled.instr"
+  mccpsd_monitor_xmin = -0.1;
+#line 146 "Untitled.instr"
+  mccpsd_monitor_xmax = 0.1;
+#line 147 "Untitled.instr"
+  mccpsd_monitor_ymin = -0.1;
+#line 148 "Untitled.instr"
+  mccpsd_monitor_ymax = 0.1;
 #line 49 "Untitled.instr"
   mccpsd_monitor_xwidth = 0;
 #line 49 "Untitled.instr"
   mccpsd_monitor_yheight = 0;
 #line 49 "Untitled.instr"
   mccpsd_monitor_restore_neutron = 0;
-#line 5878 "./Untitled.c"
+#line 6627 "./Untitled.c"
 
   SIG_MESSAGE("psd_monitor (Init:Place/Rotate)");
   rot_set_rotation(mctr1,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD,
     (0.0)*DEG2RAD);
-#line 5885 "./Untitled.c"
-  rot_mul(mctr1, mcrotabeamstop, mcrotapsd_monitor);
+#line 6634 "./Untitled.c"
+  rot_mul(mctr1, mcrotaMono_Out, mcrotapsd_monitor);
   rot_transpose(mcrotabeamstop, mctr1);
   rot_mul(mcrotapsd_monitor, mctr1, mcrotrpsd_monitor);
   mctc1 = coords_set(
-#line 75 "Untitled.instr"
+#line 149 "Untitled.instr"
     0,
-#line 75 "Untitled.instr"
+#line 149 "Untitled.instr"
     0,
-#line 75 "Untitled.instr"
+#line 149 "Untitled.instr"
     1);
-#line 5896 "./Untitled.c"
-  rot_transpose(mcrotabeamstop, mctr1);
+#line 6645 "./Untitled.c"
+  rot_transpose(mcrotaMono_Out, mctr1);
   mctc2 = rot_apply(mctr1, mctc1);
-  mcposapsd_monitor = coords_add(mcposabeamstop, mctc2);
+  mcposapsd_monitor = coords_add(mcposaMono_Out, mctc2);
   mctc1 = coords_sub(mcposabeamstop, mcposapsd_monitor);
   mcposrpsd_monitor = rot_apply(mcrotapsd_monitor, mctc1);
   mcDEBUG_COMPONENT("psd_monitor", mcposapsd_monitor, mcrotapsd_monitor)
-  mccomp_posa[7] = mcposapsd_monitor;
-  mccomp_posr[7] = mcposrpsd_monitor;
-  mcNCounter[7]  = mcPCounter[7] = mcP2Counter[7] = 0;
-  mcAbsorbProp[7]= 0;
+  mccomp_posa[14] = mcposapsd_monitor;
+  mccomp_posr[14] = mcposrpsd_monitor;
+  mcNCounter[14]  = mcPCounter[14] = mcP2Counter[14] = 0;
+  mcAbsorbProp[14]= 0;
   /* Component initializations. */
   /* Initializations for component origin. */
   SIG_MESSAGE("origin (Init)");
@@ -5930,7 +6679,7 @@ fprintf(stdout, "[%s] Initialize\n", mcinstrument_name);
     percent=1e5*100.0/mcget_ncount();
   }
 }
-#line 5933 "./Untitled.c"
+#line 6682 "./Untitled.c"
 #undef minutes
 #undef flag_save
 #undef percent
@@ -6020,7 +6769,7 @@ if (radius && !yheight && !xwidth ) {
       exit(0);
   }
 }
-#line 6023 "./Untitled.c"
+#line 6772 "./Untitled.c"
 #undef target_index
 #undef gauss
 #undef flux
@@ -6044,11 +6793,14 @@ if (radius && !yheight && !xwidth ) {
   /* Initializations for component Mono_Cradle. */
   SIG_MESSAGE("Mono_Cradle (Init)");
 
+  /* Initializations for component XY_ARM. */
+  SIG_MESSAGE("XY_ARM (Init)");
+
   /* Initializations for component monochromator_flat. */
   SIG_MESSAGE("monochromator_flat (Init)");
 #define mccompcurname  monochromator_flat
 #define mccompcurtype  Monochromator_flat
-#define mccompcurindex 4
+#define mccompcurindex 5
 #define mos_rms_y mccmonochromator_flat_mos_rms_y
 #define mos_rms_z mccmonochromator_flat_mos_rms_z
 #define mos_rms_max mccmonochromator_flat_mos_rms_max
@@ -6079,7 +6831,337 @@ if (radius && !yheight && !xwidth ) {
   if (zmin==zmax || ymin==ymax)
     exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
 }
-#line 6082 "./Untitled.c"
+#line 6834 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* Initializations for component monochromator2. */
+  SIG_MESSAGE("monochromator2 (Init)");
+#define mccompcurname  monochromator2
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 6
+#define mos_rms_y mccmonochromator2_mos_rms_y
+#define mos_rms_z mccmonochromator2_mos_rms_z
+#define mos_rms_max mccmonochromator2_mos_rms_max
+#define mono_Q mccmonochromator2_mono_Q
+#define zmin mccmonochromator2_zmin
+#define zmax mccmonochromator2_zmax
+#define ymin mccmonochromator2_ymin
+#define ymax mccmonochromator2_ymax
+#define zwidth mccmonochromator2_zwidth
+#define yheight mccmonochromator2_yheight
+#define mosaich mccmonochromator2_mosaich
+#define mosaicv mccmonochromator2_mosaicv
+#define r0 mccmonochromator2_r0
+#define Q mccmonochromator2_Q
+#define DM mccmonochromator2_DM
+#line 102 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  mos_rms_y = MIN2RAD*mosaicv/sqrt(8*log(2));
+  mos_rms_z = MIN2RAD*mosaich/sqrt(8*log(2));
+  mos_rms_max = mos_rms_y > mos_rms_z ? mos_rms_y : mos_rms_z;
+
+  mono_Q = Q;
+  if (DM != 0) mono_Q = 2*PI/DM;
+
+  if (zwidth>0)  { zmax = zwidth/2;  zmin=-zmax; }
+  if (yheight>0) { ymax = yheight/2; ymin=-ymax; }
+
+  if (zmin==zmax || ymin==ymax)
+    exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
+}
+#line 6889 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* Initializations for component monochromator3. */
+  SIG_MESSAGE("monochromator3 (Init)");
+#define mccompcurname  monochromator3
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 7
+#define mos_rms_y mccmonochromator3_mos_rms_y
+#define mos_rms_z mccmonochromator3_mos_rms_z
+#define mos_rms_max mccmonochromator3_mos_rms_max
+#define mono_Q mccmonochromator3_mono_Q
+#define zmin mccmonochromator3_zmin
+#define zmax mccmonochromator3_zmax
+#define ymin mccmonochromator3_ymin
+#define ymax mccmonochromator3_ymax
+#define zwidth mccmonochromator3_zwidth
+#define yheight mccmonochromator3_yheight
+#define mosaich mccmonochromator3_mosaich
+#define mosaicv mccmonochromator3_mosaicv
+#define r0 mccmonochromator3_r0
+#define Q mccmonochromator3_Q
+#define DM mccmonochromator3_DM
+#line 102 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  mos_rms_y = MIN2RAD*mosaicv/sqrt(8*log(2));
+  mos_rms_z = MIN2RAD*mosaich/sqrt(8*log(2));
+  mos_rms_max = mos_rms_y > mos_rms_z ? mos_rms_y : mos_rms_z;
+
+  mono_Q = Q;
+  if (DM != 0) mono_Q = 2*PI/DM;
+
+  if (zwidth>0)  { zmax = zwidth/2;  zmin=-zmax; }
+  if (yheight>0) { ymax = yheight/2; ymin=-ymax; }
+
+  if (zmin==zmax || ymin==ymax)
+    exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
+}
+#line 6944 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* Initializations for component monochromator4. */
+  SIG_MESSAGE("monochromator4 (Init)");
+#define mccompcurname  monochromator4
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 8
+#define mos_rms_y mccmonochromator4_mos_rms_y
+#define mos_rms_z mccmonochromator4_mos_rms_z
+#define mos_rms_max mccmonochromator4_mos_rms_max
+#define mono_Q mccmonochromator4_mono_Q
+#define zmin mccmonochromator4_zmin
+#define zmax mccmonochromator4_zmax
+#define ymin mccmonochromator4_ymin
+#define ymax mccmonochromator4_ymax
+#define zwidth mccmonochromator4_zwidth
+#define yheight mccmonochromator4_yheight
+#define mosaich mccmonochromator4_mosaich
+#define mosaicv mccmonochromator4_mosaicv
+#define r0 mccmonochromator4_r0
+#define Q mccmonochromator4_Q
+#define DM mccmonochromator4_DM
+#line 102 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  mos_rms_y = MIN2RAD*mosaicv/sqrt(8*log(2));
+  mos_rms_z = MIN2RAD*mosaich/sqrt(8*log(2));
+  mos_rms_max = mos_rms_y > mos_rms_z ? mos_rms_y : mos_rms_z;
+
+  mono_Q = Q;
+  if (DM != 0) mono_Q = 2*PI/DM;
+
+  if (zwidth>0)  { zmax = zwidth/2;  zmin=-zmax; }
+  if (yheight>0) { ymax = yheight/2; ymin=-ymax; }
+
+  if (zmin==zmax || ymin==ymax)
+    exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
+}
+#line 6999 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* Initializations for component monochromator5. */
+  SIG_MESSAGE("monochromator5 (Init)");
+#define mccompcurname  monochromator5
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 9
+#define mos_rms_y mccmonochromator5_mos_rms_y
+#define mos_rms_z mccmonochromator5_mos_rms_z
+#define mos_rms_max mccmonochromator5_mos_rms_max
+#define mono_Q mccmonochromator5_mono_Q
+#define zmin mccmonochromator5_zmin
+#define zmax mccmonochromator5_zmax
+#define ymin mccmonochromator5_ymin
+#define ymax mccmonochromator5_ymax
+#define zwidth mccmonochromator5_zwidth
+#define yheight mccmonochromator5_yheight
+#define mosaich mccmonochromator5_mosaich
+#define mosaicv mccmonochromator5_mosaicv
+#define r0 mccmonochromator5_r0
+#define Q mccmonochromator5_Q
+#define DM mccmonochromator5_DM
+#line 102 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  mos_rms_y = MIN2RAD*mosaicv/sqrt(8*log(2));
+  mos_rms_z = MIN2RAD*mosaich/sqrt(8*log(2));
+  mos_rms_max = mos_rms_y > mos_rms_z ? mos_rms_y : mos_rms_z;
+
+  mono_Q = Q;
+  if (DM != 0) mono_Q = 2*PI/DM;
+
+  if (zwidth>0)  { zmax = zwidth/2;  zmin=-zmax; }
+  if (yheight>0) { ymax = yheight/2; ymin=-ymax; }
+
+  if (zmin==zmax || ymin==ymax)
+    exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
+}
+#line 7054 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* Initializations for component monochromator6. */
+  SIG_MESSAGE("monochromator6 (Init)");
+#define mccompcurname  monochromator6
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 10
+#define mos_rms_y mccmonochromator6_mos_rms_y
+#define mos_rms_z mccmonochromator6_mos_rms_z
+#define mos_rms_max mccmonochromator6_mos_rms_max
+#define mono_Q mccmonochromator6_mono_Q
+#define zmin mccmonochromator6_zmin
+#define zmax mccmonochromator6_zmax
+#define ymin mccmonochromator6_ymin
+#define ymax mccmonochromator6_ymax
+#define zwidth mccmonochromator6_zwidth
+#define yheight mccmonochromator6_yheight
+#define mosaich mccmonochromator6_mosaich
+#define mosaicv mccmonochromator6_mosaicv
+#define r0 mccmonochromator6_r0
+#define Q mccmonochromator6_Q
+#define DM mccmonochromator6_DM
+#line 102 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  mos_rms_y = MIN2RAD*mosaicv/sqrt(8*log(2));
+  mos_rms_z = MIN2RAD*mosaich/sqrt(8*log(2));
+  mos_rms_max = mos_rms_y > mos_rms_z ? mos_rms_y : mos_rms_z;
+
+  mono_Q = Q;
+  if (DM != 0) mono_Q = 2*PI/DM;
+
+  if (zwidth>0)  { zmax = zwidth/2;  zmin=-zmax; }
+  if (yheight>0) { ymax = yheight/2; ymin=-ymax; }
+
+  if (zmin==zmax || ymin==ymax)
+    exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
+}
+#line 7109 "./Untitled.c"
+#undef DM
+#undef Q
+#undef r0
+#undef mosaicv
+#undef mosaich
+#undef yheight
+#undef zwidth
+#undef ymax
+#undef ymin
+#undef zmax
+#undef zmin
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* Initializations for component monochromator7. */
+  SIG_MESSAGE("monochromator7 (Init)");
+#define mccompcurname  monochromator7
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 11
+#define mos_rms_y mccmonochromator7_mos_rms_y
+#define mos_rms_z mccmonochromator7_mos_rms_z
+#define mos_rms_max mccmonochromator7_mos_rms_max
+#define mono_Q mccmonochromator7_mono_Q
+#define zmin mccmonochromator7_zmin
+#define zmax mccmonochromator7_zmax
+#define ymin mccmonochromator7_ymin
+#define ymax mccmonochromator7_ymax
+#define zwidth mccmonochromator7_zwidth
+#define yheight mccmonochromator7_yheight
+#define mosaich mccmonochromator7_mosaich
+#define mosaicv mccmonochromator7_mosaicv
+#define r0 mccmonochromator7_r0
+#define Q mccmonochromator7_Q
+#define DM mccmonochromator7_DM
+#line 102 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  mos_rms_y = MIN2RAD*mosaicv/sqrt(8*log(2));
+  mos_rms_z = MIN2RAD*mosaich/sqrt(8*log(2));
+  mos_rms_max = mos_rms_y > mos_rms_z ? mos_rms_y : mos_rms_z;
+
+  mono_Q = Q;
+  if (DM != 0) mono_Q = 2*PI/DM;
+
+  if (zwidth>0)  { zmax = zwidth/2;  zmin=-zmax; }
+  if (yheight>0) { ymax = yheight/2; ymin=-ymax; }
+
+  if (zmin==zmax || ymin==ymax)
+    exit(fprintf(stderr, "Monochromator_flat: %s : Surface is null (zmin,zmax,ymin,ymax)\n", NAME_CURRENT_COMP));
+}
+#line 7164 "./Untitled.c"
 #undef DM
 #undef Q
 #undef r0
@@ -6106,7 +7188,7 @@ if (radius && !yheight && !xwidth ) {
   SIG_MESSAGE("beamstop (Init)");
 #define mccompcurname  beamstop
 #define mccompcurtype  Beamstop
-#define mccompcurindex 6
+#define mccompcurindex 13
 #define xmin mccbeamstop_xmin
 #define xmax mccbeamstop_xmax
 #define ymin mccbeamstop_ymin
@@ -6122,7 +7204,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
   if (xmin == 0 && xmax == 0 && ymin == 0 & ymax == 0 && radius == 0)
   { fprintf(stderr,"Beamstop: %s: Error: give geometry\n", NAME_CURRENT_COMP); exit(-1); }
 }
-#line 6125 "./Untitled.c"
+#line 7207 "./Untitled.c"
 #undef radius
 #undef yheight
 #undef xwidth
@@ -6138,7 +7220,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
   SIG_MESSAGE("psd_monitor (Init)");
 #define mccompcurname  psd_monitor
 #define mccompcurtype  PSD_monitor
-#define mccompcurindex 7
+#define mccompcurindex 14
 #define nx mccpsd_monitor_nx
 #define ny mccpsd_monitor_ny
 #define PSD_N mccpsd_monitor_PSD_N
@@ -6174,7 +7256,7 @@ if (xwidth  > 0) { xmax = xwidth/2;  xmin = -xmax; }
       PSD_p2[i][j] = 0;
      }
 }
-#line 6177 "./Untitled.c"
+#line 7259 "./Untitled.c"
 #undef restore_neutron
 #undef yheight
 #undef xwidth
@@ -6345,7 +7427,7 @@ MCNUM minutes = mccorigin_minutes;
     if (flag_save) mcsave(NULL);
   }
 }
-#line 6348 "./Untitled.c"
+#line 7430 "./Untitled.c"
 }   /* End of origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -6516,7 +7598,7 @@ int target_index = mccsource_simple_target_index;
  vy=v*dy/rf;
  vx=v*dx/rf;
 }
-#line 6519 "./Untitled.c"
+#line 7601 "./Untitled.c"
 }   /* End of source_simple=Source_simple() SETTING parameter declarations. */
 #undef srcArea
 #undef square
@@ -6667,7 +7749,110 @@ mcnlsy,
 mcnlsz,
 mcnlp)
 
-  /* TRACE Component monochromator_flat [4] */
+  /* TRACE Component XY_ARM [4] */
+  mccoordschange(mcposrXY_ARM, mcrotrXY_ARM,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component XY_ARM (without coords transformations) */
+  mcJumpTrace_XY_ARM:
+  SIG_MESSAGE("XY_ARM (Trace)");
+  mcDEBUG_COMP("XY_ARM")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompXY_ARM
+  STORE_NEUTRON(4,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[4]++;
+  mcPCounter[4] += p;
+  mcP2Counter[4] += p*p;
+#define mccompcurname  XY_ARM
+#define mccompcurtype  Arm
+#define mccompcurindex 4
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompXY_ARM:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(4,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component monochromator_flat [5] */
   mccoordschange(mcposrmonochromator_flat, mcrotrmonochromator_flat,
     &mcnlx,
     &mcnly,
@@ -6707,7 +7892,7 @@ mcnlp)
 #define p mcnlp
 
 #define mcabsorbComp mcabsorbCompmonochromator_flat
-  STORE_NEUTRON(4,
+  STORE_NEUTRON(5,
     mcnlx,
     mcnly,
     mcnlz,
@@ -6721,12 +7906,12 @@ mcnlp)
     mcnlp);
   mcScattered=0;
   mcRestore=0;
-  mcNCounter[4]++;
-  mcPCounter[4] += p;
-  mcP2Counter[4] += p*p;
+  mcNCounter[5]++;
+  mcPCounter[5] += p;
+  mcP2Counter[5] += p*p;
 #define mccompcurname  monochromator_flat
 #define mccompcurtype  Monochromator_flat
-#define mccompcurindex 4
+#define mccompcurindex 5
 #define mos_rms_y mccmonochromator_flat_mos_rms_y
 #define mos_rms_z mccmonochromator_flat_mos_rms_z
 #define mos_rms_max mccmonochromator_flat_mos_rms_max
@@ -6878,7 +8063,7 @@ MCNUM DM = mccmonochromator_flat_DM;
     } /* End intersect the crystal */
   } /* End neutron moving towards crystal */
 }
-#line 6881 "./Untitled.c"
+#line 8066 "./Untitled.c"
 }   /* End of monochromator_flat=Monochromator_flat() SETTING parameter declarations. */
 #undef mono_Q
 #undef mos_rms_max
@@ -6890,7 +8075,7 @@ MCNUM DM = mccmonochromator_flat_DM;
   /* Label for restoring  neutron */
   mcabsorbCompmonochromator_flat:
   if (RESTORE) /* restore if needed */
-  { RESTORE_NEUTRON(4,
+  { RESTORE_NEUTRON(5,
       mcnlx,
       mcnly,
       mcnlz,
@@ -6927,7 +8112,1567 @@ mcnlsy,
 mcnlsz,
 mcnlp)
 
-  /* TRACE Component Mono_Out [5] */
+  /* TRACE Component monochromator2 [6] */
+  mccoordschange(mcposrmonochromator2, mcrotrmonochromator2,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component monochromator2 (without coords transformations) */
+  mcJumpTrace_monochromator2:
+  SIG_MESSAGE("monochromator2 (Trace)");
+  mcDEBUG_COMP("monochromator2")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompmonochromator2
+  STORE_NEUTRON(6,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[6]++;
+  mcPCounter[6] += p;
+  mcP2Counter[6] += p*p;
+#define mccompcurname  monochromator2
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 6
+#define mos_rms_y mccmonochromator2_mos_rms_y
+#define mos_rms_z mccmonochromator2_mos_rms_z
+#define mos_rms_max mccmonochromator2_mos_rms_max
+#define mono_Q mccmonochromator2_mono_Q
+{   /* Declarations of monochromator2=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator2_zmin;
+MCNUM zmax = mccmonochromator2_zmax;
+MCNUM ymin = mccmonochromator2_ymin;
+MCNUM ymax = mccmonochromator2_ymax;
+MCNUM zwidth = mccmonochromator2_zwidth;
+MCNUM yheight = mccmonochromator2_yheight;
+MCNUM mosaich = mccmonochromator2_mosaich;
+MCNUM mosaicv = mccmonochromator2_mosaicv;
+MCNUM r0 = mccmonochromator2_r0;
+MCNUM Q = mccmonochromator2_Q;
+MCNUM DM = mccmonochromator2_DM;
+#line 118 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  double y1,z1,t1,dt,kix,kiy,kiz,ratio,order,q0x,k,q0,theta;
+  double bx,by,bz,kux,kuy,kuz,ax,ay,az,phi;
+  double cos_2theta,k_sin_2theta,cos_phi,sin_phi,q_x,q_y,q_z;
+  double delta,p_reflect,total,c1x,c1y,c1z,width,mos_sample;
+  int i;
+
+  if(vx != 0.0 && (dt = -x/vx) >= 0.0)
+  {                             /* Moving towards crystal? */
+    y1 = y + vy*dt;             /* Propagate to crystal plane */
+    z1 = z + vz*dt;
+    t1 = t + dt;
+    if (z1>zmin && z1<zmax && y1>ymin && y1<ymax)
+    {                           /* Intersect the crystal? */
+      kix = V2K*vx;             /* Initial wave vector */
+      kiy = V2K*vy;
+      kiz = V2K*vz;
+      /* Get reflection order and corresponding nominal scattering vector q0
+         of correct length and direction. Only the order with the closest
+         scattering vector is considered */
+      ratio = -2*kix/mono_Q;
+      order = floor(ratio + .5);
+      if(order == 0.0)
+        order = ratio < 0 ? -1 : 1;
+      /* Order will be negative when the neutron enters from the back, in
+         which case the direction of Q0 is flipped. */
+      if(order < 0)
+        order = -order;
+      /* Make sure the order is small enough to allow Bragg scattering at the
+         given neutron wavelength */
+      k = sqrt(kix*kix + kiy*kiy + kiz*kiz);
+      kux = kix/k;              /* Unit vector along ki */
+      kuy = kiy/k;
+      kuz = kiz/k;
+      if(order > 2*k/mono_Q)
+        order--;
+      if(order > 0)             /* Bragg scattering possible? */
+      {
+        q0 = order*mono_Q;
+        q0x = ratio < 0 ? -q0 : q0;
+        theta = asin(q0/(2*k)); /* Actual bragg angle */
+        /* Make MC choice: reflect or transmit? */
+        delta = asin(fabs(kux)) - theta;
+        p_reflect = r0*exp(-kiy*kiy/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_y*mos_rms_y))*
+                       exp(-kiz*kiz/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_z*mos_rms_z));
+        if(rand01() < p_reflect)
+        {                       /* Reflect */
+          cos_2theta = cos(2*theta);
+          k_sin_2theta = k*sin(2*theta);
+          /* Get unit normal to plane containing ki and most probable kf */
+          vec_prod(bx, by, bz, kix, kiy, kiz, q0x, 0, 0);
+          NORM(bx,by,bz);
+          bx *= k_sin_2theta;
+          by *= k_sin_2theta;
+          bz *= k_sin_2theta;
+          /* Get unit vector normal to ki and b */
+          vec_prod(ax, ay, az, bx, by, bz, kux, kuy, kuz);
+          /* Compute the total scattering probability at this ki */
+          total = 0;
+          /* Choose width of Gaussian distribution to sample the angle
+           * phi on the Debye-Scherrer cone for the scattered neutron.
+           * The radius of the Debye-Scherrer cone is smaller by a
+           * factor 1/cos(theta) than the radius of the (partial) sphere
+           * describing the possible orientations of Q due to mosaicity, so we
+           * start with a width 1/cos(theta) greater than the largest of
+           * the two mosaics. */
+          mos_sample = mos_rms_max/cos(theta);
+          c1x = kix*(cos_2theta-1);
+          c1y = kiy*(cos_2theta-1);
+          c1z = kiz*(cos_2theta-1);
+          /* Loop, repeatedly reducing the sample width until it is small
+           * enough to avoid sampling scattering directions with
+           * ridiculously low scattering probability.
+           * Use a cut-off at 5 times the gauss width for considering
+           * scattering probability as well as for integration limits
+           * when integrating the sampled distribution below. */
+          for(i=0; i<100; i++) {
+            width = 5*mos_sample;
+            cos_phi = cos(width);
+            sin_phi = sin(width);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = (c1y + cos_phi*ay + sin_phi*by)/mos_rms_y;
+            q_z = (c1z + cos_phi*az + sin_phi*bz)/mos_rms_z;
+            /* Stop when we get near a factor of 25=5^2. */
+            if(q_z*q_z + q_y*q_y < (25/(2.0/3.0))*(q_x*q_x))
+              break;
+            mos_sample *= (2.0/3.0);
+          }
+          /* Now integrate the chosen sampling distribution, using a
+           * cut-off at five times sigma. */
+          for(i = 0; i < (sizeof(Gauss_X)/sizeof(double)); i++)
+          {
+            phi = width*Gauss_X[i];
+            cos_phi = cos(phi);
+            sin_phi = sin(phi);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = c1y + cos_phi*ay + sin_phi*by;
+            q_z = c1z + cos_phi*az + sin_phi*bz;
+            p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                        GAUSS((q_z/q_x),0,mos_rms_z);
+            total += Gauss_W[i]*p_reflect;
+          }
+          total *= width;
+          /* Choose point on Debye-Scherrer cone. Sample from a Gaussian of
+           * width 1/cos(theta) greater than the mosaic and correct for any
+           * error by adjusting the neutron weight later. */
+          phi = mos_sample*randnorm();
+          /* Compute final wave vector kf and scattering vector q = ki - kf */
+          cos_phi = cos(phi);
+          sin_phi = sin(phi);
+          q_x = c1x + cos_phi*ax + sin_phi*bx;
+          q_y = c1y + cos_phi*ay + sin_phi*by;
+          q_z = c1z + cos_phi*az + sin_phi*bz;
+          p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                      GAUSS((q_z/q_x),0,mos_rms_z);
+          x = 0;
+          y = y1;
+          z = z1;
+          t = t1;
+          vx = K2V*(kix+q_x);
+          vy = K2V*(kiy+q_y);
+          vz = K2V*(kiz+q_z);
+          p_reflect /= total*GAUSS(phi,0,mos_sample);
+          if (p_reflect <= 0) ABSORB;
+          if (p_reflect > 1)  p_reflect = 1;
+          p *= p_reflect;
+          SCATTER;
+        } /* End MC choice to reflect or transmit neutron */
+      } /* End bragg scattering possible */
+    } /* End intersect the crystal */
+  } /* End neutron moving towards crystal */
+}
+#line 8326 "./Untitled.c"
+}   /* End of monochromator2=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompmonochromator2:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(6,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component monochromator3 [7] */
+  mccoordschange(mcposrmonochromator3, mcrotrmonochromator3,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component monochromator3 (without coords transformations) */
+  mcJumpTrace_monochromator3:
+  SIG_MESSAGE("monochromator3 (Trace)");
+  mcDEBUG_COMP("monochromator3")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompmonochromator3
+  STORE_NEUTRON(7,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[7]++;
+  mcPCounter[7] += p;
+  mcP2Counter[7] += p*p;
+#define mccompcurname  monochromator3
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 7
+#define mos_rms_y mccmonochromator3_mos_rms_y
+#define mos_rms_z mccmonochromator3_mos_rms_z
+#define mos_rms_max mccmonochromator3_mos_rms_max
+#define mono_Q mccmonochromator3_mono_Q
+{   /* Declarations of monochromator3=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator3_zmin;
+MCNUM zmax = mccmonochromator3_zmax;
+MCNUM ymin = mccmonochromator3_ymin;
+MCNUM ymax = mccmonochromator3_ymax;
+MCNUM zwidth = mccmonochromator3_zwidth;
+MCNUM yheight = mccmonochromator3_yheight;
+MCNUM mosaich = mccmonochromator3_mosaich;
+MCNUM mosaicv = mccmonochromator3_mosaicv;
+MCNUM r0 = mccmonochromator3_r0;
+MCNUM Q = mccmonochromator3_Q;
+MCNUM DM = mccmonochromator3_DM;
+#line 118 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  double y1,z1,t1,dt,kix,kiy,kiz,ratio,order,q0x,k,q0,theta;
+  double bx,by,bz,kux,kuy,kuz,ax,ay,az,phi;
+  double cos_2theta,k_sin_2theta,cos_phi,sin_phi,q_x,q_y,q_z;
+  double delta,p_reflect,total,c1x,c1y,c1z,width,mos_sample;
+  int i;
+
+  if(vx != 0.0 && (dt = -x/vx) >= 0.0)
+  {                             /* Moving towards crystal? */
+    y1 = y + vy*dt;             /* Propagate to crystal plane */
+    z1 = z + vz*dt;
+    t1 = t + dt;
+    if (z1>zmin && z1<zmax && y1>ymin && y1<ymax)
+    {                           /* Intersect the crystal? */
+      kix = V2K*vx;             /* Initial wave vector */
+      kiy = V2K*vy;
+      kiz = V2K*vz;
+      /* Get reflection order and corresponding nominal scattering vector q0
+         of correct length and direction. Only the order with the closest
+         scattering vector is considered */
+      ratio = -2*kix/mono_Q;
+      order = floor(ratio + .5);
+      if(order == 0.0)
+        order = ratio < 0 ? -1 : 1;
+      /* Order will be negative when the neutron enters from the back, in
+         which case the direction of Q0 is flipped. */
+      if(order < 0)
+        order = -order;
+      /* Make sure the order is small enough to allow Bragg scattering at the
+         given neutron wavelength */
+      k = sqrt(kix*kix + kiy*kiy + kiz*kiz);
+      kux = kix/k;              /* Unit vector along ki */
+      kuy = kiy/k;
+      kuz = kiz/k;
+      if(order > 2*k/mono_Q)
+        order--;
+      if(order > 0)             /* Bragg scattering possible? */
+      {
+        q0 = order*mono_Q;
+        q0x = ratio < 0 ? -q0 : q0;
+        theta = asin(q0/(2*k)); /* Actual bragg angle */
+        /* Make MC choice: reflect or transmit? */
+        delta = asin(fabs(kux)) - theta;
+        p_reflect = r0*exp(-kiy*kiy/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_y*mos_rms_y))*
+                       exp(-kiz*kiz/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_z*mos_rms_z));
+        if(rand01() < p_reflect)
+        {                       /* Reflect */
+          cos_2theta = cos(2*theta);
+          k_sin_2theta = k*sin(2*theta);
+          /* Get unit normal to plane containing ki and most probable kf */
+          vec_prod(bx, by, bz, kix, kiy, kiz, q0x, 0, 0);
+          NORM(bx,by,bz);
+          bx *= k_sin_2theta;
+          by *= k_sin_2theta;
+          bz *= k_sin_2theta;
+          /* Get unit vector normal to ki and b */
+          vec_prod(ax, ay, az, bx, by, bz, kux, kuy, kuz);
+          /* Compute the total scattering probability at this ki */
+          total = 0;
+          /* Choose width of Gaussian distribution to sample the angle
+           * phi on the Debye-Scherrer cone for the scattered neutron.
+           * The radius of the Debye-Scherrer cone is smaller by a
+           * factor 1/cos(theta) than the radius of the (partial) sphere
+           * describing the possible orientations of Q due to mosaicity, so we
+           * start with a width 1/cos(theta) greater than the largest of
+           * the two mosaics. */
+          mos_sample = mos_rms_max/cos(theta);
+          c1x = kix*(cos_2theta-1);
+          c1y = kiy*(cos_2theta-1);
+          c1z = kiz*(cos_2theta-1);
+          /* Loop, repeatedly reducing the sample width until it is small
+           * enough to avoid sampling scattering directions with
+           * ridiculously low scattering probability.
+           * Use a cut-off at 5 times the gauss width for considering
+           * scattering probability as well as for integration limits
+           * when integrating the sampled distribution below. */
+          for(i=0; i<100; i++) {
+            width = 5*mos_sample;
+            cos_phi = cos(width);
+            sin_phi = sin(width);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = (c1y + cos_phi*ay + sin_phi*by)/mos_rms_y;
+            q_z = (c1z + cos_phi*az + sin_phi*bz)/mos_rms_z;
+            /* Stop when we get near a factor of 25=5^2. */
+            if(q_z*q_z + q_y*q_y < (25/(2.0/3.0))*(q_x*q_x))
+              break;
+            mos_sample *= (2.0/3.0);
+          }
+          /* Now integrate the chosen sampling distribution, using a
+           * cut-off at five times sigma. */
+          for(i = 0; i < (sizeof(Gauss_X)/sizeof(double)); i++)
+          {
+            phi = width*Gauss_X[i];
+            cos_phi = cos(phi);
+            sin_phi = sin(phi);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = c1y + cos_phi*ay + sin_phi*by;
+            q_z = c1z + cos_phi*az + sin_phi*bz;
+            p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                        GAUSS((q_z/q_x),0,mos_rms_z);
+            total += Gauss_W[i]*p_reflect;
+          }
+          total *= width;
+          /* Choose point on Debye-Scherrer cone. Sample from a Gaussian of
+           * width 1/cos(theta) greater than the mosaic and correct for any
+           * error by adjusting the neutron weight later. */
+          phi = mos_sample*randnorm();
+          /* Compute final wave vector kf and scattering vector q = ki - kf */
+          cos_phi = cos(phi);
+          sin_phi = sin(phi);
+          q_x = c1x + cos_phi*ax + sin_phi*bx;
+          q_y = c1y + cos_phi*ay + sin_phi*by;
+          q_z = c1z + cos_phi*az + sin_phi*bz;
+          p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                      GAUSS((q_z/q_x),0,mos_rms_z);
+          x = 0;
+          y = y1;
+          z = z1;
+          t = t1;
+          vx = K2V*(kix+q_x);
+          vy = K2V*(kiy+q_y);
+          vz = K2V*(kiz+q_z);
+          p_reflect /= total*GAUSS(phi,0,mos_sample);
+          if (p_reflect <= 0) ABSORB;
+          if (p_reflect > 1)  p_reflect = 1;
+          p *= p_reflect;
+          SCATTER;
+        } /* End MC choice to reflect or transmit neutron */
+      } /* End bragg scattering possible */
+    } /* End intersect the crystal */
+  } /* End neutron moving towards crystal */
+}
+#line 8586 "./Untitled.c"
+}   /* End of monochromator3=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompmonochromator3:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(7,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component monochromator4 [8] */
+  mccoordschange(mcposrmonochromator4, mcrotrmonochromator4,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component monochromator4 (without coords transformations) */
+  mcJumpTrace_monochromator4:
+  SIG_MESSAGE("monochromator4 (Trace)");
+  mcDEBUG_COMP("monochromator4")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompmonochromator4
+  STORE_NEUTRON(8,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[8]++;
+  mcPCounter[8] += p;
+  mcP2Counter[8] += p*p;
+#define mccompcurname  monochromator4
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 8
+#define mos_rms_y mccmonochromator4_mos_rms_y
+#define mos_rms_z mccmonochromator4_mos_rms_z
+#define mos_rms_max mccmonochromator4_mos_rms_max
+#define mono_Q mccmonochromator4_mono_Q
+{   /* Declarations of monochromator4=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator4_zmin;
+MCNUM zmax = mccmonochromator4_zmax;
+MCNUM ymin = mccmonochromator4_ymin;
+MCNUM ymax = mccmonochromator4_ymax;
+MCNUM zwidth = mccmonochromator4_zwidth;
+MCNUM yheight = mccmonochromator4_yheight;
+MCNUM mosaich = mccmonochromator4_mosaich;
+MCNUM mosaicv = mccmonochromator4_mosaicv;
+MCNUM r0 = mccmonochromator4_r0;
+MCNUM Q = mccmonochromator4_Q;
+MCNUM DM = mccmonochromator4_DM;
+#line 118 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  double y1,z1,t1,dt,kix,kiy,kiz,ratio,order,q0x,k,q0,theta;
+  double bx,by,bz,kux,kuy,kuz,ax,ay,az,phi;
+  double cos_2theta,k_sin_2theta,cos_phi,sin_phi,q_x,q_y,q_z;
+  double delta,p_reflect,total,c1x,c1y,c1z,width,mos_sample;
+  int i;
+
+  if(vx != 0.0 && (dt = -x/vx) >= 0.0)
+  {                             /* Moving towards crystal? */
+    y1 = y + vy*dt;             /* Propagate to crystal plane */
+    z1 = z + vz*dt;
+    t1 = t + dt;
+    if (z1>zmin && z1<zmax && y1>ymin && y1<ymax)
+    {                           /* Intersect the crystal? */
+      kix = V2K*vx;             /* Initial wave vector */
+      kiy = V2K*vy;
+      kiz = V2K*vz;
+      /* Get reflection order and corresponding nominal scattering vector q0
+         of correct length and direction. Only the order with the closest
+         scattering vector is considered */
+      ratio = -2*kix/mono_Q;
+      order = floor(ratio + .5);
+      if(order == 0.0)
+        order = ratio < 0 ? -1 : 1;
+      /* Order will be negative when the neutron enters from the back, in
+         which case the direction of Q0 is flipped. */
+      if(order < 0)
+        order = -order;
+      /* Make sure the order is small enough to allow Bragg scattering at the
+         given neutron wavelength */
+      k = sqrt(kix*kix + kiy*kiy + kiz*kiz);
+      kux = kix/k;              /* Unit vector along ki */
+      kuy = kiy/k;
+      kuz = kiz/k;
+      if(order > 2*k/mono_Q)
+        order--;
+      if(order > 0)             /* Bragg scattering possible? */
+      {
+        q0 = order*mono_Q;
+        q0x = ratio < 0 ? -q0 : q0;
+        theta = asin(q0/(2*k)); /* Actual bragg angle */
+        /* Make MC choice: reflect or transmit? */
+        delta = asin(fabs(kux)) - theta;
+        p_reflect = r0*exp(-kiy*kiy/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_y*mos_rms_y))*
+                       exp(-kiz*kiz/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_z*mos_rms_z));
+        if(rand01() < p_reflect)
+        {                       /* Reflect */
+          cos_2theta = cos(2*theta);
+          k_sin_2theta = k*sin(2*theta);
+          /* Get unit normal to plane containing ki and most probable kf */
+          vec_prod(bx, by, bz, kix, kiy, kiz, q0x, 0, 0);
+          NORM(bx,by,bz);
+          bx *= k_sin_2theta;
+          by *= k_sin_2theta;
+          bz *= k_sin_2theta;
+          /* Get unit vector normal to ki and b */
+          vec_prod(ax, ay, az, bx, by, bz, kux, kuy, kuz);
+          /* Compute the total scattering probability at this ki */
+          total = 0;
+          /* Choose width of Gaussian distribution to sample the angle
+           * phi on the Debye-Scherrer cone for the scattered neutron.
+           * The radius of the Debye-Scherrer cone is smaller by a
+           * factor 1/cos(theta) than the radius of the (partial) sphere
+           * describing the possible orientations of Q due to mosaicity, so we
+           * start with a width 1/cos(theta) greater than the largest of
+           * the two mosaics. */
+          mos_sample = mos_rms_max/cos(theta);
+          c1x = kix*(cos_2theta-1);
+          c1y = kiy*(cos_2theta-1);
+          c1z = kiz*(cos_2theta-1);
+          /* Loop, repeatedly reducing the sample width until it is small
+           * enough to avoid sampling scattering directions with
+           * ridiculously low scattering probability.
+           * Use a cut-off at 5 times the gauss width for considering
+           * scattering probability as well as for integration limits
+           * when integrating the sampled distribution below. */
+          for(i=0; i<100; i++) {
+            width = 5*mos_sample;
+            cos_phi = cos(width);
+            sin_phi = sin(width);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = (c1y + cos_phi*ay + sin_phi*by)/mos_rms_y;
+            q_z = (c1z + cos_phi*az + sin_phi*bz)/mos_rms_z;
+            /* Stop when we get near a factor of 25=5^2. */
+            if(q_z*q_z + q_y*q_y < (25/(2.0/3.0))*(q_x*q_x))
+              break;
+            mos_sample *= (2.0/3.0);
+          }
+          /* Now integrate the chosen sampling distribution, using a
+           * cut-off at five times sigma. */
+          for(i = 0; i < (sizeof(Gauss_X)/sizeof(double)); i++)
+          {
+            phi = width*Gauss_X[i];
+            cos_phi = cos(phi);
+            sin_phi = sin(phi);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = c1y + cos_phi*ay + sin_phi*by;
+            q_z = c1z + cos_phi*az + sin_phi*bz;
+            p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                        GAUSS((q_z/q_x),0,mos_rms_z);
+            total += Gauss_W[i]*p_reflect;
+          }
+          total *= width;
+          /* Choose point on Debye-Scherrer cone. Sample from a Gaussian of
+           * width 1/cos(theta) greater than the mosaic and correct for any
+           * error by adjusting the neutron weight later. */
+          phi = mos_sample*randnorm();
+          /* Compute final wave vector kf and scattering vector q = ki - kf */
+          cos_phi = cos(phi);
+          sin_phi = sin(phi);
+          q_x = c1x + cos_phi*ax + sin_phi*bx;
+          q_y = c1y + cos_phi*ay + sin_phi*by;
+          q_z = c1z + cos_phi*az + sin_phi*bz;
+          p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                      GAUSS((q_z/q_x),0,mos_rms_z);
+          x = 0;
+          y = y1;
+          z = z1;
+          t = t1;
+          vx = K2V*(kix+q_x);
+          vy = K2V*(kiy+q_y);
+          vz = K2V*(kiz+q_z);
+          p_reflect /= total*GAUSS(phi,0,mos_sample);
+          if (p_reflect <= 0) ABSORB;
+          if (p_reflect > 1)  p_reflect = 1;
+          p *= p_reflect;
+          SCATTER;
+        } /* End MC choice to reflect or transmit neutron */
+      } /* End bragg scattering possible */
+    } /* End intersect the crystal */
+  } /* End neutron moving towards crystal */
+}
+#line 8846 "./Untitled.c"
+}   /* End of monochromator4=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompmonochromator4:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(8,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component monochromator5 [9] */
+  mccoordschange(mcposrmonochromator5, mcrotrmonochromator5,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component monochromator5 (without coords transformations) */
+  mcJumpTrace_monochromator5:
+  SIG_MESSAGE("monochromator5 (Trace)");
+  mcDEBUG_COMP("monochromator5")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompmonochromator5
+  STORE_NEUTRON(9,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[9]++;
+  mcPCounter[9] += p;
+  mcP2Counter[9] += p*p;
+#define mccompcurname  monochromator5
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 9
+#define mos_rms_y mccmonochromator5_mos_rms_y
+#define mos_rms_z mccmonochromator5_mos_rms_z
+#define mos_rms_max mccmonochromator5_mos_rms_max
+#define mono_Q mccmonochromator5_mono_Q
+{   /* Declarations of monochromator5=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator5_zmin;
+MCNUM zmax = mccmonochromator5_zmax;
+MCNUM ymin = mccmonochromator5_ymin;
+MCNUM ymax = mccmonochromator5_ymax;
+MCNUM zwidth = mccmonochromator5_zwidth;
+MCNUM yheight = mccmonochromator5_yheight;
+MCNUM mosaich = mccmonochromator5_mosaich;
+MCNUM mosaicv = mccmonochromator5_mosaicv;
+MCNUM r0 = mccmonochromator5_r0;
+MCNUM Q = mccmonochromator5_Q;
+MCNUM DM = mccmonochromator5_DM;
+#line 118 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  double y1,z1,t1,dt,kix,kiy,kiz,ratio,order,q0x,k,q0,theta;
+  double bx,by,bz,kux,kuy,kuz,ax,ay,az,phi;
+  double cos_2theta,k_sin_2theta,cos_phi,sin_phi,q_x,q_y,q_z;
+  double delta,p_reflect,total,c1x,c1y,c1z,width,mos_sample;
+  int i;
+
+  if(vx != 0.0 && (dt = -x/vx) >= 0.0)
+  {                             /* Moving towards crystal? */
+    y1 = y + vy*dt;             /* Propagate to crystal plane */
+    z1 = z + vz*dt;
+    t1 = t + dt;
+    if (z1>zmin && z1<zmax && y1>ymin && y1<ymax)
+    {                           /* Intersect the crystal? */
+      kix = V2K*vx;             /* Initial wave vector */
+      kiy = V2K*vy;
+      kiz = V2K*vz;
+      /* Get reflection order and corresponding nominal scattering vector q0
+         of correct length and direction. Only the order with the closest
+         scattering vector is considered */
+      ratio = -2*kix/mono_Q;
+      order = floor(ratio + .5);
+      if(order == 0.0)
+        order = ratio < 0 ? -1 : 1;
+      /* Order will be negative when the neutron enters from the back, in
+         which case the direction of Q0 is flipped. */
+      if(order < 0)
+        order = -order;
+      /* Make sure the order is small enough to allow Bragg scattering at the
+         given neutron wavelength */
+      k = sqrt(kix*kix + kiy*kiy + kiz*kiz);
+      kux = kix/k;              /* Unit vector along ki */
+      kuy = kiy/k;
+      kuz = kiz/k;
+      if(order > 2*k/mono_Q)
+        order--;
+      if(order > 0)             /* Bragg scattering possible? */
+      {
+        q0 = order*mono_Q;
+        q0x = ratio < 0 ? -q0 : q0;
+        theta = asin(q0/(2*k)); /* Actual bragg angle */
+        /* Make MC choice: reflect or transmit? */
+        delta = asin(fabs(kux)) - theta;
+        p_reflect = r0*exp(-kiy*kiy/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_y*mos_rms_y))*
+                       exp(-kiz*kiz/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_z*mos_rms_z));
+        if(rand01() < p_reflect)
+        {                       /* Reflect */
+          cos_2theta = cos(2*theta);
+          k_sin_2theta = k*sin(2*theta);
+          /* Get unit normal to plane containing ki and most probable kf */
+          vec_prod(bx, by, bz, kix, kiy, kiz, q0x, 0, 0);
+          NORM(bx,by,bz);
+          bx *= k_sin_2theta;
+          by *= k_sin_2theta;
+          bz *= k_sin_2theta;
+          /* Get unit vector normal to ki and b */
+          vec_prod(ax, ay, az, bx, by, bz, kux, kuy, kuz);
+          /* Compute the total scattering probability at this ki */
+          total = 0;
+          /* Choose width of Gaussian distribution to sample the angle
+           * phi on the Debye-Scherrer cone for the scattered neutron.
+           * The radius of the Debye-Scherrer cone is smaller by a
+           * factor 1/cos(theta) than the radius of the (partial) sphere
+           * describing the possible orientations of Q due to mosaicity, so we
+           * start with a width 1/cos(theta) greater than the largest of
+           * the two mosaics. */
+          mos_sample = mos_rms_max/cos(theta);
+          c1x = kix*(cos_2theta-1);
+          c1y = kiy*(cos_2theta-1);
+          c1z = kiz*(cos_2theta-1);
+          /* Loop, repeatedly reducing the sample width until it is small
+           * enough to avoid sampling scattering directions with
+           * ridiculously low scattering probability.
+           * Use a cut-off at 5 times the gauss width for considering
+           * scattering probability as well as for integration limits
+           * when integrating the sampled distribution below. */
+          for(i=0; i<100; i++) {
+            width = 5*mos_sample;
+            cos_phi = cos(width);
+            sin_phi = sin(width);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = (c1y + cos_phi*ay + sin_phi*by)/mos_rms_y;
+            q_z = (c1z + cos_phi*az + sin_phi*bz)/mos_rms_z;
+            /* Stop when we get near a factor of 25=5^2. */
+            if(q_z*q_z + q_y*q_y < (25/(2.0/3.0))*(q_x*q_x))
+              break;
+            mos_sample *= (2.0/3.0);
+          }
+          /* Now integrate the chosen sampling distribution, using a
+           * cut-off at five times sigma. */
+          for(i = 0; i < (sizeof(Gauss_X)/sizeof(double)); i++)
+          {
+            phi = width*Gauss_X[i];
+            cos_phi = cos(phi);
+            sin_phi = sin(phi);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = c1y + cos_phi*ay + sin_phi*by;
+            q_z = c1z + cos_phi*az + sin_phi*bz;
+            p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                        GAUSS((q_z/q_x),0,mos_rms_z);
+            total += Gauss_W[i]*p_reflect;
+          }
+          total *= width;
+          /* Choose point on Debye-Scherrer cone. Sample from a Gaussian of
+           * width 1/cos(theta) greater than the mosaic and correct for any
+           * error by adjusting the neutron weight later. */
+          phi = mos_sample*randnorm();
+          /* Compute final wave vector kf and scattering vector q = ki - kf */
+          cos_phi = cos(phi);
+          sin_phi = sin(phi);
+          q_x = c1x + cos_phi*ax + sin_phi*bx;
+          q_y = c1y + cos_phi*ay + sin_phi*by;
+          q_z = c1z + cos_phi*az + sin_phi*bz;
+          p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                      GAUSS((q_z/q_x),0,mos_rms_z);
+          x = 0;
+          y = y1;
+          z = z1;
+          t = t1;
+          vx = K2V*(kix+q_x);
+          vy = K2V*(kiy+q_y);
+          vz = K2V*(kiz+q_z);
+          p_reflect /= total*GAUSS(phi,0,mos_sample);
+          if (p_reflect <= 0) ABSORB;
+          if (p_reflect > 1)  p_reflect = 1;
+          p *= p_reflect;
+          SCATTER;
+        } /* End MC choice to reflect or transmit neutron */
+      } /* End bragg scattering possible */
+    } /* End intersect the crystal */
+  } /* End neutron moving towards crystal */
+}
+#line 9106 "./Untitled.c"
+}   /* End of monochromator5=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompmonochromator5:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(9,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component monochromator6 [10] */
+  mccoordschange(mcposrmonochromator6, mcrotrmonochromator6,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component monochromator6 (without coords transformations) */
+  mcJumpTrace_monochromator6:
+  SIG_MESSAGE("monochromator6 (Trace)");
+  mcDEBUG_COMP("monochromator6")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompmonochromator6
+  STORE_NEUTRON(10,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[10]++;
+  mcPCounter[10] += p;
+  mcP2Counter[10] += p*p;
+#define mccompcurname  monochromator6
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 10
+#define mos_rms_y mccmonochromator6_mos_rms_y
+#define mos_rms_z mccmonochromator6_mos_rms_z
+#define mos_rms_max mccmonochromator6_mos_rms_max
+#define mono_Q mccmonochromator6_mono_Q
+{   /* Declarations of monochromator6=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator6_zmin;
+MCNUM zmax = mccmonochromator6_zmax;
+MCNUM ymin = mccmonochromator6_ymin;
+MCNUM ymax = mccmonochromator6_ymax;
+MCNUM zwidth = mccmonochromator6_zwidth;
+MCNUM yheight = mccmonochromator6_yheight;
+MCNUM mosaich = mccmonochromator6_mosaich;
+MCNUM mosaicv = mccmonochromator6_mosaicv;
+MCNUM r0 = mccmonochromator6_r0;
+MCNUM Q = mccmonochromator6_Q;
+MCNUM DM = mccmonochromator6_DM;
+#line 118 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  double y1,z1,t1,dt,kix,kiy,kiz,ratio,order,q0x,k,q0,theta;
+  double bx,by,bz,kux,kuy,kuz,ax,ay,az,phi;
+  double cos_2theta,k_sin_2theta,cos_phi,sin_phi,q_x,q_y,q_z;
+  double delta,p_reflect,total,c1x,c1y,c1z,width,mos_sample;
+  int i;
+
+  if(vx != 0.0 && (dt = -x/vx) >= 0.0)
+  {                             /* Moving towards crystal? */
+    y1 = y + vy*dt;             /* Propagate to crystal plane */
+    z1 = z + vz*dt;
+    t1 = t + dt;
+    if (z1>zmin && z1<zmax && y1>ymin && y1<ymax)
+    {                           /* Intersect the crystal? */
+      kix = V2K*vx;             /* Initial wave vector */
+      kiy = V2K*vy;
+      kiz = V2K*vz;
+      /* Get reflection order and corresponding nominal scattering vector q0
+         of correct length and direction. Only the order with the closest
+         scattering vector is considered */
+      ratio = -2*kix/mono_Q;
+      order = floor(ratio + .5);
+      if(order == 0.0)
+        order = ratio < 0 ? -1 : 1;
+      /* Order will be negative when the neutron enters from the back, in
+         which case the direction of Q0 is flipped. */
+      if(order < 0)
+        order = -order;
+      /* Make sure the order is small enough to allow Bragg scattering at the
+         given neutron wavelength */
+      k = sqrt(kix*kix + kiy*kiy + kiz*kiz);
+      kux = kix/k;              /* Unit vector along ki */
+      kuy = kiy/k;
+      kuz = kiz/k;
+      if(order > 2*k/mono_Q)
+        order--;
+      if(order > 0)             /* Bragg scattering possible? */
+      {
+        q0 = order*mono_Q;
+        q0x = ratio < 0 ? -q0 : q0;
+        theta = asin(q0/(2*k)); /* Actual bragg angle */
+        /* Make MC choice: reflect or transmit? */
+        delta = asin(fabs(kux)) - theta;
+        p_reflect = r0*exp(-kiy*kiy/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_y*mos_rms_y))*
+                       exp(-kiz*kiz/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_z*mos_rms_z));
+        if(rand01() < p_reflect)
+        {                       /* Reflect */
+          cos_2theta = cos(2*theta);
+          k_sin_2theta = k*sin(2*theta);
+          /* Get unit normal to plane containing ki and most probable kf */
+          vec_prod(bx, by, bz, kix, kiy, kiz, q0x, 0, 0);
+          NORM(bx,by,bz);
+          bx *= k_sin_2theta;
+          by *= k_sin_2theta;
+          bz *= k_sin_2theta;
+          /* Get unit vector normal to ki and b */
+          vec_prod(ax, ay, az, bx, by, bz, kux, kuy, kuz);
+          /* Compute the total scattering probability at this ki */
+          total = 0;
+          /* Choose width of Gaussian distribution to sample the angle
+           * phi on the Debye-Scherrer cone for the scattered neutron.
+           * The radius of the Debye-Scherrer cone is smaller by a
+           * factor 1/cos(theta) than the radius of the (partial) sphere
+           * describing the possible orientations of Q due to mosaicity, so we
+           * start with a width 1/cos(theta) greater than the largest of
+           * the two mosaics. */
+          mos_sample = mos_rms_max/cos(theta);
+          c1x = kix*(cos_2theta-1);
+          c1y = kiy*(cos_2theta-1);
+          c1z = kiz*(cos_2theta-1);
+          /* Loop, repeatedly reducing the sample width until it is small
+           * enough to avoid sampling scattering directions with
+           * ridiculously low scattering probability.
+           * Use a cut-off at 5 times the gauss width for considering
+           * scattering probability as well as for integration limits
+           * when integrating the sampled distribution below. */
+          for(i=0; i<100; i++) {
+            width = 5*mos_sample;
+            cos_phi = cos(width);
+            sin_phi = sin(width);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = (c1y + cos_phi*ay + sin_phi*by)/mos_rms_y;
+            q_z = (c1z + cos_phi*az + sin_phi*bz)/mos_rms_z;
+            /* Stop when we get near a factor of 25=5^2. */
+            if(q_z*q_z + q_y*q_y < (25/(2.0/3.0))*(q_x*q_x))
+              break;
+            mos_sample *= (2.0/3.0);
+          }
+          /* Now integrate the chosen sampling distribution, using a
+           * cut-off at five times sigma. */
+          for(i = 0; i < (sizeof(Gauss_X)/sizeof(double)); i++)
+          {
+            phi = width*Gauss_X[i];
+            cos_phi = cos(phi);
+            sin_phi = sin(phi);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = c1y + cos_phi*ay + sin_phi*by;
+            q_z = c1z + cos_phi*az + sin_phi*bz;
+            p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                        GAUSS((q_z/q_x),0,mos_rms_z);
+            total += Gauss_W[i]*p_reflect;
+          }
+          total *= width;
+          /* Choose point on Debye-Scherrer cone. Sample from a Gaussian of
+           * width 1/cos(theta) greater than the mosaic and correct for any
+           * error by adjusting the neutron weight later. */
+          phi = mos_sample*randnorm();
+          /* Compute final wave vector kf and scattering vector q = ki - kf */
+          cos_phi = cos(phi);
+          sin_phi = sin(phi);
+          q_x = c1x + cos_phi*ax + sin_phi*bx;
+          q_y = c1y + cos_phi*ay + sin_phi*by;
+          q_z = c1z + cos_phi*az + sin_phi*bz;
+          p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                      GAUSS((q_z/q_x),0,mos_rms_z);
+          x = 0;
+          y = y1;
+          z = z1;
+          t = t1;
+          vx = K2V*(kix+q_x);
+          vy = K2V*(kiy+q_y);
+          vz = K2V*(kiz+q_z);
+          p_reflect /= total*GAUSS(phi,0,mos_sample);
+          if (p_reflect <= 0) ABSORB;
+          if (p_reflect > 1)  p_reflect = 1;
+          p *= p_reflect;
+          SCATTER;
+        } /* End MC choice to reflect or transmit neutron */
+      } /* End bragg scattering possible */
+    } /* End intersect the crystal */
+  } /* End neutron moving towards crystal */
+}
+#line 9366 "./Untitled.c"
+}   /* End of monochromator6=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompmonochromator6:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(10,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component monochromator7 [11] */
+  mccoordschange(mcposrmonochromator7, mcrotrmonochromator7,
+    &mcnlx,
+    &mcnly,
+    &mcnlz,
+    &mcnlvx,
+    &mcnlvy,
+    &mcnlvz,
+    &mcnlsx,
+    &mcnlsy,
+    &mcnlsz);
+  /* define label inside component monochromator7 (without coords transformations) */
+  mcJumpTrace_monochromator7:
+  SIG_MESSAGE("monochromator7 (Trace)");
+  mcDEBUG_COMP("monochromator7")
+  mcDEBUG_STATE(
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp)
+#define x mcnlx
+#define y mcnly
+#define z mcnlz
+#define vx mcnlvx
+#define vy mcnlvy
+#define vz mcnlvz
+#define t mcnlt
+#define sx mcnlsx
+#define sy mcnlsy
+#define sz mcnlsz
+#define p mcnlp
+
+#define mcabsorbComp mcabsorbCompmonochromator7
+  STORE_NEUTRON(11,
+    mcnlx,
+    mcnly,
+    mcnlz,
+    mcnlvx,
+    mcnlvy,
+    mcnlvz,
+    mcnlt,
+    mcnlsx,
+    mcnlsy,
+    mcnlsz,
+    mcnlp);
+  mcScattered=0;
+  mcRestore=0;
+  mcNCounter[11]++;
+  mcPCounter[11] += p;
+  mcP2Counter[11] += p*p;
+#define mccompcurname  monochromator7
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 11
+#define mos_rms_y mccmonochromator7_mos_rms_y
+#define mos_rms_z mccmonochromator7_mos_rms_z
+#define mos_rms_max mccmonochromator7_mos_rms_max
+#define mono_Q mccmonochromator7_mono_Q
+{   /* Declarations of monochromator7=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator7_zmin;
+MCNUM zmax = mccmonochromator7_zmax;
+MCNUM ymin = mccmonochromator7_ymin;
+MCNUM ymax = mccmonochromator7_ymax;
+MCNUM zwidth = mccmonochromator7_zwidth;
+MCNUM yheight = mccmonochromator7_yheight;
+MCNUM mosaich = mccmonochromator7_mosaich;
+MCNUM mosaicv = mccmonochromator7_mosaicv;
+MCNUM r0 = mccmonochromator7_r0;
+MCNUM Q = mccmonochromator7_Q;
+MCNUM DM = mccmonochromator7_DM;
+#line 118 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  double y1,z1,t1,dt,kix,kiy,kiz,ratio,order,q0x,k,q0,theta;
+  double bx,by,bz,kux,kuy,kuz,ax,ay,az,phi;
+  double cos_2theta,k_sin_2theta,cos_phi,sin_phi,q_x,q_y,q_z;
+  double delta,p_reflect,total,c1x,c1y,c1z,width,mos_sample;
+  int i;
+
+  if(vx != 0.0 && (dt = -x/vx) >= 0.0)
+  {                             /* Moving towards crystal? */
+    y1 = y + vy*dt;             /* Propagate to crystal plane */
+    z1 = z + vz*dt;
+    t1 = t + dt;
+    if (z1>zmin && z1<zmax && y1>ymin && y1<ymax)
+    {                           /* Intersect the crystal? */
+      kix = V2K*vx;             /* Initial wave vector */
+      kiy = V2K*vy;
+      kiz = V2K*vz;
+      /* Get reflection order and corresponding nominal scattering vector q0
+         of correct length and direction. Only the order with the closest
+         scattering vector is considered */
+      ratio = -2*kix/mono_Q;
+      order = floor(ratio + .5);
+      if(order == 0.0)
+        order = ratio < 0 ? -1 : 1;
+      /* Order will be negative when the neutron enters from the back, in
+         which case the direction of Q0 is flipped. */
+      if(order < 0)
+        order = -order;
+      /* Make sure the order is small enough to allow Bragg scattering at the
+         given neutron wavelength */
+      k = sqrt(kix*kix + kiy*kiy + kiz*kiz);
+      kux = kix/k;              /* Unit vector along ki */
+      kuy = kiy/k;
+      kuz = kiz/k;
+      if(order > 2*k/mono_Q)
+        order--;
+      if(order > 0)             /* Bragg scattering possible? */
+      {
+        q0 = order*mono_Q;
+        q0x = ratio < 0 ? -q0 : q0;
+        theta = asin(q0/(2*k)); /* Actual bragg angle */
+        /* Make MC choice: reflect or transmit? */
+        delta = asin(fabs(kux)) - theta;
+        p_reflect = r0*exp(-kiy*kiy/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_y*mos_rms_y))*
+                       exp(-kiz*kiz/(kiy*kiy + kiz*kiz)*(delta*delta)/
+                           (2*mos_rms_z*mos_rms_z));
+        if(rand01() < p_reflect)
+        {                       /* Reflect */
+          cos_2theta = cos(2*theta);
+          k_sin_2theta = k*sin(2*theta);
+          /* Get unit normal to plane containing ki and most probable kf */
+          vec_prod(bx, by, bz, kix, kiy, kiz, q0x, 0, 0);
+          NORM(bx,by,bz);
+          bx *= k_sin_2theta;
+          by *= k_sin_2theta;
+          bz *= k_sin_2theta;
+          /* Get unit vector normal to ki and b */
+          vec_prod(ax, ay, az, bx, by, bz, kux, kuy, kuz);
+          /* Compute the total scattering probability at this ki */
+          total = 0;
+          /* Choose width of Gaussian distribution to sample the angle
+           * phi on the Debye-Scherrer cone for the scattered neutron.
+           * The radius of the Debye-Scherrer cone is smaller by a
+           * factor 1/cos(theta) than the radius of the (partial) sphere
+           * describing the possible orientations of Q due to mosaicity, so we
+           * start with a width 1/cos(theta) greater than the largest of
+           * the two mosaics. */
+          mos_sample = mos_rms_max/cos(theta);
+          c1x = kix*(cos_2theta-1);
+          c1y = kiy*(cos_2theta-1);
+          c1z = kiz*(cos_2theta-1);
+          /* Loop, repeatedly reducing the sample width until it is small
+           * enough to avoid sampling scattering directions with
+           * ridiculously low scattering probability.
+           * Use a cut-off at 5 times the gauss width for considering
+           * scattering probability as well as for integration limits
+           * when integrating the sampled distribution below. */
+          for(i=0; i<100; i++) {
+            width = 5*mos_sample;
+            cos_phi = cos(width);
+            sin_phi = sin(width);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = (c1y + cos_phi*ay + sin_phi*by)/mos_rms_y;
+            q_z = (c1z + cos_phi*az + sin_phi*bz)/mos_rms_z;
+            /* Stop when we get near a factor of 25=5^2. */
+            if(q_z*q_z + q_y*q_y < (25/(2.0/3.0))*(q_x*q_x))
+              break;
+            mos_sample *= (2.0/3.0);
+          }
+          /* Now integrate the chosen sampling distribution, using a
+           * cut-off at five times sigma. */
+          for(i = 0; i < (sizeof(Gauss_X)/sizeof(double)); i++)
+          {
+            phi = width*Gauss_X[i];
+            cos_phi = cos(phi);
+            sin_phi = sin(phi);
+            q_x = c1x + cos_phi*ax + sin_phi*bx;
+            q_y = c1y + cos_phi*ay + sin_phi*by;
+            q_z = c1z + cos_phi*az + sin_phi*bz;
+            p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                        GAUSS((q_z/q_x),0,mos_rms_z);
+            total += Gauss_W[i]*p_reflect;
+          }
+          total *= width;
+          /* Choose point on Debye-Scherrer cone. Sample from a Gaussian of
+           * width 1/cos(theta) greater than the mosaic and correct for any
+           * error by adjusting the neutron weight later. */
+          phi = mos_sample*randnorm();
+          /* Compute final wave vector kf and scattering vector q = ki - kf */
+          cos_phi = cos(phi);
+          sin_phi = sin(phi);
+          q_x = c1x + cos_phi*ax + sin_phi*bx;
+          q_y = c1y + cos_phi*ay + sin_phi*by;
+          q_z = c1z + cos_phi*az + sin_phi*bz;
+          p_reflect = GAUSS((q_y/q_x),0,mos_rms_y)*
+                      GAUSS((q_z/q_x),0,mos_rms_z);
+          x = 0;
+          y = y1;
+          z = z1;
+          t = t1;
+          vx = K2V*(kix+q_x);
+          vy = K2V*(kiy+q_y);
+          vz = K2V*(kiz+q_z);
+          p_reflect /= total*GAUSS(phi,0,mos_sample);
+          if (p_reflect <= 0) ABSORB;
+          if (p_reflect > 1)  p_reflect = 1;
+          p *= p_reflect;
+          SCATTER;
+        } /* End MC choice to reflect or transmit neutron */
+      } /* End bragg scattering possible */
+    } /* End intersect the crystal */
+  } /* End neutron moving towards crystal */
+}
+#line 9626 "./Untitled.c"
+}   /* End of monochromator7=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+  /* Label for restoring  neutron */
+  mcabsorbCompmonochromator7:
+  if (RESTORE) /* restore if needed */
+  { RESTORE_NEUTRON(11,
+      mcnlx,
+      mcnly,
+      mcnlz,
+      mcnlvx,
+      mcnlvy,
+      mcnlvz,
+      mcnlt,
+      mcnlsx,
+      mcnlsy,
+      mcnlsz,
+      mcnlp); }
+#undef mcabsorbComp
+#undef p
+#undef sz
+#undef sy
+#undef sx
+#undef t
+#undef vz
+#undef vy
+#undef vx
+#undef z
+#undef y
+#undef x
+  mcDEBUG_STATE(
+mcnlx,
+mcnly,
+mcnlz,
+mcnlvx,
+mcnlvy,
+mcnlvz,
+mcnlt,
+mcnlsx,
+mcnlsy,
+mcnlsz,
+mcnlp)
+
+  /* TRACE Component Mono_Out [12] */
   mccoordschange(mcposrMono_Out, mcrotrMono_Out,
     &mcnlx,
     &mcnly,
@@ -6967,7 +9712,7 @@ mcnlp)
 #define p mcnlp
 
 #define mcabsorbComp mcabsorbCompMono_Out
-  STORE_NEUTRON(5,
+  STORE_NEUTRON(12,
     mcnlx,
     mcnly,
     mcnlz,
@@ -6981,19 +9726,19 @@ mcnlp)
     mcnlp);
   mcScattered=0;
   mcRestore=0;
-  mcNCounter[5]++;
-  mcPCounter[5] += p;
-  mcP2Counter[5] += p*p;
+  mcNCounter[12]++;
+  mcPCounter[12] += p;
+  mcP2Counter[12] += p*p;
 #define mccompcurname  Mono_Out
 #define mccompcurtype  Arm
-#define mccompcurindex 5
+#define mccompcurindex 12
 #undef mccompcurname
 #undef mccompcurtype
 #undef mccompcurindex
   /* Label for restoring  neutron */
   mcabsorbCompMono_Out:
   if (RESTORE) /* restore if needed */
-  { RESTORE_NEUTRON(5,
+  { RESTORE_NEUTRON(12,
       mcnlx,
       mcnly,
       mcnlz,
@@ -7030,7 +9775,7 @@ mcnlsy,
 mcnlsz,
 mcnlp)
 
-  /* TRACE Component beamstop [6] */
+  /* TRACE Component beamstop [13] */
   mccoordschange(mcposrbeamstop, mcrotrbeamstop,
     &mcnlx,
     &mcnly,
@@ -7070,7 +9815,7 @@ mcnlp)
 #define p mcnlp
 
 #define mcabsorbComp mcabsorbCompbeamstop
-  STORE_NEUTRON(6,
+  STORE_NEUTRON(13,
     mcnlx,
     mcnly,
     mcnlz,
@@ -7084,12 +9829,12 @@ mcnlp)
     mcnlp);
   mcScattered=0;
   mcRestore=0;
-  mcNCounter[6]++;
-  mcPCounter[6] += p;
-  mcP2Counter[6] += p*p;
+  mcNCounter[13]++;
+  mcPCounter[13] += p;
+  mcP2Counter[13] += p*p;
 #define mccompcurname  beamstop
 #define mccompcurtype  Beamstop
-#define mccompcurindex 6
+#define mccompcurindex 13
 {   /* Declarations of beamstop=Beamstop() SETTING parameters. */
 MCNUM xmin = mccbeamstop_xmin;
 MCNUM xmax = mccbeamstop_xmax;
@@ -7110,7 +9855,7 @@ MCNUM radius = mccbeamstop_radius;
     else
       RESTORE_NEUTRON(INDEX_CURRENT_COMP, x, y, z, vx, vy, vz, t, sx, sy, sz, p);
 }
-#line 7113 "./Untitled.c"
+#line 9858 "./Untitled.c"
 }   /* End of beamstop=Beamstop() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -7118,7 +9863,7 @@ MCNUM radius = mccbeamstop_radius;
   /* Label for restoring  neutron */
   mcabsorbCompbeamstop:
   if (RESTORE) /* restore if needed */
-  { RESTORE_NEUTRON(6,
+  { RESTORE_NEUTRON(13,
       mcnlx,
       mcnly,
       mcnlz,
@@ -7155,7 +9900,7 @@ mcnlsy,
 mcnlsz,
 mcnlp)
 
-  /* TRACE Component psd_monitor [7] */
+  /* TRACE Component psd_monitor [14] */
   mccoordschange(mcposrpsd_monitor, mcrotrpsd_monitor,
     &mcnlx,
     &mcnly,
@@ -7195,7 +9940,7 @@ mcnlp)
 #define p mcnlp
 
 #define mcabsorbComp mcabsorbComppsd_monitor
-  STORE_NEUTRON(7,
+  STORE_NEUTRON(14,
     mcnlx,
     mcnly,
     mcnlz,
@@ -7209,12 +9954,12 @@ mcnlp)
     mcnlp);
   mcScattered=0;
   mcRestore=0;
-  mcNCounter[7]++;
-  mcPCounter[7] += p;
-  mcP2Counter[7] += p*p;
+  mcNCounter[14]++;
+  mcPCounter[14] += p;
+  mcP2Counter[14] += p*p;
 #define mccompcurname  psd_monitor
 #define mccompcurtype  PSD_monitor
-#define mccompcurindex 7
+#define mccompcurindex 14
 #define nx mccpsd_monitor_nx
 #define ny mccpsd_monitor_ny
 #define PSD_N mccpsd_monitor_PSD_N
@@ -7247,7 +9992,7 @@ MCNUM restore_neutron = mccpsd_monitor_restore_neutron;
       RESTORE_NEUTRON(INDEX_CURRENT_COMP, x, y, z, vx, vy, vz, t, sx, sy, sz, p);
     }
 }
-#line 7250 "./Untitled.c"
+#line 9995 "./Untitled.c"
 }   /* End of psd_monitor=PSD_monitor() SETTING parameter declarations. */
 #undef PSD_p2
 #undef PSD_p
@@ -7260,7 +10005,7 @@ MCNUM restore_neutron = mccpsd_monitor_restore_neutron;
   /* Label for restoring  neutron */
   mcabsorbComppsd_monitor:
   if (RESTORE) /* restore if needed */
-  { RESTORE_NEUTRON(7,
+  { RESTORE_NEUTRON(14,
       mcnlx,
       mcnly,
       mcnlz,
@@ -7361,7 +10106,7 @@ MCNUM minutes = mccorigin_minutes;
 
   }
 }
-#line 7364 "./Untitled.c"
+#line 10109 "./Untitled.c"
 }   /* End of origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -7375,7 +10120,7 @@ MCNUM minutes = mccorigin_minutes;
   SIG_MESSAGE("psd_monitor (Save)");
 #define mccompcurname  psd_monitor
 #define mccompcurtype  PSD_monitor
-#define mccompcurindex 7
+#define mccompcurindex 14
 #define nx mccpsd_monitor_nx
 #define ny mccpsd_monitor_ny
 #define PSD_N mccpsd_monitor_PSD_N
@@ -7401,7 +10146,7 @@ MCNUM restore_neutron = mccpsd_monitor_restore_neutron;
         &PSD_N[0][0],&PSD_p[0][0],&PSD_p2[0][0],
         filename);
 }
-#line 7404 "./Untitled.c"
+#line 10149 "./Untitled.c"
 }   /* End of psd_monitor=PSD_monitor() SETTING parameter declarations. */
 #undef PSD_p2
 #undef PSD_p
@@ -7446,7 +10191,7 @@ MCNUM minutes = mccorigin_minutes;
     fprintf(stdout, "%g [min] ", difftime(NowTime,StartTime)/60.0);
   fprintf(stdout, "\n");
 }
-#line 7449 "./Untitled.c"
+#line 10194 "./Untitled.c"
 }   /* End of origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -7465,18 +10210,39 @@ MCNUM minutes = mccorigin_minutes;
     if (!mcNCounter[3]) fprintf(stderr, "Warning: No neutron could reach Component[3] Mono_Cradle\n");
     if (mcAbsorbProp[3]) fprintf(stderr, "Warning: %g events were removed in Component[3] Mono_Cradle=Arm()\n"
 "         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[3]);
-    if (!mcNCounter[4]) fprintf(stderr, "Warning: No neutron could reach Component[4] monochromator_flat\n");
-    if (mcAbsorbProp[4]) fprintf(stderr, "Warning: %g events were removed in Component[4] monochromator_flat=Monochromator_flat()\n"
+    if (!mcNCounter[4]) fprintf(stderr, "Warning: No neutron could reach Component[4] XY_ARM\n");
+    if (mcAbsorbProp[4]) fprintf(stderr, "Warning: %g events were removed in Component[4] XY_ARM=Arm()\n"
 "         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[4]);
-    if (!mcNCounter[5]) fprintf(stderr, "Warning: No neutron could reach Component[5] Mono_Out\n");
-    if (mcAbsorbProp[5]) fprintf(stderr, "Warning: %g events were removed in Component[5] Mono_Out=Arm()\n"
+    if (!mcNCounter[5]) fprintf(stderr, "Warning: No neutron could reach Component[5] monochromator_flat\n");
+    if (mcAbsorbProp[5]) fprintf(stderr, "Warning: %g events were removed in Component[5] monochromator_flat=Monochromator_flat()\n"
 "         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[5]);
-    if (!mcNCounter[6]) fprintf(stderr, "Warning: No neutron could reach Component[6] beamstop\n");
-    if (mcAbsorbProp[6]) fprintf(stderr, "Warning: %g events were removed in Component[6] beamstop=Beamstop()\n"
+    if (!mcNCounter[6]) fprintf(stderr, "Warning: No neutron could reach Component[6] monochromator2\n");
+    if (mcAbsorbProp[6]) fprintf(stderr, "Warning: %g events were removed in Component[6] monochromator2=Monochromator_flat()\n"
 "         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[6]);
-    if (!mcNCounter[7]) fprintf(stderr, "Warning: No neutron could reach Component[7] psd_monitor\n");
-    if (mcAbsorbProp[7]) fprintf(stderr, "Warning: %g events were removed in Component[7] psd_monitor=PSD_monitor()\n"
+    if (!mcNCounter[7]) fprintf(stderr, "Warning: No neutron could reach Component[7] monochromator3\n");
+    if (mcAbsorbProp[7]) fprintf(stderr, "Warning: %g events were removed in Component[7] monochromator3=Monochromator_flat()\n"
 "         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[7]);
+    if (!mcNCounter[8]) fprintf(stderr, "Warning: No neutron could reach Component[8] monochromator4\n");
+    if (mcAbsorbProp[8]) fprintf(stderr, "Warning: %g events were removed in Component[8] monochromator4=Monochromator_flat()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[8]);
+    if (!mcNCounter[9]) fprintf(stderr, "Warning: No neutron could reach Component[9] monochromator5\n");
+    if (mcAbsorbProp[9]) fprintf(stderr, "Warning: %g events were removed in Component[9] monochromator5=Monochromator_flat()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[9]);
+    if (!mcNCounter[10]) fprintf(stderr, "Warning: No neutron could reach Component[10] monochromator6\n");
+    if (mcAbsorbProp[10]) fprintf(stderr, "Warning: %g events were removed in Component[10] monochromator6=Monochromator_flat()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[10]);
+    if (!mcNCounter[11]) fprintf(stderr, "Warning: No neutron could reach Component[11] monochromator7\n");
+    if (mcAbsorbProp[11]) fprintf(stderr, "Warning: %g events were removed in Component[11] monochromator7=Monochromator_flat()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[11]);
+    if (!mcNCounter[12]) fprintf(stderr, "Warning: No neutron could reach Component[12] Mono_Out\n");
+    if (mcAbsorbProp[12]) fprintf(stderr, "Warning: %g events were removed in Component[12] Mono_Out=Arm()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[12]);
+    if (!mcNCounter[13]) fprintf(stderr, "Warning: No neutron could reach Component[13] beamstop\n");
+    if (mcAbsorbProp[13]) fprintf(stderr, "Warning: %g events were removed in Component[13] beamstop=Beamstop()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[13]);
+    if (!mcNCounter[14]) fprintf(stderr, "Warning: No neutron could reach Component[14] psd_monitor\n");
+    if (mcAbsorbProp[14]) fprintf(stderr, "Warning: %g events were removed in Component[14] psd_monitor=PSD_monitor()\n"
+"         (negative time, miss next components, rounding errors, Nan, Inf).\n", mcAbsorbProp[14]);
   mcsiminfo_close(); 
 } /* end finally */
 #define magnify mcdis_magnify
@@ -7509,7 +10275,7 @@ MCNUM minutes = mccorigin_minutes;
 {
   magnify("");
 }
-#line 7505 "./Untitled.c"
+#line 10264 "./Untitled.c"
 }   /* End of origin=Progress_bar() SETTING parameter declarations. */
 #undef CurrentTime
 #undef EndTime
@@ -7558,7 +10324,7 @@ int target_index = mccsource_simple_target_index;
     dashed_line(0,0,0, -focus_xw/2, focus_yh/2,dist, 4);
   }
 }
-#line 7554 "./Untitled.c"
+#line 10313 "./Untitled.c"
 }   /* End of source_simple=Source_simple() SETTING parameter declarations. */
 #undef srcArea
 #undef square
@@ -7581,7 +10347,26 @@ int target_index = mccsource_simple_target_index;
   line(0,0,0,0,0.2,0);
   line(0,0,0,0,0,0.2);
 }
-#line 7577 "./Untitled.c"
+#line 10336 "./Untitled.c"
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'XY_ARM'. */
+  SIG_MESSAGE("XY_ARM (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "XY_ARM");
+#define mccompcurname  XY_ARM
+#define mccompcurtype  Arm
+#define mccompcurindex 4
+#line 40 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Arm.comp"
+{
+  /* A bit ugly; hard-coded dimensions. */
+  magnify("");
+  line(0,0,0,0.2,0,0);
+  line(0,0,0,0,0.2,0);
+  line(0,0,0,0,0,0.2);
+}
+#line 10355 "./Untitled.c"
 #undef mccompcurname
 #undef mccompcurtype
 #undef mccompcurindex
@@ -7591,7 +10376,7 @@ int target_index = mccsource_simple_target_index;
   printf("MCDISPLAY: component %s\n", "monochromator_flat");
 #define mccompcurname  monochromator_flat
 #define mccompcurtype  Monochromator_flat
-#define mccompcurindex 4
+#define mccompcurindex 5
 #define mos_rms_y mccmonochromator_flat_mos_rms_y
 #define mos_rms_z mccmonochromator_flat_mos_rms_z
 #define mos_rms_max mccmonochromator_flat_mos_rms_max
@@ -7617,8 +10402,254 @@ MCNUM DM = mccmonochromator_flat_DM;
                0.0, (double)ymin, (double)zmax,
                0.0, (double)ymin, (double)zmin);
 }
-#line 7613 "./Untitled.c"
+#line 10391 "./Untitled.c"
 }   /* End of monochromator_flat=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'monochromator2'. */
+  SIG_MESSAGE("monochromator2 (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "monochromator2");
+#define mccompcurname  monochromator2
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 6
+#define mos_rms_y mccmonochromator2_mos_rms_y
+#define mos_rms_z mccmonochromator2_mos_rms_z
+#define mos_rms_max mccmonochromator2_mos_rms_max
+#define mono_Q mccmonochromator2_mono_Q
+{   /* Declarations of monochromator2=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator2_zmin;
+MCNUM zmax = mccmonochromator2_zmax;
+MCNUM ymin = mccmonochromator2_ymin;
+MCNUM ymax = mccmonochromator2_ymax;
+MCNUM zwidth = mccmonochromator2_zwidth;
+MCNUM yheight = mccmonochromator2_yheight;
+MCNUM mosaich = mccmonochromator2_mosaich;
+MCNUM mosaicv = mccmonochromator2_mosaicv;
+MCNUM r0 = mccmonochromator2_r0;
+MCNUM Q = mccmonochromator2_Q;
+MCNUM DM = mccmonochromator2_DM;
+#line 254 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  magnify("zy");
+  multiline(5, 0.0, (double)ymin, (double)zmin,
+               0.0, (double)ymax, (double)zmin,
+               0.0, (double)ymax, (double)zmax,
+               0.0, (double)ymin, (double)zmax,
+               0.0, (double)ymin, (double)zmin);
+}
+#line 10432 "./Untitled.c"
+}   /* End of monochromator2=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'monochromator3'. */
+  SIG_MESSAGE("monochromator3 (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "monochromator3");
+#define mccompcurname  monochromator3
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 7
+#define mos_rms_y mccmonochromator3_mos_rms_y
+#define mos_rms_z mccmonochromator3_mos_rms_z
+#define mos_rms_max mccmonochromator3_mos_rms_max
+#define mono_Q mccmonochromator3_mono_Q
+{   /* Declarations of monochromator3=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator3_zmin;
+MCNUM zmax = mccmonochromator3_zmax;
+MCNUM ymin = mccmonochromator3_ymin;
+MCNUM ymax = mccmonochromator3_ymax;
+MCNUM zwidth = mccmonochromator3_zwidth;
+MCNUM yheight = mccmonochromator3_yheight;
+MCNUM mosaich = mccmonochromator3_mosaich;
+MCNUM mosaicv = mccmonochromator3_mosaicv;
+MCNUM r0 = mccmonochromator3_r0;
+MCNUM Q = mccmonochromator3_Q;
+MCNUM DM = mccmonochromator3_DM;
+#line 254 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  magnify("zy");
+  multiline(5, 0.0, (double)ymin, (double)zmin,
+               0.0, (double)ymax, (double)zmin,
+               0.0, (double)ymax, (double)zmax,
+               0.0, (double)ymin, (double)zmax,
+               0.0, (double)ymin, (double)zmin);
+}
+#line 10473 "./Untitled.c"
+}   /* End of monochromator3=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'monochromator4'. */
+  SIG_MESSAGE("monochromator4 (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "monochromator4");
+#define mccompcurname  monochromator4
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 8
+#define mos_rms_y mccmonochromator4_mos_rms_y
+#define mos_rms_z mccmonochromator4_mos_rms_z
+#define mos_rms_max mccmonochromator4_mos_rms_max
+#define mono_Q mccmonochromator4_mono_Q
+{   /* Declarations of monochromator4=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator4_zmin;
+MCNUM zmax = mccmonochromator4_zmax;
+MCNUM ymin = mccmonochromator4_ymin;
+MCNUM ymax = mccmonochromator4_ymax;
+MCNUM zwidth = mccmonochromator4_zwidth;
+MCNUM yheight = mccmonochromator4_yheight;
+MCNUM mosaich = mccmonochromator4_mosaich;
+MCNUM mosaicv = mccmonochromator4_mosaicv;
+MCNUM r0 = mccmonochromator4_r0;
+MCNUM Q = mccmonochromator4_Q;
+MCNUM DM = mccmonochromator4_DM;
+#line 254 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  magnify("zy");
+  multiline(5, 0.0, (double)ymin, (double)zmin,
+               0.0, (double)ymax, (double)zmin,
+               0.0, (double)ymax, (double)zmax,
+               0.0, (double)ymin, (double)zmax,
+               0.0, (double)ymin, (double)zmin);
+}
+#line 10514 "./Untitled.c"
+}   /* End of monochromator4=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'monochromator5'. */
+  SIG_MESSAGE("monochromator5 (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "monochromator5");
+#define mccompcurname  monochromator5
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 9
+#define mos_rms_y mccmonochromator5_mos_rms_y
+#define mos_rms_z mccmonochromator5_mos_rms_z
+#define mos_rms_max mccmonochromator5_mos_rms_max
+#define mono_Q mccmonochromator5_mono_Q
+{   /* Declarations of monochromator5=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator5_zmin;
+MCNUM zmax = mccmonochromator5_zmax;
+MCNUM ymin = mccmonochromator5_ymin;
+MCNUM ymax = mccmonochromator5_ymax;
+MCNUM zwidth = mccmonochromator5_zwidth;
+MCNUM yheight = mccmonochromator5_yheight;
+MCNUM mosaich = mccmonochromator5_mosaich;
+MCNUM mosaicv = mccmonochromator5_mosaicv;
+MCNUM r0 = mccmonochromator5_r0;
+MCNUM Q = mccmonochromator5_Q;
+MCNUM DM = mccmonochromator5_DM;
+#line 254 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  magnify("zy");
+  multiline(5, 0.0, (double)ymin, (double)zmin,
+               0.0, (double)ymax, (double)zmin,
+               0.0, (double)ymax, (double)zmax,
+               0.0, (double)ymin, (double)zmax,
+               0.0, (double)ymin, (double)zmin);
+}
+#line 10555 "./Untitled.c"
+}   /* End of monochromator5=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'monochromator6'. */
+  SIG_MESSAGE("monochromator6 (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "monochromator6");
+#define mccompcurname  monochromator6
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 10
+#define mos_rms_y mccmonochromator6_mos_rms_y
+#define mos_rms_z mccmonochromator6_mos_rms_z
+#define mos_rms_max mccmonochromator6_mos_rms_max
+#define mono_Q mccmonochromator6_mono_Q
+{   /* Declarations of monochromator6=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator6_zmin;
+MCNUM zmax = mccmonochromator6_zmax;
+MCNUM ymin = mccmonochromator6_ymin;
+MCNUM ymax = mccmonochromator6_ymax;
+MCNUM zwidth = mccmonochromator6_zwidth;
+MCNUM yheight = mccmonochromator6_yheight;
+MCNUM mosaich = mccmonochromator6_mosaich;
+MCNUM mosaicv = mccmonochromator6_mosaicv;
+MCNUM r0 = mccmonochromator6_r0;
+MCNUM Q = mccmonochromator6_Q;
+MCNUM DM = mccmonochromator6_DM;
+#line 254 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  magnify("zy");
+  multiline(5, 0.0, (double)ymin, (double)zmin,
+               0.0, (double)ymax, (double)zmin,
+               0.0, (double)ymax, (double)zmax,
+               0.0, (double)ymin, (double)zmax,
+               0.0, (double)ymin, (double)zmin);
+}
+#line 10596 "./Untitled.c"
+}   /* End of monochromator6=Monochromator_flat() SETTING parameter declarations. */
+#undef mono_Q
+#undef mos_rms_max
+#undef mos_rms_z
+#undef mos_rms_y
+#undef mccompcurname
+#undef mccompcurtype
+#undef mccompcurindex
+
+  /* MCDISPLAY code for component 'monochromator7'. */
+  SIG_MESSAGE("monochromator7 (McDisplay)");
+  printf("MCDISPLAY: component %s\n", "monochromator7");
+#define mccompcurname  monochromator7
+#define mccompcurtype  Monochromator_flat
+#define mccompcurindex 11
+#define mos_rms_y mccmonochromator7_mos_rms_y
+#define mos_rms_z mccmonochromator7_mos_rms_z
+#define mos_rms_max mccmonochromator7_mos_rms_max
+#define mono_Q mccmonochromator7_mono_Q
+{   /* Declarations of monochromator7=Monochromator_flat() SETTING parameters. */
+MCNUM zmin = mccmonochromator7_zmin;
+MCNUM zmax = mccmonochromator7_zmax;
+MCNUM ymin = mccmonochromator7_ymin;
+MCNUM ymax = mccmonochromator7_ymax;
+MCNUM zwidth = mccmonochromator7_zwidth;
+MCNUM yheight = mccmonochromator7_yheight;
+MCNUM mosaich = mccmonochromator7_mosaich;
+MCNUM mosaicv = mccmonochromator7_mosaicv;
+MCNUM r0 = mccmonochromator7_r0;
+MCNUM Q = mccmonochromator7_Q;
+MCNUM DM = mccmonochromator7_DM;
+#line 254 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Monochromator_flat.comp"
+{
+  magnify("zy");
+  multiline(5, 0.0, (double)ymin, (double)zmin,
+               0.0, (double)ymax, (double)zmin,
+               0.0, (double)ymax, (double)zmax,
+               0.0, (double)ymin, (double)zmax,
+               0.0, (double)ymin, (double)zmin);
+}
+#line 10637 "./Untitled.c"
+}   /* End of monochromator7=Monochromator_flat() SETTING parameter declarations. */
 #undef mono_Q
 #undef mos_rms_max
 #undef mos_rms_z
@@ -7632,7 +10663,7 @@ MCNUM DM = mccmonochromator_flat_DM;
   printf("MCDISPLAY: component %s\n", "Mono_Out");
 #define mccompcurname  Mono_Out
 #define mccompcurtype  Arm
-#define mccompcurindex 5
+#define mccompcurindex 12
 #line 40 "/Applications/McStas-2.4.1.app/Contents/Resources/mcstas/2.4.1/tools/Python/mcrun/../mccodelib/../../../optics/Arm.comp"
 {
   /* A bit ugly; hard-coded dimensions. */
@@ -7641,7 +10672,7 @@ MCNUM DM = mccmonochromator_flat_DM;
   line(0,0,0,0,0.2,0);
   line(0,0,0,0,0,0.2);
 }
-#line 7637 "./Untitled.c"
+#line 10661 "./Untitled.c"
 #undef mccompcurname
 #undef mccompcurtype
 #undef mccompcurindex
@@ -7651,7 +10682,7 @@ MCNUM DM = mccmonochromator_flat_DM;
   printf("MCDISPLAY: component %s\n", "beamstop");
 #define mccompcurname  beamstop
 #define mccompcurtype  Beamstop
-#define mccompcurindex 6
+#define mccompcurindex 13
 {   /* Declarations of beamstop=Beamstop() SETTING parameters. */
 MCNUM xmin = mccbeamstop_xmin;
 MCNUM xmax = mccbeamstop_xmax;
@@ -7672,7 +10703,7 @@ MCNUM radius = mccbeamstop_radius;
                (double)xmin, (double)ymax, 0.0,
                (double)xmin, (double)ymin, 0.0);
 }
-#line 7668 "./Untitled.c"
+#line 10692 "./Untitled.c"
 }   /* End of beamstop=Beamstop() SETTING parameter declarations. */
 #undef mccompcurname
 #undef mccompcurtype
@@ -7683,7 +10714,7 @@ MCNUM radius = mccbeamstop_radius;
   printf("MCDISPLAY: component %s\n", "psd_monitor");
 #define mccompcurname  psd_monitor
 #define mccompcurtype  PSD_monitor
-#define mccompcurindex 7
+#define mccompcurindex 14
 #define nx mccpsd_monitor_nx
 #define ny mccpsd_monitor_ny
 #define PSD_N mccpsd_monitor_PSD_N
@@ -7707,7 +10738,7 @@ MCNUM restore_neutron = mccpsd_monitor_restore_neutron;
                (double)xmin, (double)ymax, 0.0,
                (double)xmin, (double)ymin, 0.0);
 }
-#line 7703 "./Untitled.c"
+#line 10727 "./Untitled.c"
 }   /* End of psd_monitor=PSD_monitor() SETTING parameter declarations. */
 #undef PSD_p2
 #undef PSD_p

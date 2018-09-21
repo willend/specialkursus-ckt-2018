@@ -53,4 +53,4 @@ function [] = CreateAnalyserSpec_2(filename)
 	fprintf(fid, '%12.3f \t %12.3f \t %12.3f \t %12.3f \n', [Lsa(n) Lad(n)  BladeL(n) DetLen(n)]);	
     end
     fclose(fid)
-    
+    edit 

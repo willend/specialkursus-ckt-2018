@@ -1,0 +1,174 @@
+/*******************************************************************************
+* Instrument: <analy_crystal>
+*
+* %I
+* Written by: <your name (email)>
+* Date: 2018-09-20
+* Origin: DTU Physics
+* %INSTRUMENT_SITE: Templates
+*
+* <instrument short description>
+*
+* %D
+* <instrument description>
+*
+* Example: <parameters=values>
+*
+* %P
+* <parameter1>: [<unit>] <parameter1 description>
+* ...
+*
+* %L
+* <reference/HTML link>
+*
+* %E
+*******************************************************************************/
+DEFINE INSTRUMENT template_body_simple(OMA=37.072,TTA=74.144)
+
+DECLARE
+%{
+double DM         = 3.355;   /* Monochromator d-spacing in Angs */
+double wi		  = 0.01; 	/* Monochromator width*/
+%}
+
+INITIALIZE
+%{
+%}
+
+TRACE
+
+COMPONENT origin = Progress_bar()
+AT (0, 0, 0) RELATIVE ABSOLUTE
+
+// insert components here (e.g. Insert -> Source -> ...)
+
+COMPONENT source_simple = Source_simple(
+    radius=1e-6, 
+    dist=1.2, 
+    focus_xw=0.05, 
+    focus_yh=0.1, 
+    E0=5)
+AT (0, 0, 0) RELATIVE PREVIOUS
+
+COMPONENT Mono_Cradle = Arm()
+  AT (0.0, 0.0, 1.2) RELATIVE PREVIOUS  ROTATED (0,OMA, 0) RELATIVE source_simple
+
+COMPONENT XY_ARM = Arm() 
+AT (0.0, 0.0, 1.2) RELATIVE source_simple
+
+COMPONENT monochromator_flat = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (0, 0, 0) RELATIVE Mono_Cradle
+
+
+
+COMPONENT monochromator2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (-0.008906, 0, -0.0104) RELATIVE XY_ARM ROTATED (0,36.643,0) RELATIVE source_simple
+
+COMPONENT monochromator3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (-0.017655,0,-0.020935) RELATIVE XY_ARM ROTATED (0,36.214,0) RELATIVE source_simple
+
+COMPONENT monochromator4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (-0.026246,0,-0.031598) RELATIVE XY_ARM ROTATED (0,35.785,0) RELATIVE source_simple
+
+COMPONENT monochromator5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (0.009061,0,0.010267) RELATIVE XY_ARM ROTATED (0,37.5,0) RELATIVE source_simple
+
+COMPONENT monochromator6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (0.018274,0,0.020397) RELATIVE XY_ARM ROTATED (0,37.929,0) RELATIVE source_simple
+
+COMPONENT monochromator7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (0.027638,0,0.030387) RELATIVE XY_ARM ROTATED (0,38.358,0) RELATIVE source_simple
+
+
+
+
+//COMPONENT mirror = Mirror(
+//    xwidth=0.1, 
+//    yheight=0.1)
+//AT (0, 0, 0) RELATIVE PREVIOUS
+
+/*                                on mono, pointing towards sample */
+COMPONENT Mono_Out = Arm()
+  AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE source_simple
+
+
+COMPONENT beamstop = Beamstop(
+    xmin=-0.0005, 
+    xmax=0.0005, 
+    ymin=-0.0005, 
+    ymax=0.0005)
+AT (0, 0, 2) RELATIVE  source_simple
+ROTATED (0,0, 0) ABSOLUTE
+
+COMPONENT psd_monitor = PSD_monitor(
+    filename="test_fil_analyser", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1)
+AT (0, 0, 1) RELATIVE Mono_Out
+
+
+
+
+FINALLY
+%{
+%}
+
+END
