@@ -1,9 +1,10 @@
-DEFINE INSTRUMENT EGCESE(
+DEFINE INSTRUMENT BIFROST(
 WaveMin=0.1, // Minimum wavelength from moderator
 WaveMax=99.5, // Maximum wavelength from moderator
 pin_holeY = 0.088,   // Height of pinhole at pulse shapping chopper position (0.088 matches guide).
 pin_holeX=0.03,  // Width of pinhole at pulse shapping chopper position (0.03 matches guide).
 E_0=4.0, // Lowest energy in wavelength band.
+L_0=0, // Alternative: Lowest wavelength in wavelength band
 chopPulseOpening=0.004, // Opening time of pulse shapping chopper [s]
 chopPulseFrequencyOrder=14, // Number of chopper pulses pr moderator pulse. It will automatically be reduced when nesesary and a warning will be written in the promt. 
 sampleSizeX=0.010, // Width of monitors at sample position. Guide optimized for up to 0.015, intruments optimized for 0.001 to 0.01.
@@ -19,8 +20,11 @@ FOCopen2=51.63,
 Npulse=1,
 PscOff=0.0306,
 discD=0.04,
+monigap_length = 0.02, // Length of the moni-gap
 int print=0, // print values of interest for debugging. McTrace does not work when this is set to 1.
-monigap_length = 0.02, // Length of the moni-gap)
+makeVirtualSource=0, // if 1 print all neutrons to virtual source file 
+int printMValues=0
+)
 
 DECLARE
 %{
@@ -88,18 +92,18 @@ double smallaxis_x1 = 0.060000/2;
 
 
 
-double elementLength1_part_1[100]; 
-double mValues1vertical_part_1[100]; 
-double mValues1horizontal_part_1[100];
-double elementLength1_part_2[100]; 
-double mValues1vertical_part_2[100]; 
-double mValues1horizontal_part_2[100];
-double elementLength1_part_3[100]; 
-double mValues1vertical_part_3[100]; 
-double mValues1horizontal_part_3[100];
-double elementLength1_part_4[100]; 
-double mValues1vertical_part_4[100]; 
-double mValues1horizontal_part_4[100];
+double elementLength1_part_1[50]; 
+double mValues1vertical_part_1[50]; 
+double mValues1horizontal_part_1[50];
+double elementLength1_part_2[5]; 
+double mValues1vertical_part_2[5]; 
+double mValues1horizontal_part_2[5];
+double elementLength1_part_3[5]; 
+double mValues1vertical_part_3[5]; 
+double mValues1horizontal_part_3[5];
+double elementLength1_part_4[5]; 
+double mValues1vertical_part_4[5]; 
+double mValues1horizontal_part_4[5];
 
 int counter = 0;
 
@@ -116,26 +120,32 @@ double DivSlit0Gap=0.02; // Hole in guide required for Divergence slit nr 0 (at 
 double DivSlit1Gap=0.02; // Hole in guide required for Divergence slit nr 1
 double DivSlit2Gap=0.02; // Hole in guide required for Divergence slit nr 2
 double DivSlit3Gap=0.02; // Hole in guide required for Divergence slit nr 3
-double DivSlit1Pos=1.191;  // Position of Divergence Slit nr 1
+
+double DivSlit1Pos=1.0814;  // Position of Divergence Slit nr 1
 double DivSlit2Pos=1.661; // Position of Divergence Slit nr 2
 double DivSlit3Pos=2.961; // Position of Divergence Slit nr 3
+// Old divJaw pos:
+//double DivSlit1Pos=1.191;  // Position of Divergence Slit nr 1
+//double DivSlit2Pos=1.661; // Position of Divergence Slit nr 2
+//double DivSlit3Pos=2.961; // Position of Divergence Slit nr 3
 double chopGap=0.04;
 double BW_chopGap=0.04;
-double chopFrameOverlap1Pos_fromModerator= 8.272;    // Distance from moderator to first frame owerlap chopper
-double chopFrameOverlap2Pos_fromModerator=14.762;    // Distance from moderator to second frame owerlap chopper
+double chopFrameOverlap1Pos= 8.530;    // Distance from moderator to first frame owerlap chopper
+double chopFrameOverlap2Pos= 14.973;    // Distance from moderator to second frame owerlap chopper
 
 double benderAngle = 0.01886551; // Mads numbers = 0.0183513513514;
+
+int i;   
 %}
 
 INITIALIZE
 %{
 
 
-
-
-// make distance relative to beginning of section 
-chopFrameOverlap1Pos = chopFrameOverlap1Pos_fromModerator - (PscOff+4.39553+2*u+1.903398); // chopFrameOverlap1 distance from moderator - PSC distance from moderator
-chopFrameOverlap2Pos = chopFrameOverlap2Pos_fromModerator - (PscOff+4.39553+2*u+1.903398); // chopFrameOverlap1 distance from moderator - PSC distance from moderator
+// If there is set a value of L_0, overwrite E_0 and calculate E_0 from L_0 
+if (L_0>0){
+	E_0=81.82/(L_0*L_0);
+}
 
 
 
@@ -323,11 +333,11 @@ chopFrameOverlap2Pos = chopFrameOverlap2Pos_fromModerator - (PscOff+4.39553+2*u+
 
  
  //// Part 3 //// 
- elementLength1_part_3[0] = 0.01680; 
+ elementLength1_part_3[0] = 0.0596; 
  mValues1vertical_part_3[0] = 3.00; 
  mValues1horizontal_part_3[0] = 3.00;
 
- elementLength1_part_3[1] = 0.43330; 
+ elementLength1_part_3[1] = 0.500; 
  mValues1vertical_part_3[1] = 3.50; 
  mValues1horizontal_part_3[1] = 3.00;
 
@@ -342,7 +352,8 @@ chopFrameOverlap2Pos = chopFrameOverlap2Pos_fromModerator - (PscOff+4.39553+2*u+
  mValues1horizontal_part_4[1] = 3.5;
 
 // A bit extra due to mismatch in coating lengths after rounding element length to 0.5 meters:
- elementLength1_part_4[2] = 0.1143000;  
+// 0.47 cm of this is applied in last tested version (sep 12 2018)
+ elementLength1_part_4[2] = 0.0047;  
  mValues1vertical_part_4[2] = 3.50; 
  mValues1horizontal_part_4[2] = 3.5;
 
@@ -548,7 +559,7 @@ elementLength6S[11]=0.015; // feeder window #2
 mValues6verticalS[11]=0;
 mValues6horizontalS[11]=0;
 
-elementLength6S[12]=0.488444444444444 - 0.015 - 0.076264444; // End of Feeder (after window 2)
+elementLength6S[12]=0.488444444444444 - 0.015 - 0.076264444 - 0.00047; // End of Feeder (after window 2)
 mValues6verticalS[12]=2.0;
 mValues6horizontalS[12]=1.5;
 
@@ -613,8 +624,51 @@ chopBWOpen= 360.0/InstLength*(chopBWPos-chopPulseDist*1); //Here Jonas put a mul
 chopBWOffset=(chopBW_t0+chopBW_t1)/2.0;
 chopBWPhaseOffset=  (chopBWOffset)*14.0*360.0;
 
+if (printMValues==1) {
+	// Will print all coating values to a file if this is toggled on 
+	FILE* fp = fopen("CoatingDistributions.txt", "w");
+	fprintf(fp,"Coating Distributions. From moderator towards sample:\n");
+	fprintf(fp,"m_horizontal , m_vertical , elementlength:\n");
+	fprintf(fp,"NBOA:\n");
+	for (i = 0 ; i < 13 ; i++){
+		fprintf(fp,"%f , %f , %f\n",mValues6horizontalS[i],mValues6verticalS[i],elementLength6S[i]);
+	}
+
+	fprintf(fp,"\nCurved section:\n");
+	fprintf(fp,"(%f,%f) , %f , %f\n",3.000000,3.500000,2.500000,18.0);
+	
+	fprintf(fp,"\nExpanding ellipse:\n");
+	for (i = 0 ; i < 51 ; i++){
+		fprintf(fp,"%f , %f , %f\n",mValues3horizontalS[i],mValues3verticalS[i],elementLength3S[i]);
+	}
+	
+	fprintf(fp,"\nLong Straight Section\n");
+	fprintf(fp,"%f , %f , %f\n",1.500000,1.000000,90.0);
+
+	fprintf(fp,"\nFocusing Ellipse\n");
+	for (i = 0 ; i < 41 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_1[i], mValues1vertical_part_1[i],elementLength1_part_1[i]);
+	}
+	fprintf(fp,"2 cm gap for divJaw 3\n");
+	for (i = 0 ; i < 3 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_2[i], mValues1vertical_part_2[i],elementLength1_part_2[i]);
+	}
+	fprintf(fp,"2 cm gap for divJaw 2\n");
+	for (i = 0 ; i < 2 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_3[i], mValues1vertical_part_3[i],elementLength1_part_3[i]);
+	}
+fprintf(fp,"2 cm gap for divJaw 1 \n");
+	for (i = 0 ; i < 3 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_4[i], mValues1vertical_part_4[i],elementLength1_part_4[i]);
+	}
 
 
+fclose(fp);
+}
+
+
+printf("\n part 3 length: %f\n",DivSlit2Pos-DivSlit1Gap/2.0-DivSlit2Gap/2.0-DivSlit1Pos);
+printf("\n part 4 length: %f\n",DivSlit1Pos-DivSlit1Gap/2.0-sample_dist);
 
 %}
 TRACE
@@ -671,9 +725,9 @@ AT (0.01277,0.000000,1.903398-u) RELATIVE Origin
 ROTATED (0,-0.56,0) RELATIVE Origin 
 
 
-COMPONENT elliptical_guide_gravity6= Elliptic_guide_gravity(
-l=4.39553, linxw=4.164791, linyh=1.442343, loutxw=0.450842, loutyh=3.741480,
-xwidth = 0.068797, yheight = 0.048475, dimensionsAt="mid",
+COMPONENT NBOA= Elliptic_guide_gravity(
+l=4.39553, linxw=3.4578, linyh=1.36, loutxw=0.415155, loutyh=3.487681,
+xwidth = 0.069634, yheight = 0.04862, dimensionsAt="mid",
 R0=0.990000, Qc=0.021700, alpha=3.100000, mvaluesright = mValues6horizontalS, mvaluesleft = mValues6horizontalS,mvaluestop = mValues6verticalS,mvaluesbottom = mValues6verticalS,seglength = elementLength6S, W=0.003000)
 AT (0,0,u) RELATIVE StartOfGuide
 
@@ -778,7 +832,7 @@ COMPONENT curved_guide_2_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_3_0 = Guide_gravity(
@@ -789,7 +843,7 @@ COMPONENT curved_guide_3_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 
@@ -801,7 +855,7 @@ COMPONENT curved_guide_4_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 
@@ -817,7 +871,7 @@ COMPONENT curved_guide_5_beforeChopper = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 
@@ -889,7 +943,7 @@ COMPONENT curved_guide_7_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_8_0 = Guide_gravity(
@@ -900,7 +954,7 @@ COMPONENT curved_guide_8_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_9_0 = Guide_gravity(
@@ -911,7 +965,7 @@ COMPONENT curved_guide_9_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_10_0 = Guide_gravity(
@@ -922,7 +976,7 @@ COMPONENT curved_guide_10_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_11_0 = Guide_gravity(
@@ -933,7 +987,7 @@ COMPONENT curved_guide_11_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_12_0 = Guide_gravity(
@@ -944,7 +998,7 @@ COMPONENT curved_guide_12_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_13_0 = Guide_gravity(
@@ -955,7 +1009,7 @@ COMPONENT curved_guide_13_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_14_0 = Guide_gravity(
@@ -966,7 +1020,7 @@ COMPONENT curved_guide_14_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_15_0 = Guide_gravity(
@@ -977,7 +1031,7 @@ COMPONENT curved_guide_15_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_16_0 = Guide_gravity(
@@ -988,7 +1042,7 @@ COMPONENT curved_guide_16_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 COMPONENT curved_guide_17_0 = Guide_gravity(
@@ -999,7 +1053,7 @@ COMPONENT curved_guide_17_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS
 
 
@@ -1015,7 +1069,7 @@ COMPONENT curved_guide_18_beforeChopper = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_17_1
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_17_1
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_17_1
 
 
@@ -1087,7 +1141,7 @@ COMPONENT curved_guide_20_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_19_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_19_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_19_0
 
 COMPONENT curved_guide_21_0 = Guide_gravity(
@@ -1098,7 +1152,7 @@ COMPONENT curved_guide_21_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_20_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_20_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_20_0
 
 COMPONENT curved_guide_22_0 = Guide_gravity(
@@ -1109,7 +1163,7 @@ COMPONENT curved_guide_22_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_21_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_21_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_21_0
 
 COMPONENT curved_guide_23_0 = Guide_gravity(
@@ -1120,7 +1174,7 @@ COMPONENT curved_guide_23_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_22_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_22_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_22_0
 
 COMPONENT curved_guide_24_0 = Guide_gravity(
@@ -1131,7 +1185,7 @@ COMPONENT curved_guide_24_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_23_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_23_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_23_0
 
 COMPONENT curved_guide_25_0 = Guide_gravity(
@@ -1142,7 +1196,7 @@ COMPONENT curved_guide_25_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_24_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_24_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_24_0
 
 COMPONENT curved_guide_26_0 = Guide_gravity(
@@ -1153,7 +1207,7 @@ COMPONENT curved_guide_26_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_25_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_25_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_25_0
 
 COMPONENT curved_guide_27_0 = Guide_gravity(
@@ -1164,7 +1218,7 @@ COMPONENT curved_guide_27_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_26_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_26_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_26_0
 
 COMPONENT curved_guide_28_0 = Guide_gravity(
@@ -1175,7 +1229,7 @@ COMPONENT curved_guide_28_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_27_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_27_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_27_0
 
 COMPONENT curved_guide_29_0 = Guide_gravity(
@@ -1186,7 +1240,7 @@ COMPONENT curved_guide_29_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_28_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_28_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_28_0
 
 COMPONENT curved_guide_30_0 = Guide_gravity(
@@ -1197,7 +1251,7 @@ COMPONENT curved_guide_30_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_29_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_29_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_29_0
 
 COMPONENT curved_guide_31_0 = Guide_gravity(
@@ -1208,7 +1262,7 @@ COMPONENT curved_guide_31_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_30_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_30_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_30_0
 
 COMPONENT curved_guide_32_0 = Guide_gravity(
@@ -1219,7 +1273,7 @@ COMPONENT curved_guide_32_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_31_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_31_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_31_0
 
 COMPONENT curved_guide_33_0 = Guide_gravity(
@@ -1230,7 +1284,7 @@ COMPONENT curved_guide_33_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_32_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_32_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_32_0
 
 COMPONENT curved_guide_34_0 = Guide_gravity(
@@ -1241,7 +1295,7 @@ COMPONENT curved_guide_34_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_33_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_33_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_33_0
 
 COMPONENT curved_guide_35_0 = Guide_gravity(
@@ -1252,7 +1306,7 @@ COMPONENT curved_guide_35_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_34_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_34_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_34_0
 
 
@@ -1264,13 +1318,13 @@ COMPONENT curved_guide_36_0 = Guide_gravity(
   alpha=3.100000,W=0.003000,
   mleft = 3.000000, mright = 3.500000,
   mtop = 2.500000,mbottom =2.500000)
-AT (7.57345916228e-10,0,0.500 + u-0.004310868) RELATIVE PREVIOUS // curved_guide_34_0
+AT (7.57345916228e-10,0,0.500 + u + 6e-5) RELATIVE PREVIOUS // curved_guide_34_0
 ROTATED (0,benderAngle,0) RELATIVE PREVIOUS // curved_guide_34_0
 
 
 
 COMPONENT EndOfelement_4= Arm()
-AT (7.57345916228e-10,0,0.500 + u) RELATIVE PREVIOUS // curved_guide_35_0
+AT (7.57345916228e-10,0,0.495689132 + u) RELATIVE PREVIOUS // curved_guide_35_0
 
 
 
@@ -1300,34 +1354,34 @@ AT (0,0, u) RELATIVE PREVIOUS
 ROTATED (0,0,0) RELATIVE PREVIOUS
 
 
-COMPONENT L_monBeforeFrameOverlap = L_monitor(
+COMPONENT L_monBeforeBWC = L_monitor(
     nL = 100, filename = "L_monBeforeBWC.dat", xwidth = 0.2,restore_neutron=1,
     yheight = 0.2, Lmin = lambda_0/2.0, Lmax = lambda_1*2.0)
   AT (0, 0, chopBWPos-startXposition_straight-BW_chopGap/2+u) RELATIVE PREVIOUS
 
-COMPONENT ToFBeforeFrameOverlapChopper = TOF_monitor(
+COMPONENT ToFBeforeBWC = TOF_monitor(
     nt = 1000, filename = "ToFBeforeBWC.dat",restore_neutron=1, xwidth = 0.2,
     yheight = 0.2, tmax = 5.5*72.0*1e6/v_0)
   AT (0, 0, u) RELATIVE  PREVIOUS
 
-COMPONENT FrameOverlapChopper = DiskChopper(  /************** Bandwidth chopper 1 ****************/
+COMPONENT BWC1 = DiskChopper(  /************** Bandwidth chopper 1 ****************/
     theta_0 = BWopen, radius = 0.35, nu =14, nslit = 1, yheight=0.086,
    delay=chopBWOffset)
    //phase=chopBWPhaseOffset)
   AT (0, 0, BW_chopGap/2+u) RELATIVE PREVIOUS
 
-  COMPONENT FrameOverlapChopper2 = DiskChopper(  /************** Bandwidth chopper 2 ****************/
+  COMPONENT BWC2 = DiskChopper(  /************** Bandwidth chopper 2 ****************/
     theta_0 = BWopen, radius = 0.35, nu =-14, nslit = 1, yheight=0.086,
    delay=chopBWOffset)
    //phase=chopBWPhaseOffset)
    AT (0, 0, u) RELATIVE  PREVIOUS
    
-COMPONENT ToFAfterFrameOverlapChopper = TOF_monitor(
+COMPONENT ToFAfterBWC = TOF_monitor(
     nt = 1000, filename = "ToFAfterBWC.dat",restore_neutron=1, xwidth = 0.2,
     yheight = 0.2, tmax =  5.5*72.0*1.0e6/v_0)
   AT (0, 0, u) RELATIVE  PREVIOUS
 
-COMPONENT L_monAfterFrameOverlap = L_monitor(
+COMPONENT L_monAfterBWC = L_monitor(
     nL = 100, filename = "L_monAfterBWC.dat", restore_neutron=1,xwidth = 0.2,
     yheight = 0.2, Lmin = lambda_0/2.0, Lmax = lambda_1*2.0)
   AT (0, 0, u) RELATIVE PREVIOUS
@@ -1398,12 +1452,18 @@ R0=0.990000, Qc=0.021700, alpha=3.100000, mvaluesright = mValues1horizontal_part
 AT (0,0, 6*u+length1-(DivSlit1Pos-DivSlit1Gap/2.0-sample_dist)) RELATIVE EndOfelement_2
 ROTATED (0,0,0) RELATIVE PREVIOUS
 
+COMPONENT EndOfelement_1= Arm()
+AT (0,0,DivSlit1Pos-DivSlit1Gap/2.0-sample_dist +u) RELATIVE PREVIOUS
+
+COMPONENT VirtualOutput = Virtual_output(
+    filename="VirtualOutput_endOfGuide.dat") WHEN (makeVirtualSource==1)
+AT (0, 0,u) RELATIVE PREVIOUS
+
+
 COMPONENT DiwJaw0 = Slit(
     yheight =1, xwidth=DivSlit0_width)
 AT (0,0, 7*u+length1+DivSlit0Gap/2.0) RELATIVE EndOfelement_2
 
-COMPONENT EndOfelement_1= Arm()
-AT (0,0,length1 + 8*u+DivSlit0Gap) RELATIVE EndOfelement_2
 
 
 COMPONENT Lmon_guide_end = L_monitor(
@@ -1416,7 +1476,7 @@ COMPONENT Lmon_guide_end = L_monitor(
 COMPONENT Div2d_sample_B = Divergence_monitor(
     nh = 200, nv = 200, filename = "Div2d_sample_B", xwidth = sampleSizeX,
     yheight = sampleSizeY, maxdiv_h = 0.750000, maxdiv_v = 0.750000,restore_neutron=1)
-  AT (0, 0,0.580000) RELATIVE PREVIOUS
+  AT (0, 0,0.580000) RELATIVE EndOfelement_1
   EXTEND
     %{
     x_div = RAD2DEG*atan2(vx,vz);
@@ -1508,8 +1568,8 @@ COMPONENT acceptance_y_divy_maxdiv = DivPos_y_monitor(
  AT (0, 0, u) RELATIVE PREVIOUS
 
 COMPONENT Lmon_sample = L_monitor(
-    nL = 300, filename = "Lmon_sample", xwidth = sampleSizeX, restore_neutron=1,
-    yheight = sampleSizeY, Lmin = 2, Lmax = 4)
+    nL = 400, filename = "Lmon_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, Lmin = 2, Lmax = 6)
   AT (0, 0,u) RELATIVE PREVIOUS
 
 FINALLY
