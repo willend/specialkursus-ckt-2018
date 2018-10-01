@@ -1580,12 +1580,21 @@ COMPONENT Lmon_sample = L_monitor(
     yheight = sampleSizeY, Lmin = 2, Lmax = 6)
   AT (0, 0,u) RELATIVE PREVIOUS
 
+//V-sample
+COMPONENT v_sample = V_sample(
+    radius=0.005, 
+    thickness=0.002, 
+    zdepth=0.01, 
+    focus_xw=0.05, 
+    focus_yh=0.1)
+AT (0, 0, 1) RELATIVE Lmon_sample
+
 
 COMPONENT Mono_Cradle = Arm()
-  AT (0.0, 0.0, 1.2) RELATIVE  Lmon_sample  ROTATED (0,OMA, 0) RELATIVE  Lmon_sample
+  AT (0.0, 0.0, 1.2) RELATIVE  v_sample  ROTATED (0,OMA, 0) RELATIVE  v_sample
 
 COMPONENT XY_ARM = Arm() 
-AT (0.0, 0.0, 1.2) RELATIVE  Lmon_sample
+AT (0.0, 0.0, 1.2) RELATIVE  v_sample
 
 COMPONENT monochromator_flat = Monochromator_curved(
     mosaich=60, 
@@ -1675,7 +1684,7 @@ AT (0.027638,0,0.030387) RELATIVE XY_ARM ROTATED (0,3*dphi,0) RELATIVE Mono_Crad
 
 /*                                on mono, pointing towards sample */
 COMPONENT Mono_Out = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE  Lmon_sample
+AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE  v_sample
 
 
 
