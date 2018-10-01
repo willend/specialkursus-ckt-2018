@@ -1705,6 +1705,10 @@ COMPONENT e_monitor = E_monitor(
     Emax=5+0.5)
 AT (0, 0, 0) RELATIVE PREVIOUS
 
+  /* Collimator_linear inserted here as a test ... */
+COMPONENT Collimator = Collimator_linear(xmin=-0.1, xmax=0.1, ymin=-0.1, ymax=0.1, length=0.25, divergence=40,transmission=0.7)
+AT (0, 0, 0) RELATIVE PREVIOUS
+
 //%include "Analy_crystal.instr"
 
 FINALLY
