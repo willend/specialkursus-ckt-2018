@@ -1,0 +1,1069 @@
+McStas simulation description file for EGCESE.
+Date:    Mon Oct 22 10:23:21 2018
+Program: McStas 2.4.1 - Jun. 26, 2017
+
+begin instrument: EGCESE
+  File: C:\Users\kedde\Documents\GitHub\specialkursus-ckt-2018\BIFROST\BifrostPrimarySpectrometer_V4_20181022_102315\mccode
+  Source: BifrostPrimarySpectrometer_V4.instr
+  Parameters:  WaveMin(double) WaveMax(double) E_0(double) L_0(double) chopPulseOpening(double) DivSlit0_width(double) DivSlit1_width(double) DivSlit2_width(double) DivSlit3_width(double) Npulse(double) print(int) makeVirtualSource(int) printMValues(int) power(double) BWopen(double)
+  Trace_enabled: yes
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation: C:\Users\kedde\Documents\GitHub\specialkursus-ckt-2018\BIFROST\BifrostPrimarySpectrometer_V4_20181022_102315
+  Format: McCode with text headers
+  URL: http://www.mccode.org
+  Creator: McStas 2.4.1 - Jun. 26, 2017
+  Instrument: BifrostPrimarySpectrometer_V4.instr
+  Ncount: 1000000
+  Trace: no
+  Gravitation: no
+  Seed: 1540208613
+  Directory: C:\Users\kedde\Documents\GitHub\specialkursus-ckt-2018\BIFROST\BifrostPrimarySpectrometer_V4_20181022_102315
+  Param: WaveMin=1
+  Param: WaveMax=10
+  Param: E_0=4
+  Param: L_0=0
+  Param: chopPulseOpening=0.004
+  Param: DivSlit0_width=0.1
+  Param: DivSlit1_width=0.1
+  Param: DivSlit2_width=0.1
+  Param: DivSlit3_width=0.1
+  Param: Npulse=1
+  Param: print=0
+  Param: makeVirtualSource=0
+  Param: printMValues=0
+  Param: power=2
+  Param: BWopen=161
+end simulation
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monBeforePSC1
+  position: -0.0301909 0 6.29875
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforePSC1.dat
+  statistics: X0=3.39422; dX=0.726653;
+  signal: Min=7.75464e+007; Max=1.42742e+009; Mean=6.93234e+008;
+  values: 6.93234e+010 5.33719e+008 41232
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2.2604 5.4112
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFBeforerPSC1
+  position: -0.030191 0 6.29876
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFBeforePSC1.dat
+  statistics: X0=6992.59; dX=1263.16;
+  signal: Min=0; Max=4.99748e+008; Mean=7.60738e+007;
+  values: 7.60738e+010 5.52929e+008 49217
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_2d(100, 100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: TofLambdaBeforePSC
+  position: -0.0301911 0 6.29877
+  title: TOF-wavelength monitor
+  Ncount: 1000000
+  filename: TofLambdaBeforePSC1.dat
+  statistics: X0=6924.42; dX=1223.57; Y0=3.26835; dY=0.818372;
+  signal: Min=0; Max=3.99938e+007; Mean=447646;
+  values: 4.47646e+009 1.35392e+008 2798
+  xvar: Ti
+  yvar: Wa
+  xlabel: Time-of-flight [\gms]
+  ylabel: Wavelength [AA]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0 20000 1.3528 9.04159
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFInsidePSC
+  position: -0.0304903 0 6.32938
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFInsidePSC.dat
+  statistics: X0=7113.72; dX=1136.34;
+  signal: Min=0; Max=4.91007e+008; Mean=6.88239e+007;
+  values: 6.88239e+010 5.2509e+008 44145
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(2000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monLongRange1
+  position: -0.0308813 0 6.36938
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeRongRange1.dat
+  statistics: X0=3.44487; dX=0.719632;
+  signal: Min=0; Max=3.27256e+009; Mean=3.11114e+007;
+  values: 6.22227e+010 4.9883e+008 38307
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2.2604 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_2d(100, 100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: TofLambdaAfterPSC2
+  position: -0.0308814 0 6.36939
+  title: TOF-wavelength monitor
+  Ncount: 1000000
+  filename: TofLambdaAfterPSC2.dat
+  statistics: X0=7146.44; dX=1077.56; Y0=3.32617; dY=0.783481;
+  signal: Min=0; Max=4.74976e+007; Mean=396313;
+  values: 3.96313e+009 1.26738e+008 2529
+  xvar: Ti
+  yvar: Wa
+  xlabel: Time-of-flight [\gms]
+  ylabel: Wavelength [AA]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0 20000 1.3528 9.04159
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFAfterPSC2
+  position: -0.0308815 0 6.3694
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFAfterPSC2.dat
+  statistics: X0=7232.54; dX=1096.98;
+  signal: Min=0; Max=5.39396e+008; Mean=6.57494e+007;
+  values: 6.57494e+010 5.09869e+008 42847
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monAfterPSC2
+  position: -0.0308816 0 6.36941
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monAfterPSC2.dat
+  statistics: X0=3.43459; dX=0.705005;
+  signal: Min=5.96099e+007; Max=1.21211e+009; Mean=6.19093e+008;
+  values: 6.19093e+010 4.98642e+008 37170
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2.2604 5.4112
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monBeforeFOC1
+  position: -0.0499498 0 8.51066
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeFOC1.dat
+  statistics: X0=3.36897; dX=0.770371;
+  signal: Min=0; Max=2.27184e+009; Mean=5.89844e+008;
+  values: 5.89844e+010 4.75698e+008 38772
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 9.04159
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFBeforeFOC1
+  position: -0.0499499 0 8.51067
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFBeforeFOC1.dat
+  statistics: X0=9054.97; dX=1437.4;
+  signal: Min=0; Max=3.76712e+008; Mean=5.90012e+007;
+  values: 5.90012e+010 4.75707e+008 39172
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(2000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monLongRange2
+  position: -0.0499499 0 8.51068
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeRongRange2.dat
+  statistics: X0=3.44406; dX=0.71997;
+  signal: Min=0; Max=2.94111e+009; Mean=2.79158e+007;
+  values: 5.58315e+010 4.65277e+008 35168
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2.2604 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(2000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monLongRange3
+  position: -0.0501126 0 8.53069
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeRongRange3.dat
+  statistics: X0=3.44406; dX=0.71997;
+  signal: Min=0; Max=2.94111e+009; Mean=2.79158e+007;
+  values: 5.58315e+010 4.65277e+008 35168
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2.2604 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFAfterFOC1
+  position: -0.0501127 0 8.5307
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFAfterFOC1.dat
+  statistics: X0=9072.02; dX=1440.69;
+  signal: Min=0; Max=3.72992e+008; Mean=5.90012e+007;
+  values: 5.90012e+010 4.75707e+008 39172
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monAfterFOC1
+  position: -0.0501127 0 8.53071
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monAfterFOC1.dat
+  statistics: X0=3.36897; dX=0.770371;
+  signal: Min=0; Max=2.27184e+009; Mean=5.89844e+008;
+  values: 5.89844e+010 4.75698e+008 38772
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 9.04159
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monBeforeFOC2
+  position: -0.0891548 0 14.9514
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeFOC2.dat
+  statistics: X0=3.36413; dX=0.769668;
+  signal: Min=0; Max=1.97083e+009; Mean=5.08213e+008;
+  values: 5.08213e+010 4.26207e+008 37843
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 9.04159
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFBeforeFOC2
+  position: -0.0891548 0 14.9514
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFBeforeFOC2.dat
+  statistics: X0=14387.6; dX=2457.52;
+  signal: Min=0; Max=2.42334e+008; Mean=4.972e+007;
+  values: 4.972e+010 4.25053e+008 35547
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(2000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monLongRange4
+  position: -0.0891549 0 14.9514
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeRongRange4.dat
+  statistics: X0=3.43969; dX=0.719373;
+  signal: Min=0; Max=2.54428e+009; Mean=2.40369e+007;
+  values: 4.80739e+010 4.1673e+008 34324
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2.2604 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFAfterFOC2
+  position: -0.0892319 0 14.9714
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFAfterFOC2.dat
+  statistics: X0=14493.5; dX=2390.51;
+  signal: Min=0; Max=2.30778e+008; Mean=4.87133e+007;
+  values: 4.87133e+010 4.22128e+008 33855
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 20000
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monAfterFOC2
+  position: -0.0892319 0 14.9714
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monAfterFOC2.dat
+  statistics: X0=3.36643; dX=0.719293;
+  signal: Min=0; Max=5.01515e+009; Mean=4.92031e+007;
+  values: 4.92031e+010 4.22709e+008 34785
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Div2d_AfterBender
+  position: -0.0972904 0 24.3783
+  title: Divergence monitor
+  Ncount: 1000000
+  filename: Div2d_AfterBender.dat
+  statistics: X0=-0.00359701; dX=0.447899; Y0=-5.45292e-005; dY=0.225002;
+  signal: Min=0; Max=5.09858e+007; Mean=1.04513e+006;
+  values: 4.1805e+010 3.78729e+008 33938
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2.5 2.5 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Div2d_BeforeStraight
+  position: -0.0454459 0 49.307
+  title: Divergence monitor
+  Ncount: 1000000
+  filename: Div2d_BeforeStraight.dat
+  statistics: X0=0.00288599; dX=0.205775; Y0=-0.000182137; dY=0.122814;
+  signal: Min=0; Max=5.3037e+007; Mean=958087;
+  values: 3.83235e+010 3.61264e+008 32917
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -1 1 -1 1
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monBeforeBWC
+  position: 0.0141929 0 77.9835
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monBeforeBWC.dat
+  statistics: X0=3.3723; dX=0.717149;
+  signal: Min=0; Max=1.48801e+009; Mean=3.71711e+008;
+  values: 3.71711e+010 3.5382e+008 32939
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 9.04159
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(300)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFBeforeBWC
+  position: 0.0141929 0 77.9835
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFBeforeBWC.dat
+  statistics: X0=68282.7; dX=13769.7;
+  signal: Min=0; Max=1.0823e+009; Mean=1.23904e+008;
+  values: 3.71711e+010 3.5382e+008 32939
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 287978
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(300)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFAfterBWC
+  position: 0.0142345 0 78.0035
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFAfterBWC.dat
+  statistics: X0=70887.2; dX=8439.08;
+  signal: Min=0; Max=1.07611e+009; Mean=8.0674e+007;
+  values: 2.42022e+010 2.72277e+008 20081
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 287978
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monAfterBWLong
+  position: 0.0142346 0 78.0036
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monAfterBWLong.dat
+  statistics: X0=3.50682; dX=0.438848;
+  signal: Min=0; Max=3.788e+009; Mean=2.42022e+007;
+  values: 2.42022e+010 2.72277e+008 20081
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monAfterBWC
+  position: 0.0142346 0 78.0036
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monAfterBWC.dat
+  statistics: X0=3.50722; dX=0.435283;
+  signal: Min=0; Max=1.48801e+009; Mean=2.42022e+008;
+  values: 2.42022e+010 2.72277e+008 20081
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 9.04159
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_1d(300)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Lmon_guide_end
+  position: 0.18774 0 161.431
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: Lmon_guide_end.dat
+  statistics: X0=3.50743; dX=0.434965;
+  signal: Min=0; Max=4.95881e+008; Mean=6.88763e+007;
+  values: 2.06629e+010 2.45436e+008 19200
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 0.1 8
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:24 2018 (1540196604)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Div2d_sample_B
+  position: 0.188925 0 162.001
+  title: Divergence monitor
+  Ncount: 1000000
+  filename: Div2d_sample_B.dat
+  statistics: X0=0.0384046; dX=0.39035; Y0=0.00100374; dY=0.421451;
+  signal: Min=0; Max=8.16258e+006; Mean=76160.7;
+  values: 3.04643e+009 9.97431e+007 1452
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.75 0.75 -0.75 0.75
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Div2d_sample
+  position: 0.188925 0 162.001
+  title: Divergence monitor
+  Ncount: 1000000
+  filename: Div2d_sample.dat
+  statistics: X0=0.0315338; dX=0.485732; Y0=0.00434286; dY=0.591441;
+  signal: Min=0; Max=1.31134e+007; Mean=116396;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2.25 2.25 -2.25 2.25
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(60, 60)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: PSD_sample_large
+  position: 0.188925 0 162.001
+  title: PSD monitor
+  Ncount: 1000000
+  filename: PSD_sample_large.dat
+  statistics: X0=0.0150845; dX=0.805572; Y0=-0.00816485; dY=0.660932;
+  signal: Min=0; Max=8.76961e+007; Mean=5.73969e+006;
+  values: 2.06629e+010 2.45436e+008 19185
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -3 3 -3 3
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(20, 20)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: PSD_sample_small
+  position: 0.188925 0 162.001
+  title: PSD monitor
+  Ncount: 1000000
+  filename: PSD_sample_small.dat
+  statistics: X0=-0.012686; dX=0.286034; Y0=-0.00565313; dY=0.271909;
+  signal: Min=51115; Max=3.04437e+007; Mean=1.16396e+007;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.5 0.5 -0.5 0.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: HPSD_sample
+  position: 0.188925 0 162.001
+  title: Linear PSD monitor
+  Ncount: 1000000
+  filename: HPSD_sample.dat
+  statistics: X0=5.19841e-005; dX=0.00809517;
+  signal: Min=1.74086e+006; Max=2.40983e+008; Mean=1.12058e+008;
+  values: 1.12058e+010 1.80715e+008 9531
+  xvar: x
+  yvar: (I,I_err)
+  xlabel: x-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: x I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: VPSD_sample
+  position: 0.188925 0 162.001
+  title: Linear PSD (y) monitor
+  Ncount: 1000000
+  filename: VPSD_sample.dat
+  statistics: X0=3.78501e-005; dX=0.00666903;
+  signal: Min=0; Max=2.41904e+008; Mean=8.75514e+007;
+  values: 8.75514e+009 1.61242e+008 5853
+  xvar: y
+  yvar: (I,I_err)
+  xlabel: y-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: y I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Hdiv_sample
+  position: 0.188925 0 162.001
+  title: horizontal divergence monitor
+  Ncount: 1000000
+  filename: Hdiv_sample.dat
+  statistics: X0=0.0315338; dX=0.485732;
+  signal: Min=0; Max=1.24196e+008; Mean=2.32792e+007;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: horizontal divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Vdiv_sample
+  position: 0.188925 0 162.001
+  title: vertical divergence monitor
+  Ncount: 1000000
+  filename: Vdiv_sample.dat
+  statistics: X0=0.00434286; dX=0.591441;
+  signal: Min=0; Max=8.68652e+007; Mean=2.32792e+007;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: vertical divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: acceptance_x_divx
+  position: 0.188925 0 162.001
+  title: Position-divergence monitor
+  Ncount: 1000000
+  filename: acceptance_x_divx.dat
+  statistics: X0=-5.79839e-005; dX=0.00547147; Y0=0.0210591; dY=0.450465;
+  signal: Min=0; Max=1.36952e+007; Mean=212097;
+  values: 8.4839e+009 1.60272e+008 5596
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: acceptance_y_divy
+  position: 0.188925 0 162.001
+  title: Position-divergence (y) monitor
+  Ncount: 1000000
+  filename: acceptance_y_divy.dat
+  statistics: X0=-0.000117762; dX=0.00501186; Y0=0.0036793; dY=0.526035;
+  signal: Min=0; Max=9.3696e+006; Mean=186666;
+  values: 7.46664e+009 1.48933e+008 4984
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(300)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Lmon_sample_B
+  position: 0.188925 0 162.001
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: Lmon_sample_B.dat
+  statistics: X0=3.48511; dX=0.432265;
+  signal: Min=0; Max=1.01019e+008; Mean=1.01548e+007;
+  values: 3.04643e+009 9.97431e+007 1452
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 0.01 8
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Div2d_sample_maxdiv
+  position: 0.188925 0 162.001
+  title: Divergence monitor
+  Ncount: 1000000
+  filename: Div2d_sample_maxdiv.dat
+  statistics: X0=0.0315338; dX=0.485732; Y0=0.00434286; dY=0.591441;
+  signal: Min=0; Max=1.31134e+007; Mean=116396;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2.25 2.25 -2.25 2.25
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: PSD_sample_maxdiv
+  position: 0.188925 0 162.001
+  title: PSD monitor
+  Ncount: 1000000
+  filename: PSD_sample_maxdiv.dat
+  statistics: X0=0.0109294; dX=0.733129; Y0=-0.00893812; dY=0.673728;
+  signal: Min=0; Max=1.51862e+007; Mean=368239;
+  values: 1.47296e+010 2.18106e+008 7026
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -1.5 1.5 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: HPSD_sample_maxdiv
+  position: 0.188925 0 162.001
+  title: Linear PSD monitor
+  Ncount: 1000000
+  filename: HPSD_sample_maxdiv.dat
+  statistics: X0=7.62976e-005; dX=0.00803039;
+  signal: Min=0; Max=1.64721e+008; Mean=7.53525e+007;
+  values: 7.53525e+009 1.55225e+008 3687
+  xvar: x
+  yvar: (I,I_err)
+  xlabel: x-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: x I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(100)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: VPSD_sample_maxdiv
+  position: 0.188925 0 162.001
+  title: Linear PSD (y) monitor
+  Ncount: 1000000
+  filename: VPSD_sample_maxdiv.dat
+  statistics: X0=0.000138846; dX=0.00702535;
+  signal: Min=0; Max=1.64856e+008; Mean=6.48395e+007;
+  values: 6.48395e+009 1.4549e+008 3082
+  xvar: y
+  yvar: (I,I_err)
+  xlabel: y-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: y I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Hdiv_sample_maxdiv
+  position: 0.188925 0 162.001
+  title: horizontal divergence monitor
+  Ncount: 1000000
+  filename: Hdiv_sample_maxdiv.dat
+  statistics: X0=0.0390793; dX=0.483935;
+  signal: Min=0; Max=9.24492e+007; Mean=1.74536e+007;
+  values: 3.49071e+009 1.028e+008 2289
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: horizontal divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Vdiv_sample_maxdiv
+  position: 0.188925 0 162.001
+  title: vertical divergence monitor
+  Ncount: 1000000
+  filename: Vdiv_sample_maxdiv.dat
+  statistics: X0=0.0125249; dX=0.587899;
+  signal: Min=0; Max=7.61508e+007; Mean=2.02223e+007;
+  values: 4.04445e+009 1.13215e+008 1976
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: vertical divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: acceptance_x_divx_maxdiv
+  position: 0.188925 0 162.001
+  title: Position-divergence monitor
+  Ncount: 1000000
+  filename: acceptance_x_divx_maxdiv.dat
+  statistics: X0=-7.79492e-005; dX=0.00548667; Y0=0.0228764; dY=0.44902;
+  signal: Min=0; Max=1.36747e+007; Mean=159478;
+  values: 6.37913e+009 1.41125e+008 4107
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(200, 200)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: acceptance_y_divy_maxdiv
+  position: 0.188925 0 162.001
+  title: Position-divergence (y) monitor
+  Ncount: 1000000
+  filename: acceptance_y_divy_maxdiv.dat
+  statistics: X0=-9.19249e-005; dX=0.00503234; Y0=0.00953772; dY=0.522614;
+  signal: Min=0; Max=9.3696e+006; Mean=163143;
+  values: 6.52574e+009 1.44621e+008 3144
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(2000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: ToFatSample
+  position: 0.188925 0 162.001
+  title: Time-of-flight monitor
+  Ncount: 1000000
+  filename: ToFatSample.dat
+  statistics: X0=145368; dX=17649.4;
+  signal: Min=0; Max=1.32899e+008; Mean=1.03314e+007;
+  values: 2.06629e+010 2.45436e+008 19200
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 452537
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_1d(400)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: Lmon_sample
+  position: 0.188925 0 162.001
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: Lmon_sample.dat
+  statistics: X0=3.51585; dX=0.434502;
+  signal: Min=0; Max=6.76393e+007; Mean=1.16396e+007;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2 6
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:25 2018 (1540196605)
+  type: array_2d(500, 500)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: TofLambdaSampleZoomOut
+  position: 0.188925 0 162.001
+  title: TOF-wavelength monitor
+  Ncount: 1000000
+  filename: TofLambdaSampleZoomOut.dat
+  statistics: X0=145663; dX=17799.3; Y0=3.51395; dY=0.439964;
+  signal: Min=0; Max=8.50639e+008; Mean=18623.4;
+  values: 4.65584e+009 1.16808e+008 3141
+  xvar: Ti
+  yvar: Wa
+  xlabel: Time-of-flight [\gms]
+  ylabel: Wavelength [AA]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0 5e+006 0.5 120
+  variables: I I_err N
+end data
+
+begin data
+  Date: Mon Oct 22 10:23:26 2018 (1540196606)
+  type: array_1d(1000)
+  Source: EGCESE (BifrostPrimarySpectrometer_V4.instr)
+  component: L_monSampleZoomout
+  position: 0.188926 0 162.001
+  title: Wavelength monitor
+  Ncount: 1000000
+  filename: L_monsampleZoomOut.dat
+  statistics: X0=3.50726; dX=0.439298;
+  signal: Min=0; Max=3.2404e+009; Mean=2.06629e+007;
+  values: 2.06629e+010 2.45436e+008 19200
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 200
+  variables: L I I_err N
+end data
