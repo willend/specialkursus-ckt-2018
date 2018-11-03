@@ -1,9 +1,9 @@
 DEFINE INSTRUMENT BIFROST(
 WaveMin=0.1, // Minimum wavelength from moderator
-WaveMax=99.5, // Maximum wavelength from moderator
+WaveMax=10, // Maximum wavelength from moderator
 pin_holeY = 0.088,   // Height of pinhole at pulse shapping chopper position (0.088 matches guide).
 pin_holeX=0.03,  // Width of pinhole at pulse shapping chopper position (0.03 matches guide).
-E_0=4.0, // Lowest energy in wavelength band.
+E_0=5.0, // Lowest energy in wavelength band.
 L_0=0, // Alternative: Lowest wavelength in wavelength band
 chopPulseOpening=0.004, // Opening time of pulse shapping chopper [s]
 chopPulseFrequencyOrder=14, // Number of chopper pulses pr moderator pulse. It will automatically be reduced when nesesary and a warning will be written in the promt. 
@@ -27,7 +27,7 @@ int printMValues=0,
 OMA=37.072,
 TTA=74.144, 
 phi=37, 
-dphi=0.5
+dphi=0.4285
 )
 
 DECLARE
@@ -711,7 +711,7 @@ yheight=0.030000,beamline=4,
 dist=1.903398,
 focus_xw=0.068797+2*0.01277,
 focus_yh=0.03472,
-Lmin=WaveMin, Lmax=WaveMax, acc_power=5.0, cold_frac=0.500000, sector="W",
+Lmin=WaveMin, Lmax=WaveMax, acc_power=2.0, cold_frac=0.500000, sector="W",
 tmax_multiplier=1.500000, n_pulses=Npulse, c_performance=1.0, t_performance=1.0)
 AT (0, 0, 0) RELATIVE Origin
 ROTATED (0,0,0) RELATIVE Origin
@@ -1580,18 +1580,38 @@ COMPONENT Lmon_sample = L_monitor(
     yheight = sampleSizeY, Lmin = 2, Lmax = 6)
   AT (0, 0,u) RELATIVE PREVIOUS
 
+COMPONENT collimator_linear = Collimator_linear(
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.05, 
+   ymax=0.05)
+AT (0, 0, 0.2) RELATIVE PREVIOUS
+
+COMPONENT v_sample = Single_crystal(
+    xwidth = 0.002, 
+    yheight = 0.1, 
+    zdepth = 0.1,
+    mosaic = 30, reflections = "C_diamond.lau",
+    ax=0,      ay=2.14,   az=-1.24,
+    bx = 0,    by = 0,    bz =  2.47,
+    cx = 6.71, cy = 0,    cz =  0)
+AT (0, 0, 0.7) RELATIVE Lmon_sample
+
 //V-sample
-COMPONENT v_sample = V_sample(
-    radius=0.005, 
-    thickness=0.002, 
-    zdepth=0.01, 
-    focus_xw=0.05, 
-    focus_yh=0.1)
-AT (0, 0, 1) RELATIVE Lmon_sample
+//COMPONENT v_sample = V_sample(
+//    radius=0.005, 
+//   thickness=0.002, 
+//    zdepth=0.01,
+//  xwidth=0.01,
+//    yheight = 0.01)
+//, 
+//    focus_xw=0.05, 
+//    focus_yh=0.1)
+// AT (0, 0, 0.7) RELATIVE Lmon_sample
 
 
 COMPONENT Mono_Cradle = Arm()
-  AT (0.0, 0.0, 1.2) RELATIVE  v_sample  ROTATED (0,OMA, 0) RELATIVE  v_sample
+AT (0.0, 0.0, 1.2) RELATIVE  v_sample  ROTATED (0,OMA, 0) RELATIVE  v_sample
 
 COMPONENT XY_ARM = Arm() 
 AT (0.0, 0.0, 1.2) RELATIVE  v_sample
@@ -1703,10 +1723,6 @@ COMPONENT e_monitor = E_monitor(
     nE=128,
     Emin=5-0.5, 
     Emax=5+0.5)
-AT (0, 0, 0) RELATIVE PREVIOUS
-
-  /* Collimator_linear inserted here as a test ... */
-COMPONENT Collimator = Collimator_linear(xmin=-0.1, xmax=0.1, ymin=-0.1, ymax=0.1, length=0.25, divergence=40,transmission=0.7)
 AT (0, 0, 0) RELATIVE PREVIOUS
 
 //%include "Analy_crystal.instr"
