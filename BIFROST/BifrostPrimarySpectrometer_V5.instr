@@ -17,7 +17,12 @@ double BWopen=161,
 OMA=37.072,// our values 
 TTA=74.144, 
 phi=37, 
-dphi=0.5
+dphi=0.5,
+string SXfile="C_diamond.lau",
+ax=0,      ay=2.14,   az=-1.24,
+bx = 0,    by = 0,    bz =  2.47,
+cx = 6.71, cy = 0,    cz =  0,
+Omega=0
 )
 
 DECLARE
@@ -1649,16 +1654,23 @@ COMPONENT collimator_linear = Collimator_linear(
    ymax=0.05)
 AT (0, 0, 0.2) RELATIVE PREVIOUS
 
+COMPONENT SamplePos = Arm()
+AT (0, 0, 0.7) RELATIVE Lmon_sample
+  
 COMPONENT v_sample = Single_crystal(
     xwidth = 0.002, 
    yheight = 0.1, 
     zdepth = 0.1,
-    mosaic = 30, reflections = "C_diamond.lau",
-    ax=0,      ay=2.14,   az=-1.24,
-    bx = 0,    by = 0,    bz =  2.47,
-    cx = 6.71, cy = 0,    cz =  0)
-AT (0, 0, 0.7) RELATIVE Lmon_sample
+    mosaic = 30, reflections = SXfile,
+    ax=ax, ay=ay, az=az,
+    bx=bx, by=by, bz=bz,
+    cx=cx, cy=cy, cz=cz)
+AT (0, 0, 0) RELATIVE SamplePos
+ROTATED (0,Omega,0) RELATIVE SamplePos
 
+COMPONENT Sample_output = PSD_monitor_4PI(radius=0.5, nx=180, ny=180, filename="Sample_output", restore_neutron=1)
+  AT (0,0,0) RELATIVE SamplePos
+  
 //V-sample
 //COMPONENT v_sample = V_sample(
 //    radius=0.005, 
