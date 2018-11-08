@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of ifitmakefunc</title>
+  <meta name="keywords" content="ifitmakefunc">
+  <meta name="description" content="f = ifitmakefunc(fun, descr, pars, expr, guess, constraint) : build a fit function/model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; ifitmakefunc.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/ifitmakefunc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>f = ifitmakefunc(fun, descr, pars, expr, guess, constraint) : build a fit function/model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function f = ifitmakefunc(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> f = ifitmakefunc(fun, descr, pars, expr, guess, constraint) : build a fit function/model
+
+   iFit/ifitmakefunc fit function/model builder.
+     when only the first argument is specified as an expression (using p and x,y,z,t)
+       a model is built from the expression analysis.
+         ifitmakefunc(EXPR)
+     when only the first argument is specified as a structure, it should define fields
+       fun.Name:        the function name
+       fun.Description: the description of the function
+       fun.Parameters:  the parameter names as words separated with spaces
+       fun.Guess:       the default parameters, or 'automatic'
+       fun.Expression:  the expression of the function value
+       fun.Constraint:  the expression executed before the function evaluation
+     when input parameters are missing, a dialog pops-up to request the information
+       all arguments are optional (can be left empty), except the expression
+     when exactly 5 arguments are given, the dialogue does not show up, and a the 
+       model is retunred directly.
+     The list of all available function can be obtained with the 'fits(iFunc)' 
+
+ WARNING: the 1D and 2D cases work fine, but higher dimensions (using z,t...) are NOT validated.
+
+ input:  FUN:     function name or expression (single word or expression or structure or iFunc model)
+         DESCR:   description of the function (string)
+         PARS:    name of parameters, as a single string of words 'a b c ...'
+         EXPR:    expression of the function value, using 'p' vector as parameter values
+         GUESS:   default parameter values (guess, optional, leave empty for automatic guess)
+         CONSTRAINT: expression to execute before the function evaluation
+           which may contain any parameter constraints such as 'p(1)=p(5)'
+
+ output: f: new model object
+ 
+ Version: oct.. 23, 2018
+ See also iData, gauss, iFunc
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

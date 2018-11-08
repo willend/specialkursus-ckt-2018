@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of ff_sphere</title>
+  <meta name="keywords" content="ff_sphere">
+  <meta name="description" content="y = ff_sphere(p, x, [y]) : Sphere form factor [Guinier]">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Specialized</a> &gt; ff_sphere.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Specialized&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/ff_sphere
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>y = ff_sphere(p, x, [y]) : Sphere form factor [Guinier]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function y=ff_sphere(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> y = ff_sphere(p, x, [y]) : Sphere form factor [Guinier]
+
+   iFunc/ff_sphere monodisperse spherical particle form factor P(q) with uniform 
+       scattering length density. 
+     The 'x' wave-vector/momentum axis is usually in nm-1 or Angs-1.
+     The parameter R is given in inverse unit of the axis (that is nm or Angs).
+     Typical values for parameters are R=10-100 Angs, eta=1e-6.
+     The value at q=0 is (4/3*pi*eta*R^3)^2
+
+     Ref: Guinier, A. and G. Fournet, &quot;Small-Angle Scattering of X-Rays&quot;, 
+            John Wiley and Sons, New York, (1955).
+          Extracted from sasfit/sasfit_ff/sasfit_ff_sphere.c
+     I. Bressler, et al, Journal of Applied Crystallography, 2015, 48 (5), 1587-1598
+
+ input:  p: sphere model parameters (double)
+            p = [ R=Sphere_Radius eta=SLD particle/matrix ]
+          or 'guess'
+         x: wave-vector/momentum axis (double, e.g. nm-1 or Angs-1)
+         y: when values are given and p='guess', a guess of the parameters is performed (double)
+ output: y: model value (intensity)
+ ex:     y=ff_sphere([10 2e-6], 0:0.01:1); or plot(ff_sphere,[10 1e-6],0:0.01:1)
+
+ Version: oct.. 23, 2018
+ See also iFunc, iFunc/fits, iFunc/plot, <a href="ff_core_shell.html" class="code" title="function y=ff_core_shell(varargin)">ff_core_shell</a>
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ff_core_shell.html" class="code" title="function y=ff_core_shell(varargin)">ff_core_shell</a>	y = ff_core_shell(p, x, [y]) : Spherical/core shell form factor [Guinier]</li><li><a href="ff_core_shell.html" class="code" title="function y=ff_core_shell(varargin)">ff_core_shell</a>	y = ff_core_shell(p, x, [y]) : Spherical/core shell form factor [Guinier]</li><li><a href="ff_core_shell.html" class="code" title="function y=ff_core_shell(varargin)">ff_core_shell</a>	y = ff_core_shell(p, x, [y]) : Spherical/core shell form factor [Guinier]</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

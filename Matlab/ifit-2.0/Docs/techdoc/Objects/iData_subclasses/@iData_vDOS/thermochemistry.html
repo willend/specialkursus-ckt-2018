@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of thermochemistry</title>
+  <meta name="keywords" content="thermochemistry">
+  <meta name="description" content="iData_vDOS/thermochemistry: compute thermodynamic quantities for 1D vDOS data sets.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_vDOS</a> &gt; thermochemistry.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_vDOS&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/thermochemistry
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_vDOS/thermochemistry: compute thermodynamic quantities for 1D vDOS data sets.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [t, fig]=thermochemistry(s, T, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_vDOS/thermochemistry: compute thermodynamic quantities for 1D vDOS data sets.
+
+ compute thermodynamics quantities from the vibrational density of states.
+   vDOS -&gt; S, U, F, Cv
+
+ The input 1D data set should be e.g. a vDOS, with axis energy in [meV]. 
+
+ The function returns an array of iData objects:
+   entropy                           S [eV/K/cell]
+   internal_energy                   U [eV/cell]
+   helmholtz_energy                  F [eV/cell]
+   heat_capacity at constant volume Cv [eV/K/cell]
+
+ syntax:
+   t = thermochemistry(g)
+   t = thermochemistry(g, Tmin:Tmax)
+
+ input:
+   g: a 1D vDOS data set [Energy] (iData_vDOS)
+   T: temperature range. When not given, T=1:500 [K]
+   options: can be 'plot' to display the results.
+         The 'newplot' option does the same but opens a new figure instead of
+         re-using an existing one.
+
+ output:
+   t:    structure with [S U F Cv ]
+   fig:  figure handle
+
+ Reference: https://wiki.fysik.dtu.dk/ase/ase/thermochemistry/thermochemistry.html#background
+            D.A. McQuarrie. Statistical Mechanics. University Science Books, 2000.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

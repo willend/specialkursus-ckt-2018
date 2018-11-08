@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of convn</title>
+  <meta name="keywords" content="convn">
+  <meta name="description" content="c = convn(a,b) : computes the convolution of an iFunc object with a response function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; convn.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/convn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>c = convn(a,b) : computes the convolution of an iFunc object with a response function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c = convn(a,b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> c = convn(a,b) : computes the convolution of an iFunc object with a response function 
+
+   @iFunc/convn function to compute the convolution of data sets with automatic centering
+     and normalization of the filter. This is a shortucut for
+       conv(a,b, 'same pad background center normalize')
+     When used with a single scalar value, it is used as a width to build a 
+       gaussian function.
+     when one of the argument is a character string, it is used as-is in the 
+     operator expression. 
+
+ input:  a: object or array, signal (iFunc or numeric)
+         b: object or array, filter (iFunc or numeric)
+ output: c: object or array (iFunc)
+ ex:     c=convn(a,b);
+
+ Version: oct.. 23, 2018
+ See also <a href="iFunc.html" class="code" title="">iFunc</a>, iFunc/times, iData/convn, iFunc/xcorr, fconv, fconvn, fxcorr</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="conv.html" class="code" title="function c = conv(a,b, shape)">conv</a>	c = conv(a,b) : computes the convolution of iFunc models</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="conv.html" class="code" title="function c = conv(a,b, shape)">conv</a>	c = conv(a,b) : computes the convolution of iFunc models</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

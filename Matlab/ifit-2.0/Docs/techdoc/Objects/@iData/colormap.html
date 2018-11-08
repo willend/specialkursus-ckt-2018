@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of colormap</title>
+  <meta name="keywords" content="colormap">
+  <meta name="description" content="h=colormap(objects, colormaps, ..., options): Produce surfaces from iData 2D objects with different colormaps">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; colormap.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/colormap
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>h=colormap(objects, colormaps, ..., options): Produce surfaces from iData 2D objects with different colormaps</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h = colormap(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> h=colormap(objects, colormaps, ..., options): Produce surfaces from iData 2D objects with different colormaps
+
+ h=colormap(z1,cm1, z2, cm2, ...)
+   Produces surfaces with different colormaps.
+   iData 2D object z1 is plotted as surface 1, which is coloured with map cm1 (Nx3)
+
+ h=colormap(z1, z2, ...)
+   Same as above with a set of default colormaps
+
+ h=colormap(..., options)
+   Options specify the type of plot rendering (same as used in iData/plot)
+   Any string argument will be interpreted as an 'option' for the 2D iData/plot
+                 surf, mesh, contour, contour3, surfc, surfl, contourf
+                 plot3, scatter3 (colored points), stem3, pcolor, waterfall
+                 flat, interp, faceted (for shading), view2, view3
+                 transparent, light, clabel, colorbar, shifted (overlayed 2D)
+                 axis tight, axis auto, hide_axes (compact layout)
+                 painters (bitmap drawing), zbuffer (vectorial drawing)
+                 whole (do not reduce large object size for plotting)
+
+ In addition, the 'log' option can be used to employ a log-scale color set
+   which enhances contrast on low signal values in the plot.
+
+ Available colormaps are:
+    hsv        - Hue-saturation-value color map.
+    hot        - Black-red-yellow-white color map.
+    gray       - Linear gray-scale color map.
+    bone       - Gray-scale with tinge of blue color map.
+    copper     - Linear copper-tone color map.
+    pink       - Pastel shades of pink color map.
+    white      - All white color map.
+    flag       - Alternating red, white, blue, and black color map.
+    lines      - Color map with the line colors.
+    colorcube  - Enhanced color-cube color map.
+    vga        - Windows colormap for 16 colors.
+    jet        - Variant of HSV.
+    prism      - Prism color map.
+    cool       - Shades of cyan and magenta color map.
+    autumn     - Shades of red and yellow color map.
+    spring     - Shades of magenta and yellow color map.
+    winter     - Shades of blue and green color map.
+    summer     - Shades of green and yellow color map.
+
+ input: z1,z2,...:   iData objects (single or arrays)
+        cm1, cm2...: colormaps (Mx3 matrices, such as jet)
+        options:     string specifying the type of rendering for iData/plot.
+ output: h:          graphics object handles (cell/array)
+ example: a=iData(feval(gauss2d)); colormap(a,jet,a+1,hsv,'log transparent')
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/plot, iData/surf, iData/caxis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cat.html" class="code" title="function b = cat(varargin)">cat</a>	s = cat(dim,a,...) : catenate iData objects elements along dimension</li><li><a href="colormap.html" class="code" title="function h = colormap(varargin)">colormap</a>	h=colormap(objects, colormaps, ..., options): Produce surfaces from iData 2D objects with different colormaps</li><li><a href="double.html" class="code" title="function a=double(a)">double</a>	d = double(s) : convert iData into doubles</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isnumeric.html" class="code" title="function a = isnumeric(a)">isnumeric</a>	b = isnumeric(s) : True for numeric iData object elements</li><li><a href="linspace.html" class="code" title="function v = linspace(a,b,n)">linspace</a>	v = linspace(a,b,n) : creates a linearly spaced vector of objects</li><li><a href="log.html" class="code" title="function a = log(a)">log</a>	b = log(s) : natural logarithm value of iData object</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="prod.html" class="code" title="function [s,sigma] = prod(a,dim)">prod</a>	s = prod(a,dim) : computes the product of iData objects elements</li><li><a href="reducevolume.html" class="code" title="function s = reducevolume(a, R)">reducevolume</a>	h = reducevolume(s, factor) : reduce an iData object size</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="strfind.html" class="code" title="function [match, field] = strfind(s, varargin)">strfind</a>	[match, field]=strfind(s, pattern, option) : search for pattern in iData</li><li><a href="surf.html" class="code" title="function h = surf(a, option)">surf</a>	h = surf(s,option) : Plot a 2D/3D object as surface</li><li><a href="title.html" class="code" title="function a = title(a, lab)">title</a>	b = title(s,label) : Change iData Signal label</li><li><a href="xlabel.html" class="code" title="function a = xlabel(a, lab)">xlabel</a>	b = xlabel(s,label) : Change iData X axis label</li><li><a href="ylabel.html" class="code" title="function a = ylabel(a, lab)">ylabel</a>	b = ylabel(s,label) : Change iData Y axis label</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="colormap.html" class="code" title="function h = colormap(varargin)">colormap</a>	h=colormap(objects, colormaps, ..., options): Produce surfaces from iData 2D objects with different colormaps</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

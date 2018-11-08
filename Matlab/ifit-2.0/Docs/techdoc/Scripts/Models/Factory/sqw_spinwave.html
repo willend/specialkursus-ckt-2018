@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_spinwave</title>
+  <meta name="keywords" content="sqw_spinwave">
+  <meta name="description" content="sqw_spinwave: build a SpinWave model (S. Petit/LLB)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; sqw_spinwave.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_spinwave
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>sqw_spinwave: build a SpinWave model (S. Petit/LLB)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function s = sqw_spinwave(file, action) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sqw_spinwave: build a SpinWave model (S. Petit/LLB)
+
+ MODEL CREATION
+
+ Performs a SPINWAVE calculation using S. Petit/LLB code. The input file can be:
+
+   * a spinwave input file, such as MnFe4Si3.txt (in Data)
+   * 'defaults' will use an example.
+   * a CIF/CFL/ShelX file. In this case only the structure is imported, and
+       it is REQUIRED to edit the generated model in particular 
+       the moment type 'NOM' and couplings J1,D1 (J2,D2) must be set.
+   * a Crystallography.net ID then specify 'cod: ID' as file name,
+       e.g. 'cod: 1006141'
+   * a chemical formula, then specify 'cod: formula' in Hill notation,
+       e.g. 'cod: La Mn O3'
+   * 'gui' to get a dialogue window and enter a COD ID or formula.
+
+ The input file may contain tokens to identify variable model patrameters.
+ The tokens format can be '$par' or '($par=val)' to specify default values.
+ The access to COD requires a valid network connection.
+
+ You can check for SPINWAVE installation with: sqw_spinwave check
+ You can compile   SPINWAVE              with: sqw_spinwave compile
+
+ The SPINWAVE model is built as S(q,w) 4D, or 2D when 'action' contains 'powder'.
+ The 4D model does not support the 'powder' iFunc_Sqw4D method, so the spinwave
+   should instead use sqw_spinwave('file','powder')
+
+ model = sqw_spinwave(file)
+
+ input:
+   file:    file name of a SpinWave input file or CIF/CFL/ShelX or COD ID
+   action:  string that may contain 'powder' (to create a 2D integrated powder model)
+              and 'edit' to edit the SpinWave input file.
+
+ output:
+   model: SpinWave model [iFunc_Sqw4D or iFunc_Sqw2D (powder)]. 
+   The model parameters are set as '$par' symbols in the spinwave template, which
+   you can edit with sqw_spinwave(mode, 'edit'). Remember to SAVE before closing.
+
+ MODEL EVALUATION
+
+ You may edit the SPINWAVE input file anytime with: sqw_spinwave(model, 'edit')
+   Remember to SAVE before closing.
+
+ Powder 2D case: Once created, the model is used as:
+   value = model(p, q, w)
+   value = iData(model, p, q, w)
+
+ input:  p: spinwave model parameters set as '$par' symbols in the spinwave template (double)
+         q:  axis along Q in [Angs-1] (row,double)
+         w:  axis along energy in meV (column,double)
+
+ Crystal 4D case: Once created, the model is used as:
+   value = model(p, qh, qk, ql, w)
+   value = iData(model, p, qh, qk, ql, w)
+
+ input:  p: spinwave model parameters set as '$par' symbols in the spinwave template (double)
+         qh: axis along QH in rlu (row,double)
+         qk: axis along QK in rlu (column,double)
+         ql: axis along QL in rlu (page,double)
+         w:  axis along energy in meV (double)
+    signal: when values are given, a guess of the parameters is performed (double)
+ output: signal: model value
+
+ Example:
+   m = sqw_spinwave('defaults');
+   m = sqw_spinwave('MnFe4Si3.txt'); S=iData(m, [], 0:.05:4, 0,0, 0:0.5:20);
+   plot(log10(S));
+
+   m = sqw_spinwave('MnFe4Si3.txt','powder'); 
+   q = linspace(0.01:.25:3); w=0:.5:20;
+   S=iData(m, [], q, w); S=iData_Sqw2D(S);
+
+ Reference: SpinWave, S. Petit LLB &lt;http://www-llb.cea.fr/logicielsllb/SpinWave/SW.html&gt;
+ See also: read_cif, <a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>, <a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="sqw_spinwave.html" class="code" title="function s = sqw_spinwave(file, action)">sqw_spinwave</a>	sqw_spinwave: build a SpinWave model (S. Petit/LLB)</li><li><a href="sqw_spinwave.html" class="code" title="function s = sqw_spinwave(file, action)">sqw_spinwave</a>	sqw_spinwave: build a SpinWave model (S. Petit/LLB)</li><li><a href="sqw_spinwave.html" class="code" title="function s = sqw_spinwave(file, action)">sqw_spinwave</a>	sqw_spinwave: build a SpinWave model (S. Petit/LLB)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="sqw_spinwave.html" class="code" title="function s = sqw_spinwave(file, action)">sqw_spinwave</a>	sqw_spinwave: build a SpinWave model (S. Petit/LLB)</li><li><a href="sqw_spinwave.html" class="code" title="function s = sqw_spinwave(file, action)">sqw_spinwave</a>	sqw_spinwave: build a SpinWave model (S. Petit/LLB)</li><li><a href="sqw_spinwave.html" class="code" title="function s = sqw_spinwave(file, action)">sqw_spinwave</a>	sqw_spinwave: build a SpinWave model (S. Petit/LLB)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

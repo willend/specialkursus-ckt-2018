@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of fits</title>
+  <meta name="keywords" content="fits">
+  <meta name="description" content="[pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; fits.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/fits
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [pars_out,criteria,message,output] = fits(model, a, pars, options, constraints, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set
+
+   @iFunc/fits find best parameter estimates in order to minimize the 
+     fitting criteria using model 'fun', by mean of an optimization method
+     described with the 'options' structure argument.
+     Additional constraints may be set by fixing some parameters, or define
+     more advanced constraints (min, max, steps). The last arguments controls the 
+     fitting options with the optimset mechanism, and the constraints to apply
+     during optimization.
+  [pars,...] = fits(model, data, pars, options, lb, ub)
+     uses lower and upper bounds as parameter constraints (double arrays)
+  [pars,...] = fits(model, data, pars, options, fixed)
+     indicates which parameters are fixed (non zero elements of array).
+  [pars,...] = fits(model, data, pars, 'optimizer', ...)
+     uses a specific optimizer and its default options=feval(optimizer,'defaults')
+     See below for suggested best optimizers.
+  [pars,...] = fits(model, data, pars, options, constraints, args...)
+     send additional arguments to the fit model(pars, axes, args...).
+  [optimizers,functions] = fits(iFunc)
+     returns the list of all available optimizers and fit functions/models.
+  [pars,...] = fits(iData_object)
+     searches for a Model in the data set, and then performs the fit.
+  [pars,...] = fits(iFunc_array, iData_array, ...)
+     vectorise the fit. When the two arrays have the same number of elements,
+     the fit is done per pair (model,data) in arrays.
+  fits(iFunc)
+     displays the list of all available optimizers and fit functions.
+  You may create new fit models with the 'edit(iFunc)' tool, or by arithmetic
+     operators combining iFunc and string objects.
+
+  When the data is entered as a structure or iData object with a Monitor value, 
+    the fit is performed on Signal/Monitor.
+  When parameters, options, and constraints are entered as a string with
+    name=value pairs, the string is interpreted as a structure description, so
+    that options='TolX=1e-4; optimizer=fminpso' is a compact form for 
+    options=struct('TolX','1e-4','optimizer','fminpso').
+
+   To set a constraint on a model parameter, define the 'constraint' input argument
+   or set the constraint directly on the model parameters with:
+     model.parameter='fix'     % to lock its value during a fit process
+     model.parameter='clear'   % or 'free' to unlock value during a fit process
+     model.parameter=[min max] % to bound value
+     model.parameter=[nan nan] % to remove bound constraint
+     model.parameter=''        % to remove all constraints on 'parameter'
+     model.Constraint=''       % to remove all constraints
+ 
+ The default fit options.criteria is 'least_square', but others are available:
+   least_square          (|Signal-Model|/Error).^2     non-robust 
+   least_absolute         |Signal-Model|/Error         robust
+   least_median    median(|Signal-Model|/Error)        robust, scalar
+   least_max          max(|Signal-Model|/Error)        non-robust, scalar
+   least_rfactor         (|Signal-Model|/Error).^2/(Signal/Error).^2 non-robust
+   max_corrcoef           1-corrcoeff(Signal, Model)   scalar
+   max_likelihood
+
+  Type &lt;a href=&quot;matlab:doc(iData,'Fit')&quot;&gt;doc(iData,'Fit')&lt;/a&gt; to access the iFit/Fit Documentation.
+  Type &lt;a href=&quot;matlab:doc(iData,'Optimizers')&quot;&gt;doc(iData,'Optimizers')&lt;/a&gt; to access the Optimizers Documentation.
+
+ input:  model: model function (iFunc). When entered as an empty object, the
+           list of optimizers and fit models is shown.
+         data: array or structure/object (numeric or structure or cell)
+               Can be entered as a single numeric array (the Signal), or as a 
+                 structure/object with possible members 
+                   Signal, Error, Monitor, Axes={x,y,...}
+               or as a cell { x,y, ... , Signal }
+               or as an iData object
+               or as a file name
+           The 1st axis 'x' is row wise, the 2nd 'y' is column wise.
+         pars: initial model parameters (double array, string or structure). 
+           when set to empty or 'guess', the starting parameters are guessed.
+           when set to 'current', the current model parameter values are used.
+           Named parameters can be given as a structure or string 'Amplitude=...; Width=...'
+         options: structure as defined by optimset/optimget (char/struct)
+           if given as a char, it defines the algorithm to use and its default %             options (single optimizer name or string describing a structure).
+           when set to empty, it sets the default algorithm options (fmin).
+           options.TolX
+             The termination tolerance for x. Its default value is 1.e-4.
+           options.TolFun
+             The termination tolerance for the function value. The default value is 1.e-4. 
+             This parameter is used by fminsearch, but not fminbnd.
+           options.MaxIter
+             Maximum number of iterations allowed.
+           options.MaxFunEvals
+             The maximum number of function evaluations allowed. 
+           options.optimizer
+             Optimization method. Default is 'fminpowell' (char/function handle)
+             the syntax for calling the optimizer is e.g. optimizer(criteria,pars,options,constraints)
+
+               Best optimizers are:
+                 fminpso:    Particle Swarm Optimization
+                 fminpowell: Powell with Coggins line search
+                 fminhooke:  Hooke-Jeeves direct search
+                 fminralg:   Shor R-algorithm
+                 fminsimpsa: Simplex/simulated annealing
+                 fminimfil:  Unconstrained Implicit filtering
+ 
+           options.criteria
+             Minimization criteria. Default is 'least_square' (char/function handle)
+             the syntax for evaluating the criteria is criteria(Signal, Error, Model)
+           options.OutputFcn and options.PlotFcns
+             Function called at each iteration as outfun(pars, optimValues, state)
+             The 'fminplot' or 'fminstop' functions may be used.
+           options.Display
+             Display additional information during fit: 'iter','off','final'. Default is 'iter'.
+           options.Diagnostics
+             When set to 'on' or 1, returns the correlation coefficient and Hessian matrix
+         constraints: fixed parameter array. Use 1 for fixed parameters, 0 otherwise (double array)
+           OR use empty to not set constraints
+           OR use a structure with some of the following fields:
+           constraints.min:   minimum parameter values (double array)
+           constraints.max:   maximum parameter values (double array)
+           constraints.step:  maximum parameter step/change allowed.
+           constraints.fixed: fixed parameter flag. Use 1 for fixed parameters, 0 otherwise (double array)
+           constraints.eval:  expression making use of 'p', 'constraints', and 'options' 
+                              and returning modified 'p'
+                              or function handle p=@constraints.eval(p)
+           OR use a string 'min=...; max=...'
+
+ output: 
+         pars:              best parameter estimates (double array)
+         criteria:          minimal criteria value achieved (double)
+         message:           return message/exitcode from the optimizer (char/integer)
+         output:            additional information about the optimization (structure)
+           algorithm:         Algorithm used (char)
+           funcCount:         Number of function evaluations (double)
+           iterations:        Number of iterations (double)
+           parsHistory:       Parameter set history during optimization (double array)
+           criteriaHistory:   Criteria history during optimization (double array)
+           modelValue:        Final best model evaluation
+           parsHistoryUncertainty: Uncertainty on the parameters obtained from 
+                              the optimization trajectory (double)
+
+ The 'output' 4th return argument can be sent to 'fminplot' to plot the 
+ criteria convergence and the parameter distributions (see example below).
+
+ ex:     data=load(iData, [ ifitpath 'Data/sv1850.scn' ])
+         p=fits(data);
+         [p,c,m,o]=fits(gauss,data,[],'optimizer=fminpowell; OutputFcn=fminplot'); 
+         figure; plot(a); hold on; plot(o.modelAxes, o.modelValue,'r');
+         fminplot(o);
+
+ Version: oct.. 23, 2018
+ See also fminsearch, optimset, optimget, <a href="iFunc.html" class="code" title="">iFunc</a>, iData/fits, iData, ifitmakefunc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="abs.html" class="code" title="function a = abs(a)">abs</a>	b = abs(s) : absolute value of iFunc object</li><li><a href="char.html" class="code" title="function [ret, header] = char(s)">char</a>	ret = char(s) : convert iFunc into character</li><li><a href="disp.html" class="code" title="function disp(s_in, name)">disp</a>	disp(s) : display iFunc object (details)</li><li><a href="feval.html" class="code" title="function [signal, model, ax, name] = feval(model, p, varargin)">feval</a>	[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function</li><li><a href="fits.html" class="code" title="function [pars_out,criteria,message,output] = fits(model, a, pars, options, constraints, varargin)">fits</a>	[pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iFunc object properties</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/parameter in model objects</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iFunc object</li><li><a href="not.html" class="code" title="function a = not(a)">not</a>	b = not(s) : computes the logical 'not' of iFunc object</li><li><a href="ones.html" class="code" title="function s = ones(iFunc_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iFunc array</li><li><a href="plot.html" class="code" title="function h = plot(a, p, varargin)">plot</a>	h = plot(model, parameters, axes, ...) plot a model</li><li><a href="rdivide.html" class="code" title="function c = rdivide(a,b)">rdivide</a>	c = rdivide(a,b) : computes the ratio of iFunc objects</li><li><a href="real.html" class="code" title="function a = real(a)">real</a>	b = real(s) : real value of iFunc object</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties</li><li><a href="sqrt.html" class="code" title="function a = sqrt(a)">sqrt</a>	b = sqrt(s) : square root value of iFunc object</li><li><a href="times.html" class="code" title="function c = times(a,b)">times</a>	c = times(a,b) : computes the multiplication of iFunc objects</li><li><a href="zeros.html" class="code" title="function s = zeros(iFunc_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iFunc array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fits.html" class="code" title="function [pars_out,criteria,message,output] = fits(model, a, pars, options, constraints, varargin)">fits</a>	[pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

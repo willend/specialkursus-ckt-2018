@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of str2struct</title>
+  <meta name="keywords" content="str2struct">
+  <meta name="description" content="s=str2struct(string) Create a structure from string lines">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; str2struct.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/str2struct
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>s=str2struct(string) Create a structure from string lines</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s=str2struct(string) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s=str2struct(string) Create a structure from string lines
+   This function creates a structure from string containing &lt;name&gt; &lt;value&gt; pairs
+   Structure member must be separated by ';' or end-of-lines.
+   The member assignation can be specified with spaces, '=' and ':'
+   Values of type string can be specified with ' and &quot; delimiters.
+
+ input arguments:
+   string: string from which the structure should be extracted. It can
+           also be a file name, which is then read.
+
+ output variables:
+   s: structure which contains the named values
+
+ example: str=str2struct('Temperature: 200; RV=3; comment something nice; a=&quot;blah&quot;');
+          
+ See also: mat2str, num2str, eval, sprintf, <a href="class2str.html" class="code" title="function str=class2str(this, data, options)">class2str</a>
+
+ Part of: Loaders utilities (ILL library)
+ Author:  E. Farhi &lt;farhi@ill.fr&gt;. oct.. 23, 2018
+ (c) E.Farhi, ILL. License: BSD.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="read_adsc.html" class="code" title="function frame = read_adsc(fname)">read_adsc</a>	data = read_adsc(filename)</li><li><a href="read_bruker.html" class="code" title="function data = read_bruker(file)">read_bruker</a>	READ_JEOL: read a Bruker NMR data set</li><li><a href="read_cif.html" class="code" title="function [data, this] = read_cif(file)">read_cif</a>	read_cif Wrapper to read CIF files</li><li><a href="read_hbin.html" class="code" title="function [s, header, data] = read_hbin(filename)">read_hbin</a>	read ILL Cyclops image</li><li><a href="read_spe.html" class="code" title="function [frame,vararg_remain] = read_spe(filename,varargin)">read_spe</a>	read_spe(filename) read a Roper/SPE x-ray CCD image</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

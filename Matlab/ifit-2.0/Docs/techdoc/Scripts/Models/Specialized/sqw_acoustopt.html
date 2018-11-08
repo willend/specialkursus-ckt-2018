@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_acoustopt</title>
+  <meta name="keywords" content="sqw_acoustopt">
+  <meta name="description" content="model = sqw_acoustopt(p, h,k,l,w, {signal}) : acoutsic/optic dispersion(HKL) with DHO(energy)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Specialized</a> &gt; sqw_acoustopt.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Specialized&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_acoustopt
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model = sqw_acoustopt(p, h,k,l,w, {signal}) : acoutsic/optic dispersion(HKL) with DHO(energy)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function signal=sqw_acoustopt(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model = sqw_acoustopt(p, h,k,l,w, {signal}) : acoutsic/optic dispersion(HKL) with DHO(energy)
+
+   iFunc/sqw_acoustopt: a 4D S(q,w) with a 3D HKL dispersion with 
+      quadratic dependency, and a DHO line shape. 
+      This dispersion corresponds with a local description of an excitation, 
+      with its minimum around an (H0,K0,L0,E0) point.
+
+   The model requires to define a direction corresponding with a Slope1 dependency
+   as well as a second direction. An ortho-normal coordinate basis is then derived. 
+   All HKL coordinates are in rlu, and energies are in meV.
+
+   The dispersion has the form:
+      w(q) = sqrt(E0^2 + Slope^2*(q-HKL0)^2)
+   so that when the dispersion is linear for E0=0 or far from HKL0, else it is 
+   quadratic.
+
+   To define a pure acoustic mode, use (and adjust slopes):
+      sqw_acoustopt(0)                                 % minimum is E0=0 at q=0
+   To define an optical mode with energy E0 at Q=0, use:
+      sqw_acoustopt([ E0 ])                            % minimum is E0 at q=0
+   To define a mode which has its minimum E0 at a given HKL location, use:
+      sqw_acoustopt([ H K L E0 ])
+
+   When creating the Model, the following syntax is possible:
+      sqw_acoustopt(E0)           centers the excitation at q=0 with energy E0
+      sqw_acoustopt([ h k l E0 ]) centers the excitation at q=[H K L] and energy E0
+   You can of course tune other parameters once the model object has been created.
+
+ WARNING: Single intensity and line width parameters are used here.
+
+ To model more than one branch, just add these models together.
+
+ Example:
+   s=sqw_acoustopt(5); qh=linspace(0,.5,50);qk=qh; ql=qh'; w=linspace(0.01,10,50);
+   f=iData(s,s.p,qh,qk,ql,w); plot3(log(f(:,1,:,:)));
+
+ Reference: https://en.wikipedia.org/wiki/Phonon
+
+ input:  p: sqw_acoustopt model parameters (double)
+             p(1) = DC_Hdir1         Slope1 dispersion direction, H [rlu]
+             p(2) = DC_Kdir1         Slope1 dispersion direction, K [rlu]
+             p(3) = DC_Ldir1         Slope1 dispersion direction, L [rlu]
+             p(4) = DC_Hdir2         Slope2 dispersion direction, H (transverse) [rlu]
+             p(5) = DC_Kdir2         Slope2 dispersion direction, K (transverse) [rlu]
+             p(6) = DC_Ldir2         Slope2 dispersion direction, L (transverse) [rlu]
+             p(7) = DC_Slope1        Dispersion slope along 1st axis [meV/rlu]
+             p(8) = DC_Slope2        Dispersion slope along 2nd axis (transverse) [meV/rlu]
+             p(9) = DC_Slope3        Dispersion slope along 3rd axis (vertical) [meV/rlu]
+             p(10)= Ex_H0            Minimum of the dispersion, H [rlu]
+             p(11)= Ex_K0            Minimum of the dispersion, K [rlu]
+             p(12)= Ex_L0            Minimum of the dispersion, L [rlu]
+             p(13)= Ex_E0_Center     Minimum of the dispersion, Energy [meV]
+             p(14)= DHO_Amplitude
+             p(15)= DHO_Damping      Excitation damping, half-width [meV]
+             p(16)= DHO_Temperature  Temperature [K]
+             p(17)= Background   
+          or p='guess'
+         qh: axis along QH in rlu (row,double)
+         qk: axis along QK in rlu (column,double)
+         ql: axis along QL in rlu (page,double)
+         w:  axis along energy in meV (double)
+    signal: when values are given, a guess of the parameters is performed (double)
+ output: signal: model value
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc/fits, iFunc/plot, gauss, sqw_phonons, <a href="sqw_cubic_monoatomic.html" class="code" title="function signal=sqw_cubic_monoatomic(varargin)">sqw_cubic_monoatomic</a>, sqw_vaks
+   &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

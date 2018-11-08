@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_phonons</title>
+  <meta name="keywords" content="sqw_phonons">
+  <meta name="description" content="model=sqw_phonons(configuration, calculator, ..., options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; sqw_phonons.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_phonons
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model=sqw_phonons(configuration, calculator, ..., options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function signal=sqw_phonons(configuration, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model=sqw_phonons(configuration, calculator, ..., options)
+
+   iFunc/sqw_phonons: computes phonon dispersions using the ASE.
+   A model which computes phonon dispersions from the Hellmann-Feynman forces acting 
+     between atoms. The input argument is any configuration file describing the
+     material, e.g. CIF, PDB, POSCAR, ... supported by ASE. Alternatively, a
+     Crystallography Open Database ID or chemical formulae can be entered.
+
+   This models can compute the coherent inelastic phonons dispersions for
+     any crystalline (powder or single crystal) material, in the harmonic and
+     adiabatic approxiimation.
+   The phonon spectra is computed using one of the calculator supported by the
+   Atomic Simulation Environment (ASE) &lt;https://wiki.fysik.dtu.dk/ase&gt;.
+
+   Supported calculators are (use name as input argument, or set 'calculator=...'):
+     ABINIT    Plane-wave pseudopotential code
+     ELK       Full Potential LAPW code
+     EMT       Effective Medium Theory calculator (Al,Cu,Ag,Au,Ni,Pd,Pt,H,C,N,O)
+     GPAW      Real-space/plane-wave/LCAO PAW code
+     OCTOPUS
+     QuantumEspresso Plane-wave pseudopotential code
+     SIESTA
+     VASP      Plane-wave PAW code (when installed and licensed)
+
+   We recommend QuantumEspresso, GPAW, ABINIT and Elk.
+   Refer to https://molmod.ugent.be/deltacodesdft for codes comparison.
+
+   The simplest usage is to call: sqw_phonons('gui') which displays an entry dialog box
+   and proceeds with a fully automatic computation, and plots final results.
+     
+   The calculators can be specified by just giving their name as a parameter, 
+   or using e.g. options.calculator='GPAW'. Except for EMT, other calculators must
+   be installed separately, and optionally specific pseudo-potentials. 
+     See https://wiki.fysik.dtu.dk/ase/ase/calculators/calculators.html
+
+   Benchmarks indicate that, for phonon dispersions:
+   * QuantumEspresso, with excellent parallelization and accuracy.
+   * ABINIT, VASP are also fast codes.
+   * The all-electrons Elk code is about 10 times slower than QuantumEspresso.
+   * Using k-points=3 is both fast and ensures a reasonable accuracy in phonons
+   * Phonon dispersions are not too sensitive on the energy cut-off. 340 eV is good.
+   * Elk and ABINIT can not handle large supercells without recompiling.
+   * NWChem and Elk are not sensitive to the energy cut-off.
+
+ The model must first be created (which triggers e.g. a DFT computation), and 
+ once created, it can be evaluated in the whole HKLE reciprocal space.
+
+ MODEL CREATION ===============================================================
+
+ sqw_phonons(configuration, calculator, options, ...) 
+   is the usual syntax, such as sqw_phonons('POSCAR','qe','metal')
+ sqw_phonons('gui')
+   shows a dialogue to select the phonon calculator configuration.
+ sqw_phonons('defaults') or sqw_phonons
+   uses a simple fcc Aluminium as example.
+ sqw_phonons(dir, calculator, options, ...)
+   re-use an existing directory containing any of POSCAR, ASE atom object, PhonoPy
+   files, ...
+
+ The arguments for the model creation should be:
+
+ input (model creation):
+ configuration: file name or directory to an existing material configuration
+   Any A.S.E supported format can be used (POSCAR, CIF, SHELX, PDB, ...). 
+     See &lt;https://wiki.fysik.dtu.dk/ase/ase/io.html#module-ase.io&gt;
+   Alternatively, the 'bulk','molecule', 'crystal', and 'nanotube' ASE constructors can be
+   used, using the Python syntax, e.g. 
+       'bulk(&quot;Si&quot;, &quot;diamond&quot;, a=5.4)'
+       'bulk(&quot;Cu&quot;, &quot;fcc&quot;, a=3.6, cubic=True)'
+       'molecule(&quot;H2O&quot;)'
+       'nanotube(6, 0, length=4)'
+       'crystal([&quot;Na&quot;, &quot;Cl&quot;], [(0, 0, 0), (0.5, 0.5, 0.5)], spacegroup=225,
+          cellpar=[5.64, 5.64, 5.64, 90, 90, 90])'
+     See &lt;https://wiki.fysik.dtu.dk/ase/ase/structure.html&gt;
+         &lt;https://wiki.fysik.dtu.dk/ase/tutorials/spacegroup/spacegroup.html&gt;
+   Alternatively, the structure can be entered as a COD ID such as
+       'cod: 1532356' will fetch ID on Crystallography Open Database.
+   Alternatively, the structure can be entered as a chemical formulae in Hill
+   notation (C, H and then alpha order) on Crystallography Open Database. When
+   multiple matches, a dialogue will pop-up to select structure.
+       'cod: O7 Se2 Tb2'
+    
+
+ 'metal','insulator','semiconductor': indicates the type of occupation for 
+    electronic states, which sets smearing.
+
+ 'html' or 'report':   generate a full report of the simulation and export data.
+ 'plot' or 'autoplot': plot the results after building the model.
+
+ options: an optional structure with optional settings, as follows:
+
+ General options
+   options.target =path                   Where to store all files and FORCES
+     a temporary directory is created when not specified.
+   options.supercell=scalar or [nx ny nz] supercell size. Default is 0 (auto mode).
+   options.calculator=string              EMT,GPAW,Elk,ABINIT,Quantum
+     We recommend ABINIT,QE and Elk. Default set from installed software.
+     The calculator can also be given as a Python string, which then 
+     also requires to import the proper Python module. Use e.g.:
+       options.declaration = 'from ase.calculators.lammpsrun import LAMMPS';
+       options.calculator  = 'LAMMPS()';
+       options.command     = '/usr/bin/lammps';
+   options.potentials=string              Basis datasets or pseudopotentials.
+     Elk:    path to potentials, e.g. /usr/share/elk-lapw/species (ELK_SPECIES_PATH)
+     ABINIT: path to potentials, e.g. /usr/share/abinit/psp/      (ABINIT_PP_PATH)
+       or any of 'NC' 'fhi' 'hgh' 'hgh.sc' 'hgh.k' 'tm' 'paw'
+     QuantumEspresso: path to potentials, e.g. /usr/share/espresso/pseudo
+   options.command='exe'                  Path to calculator executable.
+   options.mpi=scalar                     use multi-cpu, requires e.g. OpenMPI to be installed.
+     when available and not specified, MPI is used with all CPU's.
+   options.machinefile=filename           file containing the list of MPI machines to use
+   options.autoplot=0|1                   when set, automatically evaluates the Model
+     and plot results.
+   options.htmlreport=0|1                 when set, automatically generates a full
+     report on the computation results.
+   options.optimizer                      when set, performs a geometry optimization
+     before computing the forces (move atoms in the cell). Can be set to 
+       'BFGS' or 'LBFGS' (low memory BFGS)
+       'MDMin' or 'FIRE'
+   options.accuracy                       'fast', 'very fast' (default) or 'accurate'.
+     The 'fast' choice uses the symmetry operators to lower the number of atom 
+     displacements. The force gradient uses central difference.
+     The 'very fast' option halves the number of displacements. The equilibrium
+     forces are used to improve the accuracy of the force gradient.
+     When using the 'accurate','fast' or 'very fast' accuracy, the calculation
+     is limited to 256 iteration steps. For more, use 'single_shot' mode below.
+     The 'single_shot' option performs all in a single call. No ETA is displayed, 
+     but computation is the fastest, and allows more than 256 iterations.
+     The 'accurate' choice is longer to execute (e.g. 3-6 times slower), but computes all forces.
+   options.use_phonopy=0|1                requests to use PhonoPy when installed.
+     This choice also sets accuracy='very fast'
+   options.disp=value                     the atom displacement in Angs. Default is 0.01.
+
+ DFT specific options
+   options.kpoints=scalar or [nx ny nz]   Monkhorst-Pack grid. Default is 0 (auto mode).
+   options.xc=string                      Type of Exchange-Correlation functional to use
+     'LDA','PBE','revPBE','RPBE','PBE0','B3LYP'   for GPAW
+     'LDA','PBE','revPBE','RPBE','GGA'            for ABINIT
+     'LDA','PBE','REVPBE','PBESOL','WC06','AM05'  for ELK
+     'LDA','PBE','PW91'                           for VASP
+     Default is 'PBE'.
+   options.raw='name=value, ...'          Additional arguments passed to the ASE
+                                          using the Python syntax.
+   options.nbands=int                     Number of valence bands for which 
+     wavefunctions are being computed. (= # of electrons /2); for a metal, 20% more
+     (minimum 4 more).
+   options.ecut=scalar                    Kinetic energy cutoff for wavefunctions. 
+     Large value improves convergence. Estimate is 200*n_typ_atoms in [eV].
+     Usually one runs at calculations at various ecut to investigate convergence
+     ABINIT paw/pawxml potentials require larger ecut (1000 eV) and nsteps (100).
+   options.diagonalization='dav' or 'cg' or 'rmm-diis'
+     The Davidson method is faster than the conjugate-gradient but uses more
+     memory. The RMM-DIIS method allows parallelization.
+   options.occupations='metal'            for metals ('smearing') help converge
+                       'insulator'        for insulators
+                       'semiconductor'    sets 0 eV FermiDirac smearing
+                       'auto'             for Elk (automatic smearing)
+                       or 0 for semi-conductors
+                       or a value in eV for the distribution width e.g. 0.3
+   options.nsteps=scalar                   Max number of iterations for SCF.
+     Typical: 30. Large value improves convergence.
+   options.toldfe=scalar                  Convergence threshold on the energy for 
+     selfconsistency, e.g. 1e-7 [eV]. Default is 1e-5 [eV] for fast estimate.
+
+ Options specific per calculator
+   options.mode='pw','fd', or 'lcao'      GPAW computation mode as Plane-Wave,
+     Finite Difference, or LCAO (linear combination of atomic orbitals). Default is 'pw'.
+   options.iscf='NC','PAW'                Type of SCF cycles (ABINIT) 
+   options.pps = 'fhi' 'hgh' 'hgh.sc' 'hgh.k' 'tm' 'paw' 'pawxml'      (ABINIT)
+                 a structure such as struct('Ca','_pv') ...              (VASP)
+                 'fhi' 'tm'                                            (SIESTA)
+                 'hscv_pbe' 'hscv_lda' 'hgh_lda' 'sg15'               (Octopus)
+   options.mixing_beta=scalar             mixing factor for self-consistency
+     default=0.7. use 0.3 to improve convergence (QuantumEspresso)
+   options.mixing_ndim=scalar             number of iterations used in mixing
+     default=8. If you are tight with memory, you may reduce it to 4. A larger
+     value will improve the SCF convergence, and use more memory (QuantumEspresso)
+
+ Options to specify executables
+   options.calculator                     Python/ASE calculator (see above)
+   options.command='exe'                  Path to calculator executable
+
+   and executables can be specified for 'python','mpirun','gpaw','elk','abinit',
+     'quantumespresso','vasp','octopus','cp2k','siesta', for instance:
+   options.python='python3'
+
+ The options can also be entered as strings with 'field=value; ...'.
+
+ output (model creation):
+   model: iFunc 4D model S(qh,qk,ql,w) with parameters p.
+
+ The syntax sqw_phonons(model,'html') allows to re-create the HTML report about
+ the 4D phonon model.
+
+ You may look at the following resources to get material structure files:
+   &lt;http://phonondb.mtl.kyoto-u.ac.jp/&gt;
+   &lt;https://www.materialsproject.org/&gt;
+   &lt;http://nomad-repository.eu/cms/&gt;
+
+ WARNING: 
+   This model is suitable to compute phonon dispersions for e.g solid-
+   state materials.
+   The Atomic Simulation Environment must be installed.
+   The temporary directories (UserData.dir) are not removed.
+   Momentum is expressed in reduced lattice unit, and energy is in meV.
+        1 meV = 241.8 GHz = 11.604 K = 0.0965 kJ/mol = 8.0657 cm-1 
+
+ References: https://en.wikipedia.org/wiki/Phonon
+
+ Atomic Simulation Environment
+   S. R. Bahn and K. W. Jacobsen, Comput. Sci. Eng., Vol. 4, 56-66, 2002
+   &lt;https://wiki.fysik.dtu.dk/ase&gt;. Exists as Debian package 'python-ase'.
+   Repository: http://download.opensuse.org/repositories/home:/dtufys/
+ GPAW J. J. Mortensen et al, Phys Rev B, Vol. 71, 035109 (2005). 
+   &lt;http://wiki.fysik.dtu.dk/gpaw&gt;. Exists as Debian package 'gpaw' and 'gpaw-setups' (gpaw-data).
+ Elk &lt;http://elk.sourceforge.net&gt;. Exists as Debian package 'elk-lapw'. 
+   The Elk executable should be compiled with e.g. 
+     elk/src/modmain.f90:289 maxsymcrys=1024 or larger
+ ABINIT  X. Gonze et al, Computer Physics Communications 180, 2582-2615 (2009).
+   &lt;http://www.abinit.org/&gt;. Exists as Debian package 'abinit' and 'abinit-doc' (abinit-data).
+   Install potentials from http://wiki.fysik.dtu.dk/abinit-files/abinit-pseudopotentials-2.tar.gz
+   into e.g. /usr/share/abinit
+ PHON D. Alfe, Computer Physics Communications 180,2622-2633 (2009). 
+   &lt;http://chianti.geol.ucl.ac.uk/~dario&gt;.
+ Quantum Espresso P. Giannozzi, et al, J.Phys.:Condens.Matter, 21, 395502 (2009).
+   &lt;http://www.quantum-espresso.org/&gt;. 
+ VASP G. Kresse and J. Hafner. Phys. Rev. B, 47:558, 1993.
+   &lt;https://www.vasp.at/&gt; Requires a license.
+ PhonoPy:   A. Togo and I. Tanaka, Scr. Mater., 108, 1-5 (2015)
+   &lt;https://atztogo.github.io/phonopy/&gt;
+
+ MODEL EVALUATION (once created) ==============================================
+
+ Once the model has been created, its use requires that axes are given on
+   regular qx,qy,qz grids (in rlu along reciprocal axes). The model evaluations
+   does not require to recompute the forces, and is very fast. 
+ When all axes are vectors of same orientation, the HKL locations is assumed to be a q-path.
+ When axes are not all vectors, not same length, nor orientation, a 3D HKL cube is used.
+ To generate a powder 2D S(q,w) you may use: powder(model)
+ To generate the dispersion curves along principal crystallographic directions,
+   use: band_structure(model)
+
+ The phonon density of states (DOS) is obtained with: dos(model)
+ by evaluation onto a grid HKL=[-.5 : 0.5]. It is stored in model.UserData.DOS as an 
+ iData object. Partial density of states (per mode) are stored in UserData.DOS_partials
+
+ The neutron scattering cross sections should be automatically determined from 
+ the chemical formula in order to properly evaluate the neutron scattering 
+ intensity. 
+ In case this would fail, or other cross sections are needed, it is required
+ to set the coherent neutron scattering length (b_coh in [fm]) as a vector in the 
+   model.UserData.properties.b_coh = [vector / number of atoms in the cell]
+ or alternatively the scattering cross section in [barn]
+   model.UserData.properties.sigma_coh = [vector / number of atoms in the cell]
+ where negative values set b_coh &lt; 0 (e.g. Hydrogen).
+ Setting b_coh=0 unactivates the intensity estimate.
+ This assignement should be done after creating the model, before performing
+ further HKL evaluations. Default is to use guessed b_coh from the formula.
+
+ Once the model has been created:
+ input:  p: sqw_phonons model parameters (double)
+             p(1)=Amplitude
+             p(2)=Gamma   dispersion DHO half-width in energy [meV]
+             p(3)=Background (constant)
+             p(4)=Temperature of the material [K]. When 0, the intensity is not computed.
+             p(5)=Energy_scaling. All frequencies are multiplied by this value.
+          or p='guess'
+         qh: axis along QH in rlu (row,double)
+         qk: axis along QK in rlu (column,double)
+         ql: axis along QL in rlu (page,double)
+         w:  axis along energy in meV (double)
+    signal: when values are given, a guess of the parameters is performed (double)
+ output: signal: model value
+
+ Example (model creation and evaluation):
+   s=sqw_phonons('bulk(&quot;Cu&quot;, &quot;fcc&quot;, a=3.6, cubic=True)','EMT','metal');
+   plot3(s)            QH=0 plot of the Brillouin Zone
+
+   publish(s)          generates a full report for the given model.
+   band_structure(s)   plots the dispersion curves and density of states.
+
+   s=sqw_phonons('bulk(&quot;Si&quot;, &quot;diamond&quot;, a=5.4, cubic=True)','semiconductor');
+
+   s=sqw_phonons([ ifitpath 'Data/POSCAR_Al'],'metal','EMT');
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc/fits, iFunc/plot, gauss, sqw_cubic_monoatomic, sqw_sine3d, <a href="sqw_vaks.html" class="code" title="function signal=sqw_vaks(varargin)">sqw_vaks</a>
+   iFunc_Sqw4D/powder, &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>	model=sqw_phonons(configuration, calculator, ..., options)</li><li><a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>	model=sqw_phonons(configuration, calculator, ..., options)</li><li><a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>	model=sqw_phonons(configuration, calculator, ..., options)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>	model=sqw_phonons(configuration, calculator, ..., options)</li><li><a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>	model=sqw_phonons(configuration, calculator, ..., options)</li><li><a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>	model=sqw_phonons(configuration, calculator, ..., options)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

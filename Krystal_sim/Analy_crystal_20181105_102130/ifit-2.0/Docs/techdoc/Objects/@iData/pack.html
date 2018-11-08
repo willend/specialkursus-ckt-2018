@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of pack</title>
+  <meta name="keywords" content="pack">
+  <meta name="description" content="b = pack(a) : compress iData storage to save memory">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; pack.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/pack
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>b = pack(a) : compress iData storage to save memory</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = pack(a) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> b = pack(a) : compress iData storage to save memory
+
+   @iData/pack function to save memory when storing data sets
+   This includes to compare sparse/full storage for large matrices, and
+   reduce the Command history. Only the Signal, aliases and Axes are kept
+   so that unused Data items are removed.
+   In addition, to further 'clean' an object, use: fill(a) and squeeze(a)
+
+ input:  s: object or array (iData)
+ output: f: compressed object or array (iData)
+ ex:     b=pack(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/sparse, iData/full, iData/saveas, iData/fill, iData/squeeze</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cell.html" class="code" title="function [content,fields]=cell(s)">cell</a>	[content,fields]=cell(s) : convert iData objects into cells</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="double.html" class="code" title="function a=double(a)">double</a>	d = double(s) : convert iData into doubles</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iData, field, option) : look for iData fields</li><li><a href="full.html" class="code" title="function a = full(a)">full</a>	b = full(s) : Convert iData object storage to full matrix</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getalias.html" class="code" title="function [link, label, names] = getalias(this,alias)">getalias</a>	[link, label,names] = getalias(s, 'AliasName') : get iData alias</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="issparse.html" class="code" title="function a = issparse(a)">issparse</a>	b = issparse(s) : True for sparse matrix iData object</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="pack.html" class="code" title="function b = pack(a)">pack</a>	b = pack(a) : compress iData storage to save memory</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sparse.html" class="code" title="function a = sparse(a)">sparse</a>	b = sparse(s) : Convert iData object storage to sparse</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="pack.html" class="code" title="function b = pack(a)">pack</a>	b = pack(a) : compress iData storage to save memory</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

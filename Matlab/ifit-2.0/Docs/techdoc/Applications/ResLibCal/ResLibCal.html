@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of ResLibCal</title>
+  <meta name="keywords" content="ResLibCal">
+  <meta name="description" content="ResLibCal: compute and display the neutron TAS resolution function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Applications</a> &gt; <a href="index.html">ResLibCal</a> &gt; ResLibCal.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Applications/ResLibCal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/ResLibCal
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ResLibCal: compute and display the neutron TAS resolution function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = ResLibCal(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ResLibCal: compute and display the neutron TAS resolution function
+
+ To start the application and open the main GUI window, use
+   ResLibCal
+ To compute directly the resolution function, sending an EXP ResLib-like
+   configuration structure, use:
+   out = ResLibCal(EXP);
+ To convolve an iFunc model with a 4D resolution function, use:
+   out = ResLibCal(model);
+ To use ResLibCal from the command line, use:
+   out = ReslibCal(command, arguments...);
+ where 'command' is one of:
+
+   open    open a configuration file (par, cfg, res, ini, m): ResLibCal('open','file')
+   save    save the configuration in the Preference directory (ini format)
+   saveas  save the configuration into a specified file/format: ResLibCal('saveas','file')
+   export  dump the main ResLibCal window into a file
+   exit    close all active views, and save current configuration
+   reset   re-load the default configuration
+   print   generate an HTML document to be printed
+   create  open the main GUI (start interface), and read last saved configuration
+   compute only compute the matrix (no plotting/printing)
+   update  compute, and then update open views, or send result to the console
+   view2   display the 2D view (resolution projections)
+   view3   display the 3D view (resolution)
+   tas     display the spectrometer geometry
+   default same as create, but does not read last configuration (using reset configuration)
+   quit    same as exit, but does not save the configuration
+   close   close the 2D, 3D and TAS view windows
+   resol   print-out the resolution matrix a la RESCAL
+   bragg   print-out the Bragg widths a la RESCAL
+   list    print-out the RESCAL parameter list
+   config  return the current configuration (ResLib EXP)
+   hkle    return the current HKLE location. Set it back with ResLibCal(hkle{:});
+   silent  use silent computation (no plot/display) for further arguments
+   &lt;PAR&gt;=&lt;VALUE&gt; sets a parameter value, e.g. 'DM=3.355'
+
+ To compute the resolution at a given HKLW location, using the current settings
+   resolution = ResLibCal(QH,QK,QL,W)
+ where QH,QK,QL,W can be vectors, or empty to use current settings.
+ To only compute the resolution function, use:
+   ResLibCal('close'); out=ResLibCal('compute');
+ which will close the 2D,3D and TAS views, then compute the resolution
+ function, returned in out.resolution
+
+ The application contains a main interface with:
+ * Menu, Method, Scan and Instrument parameters (main)
+ * Resolution function plot (2D)
+ * Resolution function plot (3D)
+ * Instrument view
+
+ when changing any value in the main GUI:
+ * Method and Scan parameters, Instrument parameters
+ any opened view is updated after a re-computation of the resolution.
+
+ The 2D and 3D views can be closed without ending the application.
+ When the main window is closed, or Exit is selected all views are closed
+
+ Convolution in 4D for TAS ----------------------------------------------------
+
+   The 4D convolution syntax allow to simulate a TAS scan from a parametrised 
+ dispersion. In the following example, we simulate a scan through a cubic crystal
+ dispersion, and show the ideal S(q,w) as well as the measured, broadened 
+ measurement. Then, the simulated scan is inserted in a representation of the 
+ S(q,w), to visualise the scan trajectory and simulated signal.
+ To use this tool, you need to input a 2D or 4D dispersion model (iFunc).
+ The dispersion is either a 2D model S(|q|,w) or a 4D model S(qh,qk,ql,w).
+ The axes of the dispersion are in the lattice reciprocal space, in r.l.u.
+
+   s=sqw_cubic_monoatomic; % create a 4D S(q,w) for a cubic pure material
+   t=ResLibCal(s);         % convolute it with a TAS resolution, and open ResLibCal.
+   w=linspace(0.01,20,50); qh=0.3*ones(size(w)); qk=0*qh; ql=qk; % a scan
+   signal1=iData(t, [], qh,qk,ql,w);
+   signal0=iData(s, [], qh,qk,ql,w);
+   figure; plot(squeeze([signal1 signal0*100])); % plot the dispersion and simulated measurement
+   % now plot the 4D dispersion with the scan in it, for fun
+   qh=linspace(0.01,.5,50);qk=qh; ql=qh; w=linspace(0.01,10,51); % a 4D grid
+   f=iData(s,[],qh,qk,ql,w); % evaluate the model on the 4D grid
+   figure; surf(log(f(:,:,1,:)),'half'); hold on;  % plot dispersion, and scan
+   scatter3(log(signal1(:,:,1,:)),'filled');
+
+ input: any combination of:
+   command: string among those listed above, which can be followed by any other
+            allowed parameter.
+   qh,qk,ql,w: 4 vectors or 4D matrices which delimit a region in the reciprocal
+            space where the TAS resolution function should be computed.
+   model:   an iFunc model which is to be convolved with the TAS response.
+   EXP:     a structure holding a ResLibCal, ResCal or ResLib configuration.
+ output:
+   a ResLibCal configuration with e.g. 'resolution' field, or a 4D convoluted model.
+
+ Version: oct.. 23, 2018
+ (c) E.Farhi, ILL. License: EUPL.
+ See also iFunc/conv</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ResLibCal.html" class="code" title="function out = ResLibCal(varargin)">ResLibCal</a>	ResLibCal: compute and display the neutron TAS resolution function</li><li><a href="ResLibCal.html" class="code" title="function out = ResLibCal(varargin)">ResLibCal</a>	ResLibCal: compute and display the neutron TAS resolution function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ResLibCal.html" class="code" title="function out = ResLibCal(varargin)">ResLibCal</a>	ResLibCal: compute and display the neutron TAS resolution function</li><li><a href="ResLibCal.html" class="code" title="function out = ResLibCal(varargin)">ResLibCal</a>	ResLibCal: compute and display the neutron TAS resolution function</li><li><a href="rescal.html" class="code" title="function out=rescal(varargin)">rescal</a>	ResCal: wrapper to ResLibCal</li><li><a href="rescal.html" class="code" title="function out=rescal(varargin)">rescal</a>	ResCal: wrapper to ResLibCal</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

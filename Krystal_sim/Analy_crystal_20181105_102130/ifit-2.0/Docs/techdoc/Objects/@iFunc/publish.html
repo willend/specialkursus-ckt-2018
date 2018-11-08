@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of publish</title>
+  <meta name="keywords" content="publish">
+  <meta name="description" content="b = publish(s) : export the Model object as an HTML document.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; publish.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/publish
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>b = publish(s) : export the Model object as an HTML document.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function filename = publish(a, filename, section, message) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> b = publish(s) : export the Model object as an HTML document.
+
+   @iFunc/publish function to export an object into a readable document.
+
+   publish(a)        export to a temporary directory and open the web browser
+   publish(a, file)  export to given file name
+   publish(a, dir)   export to given directory
+   publish(a, file, sections) export only the given sections as char or cell 
+     default sections are {'header','parameters','model','expression','footer'};
+     optional section:     'download','message'
+   publish(a, file, section, message)
+     write a specified section with additional label/text in 'message'.
+   publish(a, file, 'force')
+     overwrites any existing document (default is to append)
+
+ When the generated report file already exists, the new document is appended.
+ The resulting document file name is stored as:
+   a.UserData.options.report
+
+ input:  a: object or array (iFunc)
+         filename: a file name or directory where to export. When not given
+           the exportation takes place in the local directory.
+         section: a list of sections to generate. The default is
+           {'header','plot','expression','footer'}. 
+            'download' and 'message' can be added.
+         message: an additional label for the section.
+ output: b: generated filename
+ ex:     publish(gauss)
+
+ Version: oct.. 23, 2018
+ See also <a href="iFunc.html" class="code" title="">iFunc</a>, iFunc/save</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cellstr.html" class="code" title="function [ret, header] = cellstr(s)">cellstr</a>	ret = cellstr(s) : convert iFunc into a cell of strings</li><li><a href="char.html" class="code" title="function [ret, header] = char(s)">char</a>	ret = char(s) : convert iFunc into character</li><li><a href="disp.html" class="code" title="function disp(s_in, name)">disp</a>	disp(s) : display iFunc object (details)</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iFunc object properties</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/parameter in model objects</li><li><a href="plot.html" class="code" title="function h = plot(a, p, varargin)">plot</a>	h = plot(model, parameters, axes, ...) plot a model</li><li><a href="publish.html" class="code" title="function filename = publish(a, filename, section, message)">publish</a>	b = publish(s) : export the Model object as an HTML document.</li><li><a href="save.html" class="code" title="function [filename,format] = save(a, varargin)">save</a>	f = save(s, filename, format, options) : save iFunc object into various data formats</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, varargin)">saveas</a>	f = saveas(s, filename, format, options) : save iFunc object into various data formats</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="publish.html" class="code" title="function filename = publish(a, filename, section, message)">publish</a>	b = publish(s) : export the Model object as an HTML document.</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, varargin)">saveas</a>	f = saveas(s, filename, format, options) : save iFunc object into various data formats</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

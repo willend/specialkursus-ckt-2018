@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of iLoad_ini</title>
+  <meta name="keywords" content="iLoad_ini">
+  <meta name="description" content="config = iLoad_ini User definitions of specific import formats to be used by iLoad">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; iLoad_ini.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/iLoad_ini
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>config = iLoad_ini User definitions of specific import formats to be used by iLoad</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function config = iLoad_ini </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> config = iLoad_ini User definitions of specific import formats to be used by iLoad
+
+ Each format is specified as a structure with the following fields
+   method:   function name to use, called as method(filename, options...)
+   extension:a single or a cellstr of extensions associated with the method
+   patterns: list of strings to search in data file. If all found, then method
+             is qualified. The patterns can be regular expressions.
+   name:     name of the method/format
+   options:  additional options to pass to the method.
+             If given as a string they are catenated with file name
+             If given as a cell, they are given to the method as additional arguments
+   postprocess: function called from iData/load after file import, to assign aliases, ...
+             called as iData=postprocess(iData)
+
+ formats should be sorted from the most specific to the most general.
+ Formats will be tried one after the other, in the given order.
+ System wide loaders are tested after user definitions.
+
+ These formats can be obtained using [config, configfile]=iLoad('','load config').
+ the iLoad_ini configuration file can be saved in the Preference directory
+ using [config, configfile] = iLoad(config,'save config').
+ A list of all supported formats is shown with iLoad('formats');
+
+ See also: <a href="iLoad.html" class="code" title="function [data, format] = iLoad(filename, loader, varargin)">iLoad</a>, save, iData/saveas
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="iLoad.html" class="code" title="function [data, format] = iLoad(filename, loader, varargin)">iLoad</a>	[data, loader] = iLoad(file, loader, ...)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

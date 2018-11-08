@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of subsasgn</title>
+  <meta name="keywords" content="subsasgn">
+  <meta name="description" content="b = subsasgn(a,index,b) : iFunc indexed assignement">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; subsasgn.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/subsasgn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>b = subsasgn(a,index,b) : iFunc indexed assignement</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = subsasgn(a,S,val) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> b = subsasgn(a,index,b) : iFunc indexed assignement
+
+   @iFunc/subsasgn: function defines indexed assignement
+   such as a(1:2,3) = b
+
+   a.p(index) = val                sets the value of the indexed parameter
+   a.p        = val                sets all parameter values
+   a.Par      = val                sets the value of the parameter named &quot;Par&quot;
+   a.Par      = 'fix' or 'lock'    lock the value of the Parameter &quot;Par&quot;
+   a.Par      = 'free' or 'clear'  free/unlock the value of the Parameter &quot;Par&quot;
+   a.Par      = [min max]          restraint the Par parameter between bounds [min max]
+   a.Par      = [min val max]      restraint the Par parameter between bounds [min max]
+                                     and set its value to val
+   a.p='fix'                       fix/lock all parameter values
+   a.p='free'                      free/unlock all parameter values</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cellstr.html" class="code" title="function [ret, header] = cellstr(s)">cellstr</a>	ret = cellstr(s) : convert iFunc into a cell of strings</li><li><a href="iFunc.html" class="code" title="">iFunc</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="ones.html" class="code" title="function s = ones(iFunc_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iFunc array</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iFunc indexed assignement</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iFunc indexed references</li><li><a href="transpose.html" class="code" title="function a = transpose(a)">transpose</a>	b = transpose(s) : non-conjugate transpose of iFunc object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="mlock.html" class="code" title="function a = mlock(a, varargin)">mlock</a>	b = mlock(s, parameters, ...) : sets parameter lock (fix) for further fit using the model 's'</li><li><a href="munlock.html" class="code" title="function a = munlock(a, varargin)">munlock</a>	b = munlock(s, parameters, ...) : free parameter lock (clear) for further fit using the model 's'</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iFunc indexed assignement</li><li><a href="xlim.html" class="code" title="function a = xlim(a, varargin)">xlim</a>	b = xlim(s, parameters, [min max], ...) : sets parameter bounds (min,max) for further fit using the model 's'</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

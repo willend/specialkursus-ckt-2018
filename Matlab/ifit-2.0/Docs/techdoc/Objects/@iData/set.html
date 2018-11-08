@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of set</title>
+  <meta name="keywords" content="set">
+  <meta name="description" content="[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; set.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/set
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function this = set(this,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties
+
+   @iData/set function to set iData properties.
+   set(s, 'PropertyName', Propertyvalue, ...}) 
+     sets values into given property names for the iData object s.
+   set(s, Struct.Field, ...)
+     sets values from given structure fields into the iData object s.
+   set(s, CellNames, CellValues, ...)
+     sets values from given cells into the iData object s.
+   set(s) indicates the signification of the iData base properties
+   The input iData object is updated if no output argument is specified.
+
+ ex      : set(iData,'Title','A nice Title')
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/get, iData/setalias, iData/setaxis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="disp.html" class="code" title="function disp(s_in, name, flat)">disp</a>	disp(s) : display iData object (details)</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iData indexed assignement</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="caxis.html" class="code" title="function c = caxis(a, h)">caxis</a>	c = caxis(s, h) : Use the 2D/3D data as the colormap (CData property) in current object.</li><li><a href="colormap.html" class="code" title="function h = colormap(varargin)">colormap</a>	h=colormap(objects, colormaps, ..., options): Produce surfaces from iData 2D objects with different colormaps</li><li><a href="commandhistory.html" class="code" title="function [s,fig] = commandhistory(a, fig, varargin)">commandhistory</a>	commandhistory(s) : show the command history of iData object</li><li><a href="cwt.html" class="code" title="function s = cwt(a,dim,scales,wname,plotit)">cwt</a>	b = cwt(s,dim,scales,wname,'wname',...) : Continuous wavelet transform</li><li><a href="edit.html" class="code" title="function h = edit(a, option)">edit</a>	edit(s) : edit iData object Signal/Monitor</li><li><a href="event.html" class="code" title="function b = event(a, dim, signal, err, monitor)">event</a>	c = event(a) : build an event list</li><li><a href="fileattrib.html" class="code" title="function [b, link] = fileattrib(a, field, allfields)">fileattrib</a>	[attribute, link] = fileattrib(s, field) : return a field Attribute</li><li><a href="getframe.html" class="code" title="function frame = getframe(a, dim, options)">getframe</a>	frame = getframe(s, dim, options) : create an iData object thumbnail/frame matrix</li><li><a href="help.html" class="code" title="function c = help(s)">help</a>	c = help(s) : display iData information as a Dialogue window</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="image.html" class="code" title="function h = image(r, g, b, option)">image</a>	h = image(r,g,b, option) : Plot up to 3 images overlayed on the RGB channels</li><li><a href="imroi.html" class="code" title="function [b, mask, f] = imroi(a, options)">imroi</a>	imroi: define a region of interest on a data set</li><li><a href="jacobian.html" class="code" title="function [b, j] = jacobian(a, varargin)">jacobian</a>	[b, j] = jacobian(a, new_axes, 'new_axes_labels'...) : computes the gradient (derivative) of iData objects</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="linspace.html" class="code" title="function v = linspace(a,b,n)">linspace</a>	v = linspace(a,b,n) : creates a linearly spaced vector of objects</li><li><a href="load.html" class="code" title="function out = load(a, varargin)">load</a>	d = load(s, file, loader, ...): iData file loader</li><li><a href="logspace.html" class="code" title="function v = logspace(a,b,n)">logspace</a>	v = logspace(a,b,n) : creates a logarithmically spaced vector of objects</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="pack.html" class="code" title="function b = pack(a)">pack</a>	b = pack(a) : compress iData storage to save memory</li><li><a href="pca.html" class="code" title="function b = pca(a, varargin)">pca</a>	[b] = pca(X, k) : Principal component analysis of iData object(s)</li><li><a href="peaks.html" class="code" title="function [sigma, position, amplitude, baseline] = peaks(a, dim, m)">peaks</a>	[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</li><li><a href="plot.html" class="code" title="function h=plot(a, varargin)">plot</a>	h = plot(s, method, ...) : plot iData object</li><li><a href="resize.html" class="code" title="function b = resize(a, varargin)">resize</a>	c = resize(a) : resize/rebin the object Signal</li><li><a href="rotate.html" class="code" title="function s = rotate(a, theta)">rotate</a>	s = rotate(a, theta) : computes the rotation of iData objects around the origin</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>	f = saveas(s, filename, format, options) : save iData object into various data formats</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="slice.html" class="code" title="function h = slice(a, method)">slice</a>	slice(s) : Plot a 2D/3D object with slice rendering</li><li><a href="smooth.html" class="code" title="function b = smooth(a, varargin)">smooth</a>	Z = smooth(Y) : smooth iData objects</li><li><a href="squeeze.html" class="code" title="function a = squeeze(a)">squeeze</a>	c = squeeze(a) : remove singleton dimensions from iData objects/arrays</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iData indexed assignement</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

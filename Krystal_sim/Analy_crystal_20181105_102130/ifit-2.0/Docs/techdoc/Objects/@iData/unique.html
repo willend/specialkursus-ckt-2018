@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of unique</title>
+  <meta name="keywords" content="unique">
+  <meta name="description" content="s = unique(a,dim) : set unique iData objects axes with no repetitions">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; unique.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/unique
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>s = unique(a,dim) : set unique iData objects axes with no repetitions</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s = unique(a,dim,mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s = unique(a,dim) : set unique iData objects axes with no repetitions
+
+   @iData/unique function to remove duplicates along data set axes
+     unique(a,dim) set unique along axis of rank dim. 
+       If dim=0, operates on all axes.
+   Alternatively, you can use 'isequal' to find unique data sets and remove 
+     duplicates.
+
+ input:  a: object or array (iData)
+         dim: dimension to unique (int)
+ output: s: data set with unique axes (iData)
+ ex:     c=unique(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/plus, iData/unique, iData/sort, iData/isequal</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="unique.html" class="code" title="function s = unique(a,dim,mode)">unique</a>	s = unique(a,dim) : set unique iData objects axes with no repetitions</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="edit.html" class="code" title="function h = edit(a, option)">edit</a>	edit(s) : edit iData object Signal/Monitor</li><li><a href="fft.html" class="code" title="function b = fft(a, op, dim)">fft</a>	c = fft(a) : computes the Discrete Fourier transform of iData objects</li><li><a href="fileattrib.html" class="code" title="function [b, link] = fileattrib(a, field, allfields)">fileattrib</a>	[attribute, link] = fileattrib(s, field) : return a field Attribute</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iData, field, option) : look for iData fields</li><li><a href="findobj.html" class="code" title="function [varargout] = findobj(s_in, varargin)">findobj</a>	[s,...]=findobj(s,...) : look for existing iData objects</li><li><a href="jacobian.html" class="code" title="function [b, j] = jacobian(a, varargin)">jacobian</a>	[b, j] = jacobian(a, new_axes, 'new_axes_labels'...) : computes the gradient (derivative) of iData objects</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="load.html" class="code" title="function out = load(a, varargin)">load</a>	d = load(s, file, loader, ...): iData file loader</li><li><a href="rotate.html" class="code" title="function s = rotate(a, theta)">rotate</a>	s = rotate(a, theta) : computes the rotation of iData objects around the origin</li><li><a href="slice.html" class="code" title="function h = slice(a, method)">slice</a>	slice(s) : Plot a 2D/3D object with slice rendering</li><li><a href="subsindex.html" class="code" title="function y = subsindex(s)">subsindex</a>	d = subsindex(s) : subscript index for iData objects</li><li><a href="unique.html" class="code" title="function s = unique(a,dim,mode)">unique</a>	s = unique(a,dim) : set unique iData objects axes with no repetitions</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

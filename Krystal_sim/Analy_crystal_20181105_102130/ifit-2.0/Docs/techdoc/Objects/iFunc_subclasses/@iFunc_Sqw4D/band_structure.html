@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of band_structure</title>
+  <meta name="keywords" content="band_structure">
+  <meta name="description" content="band_structure: evaluates a 4D S(q,w) model along specified k-path / bands">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iFunc_subclasses</a> &gt; <a href="index.html">@iFunc_Sqw4D</a> &gt; band_structure.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iFunc_subclasses/@iFunc_Sqw4D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/band_structure
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>band_structure: evaluates a 4D S(q,w) model along specified k-path / bands</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [S, qLim, fig] = band_structure(f, qLim, E, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> band_structure: evaluates a 4D S(q,w) model along specified k-path / bands
+
+    band_structure(f, kpath, w, options)
+      The k-path can be given as a cell containing 3-values (HKL) vectors, or
+        a n x 3 matrix, each row being a HKL location.
+      The energy range can be entered as a vector, or a [min max] pair.
+      Refer to https://en.wikipedia.org/wiki/Brillouin_zone and
+             http://lamp.tu-graz.ac.at/~hadley/ss1/bzones/ to get the standard 
+      points in the Brillouin zone.
+
+      The bands intensity is computed along the path. For neutron scattering,
+        as all standard points in the Brillouin zone are centered around 0 and
+        the intensity is proportional to |Q.e|^2, all transverse modes are extinct.
+      To get the proper band intensity around a given Bragg peak G, the k-path
+        should be shifted by G.
+
+    band_structure(f);
+      plots the dispersion curves following the BZ points for the 
+      crystal spacegroup, and using the maximum excitation energy.
+
+    [S,k] = band_structure(...)
+      returns the dispersion curves data set (iData), and the k-path used.
+
+    When the command is followed by ';' or options contains 'plot', a plot is 
+    generated.
+
+ Example:
+   S = band_structure(sqw_cubic_monoatomic, '', [0 10]); plot(log10(S));
+   S = sqw_phonons('POSCAR_Al','emt','metal'); band_structure(S);
+
+ input:
+   f:    a 4D HKLE model S(q,w) (iFunc)
+   path: a list of k-locations given as a cell/array of HKL locations (cell or matrix)
+         can also be 'Cubic','Hexagonal','Trigonal','Tetragonal','Orthorhombic',
+                     'Monoclinic','Triclinic','fcc','bcc'
+         can also be given as a list of BZ points, such as:
+           {'Gamma' 'K' 'M' 'Gamma' 'A' 'H' 'L' 'A' }
+           which are then defined according to the space group, e.g:
+             f.UserData.properties.spacegroup_number
+         can be given as a list of HKL locations, such as {[0,0,0],[1,1,1],[1,1,0]}
+           or as an array e.g. [0 0 0 ; 1 1 1 ; 1 1 0 ; 0 0 0 ; 0 0 1]
+         The path can also be given as a Bragg peak location, e.g. [0 0 1] to compute
+           the dispersion around that location using the default K-path in the BZ.
+         when not given or empty, this is guessed from the crystal spacegroup.
+
+   w:    a vector of energies (4-th axis) for which to evaluate the model (double)
+         can also be given as Emax, or [ Emin Emax ]
+         when not given or empty, the maximum excitation energy is used.
+   options: plotting option (string). Can contain 'plot' 'THz','cm-1','meV'.
+         The 'plot' option also displays the density of states, when available.
+         The 'newplot' option does the same but opens a new figure instead of
+         re-using an existing one.
+
+ output:
+   S:    the dispersion W(HKL) computed along the path (iData)
+   k:    the k-path used to generate the dispersion curves (matrix, HKL list)
+   fig:  figure handle generated when options contains 'plot' or no output.
+
+ Version: oct.. 23, 2018
+ See also sqw_cubic_monoatomic, sqw_sine3d, sqw_vaks, sqw_spinw
+   iFunc_Sqw4D/powder, &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="band_structure.html" class="code" title="function [S, qLim, fig] = band_structure(f, qLim, E, options)">band_structure</a>	band_structure: evaluates a 4D S(q,w) model along specified k-path / bands</li><li><a href="dos.html" class="code" title="function [DOS, DOS_partials] = dos(s, n, nQ, method)">dos</a>	iFunc_Sqw4D: dos: compute the density of states (vDOS)</li><li><a href="max.html" class="code" title="function [m, DOS] = max(s)">max</a>	iFunc_Sqw4D: max: get a quick estimate of the max dispersion frequency</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="band_structure.html" class="code" title="function [S, qLim, fig] = band_structure(f, qLim, E, options)">band_structure</a>	band_structure: evaluates a 4D S(q,w) model along specified k-path / bands</li><li><a href="iFunc_Sqw4D.html" class="code" title="">iFunc_Sqw4D</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

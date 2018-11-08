@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of save</title>
+  <meta name="keywords" content="save">
+  <meta name="description" content="f = save(s, filename, format, options) : save iData object into various data formats">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; save.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/save
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>f = save(s, filename, format, options) : save iData object into various data formats</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [filename,format] = save(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> f = save(s, filename, format, options) : save iData object into various data formats
+
+   @iData/save function to save data sets
+     This function saves the content of iData objects. The default format is 'm'.
+   save(iData,'formats')
+     prints a list of supported export formats.
+   save(s,'file.ext')            determine file format from the extension
+   save(s,'file','format')       set file format explicitly
+   save(s,'file','format clean') set file format explicitly and remove NaN and Inf.
+   save(s,'file','format data')  save only the 'Data' part of the object. 
+   save(s, get(s,'Source'), 'format')  save with the same base filename(s)
+
+     To load back an object from a m-file, type its file name at the prompt.
+     To load back an object from a mat-file, type 'load filename.mat' at the prompt.
+
+  Type &lt;a href=&quot;matlab:doc(iData,'Save')&quot;&gt;doc(iData,'Save')&lt;/a&gt; to access the iFit/Save Documentation.
+
+ input:  s: object or array (iData)
+         filename: name of file to save to. Extension, if missing, is appended (char)
+                   If the filename already exists, the file is overwritten.
+                   If given as filename='gui', a file selector pops-up
+                   If the filename is empty, the object Tag is used.
+         format: data format to use (char), or determined from file name extension
+           'cdf'  save as CDF (not recommended)
+           'hdf5' save as an HDF5 data set ('nxs','n5','h5' also work)
+           'lamp' save as LAMP Processed Workspace, i.e. 'nxs lamp data' (HDF5)
+           'm'    save as a flat Matlab .m file (a function which returns an iData object or structure)
+           'mantid' save as Mantid Processed Workspace, i.e. 'nxs mantid data' (HDF5)
+           'mat'  save as a serialized '.mat' binary file (fast 'save', DEFAULT)
+           'nc'   save as NetCDF
+         as well as other lossy formats
+           'art'  save as ASCII art
+           'avi'  save as an AVI movie
+           'csv'  save as a comma separated value file
+           'dae'  save as Collada model
+           'dat'  save as Flat text file with comments
+           'edf'  EDF ESRF format for 1D and 2D data sets
+           'fig'  save as a Matlab figure
+           'fits' save as FITS binary image (only for 2D objects)
+           'gif','bmp','png','tiff','jpeg' save as an image (no axes, only for 2D data sets)
+           'hdf4' save as an HDF4 image
+           'hdr'  save as HDR/IMG Analyze MRI volume (3D/4D)
+           'html' save as Hypertext Markup Language document, appended to any existing document.
+           'inx'  save as an ILL Inelastic Neutron Scattering data (only 2D neutron)
+           'json' save as JSON JavaScript Object Notation, ascii
+           'kml'  save as KML GoogleEarth model
+           'mrc'  save as MRC map file (3/4D)
+           'nii'  save as NifTi Neuroimaging Informatics Technology Initiative (3/4D)
+           'npy'  save as Numpy binary array
+           'ps','pdf','ill','eps' save as an image (with axes)
+           'ppm','pgm','pbm'
+           'off'  save as Object File Format (geometry), ascii
+           'ply'  save as PLY (geometry), ascii
+           'spe'  save as ISIS SPE (Mslice/Horace)
+           'sqw'  save as McStas SQW Isotropic S(q,w)
+           'stl'  save as STL stereolithography (geometry), binary
+           'stla' save as STL stereolithography (geometry), ascii
+           'svg'  save as Scalable Vector Graphics (SVG) format
+           'vtk'  save as VTK ascii (&lt;1e5 elements) or binary (3/4D)
+           'wrl'  save as Virtual Reality VRML 2.0 file
+           'x3d'  save as X3D (geometry) file, ascii
+           'xhtml' save as embedded HTML/X3D file (using Flash plugin for rendering)
+           'xls'  save as an Excel sheet (requires Excel to be installed)
+           'xml'  save as an XML file, ascii
+           'yaml' save as YAML format, ascii
+
+           'gui' when filename extension is not specified, a format list pops-up
+         options: specific format options, which are usually plot options
+           default is 'view2 axis tight'
+
+ output: f: filename(s) used to save data (char)
+ ex:     b=save(a, 'file', 'm');
+         b=save(a, 'file', 'svg', 'axis tight');
+         b=save(a, 'file', 'hdf data');
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/saveas, iData/load, iData/getframe, <a href="save.html" class="code" title="function [filename,format] = save(a, varargin)">save</a>, <a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>,
+ iData/plot</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>	f = saveas(s, filename, format, options) : save iData object into various data formats</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>	f = saveas(s, filename, format, options) : save iData object into various data formats</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

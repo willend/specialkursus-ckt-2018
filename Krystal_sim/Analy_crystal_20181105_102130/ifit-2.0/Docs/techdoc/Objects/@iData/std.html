@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of std</title>
+  <meta name="keywords" content="std">
+  <meta name="description" content="[half_width, center] = std(s, dim) : standard deviation of iData">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; std.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/std
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[half_width, center] = std(s, dim) : standard deviation of iData</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [s, f] = std(a, dim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [half_width, center] = std(s, dim) : standard deviation of iData
+
+   @iData/std function to compute the standard deviation of objects, that is
+     their gaussian half width (second moment). Optionally, the distribution  
+     center (first moment) can be returned as well.
+   std(a, dim) computes standard deviation along axis of rank 'dim'.
+     When omitted, dim is set to 1.
+   std(a, -dim)
+     Using a negative dimension will subtract minimum signal value to signal
+       before computation of std, that is remove background. This may be
+       needed to avoid an imaginary result.
+   std(a, 0) computes std(Signal) and mean(Signal).
+
+ input:  a: object or array (iData/array of)
+         dim: dimension to use. Negative dim subtract background (int/array)
+ output: half_width: standard deviation (scalar/array)
+         center:     center of distribution (scalar/array)
+ ex:     a=iData(peaks); c=std(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/median, iData/mean</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="abs.html" class="code" title="function a = abs(a)">abs</a>	b = abs(s) : absolute value of iData object</li><li><a href="double.html" class="code" title="function a=double(a)">double</a>	d = double(s) : convert iData into doubles</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isfloat.html" class="code" title="function a = isfloat(a)">isfloat</a>	b = isfloat(s) : True for float iData object elements</li><li><a href="isreal.html" class="code" title="function a = isreal(a)">isreal</a>	b = isreal(s) : True for real iData object elements</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="mean.html" class="code" title="function b = mean(a, dim)">mean</a>	b = mean(s, dim) : mean value of iData object</li><li><a href="meshgrid.html" class="code" title="function b = meshgrid(a, varargin)">meshgrid</a>	s = meshgrid(a) : transforms an iData object so that its axes are grids</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="sqrt.html" class="code" title="function a = sqrt(a)">sqrt</a>	b = sqrt(s) : square root value of iData object</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li><li><a href="sum.html" class="code" title="function [s,sigma] = sum(a,dim)">sum</a>	s = sum(a,dim) : computes the sum of iData objects elements</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="camproj.html" class="code" title="function s = camproj(a,dim, center)">camproj</a>	s = camproj(a,dim) : projection/radial integration of iData objects elements</li><li><a href="cart2sph.html" class="code" title="function s = cart2sph(a, center)">cart2sph</a>	s = cart2sph(a,dim) : cartesian to polar/spherical representation of iData objects</li><li><a href="disp.html" class="code" title="function disp(s_in, name, flat)">disp</a>	disp(s) : display iData object (details)</li><li><a href="help.html" class="code" title="function c = help(s)">help</a>	c = help(s) : display iData information as a Dialogue window</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="pca.html" class="code" title="function b = pca(a, varargin)">pca</a>	[b] = pca(X, k) : Principal component analysis of iData object(s)</li><li><a href="peaks.html" class="code" title="function [sigma, position, amplitude, baseline] = peaks(a, dim, m)">peaks</a>	[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

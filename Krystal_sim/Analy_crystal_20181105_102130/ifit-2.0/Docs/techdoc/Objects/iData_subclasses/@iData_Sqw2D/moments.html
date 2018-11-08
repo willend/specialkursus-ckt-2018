@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of moments</title>
+  <meta name="keywords" content="moments">
+  <meta name="description" content="iData_Sqw2D: moments=moments(sqw, M, T, classical): compute Sqw moments/sum rules (harmonic frequencies)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_Sqw2D</a> &gt; moments.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_Sqw2D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/moments
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_Sqw2D: moments=moments(sqw, M, T, classical): compute Sqw moments/sum rules (harmonic frequencies)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function sigma=moments(data, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_Sqw2D: moments=moments(sqw, M, T, classical): compute Sqw moments/sum rules (harmonic frequencies)
+
+   m = moments(sqw, M, T, classical)
+
+  Compute the structure factor (moment 0), recoil energy (moment 1) and the
+    collective, harmonic and mean energy transfer dispersions.
+
+  Input arguments can be given in order, or with name-value pairs, or as a 
+    structure with named fields.
+
+ The result is given as an iData array with data sets:
+   S(q) = \int S(q,w) dw = &lt;S(q,w)&gt;                 structure factor [moment 0]
+   Er   = \int w*S(q,w) dw = &lt;wS(q,w)&gt; = h2q2/2M       recoil energy [moment 1]
+   Wc   = sqrt(2kT*Er/S(q))                    collective/isothermal dispersion
+   Wl                                          harmonic/longitudinal excitation
+   Wq   = 2q*sqrt(kT/S(q)/M)                               mean energy transfer
+   M2   = &lt;w2S(q,w)&gt;                                                 [moment 2]
+   M3   = &lt;w3S(q,w)&gt;                                                 [moment 3]
+   M4   = &lt;w4S(q,w)&gt;                                                 [moment 4]
+
+ Reference: 
+   Helmut Schober, Journal of Neutron Research 17 (2014) pp. 109
+   Lovesey, Theory of Neutron Scattering from Condensed Matter, Vol 1, p180 eq. 5.38 (w0)
+   J-P.Hansen and I.R.McDonald, Theory of simple liquids Academic Press New York 2006.
+
+ syntax:
+   m = moments(sqw)
+   m = moments(sqw, M, T, classical)
+   m = moments(sqw, 'M', M, 'T', T, 'classical', classical)
+
+ input:
+   sqw:  Sqw data set e.g. 2D data set with w as 1st axis (rows, meV), q as 2nd axis (Angs-1).
+   M:    molar weight of the material atom/molecule in [g/mol].
+           when omitted or empty, it is searched 'weight' or 'mass' is the object.
+   T:    when given, Temperature to use. When not given or empty, the Temperature
+           is searched in the object. The temperature is in [K]. 1 meV=11.605 K.
+   classical: 0 for non symmetric S(q,w) [with Bose, from exp.], 1 for symmetric (from MD)
+         when omitted or empty, this is guessed from the data set when possible
+
+ output:
+   moments=[ sq M1 wc wl wq M2 M3 M4 ] as an iData array
+
+ Example: m = moments(iData_Sqw2D('SQW_coh_lGe.nc'), 72.6, 1235); subplot(m);
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="iData_Sqw2D.html" class="code" title="">iData_Sqw2D</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of load</title>
+  <meta name="keywords" content="load">
+  <meta name="description" content="d = load(s, file, loader, ...): iData file loader">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; load.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/load
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>d = load(s, file, loader, ...): iData file loader</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = load(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> d = load(s, file, loader, ...): iData file loader
+
+   @iData/load: imports any data into Matlab/iData object(s)
+   The input argument 'file' should be a file name, or a cell of file names, 
+     or any Matlab variable, or empty (then popup a file selector).
+   The choice of the data file importer is set by default to automatic, so
+     that most common data importers are tested until one works. User may configure
+     a list of prefered loader definitions in a file called iLoad_ini.
+   The optional 3rd argument can be set to use a specific loader list (see below)
+     load(iData, filename, loader)
+   The input iData object is updated if no output argument is specified.
+
+   Default supported formats include: any text based including CSV, Lotus1-2-3, SUN sound, 
+     WAV sound, AVI movie, NetCDF, FITS, XLS, BMP GIF JPEG TIFF PNG ICO images,
+     HDF4, HDF5, MAT workspace, XML, CDF, JSON, YAML, IDL
+   Other specialized formats include: McStas, ILL, SPEC, ISIS/SPE, INX, EDF, Mantid.
+     SIF, MCCD/TIFF, ADSC, CBF, Analyze, NifTI, STL,PLY,OFF, CIF/CFL,
+     EZD/CCP4, Bruker Varian and JEOL NMR formats, Bruker OPUS, LabView LVM and TDMS
+     Agilent and Thermo Finnigan MS, Quantum Design VMS, ENDF
+   Compressed files are also supported, with on-the-fly extraction (zip, gz, tar, Z).
+   Distant files are supported through e.g. URLs such as 
+     file://, ftp://, http:// and https://
+   File names may end with an internal anchor reference '#anchor&quot;, as used in HTML 
+     links, in which case the members matching the anchor are returned.
+   The list of supported formats to create iData objects is obtained with:
+     load(iData,'formats')
+
+  Type &lt;a href=&quot;matlab:doc(iData,'Load')&quot;&gt;doc(iData,'Load')&lt;/a&gt; to access the iFit/Load Documentation.
+
+ input:  s: object or array (iData)
+         file: file name(s) to import (char/cellstr)
+         loader: optional loader method specification (char/struct/cellstr/array of struct)
+               loader = 'auto' (default) test all known data readers until one works
+               loader = 'gui'  manually ask user for the loader(s) to use
+             OR a function name to use as import routine, OR a struct/cell of struct with:
+               loader.method     = function to read data file (char/function_handle)
+               loader.options    = options (char/cell which is then expanded)
+               loader.postprocess= function to act on freshly imported iData (char/function_handle)
+         additional arguments are passed to the import routine.
+
+ The loading process calls first
+   data =loader.method(filename, options...)
+ then build the iData object, and optionally calls
+   iData=loader.postprocess(iData)
+
+ output: d: single object or array (iData)
+ ex:     load(iData,'file'); load(iData); load(iData, 'file', 'gui'); load(a,'','looktxt')
+         load(iData, [ ifitpath 'Data/peaks.hdf5' ], 'HDF')
+         load(iData, 'http://file.gz#Data')
+
+ Version: oct.. 23, 2018
+ See also: iLoad, <a href="save.html" class="code" title="function [filename,format] = save(a, varargin)">save</a>, iData/saveas, Loaders</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cell.html" class="code" title="function [content,fields]=cell(s)">cell</a>	[content,fields]=cell(s) : convert iData objects into cells</li><li><a href="char.html" class="code" title="function c = char(s)">char</a>	c = char(s) : convert iData into character</li><li><a href="disp.html" class="code" title="function disp(s_in, name, flat)">disp</a>	disp(s) : display iData object (details)</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/alias in iData objects</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sum.html" class="code" title="function [s,sigma] = sum(a,dim)">sum</a>	s = sum(a,dim) : computes the sum of iData objects elements</li><li><a href="unique.html" class="code" title="function s = unique(a,dim,mode)">unique</a>	s = unique(a,dim) : set unique iData objects axes with no repetitions</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="iData.html" class="code" title="">iData</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

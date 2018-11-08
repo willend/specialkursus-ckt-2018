@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of powder</title>
+  <meta name="keywords" content="powder">
+  <meta name="description" content="data = powder(model, p, q, w) : evaluate a 4D S(hkl,w) model/data set into a 2D S(|q|,w) data set for e.g. powders">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iFunc_subclasses</a> &gt; <a href="index.html">@iFunc_Sqw4D</a> &gt; powder.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iFunc_subclasses/@iFunc_Sqw4D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/powder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>data = powder(model, p, q, w) : evaluate a 4D S(hkl,w) model/data set into a 2D S(|q|,w) data set for e.g. powders</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function r=powder(a) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> data = powder(model, p, q, w) : evaluate a 4D S(hkl,w) model/data set into a 2D S(|q|,w) data set for e.g. powders
+
+   iFunc/powder:
+     The conversion between rlu (in the model) and Angs-1 in the S(q,w) powder 
+     data set is done using the B=[a* b* c*] matrix. It is searched as 
+       'reciprocal_cell' in the input model.
+
+   The methodology is to cast a number of random points on increasing |Q| spheres.
+   These points are converted to the [rlu] space by applying the inverse B matrix
+   with B=[a* b* c*]. Then the 4D S(q,w) model is evaluated at these points, and the  
+   result is the energy histogram of the bare mode frequencies along all |Q|.
+
+   Once created, the powder Model can be evaluated on a (q,w) range as any 2D model.
+   value = model(p, q, w)
+   value = iData(model, p, q, w)
+
+ input:
+  model: a 4D S(q,w) model (iFunc)
+
+ output: 
+  data:  a S(|q|,w) 2D Model
+
+ example:
+  s=sqw_phonons([ ifitpath 'Data/POSCAR_Al'],'metal','EMT');
+  pow=powder(s); % then plot [q=0:2 w=0:50]
+  plot(log(iData(pow,[],linspace(0,4,30),linspace(0,50,51))))
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc/fits, iFunc/plot, gauss, sqw_phonons, sqw_cubic_monoatomic, sqw_vaks
+   &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="max.html" class="code" title="function [m, DOS] = max(s)">max</a>	iFunc_Sqw4D: max: get a quick estimate of the max dispersion frequency</li><li><a href="powder.html" class="code" title="function r=powder(a)">powder</a>	data = powder(model, p, q, w) : evaluate a 4D S(hkl,w) model/data set into a 2D S(|q|,w) data set for e.g. powders</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="powder.html" class="code" title="function r=powder(a)">powder</a>	data = powder(model, p, q, w) : evaluate a 4D S(hkl,w) model/data set into a 2D S(|q|,w) data set for e.g. powders</li><li><a href="publish.html" class="code" title="function filename = publish(self, filename, section, message)">publish</a>	iFunc_Sqw4D: publish: generate a readable HTML document and export results to</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

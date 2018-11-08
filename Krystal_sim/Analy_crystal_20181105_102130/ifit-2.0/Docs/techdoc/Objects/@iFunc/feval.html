@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of feval</title>
+  <meta name="keywords" content="feval">
+  <meta name="description" content="[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; feval.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/feval
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [signal, model, ax, name] = feval(model, p, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function
+
+   @iFunc/feval applies the function 'model' using the specified parameters and axes
+     and function parameters 'pars' with optional additional parameters.
+     a fast notation is to pass arguments directly to the model:
+       model(p, x,y,z,...)
+
+   The parameters can be specified as a single vector, with one value per
+   model Parameter, a structure with named Parameters, a cell with one entry
+   per Parameter, a string which can be 
+     'identify'  returns a string with the Model details
+     'guess'     guess starting parameters
+     'current'   use the current (last stored) parameter values, or guess
+     'plot'      plot the model with default parameters and axes.
+
+   Providing an empty parameter argument is similar to 'guess'.
+   Providing a NaN parameter, or a vector containing NaN values, will guess
+   missing parameters, using any optional 'signal' for the guess.
+   Providing parameters as a structure or cell with vector values performs a scan
+   along the vector values.
+
+   The axes are given as vectors/matrices for the model evaluation. When given
+   as NaN, the axis is not used and left as NaN.
+
+   signal = feval(model, 'guess', x,y, ..., signal...)
+     makes a quick parameter guess. This usually requires to specify the signal
+     to guess from to be passed after the axes. The parameters are then in model.ParameterValues
+     or returned instead of the signal when the model can not be updated.
+   signal = feval(model, NaN, x,y, ..., signal...)
+     same as above, but force to get the evaluated function value with
+     guessed parameters.
+   signal = feval(model, [ ... Nan ... ], x,y, ..., signal...)
+     requires some of the initial parameters to be given, others as NaN's. These
+     values are then replaced by guessed ones, and the model value is returned.
+   signal = feval(model, parameters, x,y, ...)
+     evaluates the model with given parameters and axes
+   signal = model(p, iData_object)
+     evaluates the model on the given iData object axes and return the values
+   iData_object(model,p,...)
+     evaluate the model and return an iData object
+
+ input:  model: model function (iFunc, single or array)
+         parameters: model parameters (vector, cell or vectors, structure, iData) or 'guess'
+         x,y,..:  axes values to be used for the computation (vector,matrix,iData)
+         ...: additional parameters may be passed, which are then forwarded to the model
+ output: signal: result of the evaluation (vector/matrix/cell) or guessed parameters (vector)
+         model:  return updated object with stored parameter values (iFunc)
+         axes:   return the axes used for evaluation (cell of vector/matrix)
+         name:   return model name (char)
+
+ ex:     b=feval(gauss,[1 2 3 4]); feval(gauss*lorz, [1 2 3 4, 5 6 7 8]);
+           feval(gauss,'guess', -5:5, -abs(-5:5))
+
+ Version: oct.. 23, 2018
+ See also <a href="iFunc.html" class="code" title="">iFunc</a>, iFunc/fit, iFunc/plot</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="abs.html" class="code" title="function a = abs(a)">abs</a>	b = abs(s) : absolute value of iFunc object</li><li><a href="cellstr.html" class="code" title="function [ret, header] = cellstr(s)">cellstr</a>	ret = cellstr(s) : convert iFunc into a cell of strings</li><li><a href="disp.html" class="code" title="function disp(s_in, name)">disp</a>	disp(s) : display iFunc object (details)</li><li><a href="feval.html" class="code" title="function [signal, model, ax, name] = feval(model, p, varargin)">feval</a>	[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iFunc object properties</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/parameter in model objects</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iFunc object</li><li><a href="ones.html" class="code" title="function s = ones(iFunc_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iFunc array</li><li><a href="plot.html" class="code" title="function h = plot(a, p, varargin)">plot</a>	h = plot(model, parameters, axes, ...) plot a model</li><li><a href="rdivide.html" class="code" title="function c = rdivide(a,b)">rdivide</a>	c = rdivide(a,b) : computes the ratio of iFunc objects</li><li><a href="save.html" class="code" title="function [filename,format] = save(a, varargin)">save</a>	f = save(s, filename, format, options) : save iFunc object into various data formats</li><li><a href="transpose.html" class="code" title="function a = transpose(a)">transpose</a>	b = transpose(s) : non-conjugate transpose of iFunc object</li><li><a href="zeros.html" class="code" title="function s = zeros(iFunc_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iFunc array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="feval.html" class="code" title="function [signal, model, ax, name] = feval(model, p, varargin)">feval</a>	[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function</li><li><a href="fits.html" class="code" title="function [pars_out,criteria,message,output] = fits(model, a, pars, options, constraints, varargin)">fits</a>	[pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set</li><li><a href="fmin.html" class="code" title="function [pars,fval,exitflag,output] = fmin(objective, pars, options,  varargin)">fmin</a>	[MINIMUM,FVAL,EXITFLAG,OUTPUT] = FMIN(FUN,PARS,[OPTIONS],[X,Y,...]) Best optimizer</li><li><a href="iFunc.html" class="code" title="">iFunc</a>	</li><li><a href="mlock.html" class="code" title="function a = mlock(a, varargin)">mlock</a>	b = mlock(s, parameters, ...) : sets parameter lock (fix) for further fit using the model 's'</li><li><a href="munlock.html" class="code" title="function a = munlock(a, varargin)">munlock</a>	b = munlock(s, parameters, ...) : free parameter lock (clear) for further fit using the model 's'</li><li><a href="plot.html" class="code" title="function h = plot(a, p, varargin)">plot</a>	h = plot(model, parameters, axes, ...) plot a model</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iFunc indexed references</li><li><a href="xlim.html" class="code" title="function a = xlim(a, varargin)">xlim</a>	b = xlim(s, parameters, [min max], ...) : sets parameter bounds (min,max) for further fit using the model 's'</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

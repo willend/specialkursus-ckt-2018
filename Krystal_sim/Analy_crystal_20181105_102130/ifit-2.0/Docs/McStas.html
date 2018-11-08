@@ -1,0 +1,1475 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>iFit: McStas</title>
+  </head>
+  <body>
+    <ifit: changes="" title=""></ifit:>
+    <h1 style="text-align: center;"><a class="mozTocH1"
+        name="mozTocId294096"></a>iFit: McStas/McXtrace
+      simulation/optimization<br>
+    </h1>
+    <h1 style="text-align: center;"><a href="http://www.mcstas.org/"><img
+          alt="McStas [www.mcstas.org]" title="McStas [www.mcstas.org]"
+          src="images/mcstas.png" style="border: 2px solid ; width:
+          150px; height: 88px;" align="right"></a></h1>
+    <h1 style="text-align: center;"> </h1>
+    <ol id="mozToc">
+      <!--mozToc h3 1 h4 2 h3 3 h4 4 h5 5 h6 6-->
+      <li><a href="#mozTocId513250">Building an instrument model</a>
+        <ol>
+          <li><a href="#mozTocId500394">Specifying which monitor to use</a></li>
+          <li><a href="#mozTocId619025">Requirements</a></li>
+        </ol>
+      </li>
+      <li><a href="#mozTocId234815">Running a single simulation</a></li>
+      <li><a href="#mozTocId124981">Getting instrument information and
+          Displaying the instrument geometry</a></li>
+      <li><a href="#mozTocId821585">Running series of simulations
+          (scans)</a>
+        <ol>
+          <li><a href="#mozTocId329402">Running series of simulations
+              (single step and scans): graphical user interface </a></li>
+        </ol>
+      </li>
+      <li><a href="#mozTocId690143">Optimizing instrument parameters </a></li>
+      <li><a href="#mozTocId359721">Optimizing instrument parameters
+          with constraints</a></li>
+      <li><a href="#mozTocId745452">Preparing data files for McStas
+          components</a>
+        <ol>
+          <li><a href="#mozTocId336301">PowderN component: elastic
+              coherent scattering from a powder </a></li>
+          <li><a href="#mozTocId317818">Single_crystal component:
+              elastic coherent scattering from a single crystal </a></li>
+          <li><a href="#mozTocId297488">Isotropic_Sqw component:
+              coherent and incoherent scattering from an isotropic
+              density material (liquid, gas, powder, amorphous)</a></li>
+          <li><a href="#mozTocId36233">Single_crystal_inelastic
+              component: coherent and incoherent scattering from a
+              single crystal</a></li>
+        </ol>
+      </li>
+    </ol>
+    <hr style="width: 100%; height: 2px;">
+    <div style="text-align: left;">
+      <div style="text-align: center;">Commands we use in this page: <b>mccode</b><br>
+      </div>
+      <br>
+      In this document, we demonstrate how <a href="iFunc.html">iFunc</a>,
+      <a href="index.html">iFit</a>/<a href="Optimizers.html">Optimizers</a>
+      and <a href="iData.html">iData</a> objects can all be used
+      transparently to simulate and optimize <a
+        href="http://www.mcstas.org">McStas</a>/McXtrace neutron and
+      X-ray ray-tracing Monte-Carlo instrument models.<br>
+      <br>
+      To import a McStas simulation results, just use <br>
+      <pre style="margin-left: 40px;">&gt;&gt; results = <span style="color: rgb(51, 102, 255);">iData</span>(<span style="color: rgb(204, 51, 204);">'single_detector_file'</span>)<br>&gt;&gt; results = <span style="color: rgb(51, 102, 255);">iData</span>(<span style="color: rgb(204, 51, 204);">'directory'</span>)                 <span style="font-style: italic;">% import everything in the directory, including sim files (files may imported more than once)</span><br>&gt;&gt; results = <span style="color: rgb(51, 102, 255);">iData</span>(<span style="color: rgb(204, 51, 204);">'scan_directory/mcstas.<span style="font-weight: bold;">dat</span>'</span>) <span style="font-style: italic;">% for scans</span><br>&gt;&gt; results = <span style="color: rgb(51, 102, 255);">iData</span>(<span style="color: rgb(204, 51, 204);">'scan_directory/mcstas.<span style="font-weight: bold;">sim</span>'</span>) <span style="font-style: italic;">% for all files from the directory, uniquely</span>.<br></pre>
+      which returns a single or an array of <span style="font-style:
+        italic;">iData</span> object(s), that you can plot with e.g. <span
+        style="font-style: italic;">subplot</span>.<br>
+      The resulting McStas data has an additional <span
+        style="font-style: italic;">Parameters</span> field which holds
+      the instrument parameters used for the simulation.<br>
+      <pre style="margin-left: 40px;">&gt;&gt; results(1).Parameters<br></pre>
+      <h3><a class="mozTocH3" name="mozTocId513250"></a>Building an
+        instrument model</h3>
+      <p>The syntax for building a McCode (<a
+          href="http://www.mcstas.org">McStas</a> for neutrons or <a
+          href="http://mcxtrace.org/">McXtrace</a> for X-rays)
+        instrument model is:<br>
+      </p>
+      <pre style="margin-left: 40px;">&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'instrument'</span>);	<i>% uses the given instrument file (*.instr)</i><br>&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'gui'</span>);		<i>% lists all available instruments to select one</i><br>&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">''</span>);			<i>% pop-up a file selector to select an *.instr file</i><br>&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'defaults'</span>);		<i>% uses the templateDIFF instrument as example <br></i></pre>
+      which compile the instrument, and create an <a href="iFunc.html">iFunc</a>
+      model (in fact an <b><i>iFunc_McCode</i></b> flavour). <br>
+      When the instrument is not found in the current directory, it is
+      searched in the McStas/McXtrace library (may be specified with the
+      MCSTAS and MCXTRACE environment variables), and eventually copied
+      locally, which triggers its compilation.<br>
+      <br>
+      In addition, it is possible to select an instrument from the
+      McStas/McXtrace installation with:<br>
+      <pre style="margin-left: 40px;">model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'gui'</span>)</pre>
+      You may even assemble these models as iFunc arrays to iteratively
+      perform series of simulations, or use arithmetic operations to
+      combine models (see the <a href="iFunc.html#mozTocId443357">iFunc</a>
+      documentation).<br>
+      <br>
+      The resulting 'model' object can be forced into an <b>iFunc_McCode</b>
+      one (in case its flavour was lost) with:<br>
+      <ul>
+        <li>model = <font color="#3366ff">iFunc_McCode</font>(model)</li>
+      </ul>
+      This type of sub-class (derived from <a href="iFunc.html">iFunc</a>),
+
+
+      provides all <a href="iFunc.html">iFunc</a> methods, but also
+      specific methods adapted to McCode simulations:<br>
+      <ul>
+        <li><font color="#3366ff">plot</font>(model)</li>
+      </ul>
+      <blockquote>
+        <blockquote>plot the model geometry in 3D.<br>
+        </blockquote>
+      </blockquote>
+      <ul>
+        <li><font color="#3366ff">feval</font>(model)</li>
+      </ul>
+      <blockquote>
+        <blockquote>evaluate the model using its current parameter
+          values and settings. The returned data is an array for the
+          selected or last Monitor value. Other monitors are available
+          as iData objects in <i>model.UserData.monitors</i><br>
+        </blockquote>
+      </blockquote>
+      <ul>
+        <li><font color="#3366ff">edit</font>(model)</li>
+      </ul>
+      <blockquote>
+        <blockquote>edit the instrument source code. Do not forget to
+          save the file before closing the editor. If changes are done,
+          the object is updated, and the instrument is re-compiled.<br>
+        </blockquote>
+      </blockquote>
+      <ul>
+        <li><font color="#3366ff">dialog</font>(model)</li>
+      </ul>
+      <blockquote>
+        <blockquote>displays a table where you can change the
+          parameter/configuration values. Instrument parameters
+          (scalars) can be given as a single scalar, or a vector (for
+          scans). The calculation starts when you close the table. To <i><b>Cancel</b></i>
+          the computation, select the contextual menu (right mouse
+          button) CANCEL item, or press <i>Ctrl-C</i> at the prompt.
+          The resulting monitors are displayed when the simulation end.<br>
+        </blockquote>
+      </blockquote>
+      <ul>
+        <li><font color="#3366ff">publish</font>(model)</li>
+      </ul>
+      <blockquote>
+        <blockquote>create a full readable report as an HTML web page,
+          including the instrument model view, results, and code.<br>
+        </blockquote>
+      </blockquote>
+      <br>
+      <br>
+      It is also possible to finely tune the instrument configuration
+      using standard McStas/McXtrace options with the syntax:<br>
+      <blockquote>
+        <pre>&gt;&gt;  <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'instrument'</span>, options)</pre>
+      </blockquote>
+      and the following options:<br>
+      <table cellspacing="2" cellpadding="2" width="100%" border="1">
+        <tbody>
+          <tr>
+            <td valign="top"><b>options.dir</b></td>
+            <td valign="top"> directory where to store results, or set
+              automatically (string) ;<br>
+              the last simulation files are stored therein 'sim'.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>options.ncount</b></td>
+            <td valign="top">number of neutron events per iteration,
+              e.g. 1e6 (double).</td>
+          </tr>
+          <tr>
+            <td valign="top"><b> options.mpi</b><b><br>
+              </b> </td>
+            <td valign="top">number of processors/cores to use with MPI
+              on localhost or cluster (integer) ;<br>
+              when MPI is available, and mpi options is not given, all
+              cores are then used. Use options.mpi=1 for a serial
+              calculation.<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><b> options.machines</b></td>
+            <td valign="top">file name containing the list of
+              machines/nodes to use (string), as often found in cluster
+              job schedulers.<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><b>options.seed</b></td>
+            <td valign="top">random number seed to use for each
+              iteration (double)</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>options.gravitation</b></td>
+            <td valign="top">0 or 1 to set gravitation handling in
+              neutron propagation (boolean)</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>options.monitor</b></td>
+            <td valign="top">a <i>single</i> monitor name pattern to
+              read, or left empty for the last (string). The whole
+              monitors are available as iData objects in the <i>model.UserData.monitors</i>
+              field. Wildcard expression can be used. See below for more
+              advanced customisation.<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><b>options.mpirun</b></td>
+            <td valign="top">set the executable path to 'mpirun', or
+              automatically found when not set. Set it to 'none' or set
+              options.mpi=1 to not compile with MPI.<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><b>options.compile</b></td>
+            <td valign="top">0 or 1 to force re-compilation of the
+              executable.</td>
+          </tr>
+        </tbody>
+      </table>
+      &nbsp;<br>
+      The options can be given as a structure or as a string, e.g. <font
+        color="#cc33cc">'ncount=1e6; compile=1'</font>.<br>
+      <br>
+      <font color="#ff0000"><b>NOTE:</b> if the instrument can not be
+        built, force the compilation with:</font><br>
+      <blockquote>
+        <pre>&gt;&gt;  <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'instrument'</span>, <font color="#cc33cc">'compile=1'</font>)<br></pre>
+      </blockquote>
+      as a previous executable may be in the way, and block the
+      generation of the new model.<br>
+      <br>
+      The scalar instrument parameters of type 'double' are used as
+      model parameters. <br>
+      Other parameters (e.g. of type string and int) are stored as a
+      structure in:<br>
+      <ul>
+        <li>model.UserData.Parameters_Constant</li>
+      </ul>
+      The options <i>ncount, seed, gravitation, monitor</i> can be
+      changed after the model creation in the UserData area of the
+      object e.g.:<br>
+      <ul>
+        <li>model.UserData.options.gravitation=1;</li>
+        <li>model.UserData.options.monitor=<font color="#cc33cc">'*Theta*'</font>;</li>
+      </ul>
+      <h4><a class="mozTocH4" name="mozTocId500394"></a><i><b>Specifying
+            which monitor to use</b></i></h4>
+      The default behaviour is to leave <i>options.monitor</i> left
+      unset at the model creation, so that all monitors are read when
+      simulating instruments. The last monitor is then used as model
+      value. This provides maximum information, but the processing
+      overhead time is increased due to more data handling compared to a
+      single/restricted monitor name selection.<br>
+      <ul>
+        <li>model=<font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>);&nbsp; <i>% </i><i>same
+
+
+            as mccode('defaults')</i></li>
+      </ul>
+      In order to improve the computational efficiency, it is advised to
+      specify which files have to be imported to define the model value
+      by giving a file name or pattern (wildcard patterns can be used).
+      This specification can be done either when building the model:<br>
+      <ul>
+        <li>model=<font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>,<font color="#cc33cc">'monitor=Diff_BananaPSD*'</font>);<a
+            href="images/iFit_McStas_Monitor_scan.png"><img title="iFit:
+              McStas: evolution of a monitor"
+              src="images/iFit_McStas_Monitor_scan.png" alt="iFit:
+              McStas: evolution of a monitor" style="border: 0px solid ;
+              width: 200px; height: 177px;" height="503" align="right"
+              width="568" border="0"></a></li>
+      </ul>
+      or afterwards:<br>
+      <ul>
+        <li>model=<font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>);</li>
+        <li>model.UserData.options.monitor=<font color="#cc33cc">'</font><font
+            color="#cc33cc"><font color="#cc33cc">*BananaPSD</font>*'</font></li>
+      </ul>
+      which in both cases will select monitor files which <i>match</i>
+      the given string as an exact file name or match the pattern when
+      using a wildcard expression ( <font color="#cc33cc">'*Theta*' </font>).
+
+
+
+      In case the selection brings multiple files, the last one is used.
+      When the monitor name selection does not match any file, or is
+      given as empty, all monitors are imported, and the last one in the
+      list is used.<br>
+      <br>
+      All selected monitors are imported as <a href="Fit.html">iData</a>
+      object(s), in:<br>
+      <ul>
+        <li>model.UserData.monitors</li>
+      </ul>
+      In practice, you will often either not specify the 'monitor' at
+      the model creation to leave the system select the last one, or
+      indicate a specific monitor name/pattern of your choice.<br>
+      <br>
+      <i><b>Customize the model value</b></i><br>
+      In addition, you may customize how to use the monitor data either
+      by adding expression after the initial filename/pattern, or by
+      extending the model after its creation.<br>
+      <br>
+      The monitor to use as optimization criteria (<span
+        style="font-style: italic;">options.monitor</span>) can be part
+      of a more complex expression, which still must start with the file
+      name/pattern to select the monitor(s) and then refer to itself
+      with the<span style="font-style: italic;"> 'signal' </span>variable
+
+
+
+
+      (which are <a href="iData.html">iData</a> object(s)), such as in
+      the following example where we sum all selected monitors from the
+      pattern (when more than one are found), and define the criteria as
+      <span style="font-style: italic;">Amplitude/width²</span> (for a
+      single peak):<br>
+      <pre style="margin-left: 40px;"><span style="color: rgb(0, 0, 0);">&gt;&gt; options.monitor=</span><span style="color: rgb(204, 51, 204);">'*Banana_Theta*; signal=plus(signal); signal=max(signal)/std(signal)^2;'<br></span>&gt;&gt; model=<font color="#3366ff">mccode</font>(<font color="#cc33cc">'templateDIFF'</font>, options)<br></pre>
+      The options.monitor can be given in a compact way if the file
+      pattern and the expression are enclosed in single or double
+      quotes, such as in:<br>
+      <ul>
+        <li>model=<font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>,<font color="#cc33cc">'monitor=<b>"</b>*Theta*
+
+
+
+          </font><span style="color: rgb(204, 51, 204);">signal=max(signal)/std(signal)^2<b>"</b></span><font
+            color="#cc33cc">'</font>);</li>
+      </ul>
+      An other possibility (less recommended) is to extend the model
+      after its creation:<br>
+      <ul>
+        <li>model = <font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>,<font color="#cc33cc">'monitor=Diff_BananaPSD*'</font>);</li>
+        <li> model = model + <span style="color: rgb(204, 51, 204);">'signal=max(signal)/std(signal)^2'</span>;<br>
+        </li>
+      </ul>
+      <h4><a class="mozTocH4" name="mozTocId619025"></a><i><b>Requirements</b></i></h4>
+      As iFit contains powerful import routines, that support
+      McStas/McXtrace data files, it is straight forward to launch a
+      McStas/McXtrace instrument simulation from Matlab and get back the
+      simulation results. To do so, you will obviously need to have <span
+        style="font-style: italic;">iFit</span> installed (refer to the
+      <a href="Install.html">Install</a> page), as well as <span
+        style="font-style: italic;">McStas</span> (refer to the <a
+        href="http://www.mcstas.org">McStas web site</a>) or <a
+        href="http://mcxtrace.org/">McXtrace</a>. When used with the
+      standalone version, no Matlab license is needed. To use all the
+      CPU cores, you need to have installed an MPI library, e.g.
+      OpenMPI.<br>
+      <h3><a class="mozTocH3" name="mozTocId234815"></a>Running a single
+        simulation</h3>
+      The model value is corresponds with the 'options.monitor'
+      selected, i.e. the last one, or a specific name pattern. This
+      selection can be changed any time without rebuilding the model
+      (see <a href="mozTocId500394">above</a>).<br>
+      <br>
+      The instrument can be evaluated with given parameters and
+      optionally axes:<br>
+      <pre style="margin-left: 40px;">&gt;&gt; results = <font color="#3366ff">feval</font>(model);			<i>% return the monitor, using current/default parameters</i><br>&gt;&gt; results = <font color="#3366ff">feval</font>(model, parameters);		<i>% return the monitor as an array using guessed axes</i><br>&gt;&gt; results = <font color="#3366ff">feval</font>(model, parameters, x,y,...);	<i>% return the monitor as an array</i><i>, using specified axes</i><br>&gt;&gt; results = <font color="#3366ff">feval</font>(model, parameters, nan);	<i>% return the raw monitor as an array</i><br></pre>
+      but it may be more convenient to manipulate the model value as <a
+        href="iData.html">iData</a> objects:<br>
+      <pre style="margin-left: 40px;">&gt;&gt; result = <font color="#3366ff">iData</font>(model, parameters);		<i>% return monitor interpolated onto guessed axes<br></i>&gt;&gt; result = <font color="#3366ff">iData</font>(model, parameters, nan);	<i>% return raw monitor as an iData object</i><br>&gt;&gt; result = <font color="#3366ff">iData</font>(model, parameters, x,y,...);	<i>% return monitor interpolated onto axes x,y,...</i><br>&gt;&gt; <font color="#3366ff">plot</font>(result);<br>&gt;&gt; <font color="#3366ff">plot</font>(model.UserData.monitors)</pre>
+      where <span style="font-style: italic;">parameters</span> is a
+      structure, or string, or vector that holds parameter names and
+      values, e.g.<br>
+      <div style="margin-left: 40px;">
+        <ul>
+          <li>model=<font color="#3366ff">mccode</font>(<font
+              color="#cc33cc">'templateDIFF'</font>);</li>
+          <li> parameters.RV=1;</li>
+          <li> parameters.lambda=2.36;</li>
+          <li> <font color="#3366ff"><font color="#000000">value = </font>iData</font>(model,
+
+
+
+
+
+
+
+
+
+
+            parameters);</li>
+        </ul>
+      </div>
+      <div style="text-align: left;">or in a more compact way, giving
+        parameters as a single string with members assigned with '=' and
+        separated with the ';' character. An empty parameter value (e.g.
+        []) will compute the model evaluation using current/default
+        parameters.<br>
+        <br>
+        In the following example, we plot the model value (raw monitor),
+        and then all the available monitors in <i>model.UserData.monitors</i><br>
+        <ul>
+          <li>model= <font color="#3366ff">mccode</font>(<font
+              color="#cc33cc">'templateDIFF'</font>);</li>
+          <li> <font color="#3366ff"><font color="#000000">value = </font>iData</font>(model,
+
+
+
+
+
+
+
+
+
+
+            <font color="#cc33cc">'RV=1; lambda=2.36'</font>, nan)&nbsp;
+            <i>% the last monitor</i><br>
+          </li>
+        </ul>
+        <blockquote>
+          <pre>value =&nbsp; iData (methods,doc,plot,plot(log),values,more...) 2D object:<br>&nbsp;&nbsp;&nbsp; [Tag] [Dimension]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Title] [Last command]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Label/DisplayName]</pre>
+          <pre>&nbsp; iD61442&nbsp;&nbsp;&nbsp; [51 170]&nbsp;&nbsp; 'templateDIFF.instr McCode [... "signal"' iD61442=setalias(iD6... templateDI/templateDI...</pre>
+        </blockquote>
+        <ul>
+          <li><font color="#3366ff">plot</font>(value, <font
+              color="#cc33cc">'view2 tight'</font>)<a
+              href="images/iFit_McStas_Monitor_scan.png"><img
+                title="iFit: McStas: evolution of a monitor"
+                src="images/iFit_McStas_Monitor_scan.png" alt="iFit:
+                McStas: evolution of a monitor" style="border: 0px solid
+                ; width: 200px; height: 177px;" height="503"
+                align="right" width="568" border="0"></a></li>
+          <li>model.UserData.monitors<br>
+          </li>
+        </ul>
+        <blockquote>
+          <pre>model.UserData.monitors =&nbsp; array [5&nbsp; 1] iData (methods,doc,plot,plot(log),values,more...) object:<br><br>Index&nbsp;&nbsp;&nbsp;&nbsp; [Tag] [Dimension]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Title] [Last command]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Label/DisplayName]<br>&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; iD61449&nbsp;&nbsp;&nbsp;&nbsp; [40 40] 'mccode.sim McCode sim file ... "Data ..."' iD61449=load(iData,'... Diff_Mono_XY<br>&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp; iD61457&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [40 1] 'mccode.sim McCode sim file ... "Inten..."' iD61457=load(iData,'... Diff_Mono_Lambda<br>&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp; iD61459&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [40 1] 'mccode.sim McCode sim file ... "Inten..."' iD61459=load(iData,'... Diff_Sample_Lambda<br>&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp; iD61461&nbsp;&nbsp;&nbsp;&nbsp; [340 1] 'mccode.sim McCode sim file ... "Inten..."' iD61461=load(iData,'... Diff_BananaTheta<br>&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp; iD61463&nbsp;&nbsp;&nbsp; [25 170] 'mccode.sim McCode sim file ... "Data ..."' iD61463=load(iData,'... Diff_BananaPSD</pre>
+        </blockquote>
+        <ul>
+          <li><font color="#3366ff">subplot</font>(model.UserData.monitors)<a
+              href="images/iFit_McStas_simulate.png"><img
+                alt="iFit_McStas_simulate" title="iFit_McStas_simulate"
+                src="images/iFit_McStas_simulate.png" height="186"
+                align="right" width="200" border="0"></a></li>
+        </ul>
+        You can equally set the non numerical scalar parameters (e.g.
+        strings and integers):<br>
+        <blockquote>model.UserData.Parameters_Constant.powder=<span
+            style="color: rgb(204, 51, 204);">'Na2Ca3Al2F14.laz'</span><br>
+          <span style="color: rgb(204, 51, 204);"></span></blockquote>
+        <span style="color: rgb(204, 51, 204);"></span>The unspecified
+        instrument parameters are used with their default values (when
+        defined).<br>
+        <br>
+        The model value, and the raw monitors in <i>
+          model.UserData.monitors</i>, in the form of iData objects have
+        an additional <span style="font-style: italic;">Parameters</span>
+        field which holds the instrument parameters used for the
+        simulation.<br>
+        <pre style="margin-left: 40px;">&gt;&gt; value.Parameters<br>&gt;&gt; <font color="#3366ff">get</font>(model.UserData.monitors(1),<font color="#cc33cc">'Parameters'</font>)</pre>
+        Usual data analysis (<a href="Plot.html">display</a>, <a
+          href="Math.html">mathematics</a>, <a href="Fit.html">fit</a>,
+        <a href="Save.html">export</a>) can be performed (refer to the <a
+          href="index.html">iFit</a> and <a href="iData.html">iData</a>
+        documentation). <br>
+        <h3><a class="mozTocH3" name="mozTocId124981"></a>Getting
+          instrument information and Displaying the instrument geometry</h3>
+        To display the instrument geometry, use the syntax:<a
+          href="images/iFit_McStas_plot_geometry.png"><img
+            alt="McStas_plot_geometry" title="McStas_plot_geometry"
+            src="images/iFit_McStas_plot_geometry.png" height="180"
+            align="right" width="200" border="0"></a><br>
+        <pre style="margin-left: 40px;">&gt;&gt; model = <font color="#3366ff">mccode</font>(<font color="#cc33cc">'defaults'</font>)<br>&gt;&gt; <span style="color: rgb(51, 102, 255);">plot</span>(model<span style="color: rgb(204, 51, 204);"></span>);</pre>
+        which open a geometrical representation of the instrument. The
+        current model parameters are used. It can be given as well a set
+        of parameter values:<br>
+        <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">plot</span>(model<span style="color: rgb(204, 51, 204);"></span>, parameters);</pre>
+        An empty parameter argument requests to use the current value.
+        In addition, this routine returns the list of components, and
+        can be given more options (3rd argument), as <font
+          color="#cc33cc">'html'</font>,<font color="#cc33cc">'png'</font>,
+        and <font color="#cc33cc">'x3d'</font>.<br>
+        <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">plot</span>(model<span style="color: rgb(204, 51, 204);"></span>, [], <font color="#cc33cc">'html png x3d'</font>);</pre>
+        to generate hardcopy files and geometry rendering. The generated
+        filenames are then displayed.<br>
+        <br>
+        In order to get information about the instrument, especially its
+        input parameters, you can access the model.UserData area:<br>
+        <pre>&gt;&gt; model.UserData<br><br>ans = <br><br>        instrument_source: [1x7011 char]<br>    instrument_executable: [1299344x1 double]<br>           instrument_exe: 'templateDIFF.out'<br>          instrument_info: [1x960 char]<br>                  options: [1x1 struct]<br>               Parameters: [1x1 struct]<br>      Parameters_Constant: [1x1 struct]<br>                 monitors: [5x1 iData]<br></pre>
+        and especially the instrument_info and instrument_source, which
+        you can view with e.g:<br>
+        <ul>
+          <li><font color="#3366ff">disp</font>(model.UserData.instrument_info)</li>
+        </ul>
+        or even in a separate window:<br>
+        <blockquote>
+          <pre>&gt;&gt; <font color="#3366ff">TextEdit</font>(model.UserData.instrument_source)<br>&gt;&gt; <font color="#3366ff">TextEdit</font>(model.UserData.instrument_info)</pre>
+        </blockquote>
+      </div>
+      <h3><a class="mozTocH3" name="mozTocId821585"></a>Running series
+        of simulations (scans)</h3>
+      You may scan the model parameters when they are assigned as
+      vector.<br>
+      <ul>
+        <li>model=<font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>);</li>
+        <li>parameters.RV = 0.5:.05:1.5;</li>
+        <li>scan = <font color="#3366ff">iData</font>(model,
+          parameters);</li>
+      </ul>
+      A more compact way can be used, using explicit scan values and
+      axes:<br>
+      <ul>
+        <li>model=<font color="#3366ff">mccode</font>(<font
+            color="#cc33cc">'templateDIFF'</font>);</li>
+        <li>scan = <font color="#3366ff">iData</font>(model, <font
+            color="#cc33cc">'RV=[0.5 1 1.5]'<font color="#000000">,
+              -.15:.05:.15, -5:50</font></font>);</li>
+      </ul>
+      The argument returned is an <a href="iData.html">iData</a> object
+      array containing the model monitor as a function of the scanned
+      parameters. You may compute the integral value with the 'sum'
+      method:<br>
+      <blockquote>
+        <pre>&gt;&gt; integral = <font color="#3366ff">sum</font>(scan, 0);</pre>
+      </blockquote>
+      which can be directly plotted with e.g.&nbsp;
+      <pre>&gt;&gt; <span style="color: rgb(51, 102, 255);">plot</span>(integral);     <span style="font-style: italic;">% simple plot, or median surface for multidimensional scans</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">scatter3</span>(integral); <span style="font-style: italic;">% coloured points (possibly in 2D,3D)</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">plot3</span>(integral);    <span style="font-style: italic;">% coloured lines in 2D, or volume for multidimensional scans</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">slice</span>(integral);    <span style="font-style: italic;">% only for 3D scans, use slice-o-matic for volume inspection</span></pre>
+      You may as well concatenate the scan steps into a higher
+      dimensionality volume using e.g. the <span style="font-style:
+        italic; font-weight: bold;">iData/cat</span> method:<br>
+      <blockquote>
+        <pre>&gt;&gt; catenated = <font color="#3366ff">cat</font>(scan, 2);</pre>
+      </blockquote>
+      <pre style="margin-left: 40px;"><a href="images/iFit_McStas_scan2D_integral.png"><img title="iFit:          MsCtas scan: ploting the integral monitor value" src="images/iFit_McStas_scan2D_integral.png" alt="iFit: MsCtas          scan: ploting the integral monitor value" style="border: 0px
+          solid ; width: 200px; height: 177px;" height="503" align="right" width="568" border="0"></a></pre>
+      Multidimensional scans are also possible. In the following
+      example, we launch a quick 2D scan with parameters specified as a
+      structure:<br>
+      <pre style="margin-left: 40px;">&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'templateDIFF'</span>,<font color="#cc33cc">'monitor=Diff_BananaTheta'</font>);<br>&gt;&gt; scan = <font color="#3366ff">iData</font>(model, <span style="color: rgb(51, 102, 255);">struct</span>(<span style="color: rgb(204, 51, 204);">'RV'</span>,[0.7 0.9 1.2],<span style="color: rgb(204, 51, 204);">'L2'</span>,[1 1.3 1.5])<span style="color: rgb(51, 102, 255);"></span><span style="color: rgb(204, 51, 204);"></span>, nan);</pre>
+      Then we may plot, as a 2D surface, the integral value for the
+      model value monitor:<br>
+      <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">plot</span>(<font color="#3366ff">iData</font>(<font color="#3366ff">sum</font>(scan,0)));<br></pre>
+      <a href="images/iFit_McStas_Monitor_scan.png"><img title="iFit:
+          McStas: evolution of a monitor"
+          src="images/iFit_McStas_Monitor_scan.png" alt="iFit: McStas:
+          evolution of a monitor" style="border: 0px solid ; width:
+          200px; height: 177px;" align="right"></a>You may look at the
+      instrument parameters used for the scans, e.g.<br>
+      <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">get</span>(scan,<span style="color: rgb(204, 51, 204);">'Parameters.RV'</span>)</pre>
+      <span style="color: rgb(255, 0, 0); font-weight: bold;">Warning: </span>Beware
+of
+the
+number
+of
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      iterations required to scan large dimensionality spaces. In
+      practice you should avoid spaces above 2 or 3 scanned parameters.
+      Exceeding this will undoubtedly require very long computation
+      times, and large memory storage.<br>
+      <br>
+      You may also scan the non numerical parameters with e.g. for the
+      'powder' string parameter:<br>
+      <ul>
+        <li>scan=[];</li>
+        <li><font color="#3366ff">for</font> vector = {<span
+            style="color: rgb(204, 51, 204);">'Na2Ca3Al2F14.laz'</span>,<span
+            style="color: rgb(204, 51, 204);">'Al.laz'</span>,<span
+            style="color: rgb(204, 51, 204);">'Ge.laz'</span>};
+          model.UserData.Parameters_Constant.powder = vector{1}; scan =
+          [ scan <font color="#3366ff">iData</font>(model, [], nan) ];
+          <font color="#3366ff">end</font></li>
+        <li><font color="#3366ff">subplot<font color="#000000">(scan)</font></font></li>
+      </ul>
+      <h4><a name="mozTocId329402" class="mozTocH4"></a>Running series
+        of simulations (single step and scans): graphical user interface<br>
+      </h4>
+      <font color="#3366ff"><font color="#000000">A user interface can
+          be used to enter most McStas/McXtrace configuration and
+          instrument parameters. To display it, use:<br>
+        </font></font>
+      <ul>
+        <li><font color="#3366ff"><font color="#000000"><font
+                color="#3366ff">dialog</font>(model)</font></font></li>
+      </ul>
+      <font color="#3366ff"><font color="#000000">which shows a table
+          where instrument parameters can be specified as scalars (e.g.
+          <i><b>1</b></i>), vectors (e.g. <i>[1 2 3]</i> or <i>0:0.5:5</i>
+          or <i>linspace(0,5,10)</i> ) or strings (<i>'Al.laz'</i> for
+          the additional non variable parameters such as file names,
+          etc).<br>
+        </font></font>
+      <ul>
+      </ul>
+      <h3><a class="mozTocH3" name="mozTocId690143"></a>Optimizing
+        instrument parameters<br>
+      </h3>
+      The optimization of instrument parameters is performed as simply
+      as a single simulation, using the <b>fmax</b> method<span
+        style="color: rgb(204, 51, 204);"></span> to maximize the
+      monitor value (you may similarly use <b>fmin</b> to minimize the
+      model value). <span style="font-style: italic;"><br>
+      </span>
+      <pre style="margin-left: 40px;">&gt;&gt; best_parameters = <span style="color: rgb(51, 102, 255);">fmax</span>(model);		<i>% maximize with the current/default parameters</i><br>&gt;&gt; best_parameters = <span style="color: rgb(51, 102, 255);">fmax</span>(model, parameters);	<i>% maximize with given initial parameters</i></pre>
+      The parameters, as a vector, string or named structure, are
+      initiated to their starting value, from which the optimization
+      proceeds. An empty value requests to use the current/default
+      values.<span style="font-style: italic;"> Only numerical</span>
+      parameters can be optimized. Also, it is <span style="color:
+        rgb(255, 0, 0);">highly encouraged to use bounded parameters</span>
+      (that is define constraints, see <a href="#mozTocId359721">below</a>),
+
+
+
+
+
+
+
+
+
+      else the optimizer can get lost, produce un-meaningful results, or
+      return <span style="font-style: italic;">NaN</span> parameter
+      values.<br>
+      <br>
+      You can tune the optimizer configuration, as explained in the <a
+        href="iFunc.html#mozTocId604963">iFunc</a> documentation, with
+      syntax:<br>
+      <pre style="margin-left: 40px;">&gt;&gt; best_parameters = <span style="color: rgb(51, 102, 255);">fmax</span>(model, parameters, options);</pre>
+      as well as any other optimizer configuration fields such as<br>
+      <ul>
+        <li><span style="font-weight: bold;">options.TolFun</span> =<span
+            style="color: rgb(204, 51, 204);">'1%'</span>;&nbsp;<span
+            style="font-style: italic;">&nbsp;&nbsp;&nbsp;&nbsp; % stop
+            when criteria changes are smaller that 1%<span
+              style="font-weight: bold;"></span><br>
+          </span></li>
+        <li><span style="font-weight: bold;">options.TolX</span> =<span
+            style="color: rgb(204, 51, 204);">'0.1%';</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-style:
+            italic;">% stop when parameter changes are smaller that 0.1%</span></li>
+        <li><span style="font-weight: bold;">options.Display</span>=<span
+            style="color: rgb(204, 51, 204);">'final';</span></li>
+        <li><span style="color: rgb(204, 51, 204);"><span style="color:
+              rgb(0, 0, 0);"><span style="font-weight: bold;">options.OutputFcn</span>=</span>'fminplot';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </span>% plots the criteria and parameters evolution during
+          the optimization.&nbsp;</li>
+        <li><b>options.optimizer</b>=<font color="#cc33cc">'fminpso'</font></li>
+        <li><b>options.</b><b>MaxFunEvals</b>=100</li>
+      </ul>
+    </div>
+    The options can be given as a structure or assembled into a string.
+    The default optimizer configuration is used when not specified (see
+    the <a href="Optimizers.html">Optimizers</a> page for more
+    details). The optimizer routine is automatically guessed, but can be
+    forced (see example below):<br>
+    <ul>
+      <li><b>fminpso:</b> Particle Swarm Optimization</li>
+      <li><b>fminpowell:</b> Powell with Coggins line search</li>
+      <li><b>fminhooke:</b> Hooke-Jeeves direct search</li>
+      <li><b>fminralg:</b> Shor R-algorithm (with at least 2 parameters)<br>
+      </li>
+      <li><b>fminsimpsa:</b> Simplex/simulated annealing</li>
+      <li><b>fminimfil:</b> Unconstrained Implicit filtering</li>
+    </ul>
+    Eventhough shown as 'fminXXX' methods, the iFunc/fmax method in use
+    here will make sure to maximize the monitor value by using the
+    specified optimiser.<br>
+    <br>
+    It is <font color="#ff0000"><b>highly recommended</b></font> to
+    request the optimisation using the raw monitors. As indicated above,
+    the axes are specified as additional arguments after the options:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; best_parameters = <span style="color: rgb(51, 102, 255);">fmax</span>(model, parameters, options, x, y, ...);</pre>
+    and in particular you should probably use:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; best_parameters = <span style="color: rgb(51, 102, 255);">fmax</span>(model, parameters, options, <b>nan</b>);	<i>% use raw monitors</i></pre>
+    The optimization returns the best parameter guess, as well as the
+    monitor value for this solution.<br>
+    <br>
+    In the following example, a McStas/McXtrace model is assembled,
+    specifying which monitor to use as model value. Then all parameters
+    are fixed except RV and L2 which are bound (see section below).
+    Last, the optimizer is explicitly indicated (else an automatic guess
+    is made) as well as a request for a plot during the optimisation. In
+    addition, similarly with other iFit <a href="Optimizers.html">optimization
+
+
+
+      methods</a>, the optimizer final status and optional returned
+    information can be obtained with e.g.&nbsp;
+    <pre style="margin-left: 40px;">&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'templateDIFF'</span>,<font color="#cc33cc">'monitor=*Theta*'</font>);	% monitor contains 'Theta'<br>&gt;&gt; <font color="#3366ff">fix</font>(model, <font color="#cc33cc">'all'</font>); 				% fix all but RV L2<br>&gt;&gt; model.RV=<font color="#cc33cc">'free'</font>; model.RV=[0.5 0.8 1.5];	% set RV bounds and value in a single assignment<br>&gt;&gt; model.L2=<font color="#cc33cc">'free'</font>; model.L2=[1 3 4];<br>&gt;&gt; [parameters, fval, <span style="color: rgb(255, 0, 0);">status, output</span>]=<span style="color: rgb(51, 102, 255);">fmax</span>(model<span style="color: rgb(204, 51, 204);"></span>,<span style="color: rgb(51, 102, 255);">[], </span><span style="color: rgb(204, 51, 204);">'optimizer=fminimfil; OutputFcn=fminplot'</span>, <b>nan</b>);</pre>
+    where <span style="font-style: italic;">output</span> stores most
+    of the optimization process data, including uncertainty on the best
+    parameter values, <span style="font-style: italic;">output.parsHistoryUncertainty
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </span>and<span style="font-style: italic;"> </span><span
+      style="font-style: italic;">output.parsHessianUncertainty</span>.<br>
+    <br>
+    To abort the optimization, just <span style="font-weight: bold;">close
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      the optimization plot</span> window (or click the STOP button).
+    The actual end occurs after a few more iterations.<br>
+    <br>
+    You can then plot the monitor(s) for the optimised parameters
+    with:&nbsp;
+    <ul>
+      <li>model(parameters, nan);&nbsp; <i>% evaluate the best solution</i><br>
+      </li>
+      <li>figure;<font color="#3366ff"> subplot</font>(model.UserData.monitors)</li>
+    </ul>
+    <span style="color: rgb(255, 0, 0); font-weight: bold;">Warning: </span>as
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="http://www.mcstas.org">McStas</a>/McXtrace use a
+    Monte-Carlo technique (which means 'random'), the criteria is a
+    noisy function. The stop conditions must then usually be quite
+    relaxed for the optimization to end, or the number of <span
+      style="font-style: italic;">ncounts</span> must be large enough to
+    minimize the statistical uncertainty. TolFun=<span style="color:
+      rgb(204, 51, 204);">'1%</span>' and TolX=<span style="color:
+      rgb(204, 51, 204);">'0.1%'</span> are fair choices. Also, we
+    recommend to constrain parameter ranges (<span style="color:
+      rgb(255, 0, 0);">see <a href="#mozTocId359721">below</a></span>).
+    Also, increasing the<span style="font-style: italic;"> 'ncount' </span>(which
+
+
+    is 1e5 by default) may help the optimizer to search in a noisy
+    criteria landscape.<br>
+    <h3><a class="mozTocH3" name="mozTocId359721"></a>Optimizing
+      instrument parameters with constraints</h3>
+    It is quite usual the restrict the parameter search to specified
+    ranges, and fix some of the parameters. As the model is an iFunc
+    object, you may fix some parameter with any of:<br>
+    <ul>
+      <li><font color="#3366ff">mlock</font>(model,<font color="#cc33cc">
+          'par'</font>)</li>
+      <li>model.par='fix'</li>
+    </ul>
+    or alternatively clear (free) them with:<br>
+    <ul>
+      <li><font color="#3366ff">munlock</font>(model, <font
+          color="#cc33cc">'par'</font>)</li>
+      <li>model.par='free'</li>
+    </ul>
+    You may as well bound a parameter with:<a
+      href="images/iFit_McStas_optimize.png"><img
+        src="images/iFit_McStas_optimize.png" alt="iFit: McStas wrapper:
+        dynamic optimization evolution" style="border: 0px solid ;
+        width: 200px; height: 190px;" height="483" align="right"
+        width="508" border="0"></a>
+    <ul>
+      <li><font color="#3366ff">xlim</font>(model, <font
+          color="#cc33cc">'par'</font>, [min max])</li>
+      <li>model.par = [ min max]</li>
+    </ul>
+    or even bound a parameter and set its value in a single line:<br>
+    <ul>
+      <li>model.par = [ min value max]</li>
+    </ul>
+    In the following example we optimise the monochromator radius of
+    curvature in the <i>templateDIF</i> diffractometer, in order to get
+    the maximum flux in the diffractogram:
+    <pre style="margin-left: 40px;">&gt;&gt; model = <span style="color: rgb(51, 102, 255);">mccode</span>(<span style="color: rgb(204, 51, 204);">'templateDIFF'</span>,<font color="#cc33cc">'monitor=*Theta*'</font>);	% monitor contains 'Theta'<br>&gt;&gt; <font color="#3366ff">fix</font>(model, <font color="#cc33cc">'all'</font>); 				% fix all<br>&gt;&gt; model.RV=<font color="#cc33cc">'free'</font>; model.RV=[0.5 1 1.5];	% set RV free, bounds and value in a single assignment<br>&gt;&gt; [parameters, fval, <span style="color: rgb(255, 0, 0);">status, output</span>]=<span style="color: rgb(51, 102, 255);">fmax</span>(model<span style="color: rgb(204, 51, 204);"></span>,<span style="color: rgb(51, 102, 255);">[], ...<br>  </span><span style="color: rgb(204, 51, 204);">'optimizer=fminpso; OutputFcn=fminplot;</span><span style="color: rgb(204, 51, 204);">TolFun =<span style="color: rgb(204, 51, 204);">5%;TolX=5%;ncount=1e5;</span></span><span style="color: rgb(204, 51, 204);"><span style="color: rgb(204, 51, 204);">MaxFunEvals=100</span>'</span>, nan);</pre>
+    You can then plot the monitor(s) for the optimised parameters
+    with:&nbsp;
+    <ul>
+      <li>model.RV</li>
+    </ul>
+    <pre>	ans=<br>      &nbsp;&nbsp;&nbsp;  0.8621</pre>
+    <ul>
+      <li>model(parameters, nan);&nbsp; <i>% evaluate the best solution</i><br>
+      </li>
+      <li>figure;<font color="#3366ff"> subplot</font>(model.UserData.monitors)</li>
+    </ul>
+    We strongly <span style="font-weight: bold;">recommend</span> to
+    limit the parameter search within boundaries during optimizations.<br>
+    <h3><a class="mozTocH3" name="mozTocId745452"></a>Preparing data
+      files for McStas components</h3>
+    <h4><a class="mozTocH4" name="mozTocId336301"></a>PowderN component:
+      elastic coherent scattering from a powder<br>
+    </h4>
+    The <a
+      href="http://mcstas.org/download/components/samples/PowderN.pure.html">PowderN</a>
+    component can use both LAU ('Laue' files from Crystallographica for
+    'Single_crystal') and LAZ ('Lazy/Pulvrx' from e.g. ICSD for
+    PowderN). These files can be prepared using 'cif2hkl'. That tool is
+    also included with the <a href="http://www.mcstas.org/">McStas</a>
+    distribution as executable. <br>
+    <br>
+    <u>The cif2hkl syntax is:</u><br>
+    <ul>
+      <li>[file_out, result] = <font color="#3366ff">cif2hkl</font>(file_in,
+
+        file_out, lambda, mode, verbose)</li>
+    </ul>
+    The iFit version can use as first argument <b>'file_in'</b>:<br>
+    <ul>
+      <li>a CIF file (does not support mmCIF)<br>
+      </li>
+      <li>a CFL file (FullProf)</li>
+      <li>a INS/SHX/RES file (ShelX)</li>
+      <li>a chemical formula with syntax e.g. <font color="#cc33cc">'cod:
+
+          La Mn O3'</font> (Hill notation)</li>
+      <li>a Crystallography.net ID with syntax e.g. <font
+          color="#cc33cc">'cod: 1532356'</font></li>
+    </ul>
+    Access to the <a href="http://crystallography.net/">Crystallography
+      Open Database</a> requires a valid Internet connection.<br>
+    <br>
+    The <b>file_out</b> argument specifies the output file name to use.
+    If left empty, it adds an extension to the initial file.<br>
+    <br>
+    The <b>lambda</b> argument specifies the wavelength to use for the
+    definition of the HKL cut-off. Default is 0.5 (in Angs).<br>
+    <br>
+    The <b>'mode'</b> argument can be given as <br>
+    <ul>
+      <li>'p' for powder mode to generate a LAZ file</li>
+      <li>'x' for single crystal mode to generate a LAU file</li>
+    </ul>
+    <u>For example:</u><br>
+    <ul>
+      <li><font color="#3366ff">cif2hkl</font>(<font color="#cc33cc">'Al.cif'</font>)</li>
+      <li><font color="#3366ff">cif2hkl</font>(<font color="#cc33cc">'Al.cif'</font>,
+        [], [],<font color="#cc33cc"> 'x'</font>)</li>
+    </ul>
+    <font color="#ff0000">WARNING:</font> it is essential to check the
+    output file (text), especially the density, molar weight, cross
+    sections, etc.<br>
+    <h4><a class="mozTocH4" name="mozTocId317818"></a>Single_crystal
+      component: elastic coherent scattering from a single crystal<br>
+    </h4>
+    The procedure to generate LAU files for the <a
+      href="http://mcstas.org/download/components/samples/Single_crystal.html">Single_crystal</a>
+    component is similar as the one above for PowderN. Just use<b> 'x'</b>
+    as mode argument.<br>
+    <br>
+    <font color="#ff0000">WARNING:</font> it is essential to check the
+    output file (text), especially the density, molar weight, cross
+    sections, etc.<br>
+    <h4><a class="mozTocH4" name="mozTocId297488"></a>Isotropic_Sqw
+      component: coherent and incoherent scattering from an isotropic
+      density material (liquid, gas, powder, amorphous)</h4>
+    The <a
+      href="http://mcstas.org/download/components/samples/Isotropic_Sqw.html">Isotropic_Sqw</a>
+    component is able to simulate all neutron scattering contributions
+    for isotropic density materials: elastic, inelastic, coherent,
+    incoherent. The main idea is to first generate a 2D iData object,
+    then cast it as a iData_Sqw2D flavour and export it in the 'mcstas'
+    format.<br>
+    <ul>
+      <li>d = <font color="#3366ff">iData</font>(<font color="#cc33cc">'file'</font>);</li>
+      <li>d = <font color="#3366ff">iData_Sqw2D</font>(d);<br>
+      </li>
+      <li><font color="#3366ff">saveas</font>(d, <font color="#cc33cc">''</font>,
+        <font color="#cc33cc">'mcstas'</font>);</li>
+    </ul>
+    The initial 2D data set may for instance be obtained from:<br>
+    <ul>
+      <li>a measured S(q,w) (after reduction and correction)</li>
+      <li>a molecular dynamics treated with e.g. <a
+          href="https://mdanse.org/">MDANSE</a> to obtain the coherent
+        and incoherent S(q,w)</li>
+      <li>a powder average of a 4D model [iFunc_Sqw4D and <font
+          color="#3366ff">powder</font> method]<br>
+      </li>
+    </ul>
+    <font color="#ff0000">WARNING:</font> it is essential to check the
+    output file (text), especially the density, molar weight, cross
+    sections, etc.<br>
+    <br>
+    Let's review in details the different strategies to generate these
+    files:<br>
+    <br>
+    <b>coherent scattering from 4D S(q,w) models</b><br>
+    <br>
+    The <a href="Models.html">Sqw4D models</a>, e.g. phonons [from DFT,
+    analytical, cubic, ...], spin-waves [SpinW, SpinWave] can be
+    evaluated on a whole Brillouin zone and averaged along momentum
+    transfer to generate a 'powder' representation of the crystal. We
+    also recommend that you have a look at the <a
+      href="Neutron_Scattering.html#mozTocId424180">Neutron Scattering</a>
+    page for more details about the theory.<br>
+    <br>
+    We first create a 4D S(q,w) model, such as:<br>
+    <br>
+    <table cellspacing="2" cellpadding="2" width="100%" border="1">
+      <tbody>
+        <tr>
+          <td valign="top"><u><i>Command to generate a S(hklw) 4D model</i></u><u><i><br>
+              </i></u></td>
+          <td valign="top"><u><i>Description</i></u><u><i><br>
+              </i></u></td>
+        </tr>
+        <tr>
+          <td valign="top">s = <font color="#3366ff">sqw_sine3d</font>(20);<br>
+          </td>
+          <td valign="top">a <a href="Models.html#mozTocId677670">simple
+              acoustic branch</a> ranging up to 20 meV<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">s = <font color="#3366ff">sqw_sine3d</font>([
+            15 20 ]);<br>
+          </td>
+          <td valign="top">a <a href="Models.html#mozTocId677670">simple
+              optic branch </a>oscillating from 15 to 20 meV<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><font style="font-size: medium; font-style:
+              normal; font-variant-ligatures: normal; font-variant-caps:
+              normal; font-weight: 400; letter-spacing: normal;
+              text-align: start; text-indent: 0px; text-transform: none;
+              white-space: normal; word-spacing: 0px;
+              -webkit-text-stroke-width: 0px; text-decoration-style:
+              initial; text-decoration-color: initial;" color="#3366ff"><span
+                style="color: rgb(0, 0, 0); font-size: medium;
+                font-style: normal; font-variant-ligatures: normal;
+                font-variant-caps: normal; font-weight: 400;
+                letter-spacing: normal; text-align: start; text-indent:
+                0px; text-transform: none; white-space: normal;
+                word-spacing: 0px; -webkit-text-stroke-width: 0px;
+                text-decoration-style: initial; text-decoration-color:
+                initial; display: inline ! important; float: none;">s =
+              </span><font style="font-size: medium; font-style: normal;
+                font-variant-ligatures: normal; font-variant-caps:
+                normal; font-weight: 400; letter-spacing: normal;
+                text-align: start; text-indent: 0px; text-transform:
+                none; white-space: normal; word-spacing: 0px;
+                -webkit-text-stroke-width: 0px; text-decoration-style:
+                initial; text-decoration-color: initial;"
+                color="#3366ff">sqw_spinw</font><span style="color:
+                rgb(0, 0, 0); font-size: medium; font-style: normal;
+                font-variant-ligatures: normal; font-variant-caps:
+                normal; font-weight: 400; letter-spacing: normal;
+                text-align: start; text-indent: 0px; text-transform:
+                none; white-space: normal; word-spacing: 0px;
+                -webkit-text-stroke-width: 0px; text-decoration-style:
+                initial; text-decoration-color: initial; display: inline
+                ! important; float: none;">(<font color="#3366ff"> </font></span>sw_model</font><span
+              style="color: rgb(0, 0, 0); font-size: medium; font-style:
+              normal; font-variant-ligatures: normal; font-variant-caps:
+              normal; font-weight: 400; letter-spacing: normal;
+              text-align: start; text-indent: 0px; text-transform: none;
+              white-space: normal; word-spacing: 0px;
+              -webkit-text-stroke-width: 0px; text-decoration-style:
+              initial; text-decoration-color: initial; display: inline !
+              important; float: none;">(</span><font style="font-size:
+              medium; font-style: normal; font-variant-ligatures:
+              normal; font-variant-caps: normal; font-weight: 400;
+              letter-spacing: normal; text-align: start; text-indent:
+              0px; text-transform: none; white-space: normal;
+              word-spacing: 0px; -webkit-text-stroke-width: 0px;
+              text-decoration-style: initial; text-decoration-color:
+              initial;" color="#cc33cc">'squareAF'</font><span
+              style="color: rgb(0, 0, 0); font-size: medium; font-style:
+              normal; font-variant-ligatures: normal; font-variant-caps:
+              normal; font-weight: 400; letter-spacing: normal;
+              text-align: start; text-indent: 0px; text-transform: none;
+              white-space: normal; word-spacing: 0px;
+              -webkit-text-stroke-width: 0px; text-decoration-style:
+              initial; text-decoration-color: initial; display: inline !
+              important; float: none;">,2,0) );&nbsp;</span><br>
+          </td>
+          <td valign="top">a <a href="Models.html#mozTocId908192">SpinW
+              model</a>, here AF. Any other 'sw' model can be used.<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><span style="color: rgb(0, 0, 0); font-size:
+              medium; font-style: normal; font-variant-ligatures:
+              normal; font-variant-caps: normal; font-weight: 400;
+              letter-spacing: normal; text-align: start; text-indent:
+              0px; text-transform: none; white-space: normal;
+              word-spacing: 0px; -webkit-text-stroke-width: 0px;
+              text-decoration-style: initial; text-decoration-color:
+              initial; display: inline ! important; float: none;"><span
+                style="color: rgb(0, 0, 0); font-size: medium;
+                font-style: normal; font-variant-ligatures: normal;
+                font-variant-caps: normal; font-weight: 400;
+                letter-spacing: normal; text-align: start; text-indent:
+                0px; text-transform: none; white-space: normal;
+                word-spacing: 0px; -webkit-text-stroke-width: 0px;
+                text-decoration-style: initial; text-decoration-color:
+                initial; display: inline ! important; float: none;"><span>s
+                  = </span></span><font style="font-size: medium;
+                font-style: normal; font-variant-ligatures: normal;
+                font-variant-caps: normal; font-weight: 400;
+                letter-spacing: normal; text-align: start; text-indent:
+                0px; text-transform: none; white-space: normal;
+                word-spacing: 0px; -webkit-text-stroke-width: 0px;
+                text-decoration-style: initial; text-decoration-color:
+                initial;" color="#3366ff">sqw_spinwave</font><span
+                style="color: rgb(0, 0, 0); font-size: medium;
+                font-style: normal; font-variant-ligatures: normal;
+                font-variant-caps: normal; font-weight: 400;
+                letter-spacing: normal; text-align: start; text-indent:
+                0px; text-transform: none; white-space: normal;
+                word-spacing: 0px; -webkit-text-stroke-width: 0px;
+                text-decoration-style: initial; text-decoration-color:
+                initial; display: inline ! important; float: none;">(</span><font
+                style="font-size: medium; font-style: normal;
+                font-variant-ligatures: normal; font-variant-caps:
+                normal; font-weight: 400; letter-spacing: normal;
+                text-align: start; text-indent: 0px; text-transform:
+                none; white-space: normal; word-spacing: 0px;
+                -webkit-text-stroke-width: 0px; text-decoration-style:
+                initial; text-decoration-color: initial;"
+                color="#cc33cc">'MnFe4Si3.txt'</font><span style="color:
+                rgb(0, 0, 0); font-size: medium; font-style: normal;
+                font-variant-ligatures: normal; font-variant-caps:
+                normal; font-weight: 400; letter-spacing: normal;
+                text-align: start; text-indent: 0px; text-transform:
+                none; white-space: normal; word-spacing: 0px;
+                -webkit-text-stroke-width: 0px; text-decoration-style:
+                initial; text-decoration-color: initial; display: inline
+                ! important; float: none;">);</span></span><br>
+          </td>
+          <td valign="top">a <a href="Models.html#mozTocId826778">SPINWAVE</a>
+            (LLB) model<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <meta http-equiv="content-type" content="text/html;
+              charset=windows-1252">
+            s = <font color="#3366ff">sqw_vaks</font>(<font
+              color="#cc33cc">'KTaO3'</font>);</td>
+          <td valign="top">
+            <meta http-equiv="content-type" content="text/html;
+              charset=windows-1252">
+            a <a href="Models.html#mozTocId226848">Vaks perovskite</a>,
+            with KTaO3 parameters</td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <meta http-equiv="content-type" content="text/html;
+              charset=windows-1252">
+            s = <font color="#3366ff">sqw_cubic_monoatomic</font>([ 3 3
+            ]);</td>
+          <td valign="top">
+            <meta http-equiv="content-type" content="text/html;
+              charset=windows-1252">
+            a <a href="Models.html#mozTocId885605">simple cubic monoatomic</a>,
+            with C1/C2=3 E0=3</td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <meta http-equiv="content-type" content="text/html;
+              charset=windows-1252">
+            <font style="font-size: medium; font-style: normal;
+              font-variant-ligatures: normal; font-variant-caps: normal;
+              font-weight: 400; letter-spacing: normal; text-align:
+              left; text-indent: 0px; text-transform: none; white-space:
+              normal; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+              text-decoration-style: initial; text-decoration-color:
+              initial;">s = </font><font style="font-size: medium;
+              font-style: normal; font-variant-ligatures: normal;
+              font-variant-caps: normal; font-weight: 400;
+              letter-spacing: normal; text-align: left; text-indent:
+              0px; text-transform: none; white-space: normal;
+              word-spacing: 0px; -webkit-text-stroke-width: 0px;
+              text-decoration-style: initial; text-decoration-color:
+              initial;" color="#3366ff">sqw_phonons</font><span
+              style="color: rgb(0, 0, 0); font-size: medium; font-style:
+              normal; font-variant-ligatures: normal; font-variant-caps:
+              normal; font-weight: 400; letter-spacing: normal;
+              text-align: left; text-indent: 0px; text-transform: none;
+              white-space: normal; word-spacing: 0px;
+              -webkit-text-stroke-width: 0px; text-decoration-style:
+              initial; text-decoration-color: initial; display: inline !
+              important; float: none;">(</span><font style="font-size:
+              medium; font-style: normal; font-variant-ligatures:
+              normal; font-variant-caps: normal; font-weight: 400;
+              letter-spacing: normal; text-align: left; text-indent:
+              0px; text-transform: none; white-space: normal;
+              word-spacing: 0px; -webkit-text-stroke-width: 0px;
+              text-decoration-style: initial; text-decoration-color:
+              initial;" color="#cc33cc">'Al.cif'</font><span
+              style="color: rgb(0, 0, 0); font-size: medium; font-style:
+              normal; font-variant-ligatures: normal; font-variant-caps:
+              normal; font-weight: 400; letter-spacing: normal;
+              text-align: left; text-indent: 0px; text-transform: none;
+              white-space: normal; word-spacing: 0px;
+              -webkit-text-stroke-width: 0px; text-decoration-style:
+              initial; text-decoration-color: initial; display: inline !
+              important; float: none;">,<font color="#cc33cc">'metal'</font>);</span></td>
+          <td valign="top">a <a href="Models_Phonons_Tutorial.html">DFT
+              phonon</a> (lattice dynamics). Can also import e.g.
+            PhonoPy calculation.<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+      Roman&quot;; font-size: medium; font-style: normal;
+      font-variant-ligatures: normal; font-variant-caps: normal;
+      font-weight: 400; letter-spacing: normal; orphans: 2; text-align:
+      start; text-indent: 0px; text-transform: none; white-space:
+      normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+      0px; text-decoration-style: initial; text-decoration-color:
+      initial; display: inline !important; float: none;"><span
+        style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-style: initial;
+        text-decoration-color: initial; display: inline !important;
+        float: none;"><br>
+      </span></span>Then convert the model to a powder one (2D Sqw):<br>
+    <ul>
+      <li>p = <font color="#3366ff">powder</font>(s);</li>
+    </ul>
+    Finally, evaluate the model on given momentum and energy axes, and
+    export:<br>
+    <ul>
+      <li>q = 0:0.05:10; % Angs-1<br>
+      </li>
+      <li>w = 0:0.25:50; % meV<br>
+      </li>
+      <li>d = <font color="#3366ff">iData</font>(p, [], q, w); <i>%
+          with default model parameters</i></li>
+      <li><font color="#3366ff">saveas</font>(d, <font color="#cc33cc">'myPowder.sqw'</font>,<font
+          color="#cc33cc">'sqw'</font>);<br>
+        <i></i></li>
+    </ul>
+    <b>incoherent scattering from lattice dynamics</b><br>
+    <br>
+    In the case of lattice dynamics, the vibrational density of states
+    can be computed directly:<br>
+    <ul>
+      <li><font style="font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; text-align: left;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-style: initial; text-decoration-color:
+          initial;">s = </font><font style="font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial;" color="#3366ff">sqw_phonons</font><span
+          style="color: rgb(0, 0, 0); font-size: medium; font-style:
+          normal; font-variant-ligatures: normal; font-variant-caps:
+          normal; font-weight: 400; letter-spacing: normal; text-align:
+          left; text-indent: 0px; text-transform: none; white-space:
+          normal; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-style: initial; text-decoration-color:
+          initial; display: inline ! important; float: none;">(</span><font
+          style="font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; text-align: left;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-style: initial; text-decoration-color:
+          initial;" color="#cc33cc">'Al.cif'</font><span style="color:
+          rgb(0, 0, 0); font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; text-align: left;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-style: initial; text-decoration-color:
+          initial; display: inline ! important; float: none;">,<font
+            color="#cc33cc">'metal','emt'</font>);</span></li>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;">g = <font color="#3366ff">dos</font>(s);</span></li>
+    </ul>
+    <span style="color: rgb(0, 0, 0); font-size: medium; font-style:
+      normal; font-variant-ligatures: normal; font-variant-caps: normal;
+      font-weight: 400; letter-spacing: normal; text-align: left;
+      text-indent: 0px; text-transform: none; white-space: normal;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      text-decoration-style: initial; text-decoration-color: initial;
+      display: inline ! important; float: none;">The so-called
+      'multi-phonon' expansion [Sjolander 1958] allows to estimate the
+      inelastic incoherent scattering contribution from the density of
+      states, possibly specifying the mass and temperature (when not
+      found in the model). The Debye-Waller coefficient can also be
+      specified.<br>
+    </span>
+    <ul>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;">inc = <font color="#3366ff">incoherent</font>(g,
+          <font color="#cc33cc">'T'</font>, 10, <font color="#cc33cc">'DW'</font>,
+          0.05); <i>% all multi-phonon terms, to be summed-up</i></span></li>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;">g = plus(inc);</span></li>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;">saveas(g,<font color="#cc33cc">
+            'Al_pow_inc_10.sqw'</font>,<font color="#cc33cc">'sqw'</font>);</span></li>
+    </ul>
+    <b>coherent and incoherent scattering from molecular dynamics</b><br>
+    <br>
+    If you have access to a molecular dynamics trajectory, we recommend
+    that you use <a href="https://mdanse.org/">MDANSE</a>. The
+    procedure is as follows:<br>
+    <ol>
+      <li>First convert the input trajectory into a NetCDF file (<i>MDANSE/File/Trajectory
+          converters</i> menu). </li>
+      <li>Then open that file. </li>
+      <li>Double click the new entry in the Data panel (lower left). A
+        list of applicable items shows in the upper Plugins panel. </li>
+      <li>Open the <i>Analysis</i> item, then the <i>Scattering</i>
+        one. </li>
+      <li>Double click the <i>Dynamic Coherent Structure Factor</i>
+        (DCSF).</li>
+      <li>In the 'q vectors' panel, select 'New' and use the
+        'spherical_lattice' generator up to e.g. shells 100 (in nm<sup>-1</sup>,
+        i.e. 10 Angs<sup>-1</sup>). Give it a name, Generate and Save.</li>
+      <li>Back in the DCSF Algorithm dialog, set the output filename
+        (e.g. DCSF), and click Run. A NetCDF file is created.<br>
+      </li>
+      <li>Perform exactly the same steps for the <i>Dynamic Incoherent
+          Structure Factor</i> (DISF).<br>
+      </li>
+      <li>Close MDANSE.<br>
+      </li>
+    </ol>
+    Then import the coherent and incoherent NetCDF files from MDANSE,
+    then save it for McStas, e.g.:<br>
+    <ul>
+      <li>d = <font color="#3366ff">iData_Sqw2D</font>(<font
+          color="#cc33cc">'DCSF.nc'</font>)</li>
+      <li><font color="#3366ff">saveas</font>(d, <font color="#cc33cc">'DCSF.sqw'</font>,<font
+          color="#cc33cc">'sqw'</font>)</li>
+    </ul>
+    <b>incoherent scattering from experiment/density of states</b><br>
+    <br>
+    If you perform a neutron scattering experiment on a spectrometer,
+    you should reduce and correct the measurement data file. Then
+    convert it to S(q,w) and/or estimate the vibrational density of
+    states. Finally, follow the same procedure as the one for lattice
+    dynamics.<br>
+    <br>
+    <span style="color: rgb(0, 0, 0); font-size: medium; font-style:
+      normal; font-variant-ligatures: normal; font-variant-caps: normal;
+      font-weight: 400; letter-spacing: normal; text-align: left;
+      text-indent: 0px; text-transform: none; white-space: normal;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      text-decoration-style: initial; text-decoration-color: initial;
+      display: inline ! important; float: none;">The so-called
+      'multi-phonon' expansion [Sjolander 1958] allows to estimate the
+      inelastic incoherent scattering contribution from the density of
+      states, possibly specifying the mass and temperature (when not
+      found in the model). The Debye-Waller coefficient can also be
+      specified. We assume the vDOS has been imported as variable 'g':<br>
+    </span>
+    <ul>
+      <li>g = <font color="#3366ff">iData_vDOS</font>(<font
+          color="#cc33cc">'dos_file'</font>);<br>
+        <span style="color: rgb(0, 0, 0); font-size: medium; font-style:
+          normal; font-variant-ligatures: normal; font-variant-caps:
+          normal; font-weight: 400; letter-spacing: normal; text-align:
+          left; text-indent: 0px; text-transform: none; white-space:
+          normal; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-style: initial; text-decoration-color:
+          initial; display: inline ! important; float: none;"></span></li>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;">inc = <font color="#3366ff">incoherent</font>(g,
+          <font color="#cc33cc">'T'</font>, 10, <font color="#cc33cc">'DW'</font>,
+          0.05); <i>% all multi-phonon terms, to be summed-up</i></span></li>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;">g = <font color="#3366ff">plus</font>(inc);</span></li>
+      <li><span style="color: rgb(0, 0, 0); font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; text-align: left; text-indent: 0px; text-transform:
+          none; white-space: normal; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline !
+          important; float: none;"><font color="#3366ff">saveas</font>(g,<font
+            color="#cc33cc"> 'inc_10.sqw'</font>,<font color="#cc33cc">'sqw'</font>);</span></li>
+    </ul>
+    <b>coherent scattering from experiment</b><br>
+    <br>
+    If you perform a neutron scattering experiment on a spectrometer,
+    you should reduce and correct the measurement data file. Remove the
+    empty cell/container contribution. Then convert it to S(q,w),
+    possibly applying a radial momentum average. Estimate its density of
+    states, and the incoherent scattering (see above). Subtract the
+    incoherent scattering from the total scattering, to get an estimate
+    of the coherent scattering alone. Make it an iData_Sqw2D object, and
+    save it as a 'sqw' format file.<br>
+    <br>
+    <b>total scattering from experiment<br>
+    </b><br>
+    If you perform a neutron scattering experiment on a spectrometer,
+    you should reduce and correct the measurement data file. Remove the
+    empty cell/container contribution. Then convert it to S(q,w),
+    possibly applying a radial momentum average. When using the
+    Isotropic_Sqw, set the <i>sigma_inc</i> component parameter to 0,
+    and the <i>sigma_coh</i> as the total scattering cross-section.<b>
+    </b>
+    <h4><a class="mozTocH4" name="mozTocId36233"></a>Single_crystal_inelastic
+
+      component: coherent and incoherent scattering from a single
+      crystal</h4>
+    The Single_crystal_inelastic component is an experimental
+    contribution which allows to estimate all neutron scattering
+    contributions for single crystal materials: elastic, inelastic,
+    coherent, incoherent.<br>
+    <br>
+    The main idea is to generate a 4D model [iFunc_Sqw4D], evaluate it
+    to produce a iData_Sqw4D which is then exported in the 'mcstas'
+    format. <br>
+    Refer to the <a href="Models.html">Models</a> page to get an
+    overview of all available 4D S(q,w) models.<br>
+    <ul>
+      <li>s = <font color="#3366ff">sqw_spinw</font>(<font
+          color="#cc33cc">'defaults'</font>)</li>
+      <li>d = <font color="#3366ff">iData</font>(s); <i>% use default
+          grid for axes</i><br>
+      </li>
+      <li><font color="#3366ff">saveas</font>(d, <font color="#cc33cc">'sx_coh.sqw4'</font>,
+        <font color="#cc33cc">'mcstas'</font>);</li>
+    </ul>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <div style="text-align: center;">
+      <div style="text-align: center;"><span style="font-style: italic;">E.
+Farhi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          - iFit/McStas - </span><span style="font-style: italic;">
+          oct.. 23, 2018 2.0 </span><span style="font-style: italic;"> </span>-
+        back to <a href="index.html">Main iFit Page </a><a
+          href="http://www.ill.eu/"><img title="ILL, Grenoble, France
+            &lt;www.ill.eu&gt;" src="images/ILL-web-jpeg.jpg" alt="ILL,
+            Grenoble, France &lt;www.ill.eu&gt;" style="border: 0px
+            solid ; width: 53px; height: 50px;" align="right"></a> </div>
+    </div>
+  </body>
+</html>

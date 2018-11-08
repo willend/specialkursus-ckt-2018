@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of plot</title>
+  <meta name="keywords" content="plot">
+  <meta name="description" content="h = plot(s, method, ...) : plot iData object">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; plot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/plot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>h = plot(s, method, ...) : plot iData object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h=plot(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> h = plot(s, method, ...) : plot iData object
+
+   @iData/plot function to plot data sets
+   This function plot the signal of the object as a function of the defined axes.
+   The plot is an errorbar plot for 1D data y=f(x), a surface mesh for 2D z=f(x,y),
+     and an isosurface for 3D c=f(x,y,z) data. Data specified as series of 
+     coordinate points are plotted using a plot3-type rendering. Further
+     dimensionalities are not handled.
+
+   The scatter3 rendering option is similar to plot3, but color points are set
+   according to the signal intensity. The 'plot3' option for 3D (volume) objects
+   uses a semi-transparent volume rendering, whereas the default plot uses
+   an iso-surface on the median signal.
+
+   When a XtickLabel alias/property exists in the object, the Xtick labels are set.
+
+   As mentioned in the iData axis definition (see iData/setaxis), the 'X' axis
+     refers to the 2nd dimension (along columns), whereas the 'Y' axis refers to
+     the first dimension (along rows).
+
+  Type &lt;a href=&quot;matlab:doc(iData,'Plot')&quot;&gt;doc(iData,'Plot')&lt;/a&gt; to access the iFit/Plot Documentation.
+
+ input:  s: object or array (iData)
+         method: optional type of plot to render
+
+               For 1D plots y=f(x), method is a string to specify color/symbol.
+                 hide_errorbars is also valid not to plot error bars.
+                 To plot a set of 1D objects side by side, specify a 2D plot 
+                 option such as 'surf' or 'plot3'.
+               For 2D plots z=f(x,y), method is a string which may contain:
+                 surf, mesh, contour, contour3, surfc, surfl, contourf
+                 plot3, scatter3 (colored points), stem3, pcolor, waterfall
+               For 3D plots c=f(x,y,z), method is a string which may contain:
+                 plot3 (volume), scatter3 (colored points, supports 'scatter3 filled' and 'scatter3 bubble')
+                 waterfall (supports 'waterfall x' 'y' and 'z'), contour (set of coutour plots)
+                 surf, surf median, surf mean, surf half (isosurface)
+               The slice(a) method opens the interactive sliceomatic 3D viewer.
+
+               Global options for 2D and 3D plots: 
+                 flat, interp, faceted (for shading), view2, view3
+                 transparent, light, clabel, colorbar, shifted (overlayed 2D)
+               Global options for all plots: 
+                 axis tight, axis auto, hide_axes (compact layout)
+                 painters (bitmap drawing), zbuffer (vectorial drawing)
+                 opengl (faster for large data sets)
+                 whole or full (do not reduce large object size for plotting)
+                 figure (open a new figure window)
+                 replace (replace existing plots for same objects)
+                 legend (plot legend for objects)
+         args: additional arguments passed to the plotting method
+                 
+ output: h: graphics object handles (cell/array)
+ ex:     plot(iData(rand(10)), 'surfc interp transparent'); plot(iData(1:10), 'r-');
+         plot(iData(peaks));
+         [x,y,z,v]=flow; c=iData(x,y,z,v); plot(c,'surf');
+
+ Contributed code (Matlab Central): 
+   fscatter3: Felix Morsdorf, Jan 2003, Remote Sensing Laboratory Zuerich
+   vol3d:     Joe Conti, 2004
+   sliceomatic: Eric Ludlam 2001-2008
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, interp1, interpn, ndgrid, <a href="plot.html" class="code" title="function h=plot(a, varargin)">plot</a>, iData/setaxis, iData/getaxis
+          iData/xlabel, iData/ylabel, iData/zlabel, iData/clabel, iData/title
+          shading, lighting, <a href="surf.html" class="code" title="function h = surf(a, option)">surf</a>, iData/slice, iData/contour3, iData/contourf
+          iData/contour, iData/surf, iData/slice, iData/plot3, iData/surfl,
+          iData/surfc, iData/mesh</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="char.html" class="code" title="function c = char(s)">char</a>	c = char(s) : convert iData into character</li><li><a href="contour3.html" class="code" title="function h = contour3(a, option, varargin)">contour3</a>	h = contour3(s,option) : Plot a 2D/3D object as 3D contour</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iData, field, option) : look for iData fields</li><li><a href="findobj.html" class="code" title="function [varargout] = findobj(s_in, varargin)">findobj</a>	[s,...]=findobj(s,...) : look for existing iData objects</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getalias.html" class="code" title="function [link, label, names] = getalias(this,alias)">getalias</a>	[link, label,names] = getalias(s, 'AliasName') : get iData alias</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="interp.html" class="code" title="function b = interp(a, varargin)">interp</a>	[b...] = interp(s, ...) : interpolate iData object</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/alias in iData objects</li><li><a href="isnan.html" class="code" title="function a = isnan(a)">isnan</a>	b = isnan(s) : True for NaN iData object elements</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="label.html" class="code" title="function labl = label(this, varargin)">label</a>	b = label(s, alias, label) : Change iData label for a given alias/axis</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="plot.html" class="code" title="function h=plot(a, varargin)">plot</a>	h = plot(s, method, ...) : plot iData object</li><li><a href="prod.html" class="code" title="function [s,sigma] = prod(a,dim)">prod</a>	s = prod(a,dim) : computes the product of iData objects elements</li><li><a href="reducevolume.html" class="code" title="function s = reducevolume(a, R)">reducevolume</a>	h = reducevolume(s, factor) : reduce an iData object size</li><li><a href="resize.html" class="code" title="function b = resize(a, varargin)">resize</a>	c = resize(a) : resize/rebin the object Signal</li><li><a href="rmaxis.html" class="code" title="function this = rmaxis(this,rank)">rmaxis</a>	s = rmaxis(s, Axis) : delete iData axes</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sort.html" class="code" title="function a = sort(a,dim,mode)">sort</a>	s = sort(a,dim) : Sort iData objects axes in ascending or descending order</li><li><a href="squeeze.html" class="code" title="function a = squeeze(a)">squeeze</a>	c = squeeze(a) : remove singleton dimensions from iData objects/arrays</li><li><a href="strfind.html" class="code" title="function [match, field] = strfind(s, varargin)">strfind</a>	[match, field]=strfind(s, pattern, option) : search for pattern in iData</li><li><a href="title.html" class="code" title="function a = title(a, lab)">title</a>	b = title(s,label) : Change iData Signal label</li><li><a href="transpose.html" class="code" title="function a = transpose(a)">transpose</a>	b = transpose(s) : non-conjugate transpose of iData object</li><li><a href="xlabel.html" class="code" title="function a = xlabel(a, lab)">xlabel</a>	b = xlabel(s,label) : Change iData X axis label</li><li><a href="ylabel.html" class="code" title="function a = ylabel(a, lab)">ylabel</a>	b = ylabel(s,label) : Change iData Y axis label</li><li><a href="zlabel.html" class="code" title="function a = zlabel(a, lab)">zlabel</a>	b = zlabel(s,label) : Change iData Z axis label</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="contour.html" class="code" title="function h = contour(a, option, varargin)">contour</a>	h = contour(s,option) : Plot a 2D/3D object as contour</li><li><a href="contour3.html" class="code" title="function h = contour3(a, option, varargin)">contour3</a>	h = contour3(s,option) : Plot a 2D/3D object as 3D contour</li><li><a href="contourf.html" class="code" title="function h = contourf(a, option, varargin)">contourf</a>	h = contourf(s,option) : Plot a 2D/3D object as filled contour</li><li><a href="cwt.html" class="code" title="function s = cwt(a,dim,scales,wname,plotit)">cwt</a>	b = cwt(s,dim,scales,wname,'wname',...) : Continuous wavelet transform</li><li><a href="edit.html" class="code" title="function h = edit(a, option)">edit</a>	edit(s) : edit iData object Signal/Monitor</li><li><a href="getframe.html" class="code" title="function frame = getframe(a, dim, options)">getframe</a>	frame = getframe(s, dim, options) : create an iData object thumbnail/frame matrix</li><li><a href="image.html" class="code" title="function h = image(r, g, b, option)">image</a>	h = image(r,g,b, option) : Plot up to 3 images overlayed on the RGB channels</li><li><a href="imroi.html" class="code" title="function [b, mask, f] = imroi(a, options)">imroi</a>	imroi: define a region of interest on a data set</li><li><a href="mesh.html" class="code" title="function a = mesh(a, option)">mesh</a>	h = mesh(s,option) : Plot a 2D/3D object as mesh</li><li><a href="pcolor.html" class="code" title="function h =  pcolor(a, option)">pcolor</a>	h =  pcolor(s,option) : Plot a 2D/3D object as a flat matrix image</li><li><a href="plot.html" class="code" title="function h=plot(a, varargin)">plot</a>	h = plot(s, method, ...) : plot iData object</li><li><a href="plot3.html" class="code" title="function h = plot3(a, option)">plot3</a>	h = plot3(s,option) : Plot a 2D/3D object as separate points or semi-transparent volume</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>	f = saveas(s, filename, format, options) : save iData object into various data formats</li><li><a href="scatter.html" class="code" title="function h = scatter3(a, option)">scatter</a>	h = scatter(s,option) : Plot a 2D/3D object as separate colored points</li><li><a href="scatter3.html" class="code" title="function h = scatter3(a, option)">scatter3</a>	h = scatter3(s,option) : Plot a 2D/3D object as separate colored points</li><li><a href="slice.html" class="code" title="function h = slice(a, method)">slice</a>	slice(s) : Plot a 2D/3D object with slice rendering</li><li><a href="subplot.html" class="code" title="function h=subplot(a, varargin)">subplot</a>	h = subplot(s) : plot iData array as subplots</li><li><a href="surf.html" class="code" title="function h = surf(a, option)">surf</a>	h = surf(s,option) : Plot a 2D/3D object as surface</li><li><a href="surfc.html" class="code" title="function h = surfc(a, option)">surfc</a>	h = surfc(s,option) : Plot a 2D/3D object as surface+contour</li><li><a href="surfl.html" class="code" title="function h = surfl(a, option)">surfl</a>	h = surfl(s,option) : Plot a 2D/3D object as surface with light</li><li><a href="waterfall.html" class="code" title="function h = waterfall(a, option)">waterfall</a>	h = waterfall(s,option) : Plot a 2D/3D object as waterfall (side by side lines)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of thermochemistry</title>
+  <meta name="keywords" content="thermochemistry">
+  <meta name="description" content="iFunc_Sqw4D/thermochemistry: compute thermodynamic quantities for 4D S(q,w) models.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iFunc_subclasses</a> &gt; <a href="index.html">@iFunc_Sqw4D</a> &gt; thermochemistry.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iFunc_subclasses/@iFunc_Sqw4D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/thermochemistry
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iFunc_Sqw4D/thermochemistry: compute thermodynamic quantities for 4D S(q,w) models.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [t, fig]=thermochemistry(s, T, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iFunc_Sqw4D/thermochemistry: compute thermodynamic quantities for 4D S(q,w) models.
+
+ compute thermodynamics quantities for a 4D S(q,w) Model.
+ When missing, the phonon (vibrational) density of states (vDOS) is estimated 
+ from e.g. the evaluation of the 4D sqw phonons object.
+
+ The input 4D model should be e.g. a 4D phonon one, with axes qh,qk,ql,energy
+ in [rlu^3,meV]. The evaluation of the model should provide the density of states
+ in model.UserData.DOS as an iData object.
+
+ the function returns an array of iData objects:
+   DOS                                 [modes/energy unit/unit cell]
+   DOS_partials                    DOS partials (one per mode)
+   entropy                           S [eV/K/cell]
+   internal_energy                   U [eV/cell]
+   helmholtz_energy                  F [eV/cell]
+   heat_capacity at constant volume Cv [eV/K/cell]
+
+ input:
+   s: a 4D sqw phonons model [K,H,L,Energy] (iFunc)
+   T: temperature range. When not given, T=1:500 [K]
+   options: can be 'plot' to display the results.
+         The 'newplot' option does the same but opens a new figure instead of
+         re-using an existing one.
+
+ output:
+   t: structure with [DOS, DOS_partials, S U F Cv ]
+   fig: figure handle
+
+ Reference: https://wiki.fysik.dtu.dk/ase/ase/thermochemistry/thermochemistry.html#background
+            D.A. McQuarrie. Statistical Mechanics. University Science Books, 2000.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="dos.html" class="code" title="function [DOS, DOS_partials] = dos(s, n, nQ, method)">dos</a>	iFunc_Sqw4D: dos: compute the density of states (vDOS)</li><li><a href="thermochemistry.html" class="code" title="function [t, fig]=thermochemistry(s, T, options)">thermochemistry</a>	iFunc_Sqw4D/thermochemistry: compute thermodynamic quantities for 4D S(q,w) models.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="publish.html" class="code" title="function filename = publish(self, filename, section, message)">publish</a>	iFunc_Sqw4D: publish: generate a readable HTML document and export results to</li><li><a href="thermochemistry.html" class="code" title="function [t, fig]=thermochemistry(s, T, options)">thermochemistry</a>	iFunc_Sqw4D/thermochemistry: compute thermodynamic quantities for 4D S(q,w) models.</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

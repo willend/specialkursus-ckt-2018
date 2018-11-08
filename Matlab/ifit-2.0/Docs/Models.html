@@ -1,0 +1,4990 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>iFit: Models model functions</title>
+  </head>
+  <body>
+    <h1 style="text-align: center;"><a class="mozTocH1"
+        name="mozTocId294096"></a>iFit: Models (fit models)</h1>
+    <br>
+    <ul id="mozToc">
+      <!--mozToc h3 1 h4 2 h5 3 h4 4 h5 5 h6 6-->
+      <li><a href="#mozTocId147615">How to use models </a></li>
+      <li><a href="#mozTocId96090">List of default fit models</a></li>
+      <li><a href="#mozTocId285330">Specialized models</a>
+        <ul>
+          <li><a href="#mozTocId597620">Small Angle Scattering models
+              (neutrons, x-rays)</a></li>
+          <li><a href="#mozTocId344379"> Powder structure refinement
+              (Rietveld)</a></li>
+          <li><a href="#mozTocId677670">Phonon/spin-wave dispersion
+              (simple) </a></li>
+          <li><a href="#mozTocId908192">Spin-wave model (SpinW) </a></li>
+          <li><a href="#mozTocId826778">Spin-wave model (SPINWAVE)</a></li>
+          <li><a href="#mozTocId226848">Phonon dispersion in perovskites</a></li>
+          <li><a href="#mozTocId885605">Acoustic phonon dispersion in
+              mono-atomic cubic crystal</a></li>
+          <li><a href="#mozTocId774280">Phenomenological
+              linear/quadratic dispersion</a></li>
+          <li><a href="#mozTocId897311">Phenomenological acoustic/optic
+              dispersion (quadratic) </a></li>
+          <li><a href="#mozTocId990577">Phonon dispersion from ab-initio
+              force estimate and dynamical matrix </a></li>
+        </ul>
+      </li>
+      <li><a href="#mozTocId810939">Model builder: defining a new model
+          easy</a>
+        <ul>
+          <li><a href="#mozTocId775891">Creating complex functions from
+              simple functions</a></li>
+          <li><a href="#mozTocId937554">Using signal
+              convolution/correlation in new functions</a></li>
+        </ul>
+      </li>
+      <li><a href="#mozTocId854762">How to write manually a model
+          function</a></li>
+    </ul>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <div style="text-align: center;">Commands we use in this page: <span
+        style="font-style: italic;">fits, <a href="#mozTocId775891">ifitmakefunc,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </a>fits(iData)</span>, <a href="iFunc.html">iFunc</a><br>
+    </div>
+    <br>
+    <h3><a class="mozTocH3" name="mozTocId147615"></a>How to use models<br>
+    </h3>
+    Models are numerical functions, that take input axes and a parameter
+    set, and return a function evaluation. <br>
+    <br>
+    Such models are defined as <a href="iFunc.html">iFunc</a> objects,
+    and used in iFit when there is a need to e.g. compute and plot a
+    function evaluation corresponding with the axes of an iData object.
+    Similarly, this function evaluation can be used iteratively in an
+    optimization process in order to find a parameter set that matches
+    best the iData object Signal, using the <span style="font-weight:
+      bold;">fits</span> method (refer to the <a href="Fit.html">Fit</a>
+    page).<br>
+    <br>
+    Models can be used in the following ways (for instance 'model' may
+    be 'gauss'):<br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">model</span>		<span style="font-style: italic;">% display model information</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">disp(model</span>)		<span style="font-style: italic;">% idem, extensive information</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">plot(model</span><span style="color: rgb(204, 51, 204);"></span>)	<span style="font-style: italic;">	% plot the model with its default settings</span><span style="color: rgb(255, 0, 0); font-style: italic;"></span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">model</span>(p, x, y ...)	<span style="font-style: italic;">% evaluate the model with parameters p, and axes x,y,...<br>&gt;&gt; </span><span style="color: rgb(51, 102, 255);">model</span>([], x, y ...)	<span style="font-style: italic;">% evaluate the model with axes x,y,... and automatic parameter guess<br></span><span style="font-style: italic;">&gt;&gt; </span><span style="color: rgb(51, 102, 255);">model</span>(<span style="color: rgb(204, 51, 204);">'guess'</span>, x, y ...)	% idem<br>&gt;&gt; <span style="color: rgb(51, 102, 255);"></span>a(model, p)	<span style="font-style: italic;">	% evaluate the model onto the iData object 'a' axes with parameters p<br>&gt;&gt; </span><span style="color: rgb(51, 102, 255);">fits</span>(a, model, p)	<span style="font-style: italic;">% fit the model onto the iData object</span> 'a'<br>&gt;&gt; <span style="color: rgb(51, 102, 255);">fits</span>(model, a, p)	<span style="font-style: italic;">% same as above<br>&gt;&gt; <font color="#3366ff">save</font>(model, <font color="#cc33cc">'filename'</font>, <font color="#cc33cc">'mat'</font>) % save the Model as a Matlab file. orher formats are possible (YAML, m, JSON, XML...)</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">iFunc</span>(<span style="font-style: italic;"><font color="#cc33cc">'filename'</font></span>)	% import a Model stored as m, YAML, MAT, JSON file format.<br></pre>
+    To create a model, use the <a href="#mozTocId775891">ifitmakefunc</a>
+    dialogue window (see below), or instantiate an <a href="iFunc.html">iFunc</a>
+    object.<br>
+    <pre style="margin-left: 40px;">&gt;&gt; model = gauss;<br>&gt;&gt; model = gauss+lorz;<br>&gt;&gt; model = <span style="color: rgb(51, 102, 255);">iFunc</span>(<span style="color: rgb(204, 51, 204);">'p(1)*x+p(2)'</span>)<br>&gt;&gt; model = <span style="color: rgb(51, 102, 255);">iFunc</span>(<span style="color: rgb(204, 51, 204);">'a=p(1); b=p(2); signal=a*x+b'</span>) <br></pre>
+    You can edit their code to see how to define new models:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">edit</span> gauss <span style="font-style: italic;">% edit the function definition (from a file)</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">edit</span> voigt<br>&gt;&gt; <span style="color: rgb(51, 102, 255);">edit</span>(voig) <span style="font-style: italic;">% edit the object definition</span><br></pre>
+    <div align="left">It is also possible to create a model out of an <a
+        href="iData.html">iData</a> (data set) object. Then, the model
+      parameters are the total intensity scaling, as well as an offset
+      and a scaling factor per axis. In order to create a model from a
+      data file, use:<br>
+      <pre>	&gt;&gt; <font color="#3366ff">iFunc</font>(<font color="#3366ff">iData</font>(<font color="#cc33cc">'filename'</font>))</pre>
+      will create a data set object and derive a model out of it.<br>
+    </div>
+    <pre style="margin-left: 40px;"><span style="font-style: italic;"></span></pre>
+    <h3><a class="mozTocH3" name="mozTocId96090"></a><span
+        style="font-weight: bold;">List of default fit models</span></h3>
+    The 1D functions are <span style="font-style: italic;">signal=f(parameters,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      x)</span>, and the 2D functions are <span style="font-style:
+      italic;">signal=f(parameters, x, y)</span>.<br>
+    <span style="font-style: italic; font-weight: bold;"><br>
+    </span>
+    <table style="text-align: left; width: 1016px; height: 1301px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Function<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">allometric<br>
+          </td>
+          <td style="vertical-align: top;">Allometric (power/asymptotic
+            law)<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Offset Exponent
+            BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">bigauss</span><br>
+          </td>
+          <td style="vertical-align: top;">Asymmetric Gaussian<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D</td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth1
+            HalfWidth2 Background</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">bilorz</span><br>
+          </td>
+          <td style="vertical-align: top;">Asymmetric Lorentzian<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D</td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth1
+            HalfWidth2 Background</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; color: rgb(0, 0, 0);
+            font-weight: bold;">bose</td>
+          <td style="vertical-align: top;">Bose factor<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D</td>
+          <td style="vertical-align: top;">Tau <span style="font-style:
+              italic;">[h/2pi/kT] in "x" units</span><br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">dho<br>
+          </td>
+          <td style="vertical-align: top;">Damped harmonic oscillator<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D</td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth
+            Background Temperature <span style="font-style: italic;">(in
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              "x" unit)</span><br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">dirac<br>
+          </td>
+          <td style="vertical-align: top;">Dirac peak<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Centre<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">doseresp<br>
+          </td>
+          <td style="vertical-align: top;">Dose-response curve with
+            variable Hill slope. This is a sigmoid or S-shaped.<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Center Slope
+            BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">expon</span><br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Exponential_decay">Exponential</a>
+            decay <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Plot-exponential-decay.svg.png"><img
+                alt="Expon decay" title="Expon decay"
+                src="images/Models_Plot-exponential-decay.svg.png"
+                height="75" align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Tau Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">expstretched</span><br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Stretched_exponential_function">Exponential
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              - Stretched</a><br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Pibmasterplot.png"><img alt="Expon
+                stretched" title="Expon stretched"
+                src="images/Models_Pibmasterplot.png" height="75"
+                align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Tau Exponent
+            Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; color: rgb(0, 0, 0);
+            font-weight: bold;">gauss</td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Gaussian_function">Gaussian</a><font
+              size="-2"> where the HalfWidth is in fact &#963;. The 'true'
+              half width is thus 1.177*HalfWidth.</font><br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Normal_Distribution_PDF.svg.png"><img
+                alt="Normal_Distribution" title="Normal_Distribution"
+                src="images/Models_Normal_Distribution_PDF.svg.png"
+                height="75" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth
+            Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">green<br>
+          </td>
+          <td style="vertical-align: top;">Green function<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth
+            Background</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">heaviside</span><br>
+          </td>
+          <td style="vertical-align: top;">Heaviside (gap)<br>
+            <span style="font-style: italic;">The GapSide indicates
+              raising (+) or falling (-) gap.</span><br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Centre GapSide
+            Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">langevin<br>
+          </td>
+          <td style="vertical-align: top;">Langevin function for
+            magnetic polarization<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Center Width
+            BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">laplace<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Laplace_distribution">Laplace
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              distribution function</a> <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Laplace_pdf_mod.svg.png"><img
+                alt="Laplace" title="Laplace"
+                src="images/Models_Laplace_pdf_mod.svg.png" height="75"
+                align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Center Width
+            BackGround</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">lognormal<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Log-normal_distribution">Log-Normal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              distribution</a> <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_PDF-log_normal_distributions.svg.png"><img
+                alt="Log normal" title="Log normal"
+                src="images/Models_PDF-log_normal_distributions.svg.png"
+                height="100" align="middle" width="100" border="0"></a>
+          </td>
+          <td style="vertical-align: top;">Amplitude Center Width
+            BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">lorz<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Lorentzian_function">Lorentzian</a>
+            (aka Cauchy) <font size="-2">used with Amplitude
+              uncorrelated to Width.</font><br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Cauchy_pdf.svg.png"><img alt="lorz"
+                title="lorz" src="images/Models_Cauchy_pdf.svg.png"
+                height="80" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth
+            Background</td>
+        </tr>
+        <tr>
+          <td valign="top"><b>ngauss</b><b><br>
+            </b></td>
+          <td valign="top">multiple Gaussian <font size="-2">where the
+              HalfWidth is in fact &#963;. </font><font size="-2">The 'true'
+              half width is thus 1.177*HalfWidth.</font> </td>
+          <td valign="top">n*1D<br>
+          </td>
+          <td valign="top"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><b>nlorz</b><b><br>
+            </b></td>
+          <td valign="top">multiple Lorentzian <font size="-2">used
+              with Amplitude uncorrelated to Width.</font> </td>
+          <td valign="top">n*1D<br>
+          </td>
+          <td valign="top"><br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">pareto<br>
+          </td>
+          <td style="vertical-align: top;">Pareto distribution function<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Exponent Width
+            BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">poisson<br>
+          </td>
+          <td style="vertical-align: top;">Poisson distribution<br>
+            <span style="color: rgb(255, 0, 0);">WARNING:<span
+                style="font-style: italic;"> </span></span><span
+              style="font-style: italic;">The 'x' axis is assumed to be
+              an integer array (counts)</span><br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Center BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">pseudovoigt</span><br>
+          </td>
+          <td style="vertical-align: top;">Pseudo Voigt<br>
+          </td>
+          <td style="vertical-align: top;"><span style="color: rgb(51,
+              204, 0);">1D</span><br>
+          </td>
+          <td style="vertical-align: top;">Amplitude Center Width
+            BackGround LorentzianRatio<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">quadline</span><br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Parabola">Quadratic</a>
+            line (parabola) <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Parts_of_Parabola.svg.png"><img
+                alt="quad" title="quad"
+                src="images/Models_Parts_of_Parabola.svg.png"
+                height="82" align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Quadratic Linear Constant<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">sigmoid</span><br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Sigmoid_function">Sigmoidal</a>
+            S-shaped curve (similar to Dose Response) <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Logistic-curve.svg.png"><img
+                alt="sigmo" title="sigmo"
+                src="images/Models_Logistic-curve.svg.png" height="67"
+                align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">Amplitude Center Width
+            BackGround</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">sine<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Sine_function">Sine
+              function</a> <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Sine_one_period.svg.png"><img
+                alt="sine" title="sine"
+                src="images/Models_Sine_one_period.svg.png" height="40"
+                align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Phase_Shift Period
+            BackGround<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">sinedamp<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Damped_sine_wave">Damped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              Sine function</a> (exponential decay) <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_DampedSine.png"><img alt="sine_exp"
+                title="sine_exp" src="images/Models_DampedSine.png"
+                height="76" align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Phase_Shift Period
+            BackGround Decay<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">strline<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Straight_line">Straight
+              line</a> <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_FuncionLineal01.svg.png"><img
+                alt="line" title="line"
+                src="images/Models_FuncionLineal01.svg.png" height="75"
+                align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Gradient Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">triangl<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Triangular_function">Triangular</a>
+            <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Triangular_function.svg.png"><img
+                alt="triangle" title="triangle"
+                src="images/Models_Triangular_function.svg.png"
+                height="70" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth
+            Background</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">tophat</span><br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Rectangular_function">Top-Hat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              rectangular function</a> <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Rectangular_function.svg.png"><img
+                alt="top hat" title="top hat"
+                src="images/Models_Rectangular_function.svg.png"
+                height="69" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">Amplitude Centre HalfWidth
+            Background</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><span style="font-weight:
+              bold;">twoexp</span><br>
+          </td>
+          <td style="vertical-align: top;">Two exponential decay
+            functions<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D</td>
+          <td style="vertical-align: top;">Amplitude1 Tau1 Amplitude2
+            Tau2 Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">voigt<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Voigt_profile">Voigt
+              function</a> <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<a
+              href="images/Models_Voigt_distributionPDF.png"><img
+                alt="voigt" title="voigt"
+                src="images/Models_Voigt_distributionPDF.png"
+                height="75" align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Centre
+            HalfWidth_Gauss HalfWidth_Lorz Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">gauss2d<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Gaussian_function">Gaussian</a>
+            function with tilt angle <font size="-2"> where the
+              HalfWidth is in fact &#963;. The 'true' half width is thus
+              1.177*HalfWidth.</font> </td>
+          <td style="vertical-align: top;"><span style="color: rgb(51,
+              102, 255);">2D</span><a
+              href="images/Models_Gaussian_2d_3.svg.png"><img
+                alt="gauss2d" title="gauss2d"
+                src="images/Models_Gaussian_2d_3.svg.png" height="75"
+                align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">Amplitude Centre_X Center_Y
+            HalfWidth_X HalfWidth_Y Angle Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">lorz2d<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Lorentzian_function">Lorentzian</a>
+            function with tilt angle <font size="-2">used with
+              Amplitude uncorrelated to Width.</font></td>
+          <td style="vertical-align: top;"><span style="color: rgb(51,
+              102, 255);">2D</span></td>
+          <td style="vertical-align: top;">Amplitude Centre_X Center_Y
+            HalfWidth_X HalfWidth_Y Angle Background</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">plane2d<br>
+          </td>
+          <td style="vertical-align: top;">Planar function<br>
+          </td>
+          <td style="vertical-align: top;"><span style="color: rgb(51,
+              102, 255);">2D</span></td>
+          <td style="vertical-align: top;">Slope_X Slope_Y Background<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">pseudovoigt2d<br>
+          </td>
+          <td style="vertical-align: top;">Pseudo Voigt with tilt
+            angle&nbsp;</td>
+          <td style="vertical-align: top;"><span style="color: rgb(51,
+              102, 255);">2D</span><a
+              href="images/Models_Voigt_distributionPDF.png"><img
+                alt="voigt" title="voigt"
+                src="images/Models_Voigt_distributionPDF.png"
+                height="75" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">Amplitude Centre_X Center_Y
+            HalfWidth_X HalfWidth_Y Angle Background LorentzianRatio<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">quad2d<br>
+          </td>
+          <td style="vertical-align: top;">Quadratic (parabola) with
+            tilt angle</td>
+          <td style="vertical-align: top;"><span style="color: rgb(51,
+              102, 255);">2D</span></td>
+          <td style="vertical-align: top;">Amplitude Centre_X Center_Y
+            Curvature_X Curvature_Y Angle Background</td>
+        </tr>
+        <tr>
+          <td valign="top"><b>gaussnd</b><br>
+          </td>
+          <td valign="top"><a
+href="http://en.wikipedia.org/wiki/Gaussian_function#Multi-dimensional_Gaussian_function">n-dimensional
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              Gaussian</a><br>
+          </td>
+          <td valign="top"><font color="#cc33cc">nD</font><br>
+          </td>
+          <td valign="top"><br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;"><a
+              href="#mozTocId597620">sf_hard_spheres</a><br>
+          </td>
+          <td style="vertical-align: top;">Hard Sphere structure factor
+            [Percus-Yevick] <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D <a
+              href="images/Models_Hard_Spheres.jpg"><img alt="py"
+                title="py" src="images/Models_Hard_Spheres.jpg"
+                height="81" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">R rho<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;"><a
+              href="#mozTocId344379">rietveld</a><br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Rietveld_refinement">Rietveld</a>
+            refinement of powder sample <br>
+            with full <a href="http://www.mcstas.org">McStas</a>
+            instrument model <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D,
+            2D, 3D<a href="images/Models_xrayplot-usgs2.gif"><img
+                alt="rietveld" title="rietveld"
+                src="images/Models_xrayplot-usgs2.gif" height="59"
+                align="middle" width="100" border="0"></a><br>
+          </td>
+          <td style="vertical-align: top;">sample structure, <br>
+            instrument parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;"><a
+              href="#mozTocId677670"><b>sqw_sine3d</b></a> </td>
+          <td style="vertical-align: top;">Phonon dispersions as sine
+            wave in HKL with a damped harmonic oscillator energy
+            dispersion&nbsp; </td>
+          <td style="vertical-align: top;"><font color="#33cc00">4D (HKL<i>w</i>)</font><br>
+            <img alt="sqw_sine3d" title="sqw_sine3d"
+              src="images/Models_sqw_sine3d.png" height="73"
+              align="middle" width="100" border="0"> </td>
+          <td valign="top">zone center, energy gaps, periodicity, DHO
+            width, temperature, background<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="#mozTocId908192"><b>sqw_spinw</b></a><br>
+          </td>
+          <td valign="top">Spin-wave dispersion in HKL using <a
+              href="https://www.psi.ch/spinw/">SpinW</a>.</td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_sine3d.png"><img alt="sw"
+                title="sw" src="images/Models_sqw_spinw.png" height="73"
+                align="middle" width="100" border="0"></a> </td>
+          <td valign="top">energy broadening, Temperature, Amplitude,
+            coupling parameters J...<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="#mozTocId226848"><b>sqw_vaks</b></a></td>
+          <td valign="top">Phonon dispersions in perovskite cubic
+            crystals using the Vaks parameterisation&nbsp; </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_vaks.png"><img alt="sqw_vaks"
+                title="sqw_vaks" src="images/Models_sqw_vaks.png"
+                height="75" align="middle" width="100" border="0"></a></td>
+          <td valign="top">acoustic and optical energies, coupling
+            parameters, soft mode frequency, DHO width, temperature,
+            background </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="#mozTocId885605"><b>sqw_</b><b>cubic_monoatomic</b></a></td>
+          <td valign="top">Phonon dispersions in a monoatomic cubic
+            crystal using the Dynamical matrix. </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_cubic_mono.png"><img
+                alt="sqw_cubic_mono" title="sqw_cubic_mono"
+                src="images/Models_sqw_cubic_mono.png" height="76"
+                align="middle" width="100" border="0"></a></td>
+          <td valign="top">acoustic force constant ratio and energy
+            scaling, DHO width, temperature, background </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="#mozTocId990577"><b>sqw_phonons</b></a></td>
+          <td valign="top">Phonon dispersions from the Dynamical matrix,
+            using forces estimated by <i>ab-initio </i>DFT using <a
+              href="https://wiki.fysik.dtu.dk/ase">ASE</a> </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_ph_ase.png"><img
+                src="images/Models_sqw_ph_ase.png" title="sqw_ph_ase Al
+                fcc" alt="sqw_ph_ase Al fcc" height="74" align="left"
+                width="100" border="0"></a></td>
+          <td valign="top">Creation: <a
+              href="http://cms.mpi.univie.ac.at/vasp/guide/node59.html">POSCAR</a>,
+            <a
+              href="http://en.wikipedia.org/wiki/Crystallographic_Information_File">CIF</a>,
+            or <a href="http://www.rcsb.org/pdb/">PDB</a>, ...<br>
+            Then, only the DHO line shape. <i>ab-initio</i> implies no
+            (few) tunable parameter. </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="#mozTocId774280"><b>sqw_linquad</b></a><br>
+          </td>
+          <td valign="top">A phenomenological dispersion which can
+            describe e.g. an acoustic/linear mode, with quadratic
+            expansion in other directions. This model can be considered
+            as a local expansion in series of any dispersion.<br>
+          </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <div align="left"><a href="images/Models_sqw_linquad.png"><img
+                  alt="sqw_linquad" title="sqw_linquad"
+                  src="images/Models_sqw_linquad.png" height="75"
+                  align="left" width="100" border="0"></a></div>
+          </td>
+          <td valign="top">Energy and location of 'gap', slopes,
+            directions of slopes, DHO width, temperature, background</td>
+        </tr>
+        <tr>
+          <td valign="top"><b><a href="#mozTocId897311">sqw_acoustopt</a></b><br>
+          </td>
+          <td valign="top">A phenomenological dispersion which can
+            describe e.g. a pure acoustic or optical mode, with
+            quadratic expansion around a minimum. </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><img
+              alt="sqw_acoustopt" title="sqw_acoustopt"
+              src="images/Models_sqw_acoustopt.png" height="75"
+              width="100"><br>
+          </td>
+          <td valign="top">Energy and location of 'gap', slopes,
+            directions of slopes, DHO width, temperature, background</td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="#mozTocId826778"><b>sqw_spinwave</b></a><br>
+          </td>
+          <td valign="top">Spin-wave dispersion in HKL using <a
+              href="http://www-llb.cea.fr/logicielsllb/SpinWave/SW.html">SPINWAVE</a>
+            (LLB).<br>
+          </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font></td>
+          <td valign="top">Amplitude, and user defined parameters
+            (coupling...)<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <div style="text-align: center;"><a href="images/iFit_Models.png"><img
+          title="iFit: default functions (in Models)"
+          src="images/iFit_Models.png" alt="iFit: default functions (in
+          Models)" style="border: 0px solid ; width: 560px; height:
+          420px;" align="middle"></a><br>
+    </div>
+    <span style="font-weight: normal;">To get one of these models, just
+      type their function name:<br>
+    </span>
+    <pre style="margin-left: 40px;"><span style="font-weight: normal;">&gt;&gt; gauss<br>&gt;&gt; a = gauss;<br></span></pre>
+    <pre><span style="font-weight: normal;"></span></pre>
+    <span style="font-weight: normal;">The </span>list of <span
+      style="font-weight: bold;">all available fit functions</span><span
+      style="font-weight: normal;"> can be obtained from the command<span
+        style="font-weight: bold;">:</span></span><br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(51, 102, 255);">fits</span>(<span style="font-style: italic;">iData);<br></span></pre>
+    which also produces the plot above.<br>
+    <h3><a class="mozTocH3" name="mozTocId285330"></a>Specialized models</h3>
+    <h4><a class="mozTocH4" name="mozTocId597620"></a>Small Angle
+      Scattering models (neutrons, x-rays)</h4>
+    <p>We list below a number of models used to describe neutron and
+      x-ray scattering from matter. The structure factor S(q) accounts
+      for the structure of matter at the atomistic/molecular level,
+      whereas the form factor P(q) accounts for the geometrical
+      arrangement of large scale scattering units (micelles, tubes,
+      ...). In practice, the scattering from a material can be described
+      by:<br>
+    </p>
+    <p style="text-align: center;"><span style="font-style: italic;">I(q)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        = P(q).S(q)</span><br>
+    </p>
+    <p style="text-align: left;">where <span style="font-style:
+        italic;">q</span> is the momentum exchange in the material.
+      These models have been extracted from:<br>
+    </p>
+    <ul>
+      <li><a href="http://kur.web.psi.ch/sans1/SANSSoft/sasfit.html">SASfit</a>,
+        by <a href="http://kur.web.psi.ch/sans1/SANSSoft/KJ33.html">Joachim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Kohlbrecher</a> and <a
+          href="mailto:ingo%28at%29cs.tu-berlin.de">Ingo Bressler</a>
+        PSI (2006-2011)</li>
+      <li>
+        <meta http-equiv="content-type" content="text/html;
+          charset=windows-1252">
+        <meta http-equiv="content-type" content="text/html;
+          charset=windows-1252">
+        Ingo Bressler, Joachim Kohlbrecher and Andreas F. Thunemann,<i>
+        </i><i>Journal of Applied Crystallography</i>, 2015, <b>48</b>
+        (5), 1587-1598</li>
+    </ul>
+    <table style="text-align: left; width: 1016px; height: 13px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Structure factors<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">sf_hard_spheres<br>
+          </td>
+          <td style="vertical-align: top;">Hard Sphere structure factor
+            [Percus-Yevick] <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D <a
+              href="images/Models_Hard_Spheres.jpg"><img alt="py"
+                title="py" src="images/Models_Hard_Spheres.jpg"
+                height="81" align="middle" width="100" border="0"></a></td>
+          <td style="vertical-align: top;">R rho<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">sf_square_well
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <br>
+          </td>
+          <td style="vertical-align: top;">structure factor of particles
+            interacting with a square well potential [Sharma]<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">R rho epsilon Delta T<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">sf_sticky_hard_spheres<br>
+          </td>
+          <td style="vertical-align: top;">Sticky Hard Sphere structure
+            factor [Baxter/Menon]<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">R rho tau<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Form factors: small angle<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">ff_core_shell<br>
+          </td>
+          <td style="vertical-align: top;">Spherical/core shell form
+            factor [Guinier]<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">R1 R2 eta1 eta2<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">ff_sphere&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <br>
+          </td>
+          <td style="vertical-align: top;">Sphere form factor [Guinier]<br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D<br>
+          </td>
+          <td style="vertical-align: top;">R eta<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pre style="margin-left: 40px;"><span style="font-style: italic;"></span><span style="font-style: italic;"></span></pre>
+    <h4><a class="mozTocH4" name="mozTocId344379"></a> Powder structure
+      refinement (Rietveld)</h4>
+    <p>The <b>rietveld</b> model performs a structure refinement (atom
+      type and position, structure group) of a powder by comparing a
+      measured diffractogram with a simulated diffractogram using <a
+        href="http://www.mcstas.org">McStas</a> and <a
+        href="https://forge.epn-campus.eu/projects/crysfml">CrysFML</a>.
+      This model requires external software to be installed on your
+      computer. See <i>Requirements</i> below.<br>
+    </p>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Powder diffraction<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;">rietveld<br>
+          </td>
+          <td style="vertical-align: top;"><a
+              href="http://en.wikipedia.org/wiki/Rietveld_refinement">Rietveld</a>
+            refinement of powder sample <br>
+            with full <a href="http://www.mcstas.org">McStas</a>
+            instrument model <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">1D,
+            2D, 3D<br>
+            <a href="images/Models_xrayplot-usgs2.gif"><img
+                alt="rietveld" title="rietveld"
+                src="images/Models_xrayplot-usgs2.gif" height="59"
+                align="middle" width="100" border="0"></a> </td>
+          <td style="vertical-align: top;">sample structure, <br>
+            instrument parameters<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pre style="margin-left: 40px;"><span style="font-style: italic;"></span><span style="font-style: italic;"></span></pre>
+    The '<b>rietveld</b>' model allows to prepare a sample+instrument
+    model in order to fit a diffraction/structure data set.<br>
+    It is obtained by making use of the CrysFML library:<br>
+    <ul>
+      <li><a href="https://forge.epn-campus.eu/projects/crysfml">CrysFML</a>
+        by <a href="mailto:jrc@ill.eu">Juan Rodriguez-Carvajal</a> and
+        <a href="mailto:jplatas@ull.es">Javier Gonzalez-Platas</a>, ILL
+        and <span class="st">ULL, Tenerife, <em>Spain </em>(LGPL 3.0<em>)</em></span></li>
+      <li><span class="st">Commission on Crystallographic Computing,
+          IUCr Newsletter No.1, pp 50-58,&nbsp; January 2003 [<a
+href="http://www.iucr.org/resources/commissions/crystallographic-computing/newsletters/1/crysfml">link</a>]<br>
+        </span></li>
+    </ul>
+    The procedure is to import a crystal structure (<a
+      href="http://en.wikipedia.org/wiki/Crystallographic_Information_File">CIF</a>,
+    <a href="http://shelx.uni-ac.gwdg.de/SHELX/">ShelX</a>, <a
+      href="https://www.ill.eu/sites/fullprof/">FullProf/CFL</a> format)
+    then compute the HKL <i>d-F</i><sup>2</sup> list of reflections
+    (for crystal or powder), and insert this powder model into a
+    diffractometer simulated using <a href="http://www.mcstas.org">McStas</a>.
+    The detector image, which is the convolution of the sample structure
+    with the instrument resolution, is then compared with a given
+    diffractogram, and optimised to refine the crystal parameters.<br>
+    <br>
+    The syntax to build the model, and then perform the refinement is:<br>
+    <div style="margin-left: 40px;">
+      <pre>&gt;&gt; model=<span style="color: rgb(51, 102, 255);">rietveld</span>(structure, ...., instrument, ....)<br>&gt;&gt; p = <span style="color: rgb(51, 102, 255);">fits</span>(model, measurement);<br></pre>
+    </div>
+    where the 'structure' describes the initial sample structure (space
+    group, cell parameters abc &#945;&#946;&#947;, atom positions, ...); it can be
+    given as a <a
+      href="http://en.wikipedia.org/wiki/Crystallographic_Information_File">CIF</a>,
+    <a href="https://www.ill.eu/sites/fullprof/">FullProf/CFL</a> or <a
+      href="http://shelx.uni-ac.gwdg.de/SHELX/">ShelX</a> file, as well
+    as from a <span style="font-style: italic;">struct</span> type
+    variable with fields<span style="font-style: italic;"> 'Spgr' </span>and
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span style="font-style: italic;">'cell'</span>, followed with atoms
+    (giving xyz Biso occupancy spin charge, where only xyz are
+    mandatory, others are optional):<br>
+    <div style="margin-left: 40px;">
+      <pre>Sample.cell&nbsp; = [10.242696&nbsp; 10.242696&nbsp; 10.242696&nbsp; 90.000&nbsp; 90.000&nbsp; 90.000];
+Sample.Spgr&nbsp; = 'I 21 3';
+Sample.Ca1&nbsp;&nbsp; = [0.46737&nbsp; 0.00000&nbsp; 0.25000&nbsp; 0.60046&nbsp; 0.50000&nbsp;&nbsp; 0.0&nbsp;&nbsp; 2.0];<br>...<br></pre>
+    </div>
+    the instrument is the name of the McStas instrument description (<span
+      style="font-style: italic;">templateDIFF.instr</span> is the
+    default). The McStas simulation can be controlled using the default
+    McStas options, as described in the <a href="McStas.html">dedicated
+      help page</a> : <span style="font-weight: bold;">dir, ncount,
+      mpi, seed, gravitation, compile, monitors</span>. The monitors
+    options is particularly recommended to specify which monitor file to
+    use from the virtual experiment. The resulting model data set should
+    be of the same type as the diffractometer measured data set (e.g.
+    TOF-angle, height-angle, ...), but not necessarily with same binning
+    and axes range.<br>
+    <br>
+    Any other '<span style="font-style: italic;">name=value</span>'
+    argument is assumed to be an instrument parameter. Any scalar
+    parameter is made into a model parameter, whereas string/char
+    parameters are set as fixed instrument parameters. By default, the
+    sample structure (powder/single crystal) is made available to the
+    McStas instrument by mean of a <span style="font-style: italic;">'reflections.laz'</span>
+    file which should be used by a <span style="font-style: italic;">PowderN</span>
+    or <span style="font-style: italic;">Isotropic_Sqw</span>
+    component. This name can be changed by specifying the
+    'CFML_write=filename' option.<br>
+    <br>
+    An example of Rietveld model is obtained from a CFL file, and the
+    templateDIFF instrument including <span style="font-style: italic;">PowderN(reflections=Powder,...)</span>.
+    We thus specify the fixed instrument parameter <span
+      style="font-style: italic;">Powder='reflections.laz'</span>. The
+    wavelength is kept fixed at 2.36, and we use monitor names matching
+    <span style="font-style: italic;">BananaTheta</span>.<br>
+    <pre style="margin-left: 40px;">&gt;&gt; model = <span style="color: rgb(51, 102, 255);">rietveld</span>([ <span style="color: rgb(51, 102, 255);">ifitpath</span> <span style="color: rgb(204, 51, 204);">'Data/Na2Ca3Al2F14.cfl'</span> ], <span style="color: rgb(204, 51, 204);">'templateDIFF.instr'</span>, <span style="color: rgb(204, 51, 204);">'Powder=reflections.laz; lambda="2.36"; monitors=BananaTheta'</span>);</pre>
+    Once built, it is possible to set constraints on the model with the
+    syntax such as (see <a href="iFunc.html#mozTocId579374">iFunc</a>
+    page) :<br>
+    <pre style="margin-left: 40px;">&gt;&gt; model.parameter=<span style="color: rgb(204, 51, 204);">'fix'</span>     <span style="font-style: italic;">% to lock its value during a fit process</span><br>&gt;&gt; model.parameter='<span style="color: rgb(204, 51, 204);">clear'</span>   <span style="font-style: italic;">% to unlock value during a fit process</span>
+&gt;&gt; model.parameter=[min max] <span style="font-style: italic;">% to bound value</span><br>&gt;&gt; model.parameter=[nan nan] <span style="font-style: italic;">% to remove bound constraint</span><br>&gt;&gt; model.parameter=<span style="color: rgb(204, 51, 204);">''</span>        <span style="font-style: italic;">% to remove all constraints on 'parameter'</span><br>&gt;&gt; model.Constraint=<span style="color: rgb(204, 51, 204);">''</span>       <span style="font-style: italic;">% to remove all constraints</span></pre>
+    Then we import a data set<br>
+    <pre style="margin-left: 40px;">&gt;&gt; measurement = iData([ <span style="color: rgb(51, 102, 255);">ifitpath</span> <span style="color: rgb(204, 51, 204);">'Data/nac_1645179.dat'</span> ]);</pre>
+    The refinement is then obtained by starting :<br>
+    <pre style="margin-left: 40px;">&gt;&gt; parameters = <span style="color: rgb(51, 102, 255);">fits</span>(model, measurement)</pre>
+    with optional arguments as described in the <a href="Fit.html">Fit</a>
+    page (the 'constraints' argument of <span style="font-style:
+      italic;">fits</span> is partly redundant with the model
+    constraints seen above).<br>
+    Remember to bound most or all of the model parameters for a faster
+    and more reliable convergence of the optimization.<br>
+    <br>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    You may look at the following resources to get material structure
+    files:<br style="color: rgb(0, 0, 0); font-family: 'Times New
+      Roman'; font-size: medium; font-style: normal; font-variant:
+      normal; font-weight: normal; letter-spacing: normal; line-height:
+      normal; orphans: auto; text-align: start; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 1;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+    <ul style="color: rgb(0, 0, 0); font-family: 'Times New Roman';
+      font-size: medium; font-style: normal; font-variant: normal;
+      font-weight: normal; letter-spacing: normal; line-height: normal;
+      orphans: auto; text-align: start; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 1;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+      <li>MaterialsProject&lt;<a
+          href="https://www.materialsproject.org/">https://www.materialsproject.org/</a>&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        using VASP. Can export structures as CIF.<br>
+      </li>
+      <li>Inorganic Crystal Structure Database &lt;<a
+          href="http://icsd.ill.fr">http://icsd.ill.fr</a>&gt; with
+        plenty of CIFs.</li>
+    </ul>
+    <br>
+    <i><b>References:</b></i><br>
+    <ol>
+      <li> <span class="st">CrysFML, Commission on Crystallographic
+          Computing, IUCr Newsletter No.1, pp 50-58,&nbsp; January 2003
+          [<a
+href="http://www.iucr.org/resources/commissions/crystallographic-computing/newsletters/1/crysfml">link</a>]</span>.</li>
+      <li> McStas: K. Lefmann and K. Nielsen, Neutron News 10, 20,
+        (1999) ; P. Willendrup, E. Farhi and K. Lefmann, Physica B, 350
+        (2004) 735.</li>
+    </ol>
+    <br>
+    <i><b>Requirements/installation:</b></i><br>
+    <a href="http://www.mcstas.org">McStas</a> must be installed.
+    Packages exist for all major systems (Linux as RedHat and Debian
+    flavours, Windows, Mac OSX). For Debian-class systems:<br>
+    <blockquote>
+      <pre>cd /etc/apt/sources.list.d
+sudo wget http://packages.mccode.org/debian/mccode.list
+sudo apt-get update<br>sudo apt-get install <b><font color="blue">mcstas-suite</font></b><br></pre>
+    </blockquote>
+    The CrysFML does not need to be installed, as the used bits are
+    assembled in the <a
+      href="http://ifit.mccode.org/Downloads/cif2hkl.F90">cif2hkl
+      fortran</a> programme, which generates HKL d-F2 reflection lists
+    suitable for the PowderN and Isotropic_Sqw McStas components. The
+    cif2hkl programme is part of the iFit distribution, and is compiled
+    by calling the local fortran compiler (gfortran) on demand.<br>
+    <h4><a class="mozTocH4" name="mozTocId677670"></a>Phonon/spin-wave
+      dispersion (simple)<br>
+    </h4>
+    <p>The <b>sqw_sine3d</b> model provides a simple way to model <a
+        href="https://en.wikipedia.org/wiki/Phonon">phonon-type</a>
+      dispersions, including simple <a
+        href="https://en.wikipedia.org/wiki/Spin_wave">spin-waves</a>,
+      acoustic and optical modes, incommensurate dispersions.<br>
+    </p>
+    <p><i><u>Limitation</u></i><i>:</i> this model only handles simple
+      sine dispersions, and can not treat mode exchange (interferences).
+      For more advanced spin-wave models, use the <a
+        href="#mozTocId908192">sqw_spinwave</a> Model (below).</p>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;"><b>sqw_sine3d</b>
+          </td>
+          <td style="vertical-align: top;">Phonon dispersions as sine
+            wave in HKL (3D) with a damped harmonic oscillator energy
+            dispersion&nbsp; </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">4D
+            (HKL<i>w</i>)<br>
+            <a href="images/Models_sqw_sine3d.png"><img alt="sqw_sine3d"
+                title="sqw_sine3d" src="images/Models_sqw_sine3d.png"
+                height="73" align="middle" width="100" border="0"></a><br>
+          </td>
+          <td style="vertical-align: top;">zone center, energy gaps,
+            periodicity. Axes are in rlu.<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pre style="margin-left: 40px;"><span style="font-style: italic;"></span><span style="font-style: italic;"></span></pre>
+    <p>Each dispersion is a sine wave which goes continuously from
+      energy E0 to E1, along 3 principal lattice directions (HKL). The
+      dispersion has an energy width (DHO). Schematically, the
+      dispersion relation is:<br>
+    </p>
+    <p>&nbsp;&nbsp;&nbsp; <i>w(Q) = E0 + (E1-E0)*sin(Q_freq*pi*(Q-Q0));</i>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; along principal axes<br>
+    </p>
+    <p>where the wave-vector/momentum Q is expressed in reciprocal
+      lattice units [r.l.u]. The parameters of this model allow extended
+      flexibility in the description of the mode. Along the 3D HKL
+      volume, a dispersion is described with 10 parameters.<br>
+      The <i>Q_freq</i> parameter indicates how many dispersion sine
+      'arches' there are per reciprocal lattice unit [rlu]. A <i>Q_freq</i>
+      of 1/2 means the dispersion extends from e.g. Q=0 to Q=2 rlu. A <i>Q_freq</i>
+      of 1 means it extends from Q=0 to Q=1 rlu, and a <i>Q_freq</i> of
+      2 means there are two arches between Q=0 and Q=1 rlu (all these
+      with Q0=0). A Q_freq of 0 sets a flat dispersion.<br>
+    </p>
+    <p>To create the model without defined parameter values, you may
+      use:<br>
+    </p>
+    <blockquote>
+      <p>sw = <font color="#3366ff">sqw_sine3d</font>;<br>
+      </p>
+    </blockquote>
+    or alternatively, to define starting parameters:<br>
+    <blockquote>sw = <font color="#3366ff">sqw_sine3d</font>(<i>p</i>);<br>
+    </blockquote>
+    where <i>p</i>=[...] is a vector containing the parameter values.
+    It may be given as 1,2,3 and 14 value vector, as detailed below.<br>
+    <p>A <b>spin-wave </b>could for instance mostly use Q0=0,
+      Q_freq=1,&nbsp; E0=0, E1&gt;0 (2 arches from Q=0 to 1 rlu). In a
+      simple anti-ferromagnet, the gap width is <i>E1-E0=4J.S</i> with
+      J=exchange energy and S=magnetic moment of spins.<br>
+    </p>
+    <pre>  &gt;&gt; sw = <font color="#3366ff">sqw_sine3d</font>([ E0 E1 Q_freq ])	<i>% creates a dispersion from E0 to E1 with given Q frequency, e.g. .5, 1 or 2</i></pre>
+    <p>A <b>phonon acoustic branc</b>h could use Q0=0, Q_freq=.5, E0=0
+      (1 arch from Q=0 to 1 rlu).<br>
+    </p>
+    <pre>  &gt;&gt; acoustic = <font color="#3366ff">sqw_sine3d</font>(Emax)	<i>% creates an acoustic dispersion up to Emax </i><br></pre>
+    <p>An <b>phonon optical branch</b> could use Q0=0, Q_freq=.2,
+      E0&gt;E1 E1&gt;0 (1 arch from Q=0 to 1 rlu with Q=0 energy - Raman
+      frequency). </p>
+    <pre>  &gt;&gt; optical = <font color="#3366ff">sqw_sine3d</font>([ E0 E1 ])	<i>% creates an optical dispersion from E0 to E1</i></pre>
+    <p>The model parameters allow to tune the dispersion:<br>
+    </p>
+    <ul>
+      <li>To shift the minimum/maximum Q of the dispersion, move <i>QH0,QK0,QL0</i>
+        parameters.</li>
+      <li> To change the extent of the dispersion in Q, vary <i>QH_freq,QK_freq,QL_freq</i>
+        parameters.</li>
+      <li> To change to minimum and maximum energy, move <i>E0</i> and
+        <i>E1_qh,E1_qk,E1_ql</i> parameters. </li>
+      <li> To model an incommensurate dispersion, move both <i>QH0,QK0,QL0</i>
+        and the <i>QH_freq,QL_freq,QK_freq </i>parameters to
+        incommensurate (non rational) values.</li>
+      <li>An anisotropic model can be obtained by having different <i>E1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </i> and <i>Q_freq</i> parameters along axes.</li>
+      <li>A 1D or 2D dispersion can be obtained when setting the
+        frequencies (e.g. <i>QK_freq QL_freq</i>) to 0<br>
+      </li>
+    </ul>
+    <p>The model parameters are:</p>
+    <blockquote>
+      <p>&nbsp; p(&nbsp;
+        1)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>E1_qh</b> energy at QH half period [meV]<br>
+        &nbsp; p(&nbsp;
+        2)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>E1_qk</b> energy at QK half period [meV]<br>
+        &nbsp; p(&nbsp;
+        3)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>E1_ql</b> energy at QL half period [meV]<br>
+        &nbsp; p(&nbsp;
+        4)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>E0</b> zone-centre energy gap [meV]<br>
+        &nbsp; p(&nbsp;
+        5)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>QH0</b> QH zone-centre [rlu]<br>
+        &nbsp; p(&nbsp;
+        6)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>QK0</b> QK zone-centre [rlu]<br>
+        &nbsp; p(&nbsp;
+        7)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>QL0</b> QL zone-centre [rlu]<br>
+        &nbsp; p(&nbsp;
+        8)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>QH_freq</b> QH frequency [multiples of pi]<br>
+        &nbsp; p(&nbsp;
+        9)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>QK_freq</b> QK frequency [multiples of pi]<br>
+        &nbsp; p(
+        10)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>QL_freq</b> QL frequency [multiples of pi]<br>
+        &nbsp; p(
+        11)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>Gamma</b> Damped Harmonic Oscillator width in energy [meV]<br>
+        &nbsp; p( 12)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Temperature</b>
+        [K]<br>
+        &nbsp; p(
+        13)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Amplitude</b><br>
+        &nbsp; p(
+        14)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Background</b><br>
+      </p>
+    </blockquote>
+    <p>The axes needed for the evaluation are expressed in rlu for
+      QH,QK,QL and in meV for the energy.<br>
+      The Model evaluation is as usual (in 4D):</p>
+    <blockquote><b>model</b>(p, qh, qk, ql, w)&nbsp;&nbsp;&nbsp; %
+      return a matrix. p can be [] to use guessed/default parameters<br>
+      <font color="#3366ff">iData</font>(<b>model</b>, p, qh, qk, ql,
+      w)&nbsp;&nbsp;&nbsp; % return an iData.<br>
+    </blockquote>
+    <p>A usage example is as follows:<a
+        href="images/Models_sqw_sine3d.png"><img alt="sqw_sine3d"
+          title="sqw_sine3d" src="images/Models_sqw_sine3d.png"
+          height="146" align="right" width="200" border="0"></a><br>
+    </p>
+    <pre style="margin-left: 40px;">&gt;&gt; ac=<font color="#3366ff">sqw_sine3d</font>(5); 		<i>% an acoustic branch up to 5 meV</i><br>&gt;&gt; qh=<font color="#3366ff">linspace</font>(0,1,50);qk=qh; ql=qh'; w=<font color="#3366ff">linspace</font>(0.01,10,50);	<i>% the axes for evaluation</i><br>&gt;&gt; f=<font color="#3366ff">iData</font>(ac,[],qh,qk,ql,w);	<i>% evaluate the model onto given axes</i><br>&gt;&gt; <font color="#3366ff">plot3</font>(log(f(:,:,1,:))); 	<i>% plot as volume</i> in [QH,QK,w, QL=0]. You can also use surf and scatter3 for other rendering<br></pre>
+    <p>The axes are given as vectors, but the second is made
+      non-parallel to the others, to indicate we wish to build a volume
+      out of this. Without transposing the vector, as all axes are the
+      same length, they would be interpreted as event data, and the
+      resulting evaluation would only contain 50 values.<br>
+    </p>
+    <p>It is possible to stack as many modes as possible, in different
+      flavors. In this case it is advisable to link e.g. the <i>Temperature</i>
+      and <i>Background</i> parameters:<a
+        href="images/Models_sqw_sine3d_add.png"><img
+          alt="sqw_sine3d_3disp" title="sqw_sine3d_3disp"
+          src="images/Models_sqw_sine3d_add.png" height="143"
+          align="right" width="200" border="0"></a><br>
+    </p>
+    <pre style="margin-left: 40px;">&gt;&gt; acoustic = <font color="#3366ff">sqw_sine3d</font>(5); optical = <font color="#3366ff">sqw_sine3d</font>([ 10 8 ]); sw = <font color="#3366ff">sqw_sine3d</font>([ 2 4 1 ]);<br>&gt;&gt; disp3 = acoustic + optical + sw;<br>&gt;&gt; disp3.Temperature_2 = <font color="#cc33cc">'"Temperature"'</font>;		% Temperature_2 = Temperature (1st sin3d)<br>&gt;&gt; disp3.Temperature_3 = <font color="#cc33cc">'"Temperature"'</font>;		% Temperature_3 = Temperature<br>&gt;&gt; disp3.Name=<font color="#cc33cc">'sqw_sine3d: acousitc+optical+sw'</font>;<br>&gt;&gt; <font color="#3366ff">mlock</font>(disp3, {<font color="#cc33cc">'Background_2','Background_3'</font>});	% keep them as 0 (default)<br>&gt;&gt; qh=<font color="#3366ff">linspace</font>(0,1,50);qk=qh; ql=qh; w=<font color="#3366ff">linspace</font>(0.01,10,51);	<i>% the axes for evaluation<br></i>&gt;&gt; f=<font color="#3366ff">iData</font>(disp3,[],qh,qk,ql,w);	<i>		% evaluate using initial model parameters</i><br>&gt;&gt; <font color="#3366ff">plot3</font>(log(f(:,:,1,:))); 				<i>% plot as volume</i> in [QH,QK,w, QL=0].<br></pre>
+    <p>The <b>plot (surf), plot3, scatter3</b>, and <b>slice</b>
+      methods for plotting all provide nice looking rendering of volume
+      data. See <a href="Plot.html#mozTocId734523">Plot/3D</a> page.<br>
+    </p>
+    <h4><a class="mozTocH4" name="mozTocId908192"></a>Spin-wave model
+      (SpinW)<br>
+    </h4>
+    <p>The <b>sqw_spinw</b> model can embed a spin-wave model from the
+      <a href="https://www.psi.ch/spinw/">SpinW</a> to "
+      <meta http-equiv="content-type" content="text/html;
+        charset=windows-1252">
+      <i>simulate magnetic structures and excitations of given spin
+        Hamiltonian using classical Monte Carlo simulation and linear
+        spin wave theory</i>."<br>
+      Basically, SpinW allows to model a crystal structure including a
+      spin Hamiltonian in the form:<br>
+    </p>
+    <div align="center"><i>H</i><i> = </i><i>&#8721;</i><i><sub>ij</sub></i><i>
+        S</i><i><sub>i</sub></i><i>J</i><i><sub>ij</sub></i><i>S</i><i><sub>j</sub></i><i>
+        +&nbsp;</i><i>&#8721;</i><i><sub>i</sub></i><i> S</i><i><sub>i</sub></i><i>A</i><i><sub>i</sub></i><i>S</i><i><sub>i</sub></i><i>
+        + B </i><i>&#8721;</i><i><sub>i</sub></i><i> g</i><i><sub>i</sub></i><i>S</i><i><sub>i</sub></i><i>
+      </i><br>
+      <br>
+    </div>
+    where <i>S</i> are the spin vectors, <i>J</i> are the spin-spin
+    coupling matrices, <i>A</i> are the spin anisotropy matrices, <i>B</i>
+    is the external magnetic field, and <i>g</i> is the g-tensor.<br>
+    <br>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;"><b>sqw_spinw<br>
+            </b><img alt="spinw" title="spinw"
+              src="images/spinw_logo.png" height="64" align="middle"
+              width="99"><br>
+          </td>
+          <td style="vertical-align: top;">Spin-wave dispersion in HKL
+            using <a href="https://www.psi.ch/spinw/">SpinW</a>. <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">4D
+            (HKL<i>w</i>)<br>
+            <a href="images/Models_sqw_sine3d.png"><img alt="sw"
+                title="sw" src="images/Models_sqw_spinw.png" height="73"
+                align="middle" width="100" border="0"></a><br>
+          </td>
+          <td style="vertical-align: top;">energy broadening,
+            Temperature, Amplitude,&nbsp; parameters J...<br>
+            Axes are in rlu.<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    A SpinW object must first be created, and is then converted into an
+    iFunc object using the syntax:
+    <blockquote>s = <font color="#3366ff">sqw_spinw</font>(sw);</blockquote>
+    or<br>
+    <blockquote>s = <font color="#3366ff">iFunc</font>(sw);<br>
+    </blockquote>
+    <p>The <a href="https://www.psi.ch/spinw/">SpinW</a> toolbox allows
+      to build spin-wave models incuding spin-spin pair coupling,
+      anisotropy terms and external field contribution. The model is
+      then converted into an iFunc object, so that fitting and plotting
+      is straightforward. An easy way to build a SpinW object is to read
+      a <a
+        href="http://en.wikipedia.org/wiki/Crystallographic_Information_File">CIF</a>
+      file, with syntax:<br>
+    </p>
+    <blockquote>s = <font color="#3366ff">sqw_spinw</font>(<font
+        color="#3366ff">sw</font>(<font color="#cc33cc">'cif_file'</font>))</blockquote>
+    <p></p>
+    <p>Additional options can be used when creating the Model, with:<br>
+    </p>
+    <blockquote>
+      <p>s = <font color="#3366ff">sqw_spinw</font>(sw, <i>options</i>);<br>
+      </p>
+    </blockquote>
+    where '<i>options</i>' is a structure that can hold:<br>
+    <ul>
+      <li><i>options.component</i>: a string to specify the component to
+        use as intensity, as documented in <a
+          href="https://github.com/tsdev/spinw/blob/master/mfiles/sw_egrid.m">sw_egrid</a>
+        function. Default is <font color="#cc33cc">'Sperp'</font>.
+        Suggested is also<font color="#cc33cc"> 'Sxx+Syy+Szz'</font>.</li>
+    </ul>
+    <b>Once created</b>, the model can be evaluated and used for
+    fitting. <br>
+    The model parameters are:<br>
+    <blockquote>p(1)=&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; <b>Gamma</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      energy broadening (instrumental) [meV]<br>
+      p(2)=&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <b>Temperature</b>
+      of the material [K]<br>
+      p(3)=&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <b>Amplitude</b><br>
+      p(4...)= &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <b>coupling
+        parameters</b> of the Hamiltonian (J)<br>
+    </blockquote>
+    The axes needed for the evaluation are expressed in <i>rlu</i> for
+    QH,QK,QL and in meV for the energy [1 meV = 241.8 GHz = 11.604 K =
+    0.0965 kJ/mol]. The model can be evaluated by giving axes and model
+    parameters (see examples below). <br>
+    <ul>
+      <li>When all axes are given as vectors of same orientation <i>and</i>
+        same length, the HKLE set is assumed to be list of 'events'.</li>
+      <li>When the H K L axes are vectors of same length/orientation,
+        the HKL locations is assumed to be a q-path in the BZ, but the E
+        (energy) axis can be of different length/orientation to compute
+        the Model along (q,E) path, resulting in a 2D object. Typically,
+        the <b>band_structure</b> function does this, to provide the
+        phonon dispersion curve along principal directions.</li>
+      <li>When the H K L E axes are given as mixed orientations/length,
+        as vectors or matrices, the Model evaluation is done on a HKLE
+        cube, which is well suited to visualize the whole dispersion
+        surfaces. <b>In the example below</b>, <i>ql</i> has a
+        different orientation (it is transposed) as <i>qh</i> and <i>qk</i>,
+        which triggers a 4D HKLE cube evaluation.</li>
+    </ul>
+    The Model evaluation is as usual (in 4D):
+    <blockquote><b>model</b>(p, qh, qk, ql, w)&nbsp;&nbsp;&nbsp; %
+      return a matrix. p can be [] to use guessed/default parameters<br>
+      <font color="#3366ff">iData</font>(<b>model</b>, p, qh, qk, ql,
+      w)&nbsp;&nbsp;&nbsp; % return an iData </blockquote>
+    As an example, we plot a simple
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    square lattice Heisenberg antiferromagnet model:<a
+      href="images/Models_sqw_sine3d_add.png"><img alt="sw" title="sw"
+        src="images/Models_sqw_spinw.png" height="143" align="right"
+        width="200" border="0"></a>
+    <blockquote>sq = <font color="#3366ff">sw_model</font>(<font
+        color="#cc33cc">'squareAF'</font>,2,0);&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <i>%
+        create the SW object</i><i> (using SpinW)</i><br>
+      s=<font color="#3366ff">sqw_spinw</font>(sq);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <i>%
+        create the Model</i><br>
+      qh=<font color="#3366ff">linspace</font>(0.01,1.5,50);qk=qh; ql=<i><b>qh'</b></i>;
+      w=<font color="#3366ff">linspace</font>(0.01,10,50);<br>
+      f=<font color="#3366ff">iData</font>(s,s.p,qh,qk,ql,w); <font
+        color="#3366ff">plot3</font>(log(f(:,:,1,:)));
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <i>% evaluate and plot</i><br>
+    </blockquote>
+    <b>References</b><br>
+    <blockquote>S. Toth and B. Lake, <i>J. Phys.: Condens. Matter</i> <b>27</b>,
+      166002 (2015).<br>
+    </blockquote>
+    <b>Requirements</b><br>
+    <blockquote>In principle, the <a
+        href="https://www.psi.ch/spinw/spinw">SpinW</a> Matlab toolbox
+      must have been installed from e.g. &lt;<a
+        href="https://github.com/tsdev/spinw">https://github.com/tsdev/spinw</a>&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      or &lt;<a href="https://www.psi.ch/spinw/spinw">https://www.psi.ch/spinw/spinw</a>&gt;.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      The version 2.1 of SpinW is <b>included</b> in iFit, so that the
+      <b><i>sqw_spinw</i></b> Model does not require any additional
+      installation. Updating SpinW may affect the iFit-SpinW interface.<br>
+    </blockquote>
+    <h4><a class="mozTocH4" name="mozTocId826778"></a>Spin-wave model
+      (SPINWAVE)</h4>
+    The <b>sqw_spinwave</b> model builder is an interface to the <a
+      href="http://www-llb.cea.fr/logicielsllb/SpinWave/SWnews.html">SPINWAVE</a>
+    LLB software from <a href="mailto:sylvain.petit@cea.fr">S. Petit</a>.
+    It works the same way as the <b>sqw_spinw</b> model above, but uses
+    a configuration file instead of a 'sw' object.<br>
+    <br>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold;"><b>sqw_spinwave<br>
+            </b><br>
+          </td>
+          <td style="vertical-align: top;">Spin-wave dispersion in HKL
+            using <a
+              href="http://www-llb.cea.fr/logicielsllb/SpinWave/SWnews.html">SPINWAVE</a>.
+            <br>
+          </td>
+          <td style="vertical-align: top; color: rgb(51, 204, 0);">4D
+            (HKL<i>w</i>)<br>
+          </td>
+          <td style="vertical-align: top;">Amplitude, and user defined
+            parameters (coupling...)<br>
+            Axes are in rlu.<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The model is built from an initial description file (text), a CIF
+    file, or a chemical formula.<br>
+    <br>
+    <b>Creating the model using a SPINWAVE file</b><br>
+    <br>
+    The description of this file format is detailed in the SPINWAVE
+    manual. It basically contains an initial lattice description (cell
+    parameters) with AX,AY,AZ,ALFA,BETA,GAMA lines. Then there is a list
+    of the magnetic atoms which are given an index, their coordinates,
+    spin type and initial spin orientation. Then a block indicates the
+    coupling between the spins with e.g. 'J' parameters (in [meV]) and a
+    cut-off distance. An optional dispersion broadening parameter SIG
+    [meV] can also be specified.<br>
+    <br>
+    Once assembled, the file is used as syntax:<br>
+    <blockquote>model = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'file'</font>);<br>
+    </blockquote>
+    which produces a 4D S(q,w) model [iFunc_Sqw4D]. For instance, you
+    may use as example:<br>
+    <blockquote>lmo = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'LaMnO3.txt'</font>);<br>
+      mfs = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'MnFe4Si3.txt'</font>);<br>
+    </blockquote>
+    A 2D S(q,w) powder model can be created the same way with syntax:<br>
+    <blockquote>model = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'file'</font>,<font color="#cc33cc">'powder'</font>);<br>
+    </blockquote>
+    as the iFunc_Sqw4D <b><i>powder</i></b> method is not fully
+    supported by SPINWAVE.<br>
+    <br>
+    <b>Creating the model using a CIF file or chemical formula</b><br>
+    <br>
+    It is possible to create a model out of a CIF file using:<br>
+    <blockquote>model = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'file.cif'</font>);<br>
+    </blockquote>
+    or from a chemical formula with:<br>
+    <blockquote>model = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'cod: La Mn O3'</font>);<br>
+    </blockquote>
+    In both cases, it is then <b>necessary</b> to customize the
+    spin-wave description file, as the CIF does not include any magnetic
+    information.<br>
+    <br>
+    A text editor is then shown, which allows to add the missing
+    information. Beware that <i><b>all</b></i> atoms in the cell will
+    be listed. You will need to remove the non-magnetic ones, and adapt
+    the atom indices ('I=') accordingly. Then move to the coupling
+    parameters and fill the missing information. This step (see below)
+    also allows to define variable model parameters.<br>
+    <br>
+    <b>Editing a new or existing model</b><br>
+    <br>
+    When creating the model, it is possible to request an edition of the
+    description with syntax:<br>
+    <blockquote>model = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'file'</font>,<font color="#cc33cc">'edit'</font>);<br>
+      model = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'file'</font>,<font color="#cc33cc">'powder
+        edit'</font>);<br>
+    </blockquote>
+    It is also possible to edit an existing SPINWAVE description file
+    with:<br>
+    <blockquote>model = <font color="#3366ff">sqw_spinwave</font>(model,<font
+        color="#cc33cc">'edit'</font>);<br>
+    </blockquote>
+    The editor allows to replace numerical values by symbols which
+    indicate variable model parameters. Such symbols should be <b>$par</b>
+    to indicate a 'par' model parameter. Namely, an entry:<br>
+    <blockquote>... J1=-18 ...<br>
+    </blockquote>
+    can be replaced by<br>
+    <blockquote>... J1=<b>$J1</b> ...<br>
+    </blockquote>
+    One may as well specify an initial parameter value with syntax <b>($par=value)</b>
+    or ($par,value) such as:<br>
+    <blockquote>... J1=-18 ...<br>
+    </blockquote>
+    can be replaced by<br>
+    <blockquote>... J1=<b>($J1=-18)</b> ...</blockquote>
+    which defines the parameter name and its initial value. If you skip
+    this step, the model parameters are set to 0, but you may of course
+    change this with the iFunc parameter setting syntax such as:<br>
+    <blockquote>model.J1 = -18;<br>
+    </blockquote>
+    Then it is important to save the content of the editor (menu
+    File/Save). When closing the editor, the result of the <b>sqw_spinwave</b>
+    call is the modified object, with new parameters.<br>
+    <b><br>
+    </b><b>Evaluating the spin-wave</b><br>
+    <br>
+    Once created,<b> </b>the model can be evaluated and used for
+    fitting. <br>
+    The model parameters are:<br>
+    <blockquote>p(1)=&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; <b>Amplitude</b><br>
+      p(...)=&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      any other parameter defined with <b>$par</b> symbols<br>
+    </blockquote>
+    The axes needed for the evaluation are expressed in <i>rlu</i> for
+    QH,QK,QL and in meV for the energy [1 meV = 241.8 GHz = 11.604 K =
+    0.0965 kJ/mol]. The model can be evaluated by giving axes and model
+    parameters (see examples below). <br>
+    <ul>
+      <li>When all axes are given as vectors of same orientation <i>and</i>
+        same length, the HKLE set is assumed to be list of 'events'.</li>
+      <li>When the H K L axes are vectors of same length/orientation,
+        the HKL locations is assumed to be a q-path in the BZ, but the E
+        (energy) axis can be of different length/orientation to compute
+        the Model along (q,E) path, resulting in a 2D object. Typically,
+        the <b>band_structure</b> function does this, to provide the
+        phonon dispersion curve along principal directions.</li>
+      <li>When the H K L E axes are given as mixed orientations/length,
+        as vectors or matrices, the Model evaluation is done on a HKLE
+        cube, which is well suited to visualize the whole dispersion
+        surfaces. <b>In the example below</b>, <i>ql</i> has a
+        different orientation (it is transposed) as <i>qh</i> and <i>qk</i>,
+        which triggers a 4D HKLE cube evaluation.</li>
+    </ul>
+    The Model evaluation is as usual (in 4D):
+    <blockquote><b>model</b>(p, qh, qk, ql, w)&nbsp;&nbsp;&nbsp; %
+      return a matrix. p can be [] to use guessed/default parameters<br>
+      <font color="#3366ff">iData</font>(<b>model</b>, p, qh, qk, ql,
+      w)&nbsp;&nbsp;&nbsp; % return an iData </blockquote>
+    The same applies to 2D S(q,w) 'powder' spin-wave models, but the Q
+    axis is then given in Angs<sup>-1</sup>.<br>
+    <blockquote><b>model</b>(p, q, w)&nbsp;&nbsp;&nbsp; % return a
+      matrix. p can be [] to use guessed/default parameters<br>
+      <font color="#3366ff">iData</font>(<b>model</b>, p, q,
+      w)&nbsp;&nbsp;&nbsp; % return an iData <br>
+    </blockquote>
+    Beware as the spin-wave evaluation can be long to compute.<br>
+    <br>
+    <b>Example</b><br>
+    <br>
+    We define a MnFe4Si3 spin-wave model and request to edit the
+    description. You will notice that the AX,AY,Az lines are using AA,BB
+    and CC model parameters with default values 6.8 and 4.7. Also, the
+    energy broadening is defined as the Gamma parameter with value 1. We
+    then evaluate the model along the QH line and a given energy range.<br>
+    <blockquote>mfs = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'MnFe4Si3.txt', 'edit'</font>);<br>
+      d=<font color="#3366ff">iData</font>(mfs, [], 0:.05:4, 0,0,
+      0:0.5:20);<br>
+      plot(log10(squeeze(d))); <i>% 'squeeze' removes singleton QK and
+        QL axes</i><br>
+    </blockquote>
+    Next we compute the powder average of the spin-wave dispersions, and
+    plot them (takes 2 min).<br>
+    <blockquote>mfs = <font color="#3366ff">sqw_spinwave</font>(<font
+        color="#cc33cc">'MnFe4Si3.txt', 'powder'</font>);<br>
+      q = 0.01:0.25:3; <i>% from 0.01 to 3 Angs-1 with .25 steps</i><br>
+      w = 0:0.5:20;<br>
+      d=<font color="#3366ff">iData</font>(mfs, [], q, w);<br>
+      plot(d);<br>
+    </blockquote>
+    <b>Installation</b><br>
+    <br>
+    The SPINWAVE program (c) LLB is distributed with iFit, and does not
+    need to be installed separately.<br>
+    You can check for SPINWAVE installation with: sqw_spinwave <font
+      color="#cc33cc">check</font><br>
+    You can compile SPINWAVE with: sqw_spinwave <font color="#cc33cc">compile</font><br>
+    <blockquote> </blockquote>
+    <h4><a class="mozTocH4" name="mozTocId226848"></a>Phonon dispersion
+      in perovskites</h4>
+    <p>The <b>sqw_vaks </b>model computes the dispersion of the 5
+      lowest <a href="https://en.wikipedia.org/wiki/Phonon">phonon</a>
+      dispersions in perovskite cubic crystals. It is based on the Vaks
+      parametrization (see references below). The TA1,TA2,LA,TO1 and TO2
+      dispersions are obtained from 8 parameters, and a DHO line shape
+      is added. The dispersions are anisotropic, with 'valley' and soft
+      mode. <br>
+      The dynamical matrix is 5x5 and its eigenvalues are the mode
+      frequencies.<br>
+    </p>
+    <p><i><u>Limitation</u></i><i>:</i> even though this is model uses
+      few parameters, the dynamic range is limited to e.g.<b> |q|</b>
+      &lt; 0.3-0.5 rlu and |w| &lt; 100 meV.<br>
+    </p>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><b>sqw_vaks</b></td>
+          <td valign="top">Phonon dispersions in perovskite cubic
+            crystals using the Vaks parameterisation&nbsp; </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_vaks.png"><img alt="sqw_vaks"
+                title="sqw_vaks" src="images/Models_sqw_vaks.png"
+                height="75" align="middle" width="100" border="0"></a></td>
+          <td valign="top">acoustic and optical , coupling parameters,
+            soft mode frequency. Axes in rlu.<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <p>To create the model without defined parameter values, you may
+      use:<br>
+    </p>
+    <blockquote>
+      <p>s = <font color="#3366ff">sqw_vaks</font>;<br>
+      </p>
+    </blockquote>
+    or alternatively, to define starting parameters:<br>
+    <blockquote>s = <font color="#3366ff">sqw_vaks</font>(<i>p</i>);<br>
+    </blockquote>
+    where <i>p</i>=[...] is a vector containing the parameter values.
+    It may be given as a 12 value vector or a string, as detailed below.<br>
+    <br>
+    The model parameters are the following:<br>
+    <blockquote>&nbsp; p(&nbsp;
+      1)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>At</b> transverse acoustic slope [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      2)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Al</b> longitudinal acoustic slope [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      3)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Aa</b> anisotropic acoustic slope [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      4)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>St</b> soft mode&nbsp; transverse soft optical slope [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      5)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Sa</b> soft mode&nbsp; anisotropic soft optical slope [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      6)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Vt</b> transverse acoustic-optical coupling [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      7)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Va</b> entered as: anisotropic acoustic-optical coupling [meV<sup>2</sup>/rlu<sup>2</sup>]<br>
+      &nbsp; p(&nbsp;
+      8)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>w0</b> soft mode frequency at q=0, depends on temperature [meV]<br>
+      &nbsp; p(&nbsp;
+      9)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Gamma</b> Damped Harmonic Oscillator width in energy [meV]<br>
+      &nbsp; p( 10)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Temperature</b>
+      [K]<br>
+      &nbsp; p(
+      11)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Amplitude</b><br>
+      &nbsp; p(
+      12)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Background</b><br>
+    </blockquote>
+    The axes needed for the evaluation are expressed in <i>rlu</i> for
+    QH,QK,QL and in meV for the energy [1 meV = 241.8 GHz = 11.604 K =
+    0.0965 kJ/mol]. The model can be evaluated by giving axes and model
+    parameters (see examples below). <br>
+    <ul>
+      <li>When all axes are given as vectors of same orientation <i>and</i>
+        same length, the HKLE set is assumed to be list of 'events'.</li>
+      <li>When the H K L axes are vectors of same length/orientation,
+        the HKL locations is assumed to be a q-path in the BZ, but the E
+        (energy) axis can be of different length/orientation to compute
+        the Model along (q,E) path, resulting in a 2D object. Typically,
+        the <b>band_structure</b> function does this, to provide the
+        phonon dispersion curve along principal directions.</li>
+      <li>When the H K L E axes are given as mixed orientations/length,
+        as vectors or matrices, the Model evaluation is done on a HKLE
+        cube, which is well suited to visualize the whole dispersion
+        surfaces. <b>In the example below</b>, <i>ql</i> has a
+        different orientation (it is transposed) as <i>qh</i> and <i>qk</i>,
+        which triggers a 4D HKLE cube evaluation.</li>
+      <li>When the <i>qh,qk,ql</i> axes span over a whole Brillouin
+        zone, e.g. [-0.5 : 0.5], the <b>phonon density of states</b>
+        (DOS) is computed, and stored in <i>s.UserData.DOS</i>, as well
+        as partial DOS in <i>s.UserData.DOS_partials</i> (per mode).</li>
+      <li>You may evaluate the <b>powder dispersion</b> using the <b>powder</b><b>(s)</b>
+        function.<br>
+      </li>
+    </ul>
+    The <b>plot (surf), plot3, scatter3</b>, and <b>slice</b> methods
+    for plotting all provide nice looking rendering of volume data. See
+    <a href="Plot.html#mozTocId734523">Plot/3D</a> page.<br>
+    <br>
+    There are predefined parameter settings for <font color="#cc33cc">'KTaO3'</font>,
+    <font color="#cc33cc">'SrTiO3'</font> and <font color="#cc33cc">'BaTiO3'</font>
+    crystals.<br>
+    A usage example is:<a href="images/Models_sqw_vaks.png"><img
+        alt="sqw_vaks" title="sqw_vaks" src="images/Models_sqw_vaks.png"
+        height="151" align="right" width="200" border="0"></a><br>
+    <pre>	&gt;&gt; s=<font color="#3366ff">sqw_vaks</font>(<font color="#cc33cc">'KTaO3'</font>); 		<i>% create model, with KTaO3 parameters</i><br>	&gt;&gt; qh=<font color="#3366ff">linspace</font>(0,.5,50);qk=qh; ql=<i><b>qh'</b></i>; w=<font color="#3366ff">linspace</font>(0.01,10,51);<br> 	&gt;&gt; f=<font color="#3366ff">iData</font>(s,[],qh,qk,ql,w); 		<i>% evaluate model into an iData</i><br>	&gt;&gt; <font color="#3366ff">scatter3</font>(log(f(:,:,1,:)),'filled');	<i>% plot</i> ql(1)=0 plane<br></pre>
+    <i><br>
+    </i><i> </i><i><b>References:</b></i><br>
+    <ul>
+      <li>E. Farhi et al, <i>EPJB</i>, <b>15</b> (2000) pp 615-623. <a
+href="http://epjb.epj.org/articles/epjb/abs/2000/12/b9618/b9618.html">
+          DOI: 10.1007/s100510051164 </a></li>
+      <li> A.K. Tagantsev et al, <i>Nature Comm</i>, <b>4</b> (2013)
+        2229. <a
+href="http://www.nature.com/ncomms/2013/130729/ncomms3229/abs/ncomms3229.html">DOI:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          10.1038/ncomms3229</a></li>
+      <li> V.G. Vaks,<i> Introduction to the Microscopic Theory of
+          Ferroelectrics</i> (Nauka, Moscow, 1973)</li>
+    </ul>
+    <h4><a class="mozTocH4" name="mozTocId885605"></a>Acoustic phonon
+      dispersion in mono-atomic cubic crystal</h4>
+    The <b>sqw_cubic_monoatomic</b> model provides 3 acoustic <a
+      href="https://en.wikipedia.org/wiki/Phonon">phonon</a> dispersions
+    from a dynamical matrix computation. It uses only 2 parameters for
+    these 3 modes, plus additional DHO parameters. Each dispersion is
+    basically:<br>
+    <blockquote><i>w(k) = E<sub>max</sub>*sin(k.a) </i><i>&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+        &nbsp;&nbsp;&nbsp; </i>along principal axes.<br>
+    </blockquote>
+    The dynamical matrix is 3x3 with sine and cosine terms. Eigenvalues
+    provide the mode energies.<br>
+    <br>
+    <table style="text-align: left;" height="135" cellspacing="2"
+      cellpadding="2" width="1016" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><b>sqw_</b><b>cubic_monoatomic</b></td>
+          <td valign="top">Phonon dispersions in a monoatomic cubic
+            crystal using the Dynamical matrix. </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_cubic_mono.png"><img
+                alt="sqw_cubic_mono" title="sqw_cubic_mono"
+                src="images/Models_sqw_cubic_mono.png" height="76"
+                align="middle" width="100" border="0"></a></td>
+          <td valign="top">acoustic force constant ratio and scaling
+            energy. Axes in rlu. </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The model parameters are the following:<br>
+    <blockquote>&nbsp; p(&nbsp;
+      1)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>C_ratio</b> C1/C2 force constant ratio first/second neighbours<a
+        href="images/Models_sqw_cubic_mono.png"><img
+          alt="sqw_cubic_mono" title="sqw_cubic_mono"
+          src="images/Models_sqw_cubic_mono.png" height="152"
+          align="right" width="200" border="0"></a><br>
+      &nbsp; p(&nbsp;
+      2)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>E0</b> sqrt(C1/m) energy [meV]<br>
+      &nbsp; p(&nbsp;
+      3)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Gamma</b> Dampled Harmonic Oscillator width in energy [meV]<br>
+      &nbsp; p(&nbsp;
+      4)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Temperature</b>
+      [K]<br>
+      &nbsp; p(&nbsp;
+      5)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Amplitude</b><br>
+      &nbsp; p(&nbsp;
+      6)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Background</b><br>
+    </blockquote>
+    The axes needed for the evaluation are expressed in <i>rlu</i> for
+    QH,QK,QL and in meV for the energy [1 meV = 241.8 GHz = 11.604 K =
+    0.0965 kJ/mol]. The model can be evaluated by giving axes and model
+    parameters (see examples below). <br>
+    <ul>
+      <li>When all axes are given as vectors of same orientation <i>and</i>
+        same length, the HKLE set is assumed to be list of 'events'.</li>
+      <li>When the H K L axes are vectors of same length/orientation,
+        the HKL locations is assumed to be a q-path in the BZ, but the E
+        (energy) axis can be of different length/orientation to compute
+        the Model along (q,E) path, resulting in a 2D object. Typically,
+        the <b>band_structure</b> function does this, to provide the
+        phonon dispersion curve along principal directions.</li>
+      <li>When the H K L E axes are given as mixed orientations/length,
+        as vectors or matrices, the Model evaluation is done on a HKLE
+        cube, which is well suited to visualize the whole dispersion
+        surfaces. <b>In the example below</b>, <i>ql</i> has a
+        different orientation (it is transposed) as <i>qh</i> and <i>qk</i>,
+        which triggers a 4D HKLE cube evaluation.</li>
+      <li>When the <i>qh,qk,ql</i> axes span over a whole Brillouin
+        zone, e.g. [-0.5 : 0.5], the <b>phonon density of states</b>
+        (DOS) is computed, and stored in <i>s.UserData.DOS</i>, as well
+        as partial DOS in <i>s.UserData.DOS_partials</i> (per mode).</li>
+      <li>You may evaluate the <b>powder dispersion</b> using the <b>powder</b><b>(s)</b>
+        function.<br>
+      </li>
+    </ul>
+    A usage example is:<br>
+    <pre>	&gt;&gt; s=<font color="#3366ff">sqw_cubic_monoatomic</font>([ 3 3 ]); 	<i>% create model, with C1/C2=3 E0=3</i><br>	&gt;&gt; qh=<font color="#3366ff">linspace</font>(0,.5,50);qk=qh; ql=<i><b>qh'</b></i>; w=<font color="#3366ff">linspace</font>(0.01,10,51);<br> 	&gt;&gt; f=<font color="#3366ff">iData</font>(s,[],qh,qk,ql,w); 		<i>% evaluate model into an iData</i><br>	&gt;&gt; <font color="#3366ff">plot3</font>(log(f(:,:,1,:)));	<i>	% plot </i><i>ql(1)=0 plane</i><br></pre>
+    The <b>plot (surf), plot3, scatter3</b>, and <b>slice</b> methods
+    for plotting all provide nice looking rendering of volume data. See
+    <a href="Plot.html#mozTocId734523">Plot/3D</a> page.<br>
+    <br>
+    <i> </i><i><b>References:</b></i><br>
+    <ul>
+      <li>E. Meisterhofer &lt;<a
+          href="http://lampx.tugraz.at/%7Ehadley/ss1/phonons/scdos/sc.pdf">http://lampx.tugraz.at/~hadley/ss1/phonons/scdos/sc.pdf</a>&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        2013</li>
+      <li> Kittel, Solid State Physics, Wiley, New York, 7th ed. (1996),
+        pp 99-103.</li>
+    </ul>
+    <h4><a class="mozTocH4" name="mozTocId774280"></a>Phenomenological
+      linear/quadratic dispersion</h4>
+    This model is suited to describe a linear or quadratic dispersion.
+    The dispersion slopes (in [meV/rlu]) are given for user defined axes
+    (e.g. principal crystal directions in reciprocal space). Two
+    directions must be given from which the 1st one is used as is (but
+    normalised) to indicate the 'linear' dispersion direction, the
+    second axis is used to define an ortho-normal reciprocal coordinate
+    frame. The 2nd and 3rd dispersion slopes apply into this frame.<br>
+    <br>
+    The general dispersion relation has the form, with <i><b>q</b></i>=<i>[
+      q</i><i><sub>h</sub></i><i>, q</i><i><sub>k</sub></i><i>, q</i><i><sub>l</sub></i><i>
+      ]</i> and <b>HKLE0</b> =<i>[q</i><i><sub>h0</sub></i><i>, q</i><i><sub>k0</sub></i><i>,
+      q</i><i><sub>l0</sub></i><i>, E<sub>0</sub>]</i>&nbsp; in [rlu and
+    meV]:<br>
+    <br>
+    <div align="center">w(q)<sup>2</sup> = (Slope1*(q<sub>h</sub>-q<sub>h0</sub>)<sup><i>
+        </i></sup>+ E<sub>0</sub>)<sup>2</sup> + Slope2<sup>2</sup>*(q<sub>k</sub>-q<sub>k0</sub>)<sup><i>2</i></sup>
+      + Slope3<sup>2</sup>*(q<sub>l</sub>-q<sub>l0</sub>)<sup><i>2</i></sup><br>
+    </div>
+    <br>
+    where the <i>Slope</i> parameters are specified for 3 directions.
+    The <i>hkl</i> directions can be rotated by specifying the <i>dir1</i>
+    and <i>dir2</i> frame vectors. The <i>dir3</i> is built as <i>dir1
+
+
+
+      x dir2</i>. Along <i>dir1</i> the dispersion is linear, along
+    other directions it is quadratic (becomes linear far from HKL0). <br>
+    <br>
+    Such a model can be used to model an <b>acoustic/linear</b>
+    dispersion (with a given slope/velocity), which has a given energy
+    E0 at a given HKL0 location, use:<br>
+    <ul>
+      <li>s=<font color="#3366ff">sqw_linquad</font>([H0 K0 L0 E0]);</li>
+    </ul>
+    The HKLE0 location is typically the centre of a measurement scan.<br>
+    <br>
+    The <b><a href="Models.html#mozTocId897311"><b>sqw_acoustopt</b></a></b>
+    model (below) is somewhat similar, but specifies the <i>minimum</i>
+    of the dispersion instead of a specific location from which the
+    expansion is linear/quadratic.<br>
+    <ul>
+    </ul>
+    <br>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <b><a href="#mozTocId774280"><b>sqw_linquad</b></a> <br>
+            </b></td>
+          <td valign="top">A phenomenological dispersion which can
+            describe an acoustic or optical mode. This model can be
+            considered as a local expansion in series of any dispersion.</td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)<br>
+            </font>
+            <div align="center"><a href="images/Models_sqw_linquad.png"><img
+                  alt="sqw_linquad" title="sqw_linquad"
+                  src="images/Models_sqw_linquad.png" height="75"
+                  align="right" width="100" border="0"></a></div>
+          </td>
+          <td valign="top">Energy and location of 'gap', slopes,
+            directions of slopes, DHO width, temperature, background</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The model parameters are the following:<a
+      href="images/Models_sqw_linquad_parameters.svg"><img
+        src="images/Models_sqw_linquad_parameters.svg"
+        title="sqw_linquad_parameters" alt="sqw_linquad_parameters"
+        height="211" align="right" width="300" border="0"></a><br>
+    <blockquote>&nbsp; p(&nbsp;
+      1)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>DC_Hdir1</b>&nbsp;&nbsp; Slope1 dispersion direction, <b>linear,</b>
+      H [rlu]<br>
+      &nbsp; p(&nbsp;
+      2)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>DC_Kdir1</b>&nbsp;&nbsp; Slope1 dispersion direction, K [rlu]<br>
+      &nbsp; p(&nbsp;
+      3)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>DC_Ldir1</b>&nbsp;&nbsp; Slope1 dispersion direction, L [rlu]<br>
+      &nbsp; p(&nbsp;
+      4)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>DC_Hdir2</b>&nbsp;&nbsp; Slope2 dispersion direction, H
+      (transverse) [rlu]<br>
+      &nbsp; p(&nbsp;
+      5)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>DC_Kdir2</b>&nbsp;&nbsp; Slope2 dispersion direction, K
+      (transverse) [rlu]<br>
+      &nbsp; p(&nbsp;
+      6)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <b>DC_Ldir2</b>&nbsp;&nbsp; Slope2 dispersion direction, L
+      (transverse) [rlu]<br>
+      &nbsp; p(&nbsp;
+      7)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DC_Slope1</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      Dispersion slope along 1st axis, linear [meV/rlu]<br>
+      &nbsp; p(&nbsp;
+      8)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DC_Slope2</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      Dispersion slope along 2nd axis (transverse to 1st, in plane)
+      [meV/rlu]<br>
+      &nbsp; p(&nbsp;
+      9)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DC_Slope3</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      Dispersion slope along 3rd axis (transverse to 1st, vertical)
+      [meV/rlu]<br>
+      &nbsp; p(
+      10)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Ex_H0</b>&nbsp;&nbsp; Excitation location H [rlu]<br>
+      &nbsp; p(
+      11)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Ex_K0</b>&nbsp;&nbsp; Excitation location K [rlu]<br>
+      &nbsp; p(
+      12)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      <b>Ex_L0</b>&nbsp;&nbsp; Excitation location L [rlu]<br>
+      &nbsp; p( 13)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Ex_E0_Center</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+      Excitation location, Energy [meV]<br>
+      &nbsp; p( 14)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DHO_Amplitude
+
+
+
+
+
+
+
+
+
+
+
+
+      </b><br>
+      &nbsp; p( 15)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DHO_Damping</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      Excitation damping, half-width [meV]<br>
+      &nbsp; p( 16)=&nbsp;&nbsp;&nbsp;&nbsp; <b>DHO_Temperature</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+      Temperature [K]<br>
+      &nbsp; p(
+      17)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Background</b><br>
+    </blockquote>
+    <div align="left">The axes needed for the evaluation are expressed
+      in <i>rlu</i> for QH,QK,QL and in meV for the energy [1 meV =
+      241.8 GHz = 11.604 K = 0.0965 kJ/mol]. The model can be evaluated
+      by giving axes and model parameters (see examples below). <br>
+      <ul>
+        <li>When all axes are given as vectors of same orientation <i>and</i>
+          same length, the HKLE set is assumed to be list of 'events'.</li>
+        <li>When the H K L axes are vectors of same length/orientation,
+          the HKL locations is assumed to be a q-path in the BZ, but the
+          E (energy) axis can be of different length/orientation to
+          compute the Model along (q,E) path, resulting in a 2D object.
+          Typically, the <b>band_structure</b> function does this, to
+          provide the phonon dispersion curve along principal
+          directions.</li>
+        <li>When the H K L E axes are given as mixed
+          orientations/length, as vectors or matrices, the Model
+          evaluation is done on a HKLE cube, which is well suited to
+          visualize the whole dispersion surfaces. <b>In the example
+            below</b>, <i>ql</i> has a different orientation (it is
+          transposed) as <i>qh</i> and <i>qk</i>, which triggers a 4D
+          HKLE cube evaluation.</li>
+        <li>When the <i>qh,qk,ql</i> axes span over a whole Brillouin
+          zone, e.g. [-0.5 : 0.5], the <b>phonon density of states</b>
+          (DOS) is computed, and stored in <i>s.UserData.DOS</i>, as
+          well as partial DOS in <i>s.UserData.DOS_partials</i> (per
+          mode).</li>
+        <li>You may evaluate the <b>powder dispersion</b> using the <b>powder</b><b>(s)</b>
+          function.</li>
+      </ul>
+      <br>
+      The Slope parameters allow to estimate the mode group velocity.
+      Using the definition rlu = 2pi/<i>a</i> where <i>a</i> is the
+      excitation periodicity, we can derive:<br>
+      <blockquote>velocity<sub>[m/s]</sub> = Slope<sub>[meV/rlu]</sub>
+        *a<sub>[Angs]</sub> /2pi * 151.9<br>
+      </blockquote>
+      A usage example is:<a href="images/Models_sqw_linquad.png"><img
+          alt="sqw_linquad" title="sqw_linquad"
+          src="images/Models_sqw_linquad.png" height="151" align="right"
+          width="200" border="0"></a>
+      <ul>
+        <li>s=<font color="#3366ff">sqw_linquad</font>([ 0.25 0 0 5])</li>
+        <li>qh=<font color="#3366ff">linspace</font>(0,0.5,51);qk=qh;
+          ql=qh'; w=<font color="#3366ff">linspace</font>(0.01,20,50);</li>
+        <li>f=<font color="#3366ff">iData</font>(s,[],qh,qk,ql,w);
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; % evaluate model into an
+          iData</li>
+        <li><font color="#3366ff">plot3</font>(log(f(:,1,:,:)));</li>
+      </ul>
+      <h4><a name="mozTocId897311" class="mozTocH4"></a>Phenomenological
+        acoustic/optic dispersion (quadratic)<br>
+      </h4>
+      <p>This model is suited to describe a quadratic dispersion with
+        given minimum/gap. The dispersion slopes (in [meV/rlu]) are
+        given for user defined axes (e.g. principal crystal directions
+        in reciprocal space). Two directions must be given, which are
+        used to define an ortho-normal reciprocal coordinate frame. The
+        dispersion slopes apply into this frame.<br>
+        <br>
+        The general dispersion relation has the form, with <i><b>q</b></i>=<i>[
+          q</i><i><sub>h</sub></i><i>, q</i><i><sub>k</sub></i><i>, q</i><i><sub>l</sub></i><i>
+          ]</i> and <b>HKLE0</b> =<i>[q</i><i><sub>h0</sub></i><i>, q</i><i><sub>k0</sub></i><i>,
+          q</i><i><sub>l0</sub></i><i>, E<sub>0</sub>]</i>&nbsp; in [rlu
+        and meV]::<br>
+      </p>
+      <div align="center">w(q)<sup>2</sup> = E<sub>0</sub><sup>2</sup> +
+        Slope1<sup>2</sup>*(q<sub>h</sub>-q<sub>h0</sub>)<sup>2</sup> +
+        Slope2<sup>2</sup>*(q<sub>k</sub>-q<sub>k0</sub>)<sup><i>2</i></sup>
+        + Slope3<sup>2</sup>*(q<sub>l</sub>-q<sub>l0</sub>)<sup><i>2</i></sup><br>
+        <br>
+      </div>
+      <br>
+      where the Slope parameters are specified for 3 directions. The <i>hkl</i>
+      directions can be rotated by specifying the <i>dir1</i> and <i>dir2</i>
+      frame vectors. The <i>dir3</i> is built as <i>dir1 x dir2</i>.&nbsp;
+Along
+
+
+
+
+      given directions the dispersion is quadratic (becomes linear far
+      from HKL0).<br>
+      <br>
+      Such a model can be used to model an <b>acoustic/linear</b>
+      dispersion (with a given slope/velocity), which has a given energy
+      minimum E0 at a given HKL0 location, use:<br>
+      <ul>
+        <li>s=<font color="#3366ff">sqw_acoustopt</font>([H0 K0 L0 E0]);</li>
+      </ul>
+      To model an <i><b>acoustic</b></i> mode, use e.g. <i>H0=K0=L0=E0</i>=0
+
+
+
+
+
+
+
+
+
+      and adjust the <i>Slope</i> parameters. <br>
+      To model an <i><b>optical</b></i> mode, use e.g. <i>H0=K0=L0=0</i>
+      but set <i>E0</i> to a finite energy (e.g. zone centre energy).<br>
+      To model something else, use other parameters... ;-) <br>
+      <br>
+      The <b><a href="Models.html#mozTocId774280"><b>sqw_linquad</b></a></b>
+      model (above) is somewhat similar, but specifies a <i>specific</i>
+      HKLE location instead of the minimum of the dispersion from which
+      the expansion is quadratic.<br>
+      <br>
+      <table style="text-align: left; width: 1016px; height: 59px;"
+        cellspacing="2" cellpadding="2" border="1">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; font-weight: bold;
+              font-style: italic; color: rgb(51, 102, 255);
+              background-color: rgb(255, 204, 204);">S(q,w)<br>
+            </td>
+            <td style="vertical-align: top; background-color: rgb(255,
+              204, 204);"><span style="font-style: italic; font-weight:
+                bold; color: rgb(51, 102, 255);">Description</span><br>
+            </td>
+            <td style="vertical-align: top; font-weight: bold;
+              font-style: italic; color: rgb(51, 102, 255);
+              background-color: rgb(255, 204, 204);">Dimensionality<br>
+            </td>
+            <td style="vertical-align: top; font-weight: bold;
+              font-style: italic; color: rgb(51, 102, 255);
+              background-color: rgb(255, 204, 204);">Parameters<br>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><br>
+              <b><a href="#mozTocId897311"><b>sqw_acoustopt</b></a> <br>
+              </b></td>
+            <td valign="top">A phenomenological dispersion which can
+              describe an acoustic or optical mode.<br>
+            </td>
+            <td valign="top"><font color="#33cc00">4D (HKLw)<br>
+              </font><a href="images/Models_sqw_acoustopt.png"><img
+                  src="images/Models_sqw_acoustopt.png"
+                  title="sqw_acoustopt" alt="sqw_acoustopt" height="75"
+                  width="100" border="0"></a><br>
+            </td>
+            <td valign="top">Energy and location of 'gap', slopes,
+              directions of slopes, DHO width, temperature, background</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      The model parameters are the following:<br>
+      <blockquote>&nbsp; p(&nbsp;
+        1)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Hdir1</b>&nbsp;&nbsp; Slope1 dispersion direction, H [rlu]<a
+          href="images/Models_sqw_acoustopt_parameters.svg"><img
+            src="images/Models_sqw_acoustopt_parameters.svg"
+            title="sqw_acoustopt_parameters"
+            alt="sqw_acoustopt_parameters" height="211" align="right"
+            width="300" border="0"></a><br>
+        &nbsp; p(&nbsp;
+        2)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Kdir1</b>&nbsp;&nbsp; Slope1 dispersion direction, K [rlu]<br>
+        &nbsp; p(&nbsp;
+        3)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Ldir1</b>&nbsp;&nbsp; Slope1 dispersion direction, L [rlu]<br>
+        &nbsp; p(&nbsp;
+        4)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Hdir2</b>&nbsp;&nbsp; Slope2 dispersion direction, H
+        (transverse) [rlu]<br>
+        &nbsp; p(&nbsp;
+        5)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Kdir2</b>&nbsp;&nbsp; Slope2 dispersion direction, K
+        (transverse) [rlu]<br>
+        &nbsp; p(&nbsp;
+        6)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Ldir2</b>&nbsp;&nbsp; Slope2 dispersion direction, L
+        (transverse) [rlu]<br>
+        &nbsp; p(&nbsp;
+        7)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Slope1</b>&nbsp;&nbsp; Dispersion slope along 1st axis
+        [meV/rlu]<br>
+        &nbsp; p(&nbsp;
+        8)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Slope2</b>&nbsp;&nbsp; Dispersion slope along 2nd axis
+        (transverse to 1st, in plane) [meV/rlu]<br>
+        &nbsp; p(&nbsp;
+        9)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>DC_Slope3</b>&nbsp;&nbsp; Dispersion slope along 3rd axis
+        (transverse to 1st, vertical) [meV/rlu]<br>
+        &nbsp; p(
+        10)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>Ex_H0</b>&nbsp;&nbsp; Minimum of the dispersion, H [rlu]<br>
+        &nbsp; p(
+        11)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>Ex_K0</b>&nbsp;&nbsp; Minimum of the dispersion, K [rlu]<br>
+        &nbsp; p(
+        12)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+        <b>Ex_L0</b>&nbsp;&nbsp; Minimum of the dispersion, L [rlu]<br>
+        &nbsp; p( 13)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Ex_E0_Center</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+        Minimum of the dispersion, Energy [meV]<br>
+        &nbsp; p( 14)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DHO_Amplitude
+
+
+
+
+
+
+
+
+
+
+
+
+        </b><br>
+        &nbsp; p( 15)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>DHO_Damping</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+        Excitation damping, half-width [meV]<br>
+        &nbsp; p( 16)=&nbsp;&nbsp;&nbsp;&nbsp; <b>DHO_Temperature</b>&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+        Temperature [K]<br>
+        &nbsp; p(
+        17)=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Background</b><br>
+      </blockquote>
+      The axes needed for the evaluation are expressed in <i>rlu</i>
+      for QH,QK,QL and in meV for the energy [1 meV = 241.8 GHz = 11.604
+      K = 0.0965 kJ/mol]. The model can be evaluated by giving axes and
+      model parameters (see examples below). <br>
+      <ul>
+        <li>When all axes are given as vectors of same orientation <i>and</i>
+          same length, the HKLE set is assumed to be list of 'events'.</li>
+        <li>When the H K L axes are vectors of same length/orientation,
+          the HKL locations is assumed to be a q-path in the BZ, but the
+          E (energy) axis can be of different length/orientation to
+          compute the Model along (q,E) path, resulting in a 2D object.
+          Typically, the <b>band_structure</b> function does this, to
+          provide the phonon dispersion curve along principal
+          directions.</li>
+        <li>When the H K L E axes are given as mixed
+          orientations/length, as vectors or matrices, the Model
+          evaluation is done on a HKLE cube, which is well suited to
+          visualize the whole dispersion surfaces. <b>In the example
+            below</b>, <i>ql</i> has a different orientation (it is
+          transposed) as <i>qh</i> and <i>qk</i>, which triggers a 4D
+          HKLE cube evaluation.</li>
+        <li>When the <i>qh,qk,ql</i> axes span over a whole Brillouin
+          zone, e.g. [-0.5 : 0.5], the <b>phonon density of states</b>
+          (DOS) is computed, and stored in <i>s.UserData.DOS</i>, as
+          well as partial DOS in <i>s.UserData.DOS_partials</i> (per
+          mode).</li>
+        <li>You may evaluate the <b>powder dispersion</b> using the <b>powder</b><b>(s)</b>
+          function.</li>
+      </ul>
+      The Slope parameters allow to estimate the mode phase velocity for
+      acoustic modes when E0=0. Using the definition rlu = 2pi/<i>a</i>
+      where <i>a</i> is the excitation periodicity, we can derive:<br>
+      <blockquote>velocity<sub>[m/s]</sub> = Slope<sub>[meV/rlu]</sub>
+        *a<sub>[Angs]</sub> /2pi * 151.9<br>
+      </blockquote>
+      A usage example is: <a href="images/Models_sqw_acoustopt.png"><img
+          alt="sqw_acoustopt" title="sqw_acoustopt"
+          src="images/Models_sqw_acoustopt.png" height="151"
+          align="right" width="200" border="0"></a>
+      <ul>
+        <li>s=<font color="#3366ff">sqw_acoustopt</font>([ 0.25 0 0 5])</li>
+        <li>qh=<font color="#3366ff">linspace</font>(0,0.5,51);qk=qh;
+          ql=qh'; w=<font color="#3366ff">linspace</font>(0.01,20,50);</li>
+        <li>f=<font color="#3366ff">iData</font>(s,[],qh,qk,ql,w);
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; % evaluate model into an
+          iData</li>
+        <li><font color="#3366ff">plot3</font>(log(f(:,1,:,:)));</li>
+      </ul>
+    </div>
+    <ul>
+    </ul>
+    <ul>
+    </ul>
+    <h4><a class="mozTocH4" name="mozTocId990577"></a>Phonon dispersion
+      from <i>ab-initio</i> force estimate and dynamical matrix<br>
+    </h4>
+    <p>The <b>sqw_phonons</b> model computes phonon dispersions
+      (lattice dynamics) using the <a
+        href="https://wiki.fysik.dtu.dk/ase/">Atomic Simulation
+        Environment</a> (ASE) in the so-called <i>small displacement</i>
+      methodology. The only needed input for the model to run is the
+      name of a configuration file describing the material lattice and
+      atom positions. This file can be in any <a
+        href="https://wiki.fysik.dtu.dk/ase/ase/io.html#module-ase.io">ASE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        supported format</a>, e.g. <a
+        href="http://cms.mpi.univie.ac.at/vasp/guide/node59.html">POSCAR</a>,
+      <a
+        href="http://en.wikipedia.org/wiki/Crystallographic_Information_File">CIF</a>,
+      <a href="http://www.rcsb.org/pdb/">PDB</a>, ... <br>
+    </p>
+    <br>
+    <table style="text-align: left; width: 1016px; height: 59px;"
+      cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">S(q,w)<br>
+          </td>
+          <td style="vertical-align: top; background-color: rgb(255,
+            204, 204);"><span style="font-style: italic; font-weight:
+              bold; color: rgb(51, 102, 255);">Description</span><br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Dimensionality<br>
+          </td>
+          <td style="vertical-align: top; font-weight: bold; font-style:
+            italic; color: rgb(51, 102, 255); background-color: rgb(255,
+            204, 204);">Parameters<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><b>sqw_phonons<br>
+              <a href="https://wiki.fysik.dtu.dk/ase/index.html"><img
+                  alt="ase" title="ase" src="images/ase256.png"
+                  height="80" align="middle" width="80" border="0"></a><br>
+            </b></td>
+          <td valign="top">Phonon dispersions from the Dynamical matrix,
+            using forces estimated by <i>ab-initio </i>using <a
+              href="https://wiki.fysik.dtu.dk/ase">ASE</a> and a
+            selection of DFT codes (EMT, GPAW, ABINIT, Elk,
+            QuantumEspresso, VASP). </td>
+          <td valign="top"><font color="#33cc00">4D (HKLw)</font><br>
+            <a href="images/Models_sqw_ph_ase.png"><img
+                src="images/Models_sqw_ph_ase.png" title="sqw_ph_ase Al
+                fcc" alt="sqw_ph_ase Al fcc" height="74" align="left"
+                width="100" border="0"></a></td>
+          <td valign="top">Creation: <a
+              href="http://cms.mpi.univie.ac.at/vasp/guide/node59.html">POSCAR</a>,
+            <a
+              href="http://en.wikipedia.org/wiki/Crystallographic_Information_File">CIF</a>,
+            <a href="http://www.rcsb.org/pdb/">PDB</a>, ...<br>
+            Then, only the DHO line shape. <i>ab-initio</i> implies no
+            (few) tunable parameter. Axes in rlu. </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The procedure is entirely automatic. A supercell is automatically
+    generated, then forces are estimated by differentiation of a set of
+    atom displacements. Temporary data files are created. The model can
+    then be evaluated onto an HKLE trajectory, and plotted.<br>
+    <p>As the Phonon calculation is by itself a full story, we provide
+      dedicated help pages:<br>
+    </p>
+    <ul>
+      <li>Models <a href="Models_Phonons.html">Phonons usage</a>
+        (technical documentation, installation)</li>
+      <li>Models <a href="Models_Phonons_Tutorial.html">Phonons
+          Tutorial</a> (examples)</li>
+    </ul>
+    <h3><a class="mozTocH3" name="mozTocId810939"></a><span
+        style="font-weight: bold;">Model builder: defining a new model
+        easy</span></h3>
+    The <span style="font-style: italic;">ifitmakefunc</span> tool
+    enables to define a new fit function/model from a simple dialog, by
+    entering its <a href="images/ifitmakefunc.png"><img
+        title="ifitmakefunc" src="images/ifitmakefunc.png"
+        alt="ifitmakefunc" style="border: 0px solid ; width: 150px;
+        height: 137px;" align="right"></a>expression as a function of
+    the parameter vector <span style="font-style: italic; font-weight:
+      bold;">p</span> and the axes <span style="font-style: italic;
+      font-weight: bold;">x,y,z</span><b>,t,u,v,w</b><br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">ifitmakefunc;<br><span style="color: rgb(0, 0, 0);">&gt;&gt; h=</span>edit<span style="color: rgb(0, 0, 0);">(iFunc);	<span style="font-style: italic;">% equivalent</span></span><br></span></pre>
+    The only required argument is the expression, but you may as
+    well&nbsp; enter a function name and description, parameter names
+    and default values, as well as a constraint to be evaluated before
+    computing the function value. When started without any parameters,
+    the Gaussian function settings are used.<br>
+    <br>
+    The function both creates a function file, and returns its model
+    object, that may evaluate and adjust to a data set with <a
+      href="Fit.html"><span style="font-weight: bold;">fits</span></a>.<br>
+    <pre style="margin-left: 40px;">&gt;&gt; [p,criteria,message,output]= <span style="color: rgb(51, 102, 255);">fits</span>(a, <span style="color: rgb(255, 0, 0);">h</span><span style="color: rgb(204, 51, 204);"></span>);<br>&gt;&gt; [p,criteria,message,output]= <span style="color: rgb(51, 102, 255);">fits</span>(<span style="color: rgb(255, 0, 0);">h</span><span style="color: rgb(204, 51, 204);"></span>, a); <span style="font-style: italic;">% same as above</span><br></pre>
+    A quick definition, without using the dialog, can be performed with
+    the syntax:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">ifitmakefunc<span style="color: rgb(0, 0, 0);">(<span style="color: rgb(204, 51, 204);">'p(1)*exp( (x-p(2))/p(3) )'</span>);</span></span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">fits</span>(a,<span style="color: rgb(51, 102, 255);">  iFunc<span style="color: rgb(0, 0, 0);">(<span style="color: rgb(204, 51, 204);">'p(1)*exp( (x-p(2))/p(3) )'</span>));</span></span> <span style="font-style: italic;">% same as above</span><br></pre>
+    where&nbsp; <span style="font-weight: bold; font-style: italic;">p</span>
+    is the vector that holds parameters. Axes are<span
+      style="font-weight: bold; font-style: italic;"> x </span><span
+      style="font-style: italic;">(rows)</span><span style="font-weight:
+      bold; font-style: italic;">,y </span><span style="font-style:
+      italic;">(columns)</span><span style="font-weight: bold;
+      font-style: italic;">,z </span><span style="font-style: italic;">(pages)</span><span
+      style="font-weight: bold; font-style: italic;">,t</span><span
+      style="font-style: italic;"> (time)</span>. Beware to use a model
+    expression with element-wise division and multiplication operators (<span
+      style="font-weight: bold;">./</span> and <span
+      style="font-weight: bold;">.*</span>). The function builder is
+    known to work well for 1D and 2D functions.<br>
+    <br>
+    You can also build complex models from simpler ones using <a
+      href="iFunc.html">iFunc</a> methods/operators, such as in<br>
+    <pre style="margin-left: 40px;">&gt;&gt; h = gauss + lorz<br>&gt;&gt; h = convn(lorz, 3)<br>&gt;&gt; h = convn(gauss, lorz)<br>&gt;&gt; h = gauss .* lorz; % a 1D model<br>&gt;&gt; h = gauss  * lorz; % a 2D model
+<br></pre>
+    The full syntax for the model builder is:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">ifitmakefunc</span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);">(</span></span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"><span style="color: rgb(204, 51, 204);">'expression'<span style="color: rgb(0, 0, 0);">);<br></span></span></span></span>&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">ifitmakefunc</span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);">(</span></span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"><span style="color: rgb(204, 51, 204);"><span style="font-style: italic;">iFunc model</span><span style="color: rgb(0, 0, 0);">);</span></span></span></span>	<span style="font-style: italic;"><br>&gt;&gt; </span><span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">edit</span><span style="font-style: italic;">(</span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"><span style="color: rgb(204, 51, 204);"><span style="font-style: italic;">iFunc model</span><span style="color: rgb(0, 0, 0);"><span style="font-style: italic;">);		</span></span></span></span></span><span style="font-style: italic;">% same as above</span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"><span style="color: rgb(204, 51, 204);"><span style="color: rgb(0, 0, 0);"><span style="font-style: italic;"></span><br></span></span></span></span>&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">ifitmakefunc</span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);">('function_name', 'description', 'Parameter1 Parameter2 ...', ...<br>	<span style="color: rgb(204, 51, 204);">'expression'<span style="color: rgb(0, 0, 0);">, </span></span>[default parameter values], <span style="color: rgb(204, 51, 204);">'constraint'</span>);<br></span></span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"></span></span></pre>
+    which is equivalent to:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; fun.Name=<span style="color: rgb(204, 51, 204);">'function short name'</span>;<br>&gt;&gt; fun.Description=<span style="color: rgb(204, 51, 204);">'function description'</span>;		<span style="font-style: italic;">% function long description</span><br style="font-style: italic;">&gt;&gt; fun.Parameters=<span style="color: rgb(204, 51, 204);">'Parameter1 Parameter2 ...'</span>;		<span style="font-style: italic;">% parameter names</span>. When empty, names are given according to the Expression analysis (when appropriate)<br>&gt;&gt; fun.Guess=[0 1 2 ...] or <span style="color: rgb(204, 51, 204);">'automatic'</span>;		<span style="font-style: italic;">% parameter default values (vector), or automatic mode</span><br>&gt;&gt; fun.Expression=<span style="color: rgb(204, 51, 204); font-style: italic;">'expression using p and x,y,z,t...'</span>;	<span style="font-style: italic;">% value of the model</span> (required). p is the vector that holds parameters. Axes are x,y,z,t,u,v,w.<br>&gt;&gt; fun.Constraint=<span style="color: rgb(204, 51, 204);">'evaluated before Expression'</span>;	<span style="font-style: italic;">% constraint evaluated </span>prior<span style="font-style: italic;"> to the model Expression</span><br>&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);">iFunc</span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);">(fun);<br>&gt;&gt; </span></span><span style="color: rgb(51, 102, 255);">fits</span>(a, <span style="color: rgb(255, 0, 0);">h</span><span style="color: rgb(204, 51, 204);"></span>);<span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"></span></span></pre>
+    The generated code will basically be:<br>
+    <pre style="margin-left: 40px;"><span style="color: rgb(51, 102, 255);">function</span> y=Name(p, axes, ...)<br><span style="font-style: italic;">% Description</span><br style="font-style: italic;"><span style="font-style: italic;">% Parameters: [fun.Parameters]</span><br>Constraint;<br>y=Expression;<br></pre>
+    The resulting function has the ability to identify itself (<span
+      style="color: rgb(51, 102, 255);">disp(model)</span> provides
+    detailed informations), compute automatic starting parameters with
+    e.g.<span style="color: rgb(51, 102, 255);"> feval(model, 'guess')</span>,
+    display itself <span style="color: rgb(51, 102, 255);">plot(model)</span>,
+    and evaluate its value of course <span style="color: rgb(51, 102,
+      255);">feval(model, parameter_values, axes, ...)</span>. The
+    resulting model is a <a href="iFunc.html">iFunc</a> object. Refer
+    to that object description for more information.<br>
+    <br>
+    A large set of 1D (vector) and 2D (surface) models can be obtained
+    from <a href="http://zunzun.com">ZunZun.com</a>.<br>
+    <h4><a class="mozTocH4" name="mozTocId775891"></a>Creating complex
+      functions from simple functions</h4>
+    To <span style="font-weight: bold;">assemble existing functions</span>
+    into new ones, you may use the iFunc operators <span
+      style="font-style: italic;">e.g.</span>:&nbsp; <br>
+    <pre style="margin-left: 40px;">&gt;&gt; <span style="color: rgb(255, 0, 0);">h</span>=<span style="color: rgb(51, 102, 255);"></span><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"></span></span><span style="color: rgb(204, 51, 204);"><span style="color: rgb(51, 102, 255);">gauss</span>+<span style="color: rgb(51, 102, 255);">lorz</span><span style="color: rgb(0, 0, 0);">; h.Constraint = </span></span><span style="color: rgb(204, 51, 204);">'p(8)=0'</span>;<br></pre>
+    which creates a new function which is the <span style="font-weight:
+      bold; font-style: italic;">sum</span> of a Gaussian and a
+    Lorentzian.&nbsp; Unspecified arguments are guessed/automatically
+    set. The second redundant Lorentzian Background <span
+      style="font-style: italic;">p(8)</span> parameter is forced to 0
+    so that it does not correlate with the Gaussian Background <span
+      style="font-style: italic;">p(4)</span>.
+    <h4><a class="mozTocH4" name="mozTocId937554"></a>Using signal
+      convolution/correlation in new functions</h4>
+    It is possible to include a convolution (FFT based,
+    multidimensional) in the core of the new function. The two function
+    <span style="font-weight: bold; font-style: italic;">fconv</span>
+    and <span style="font-weight: bold; font-style: italic;">fconvn</span>
+    should then be used with the following syntax, where <span
+      style="font-style: italic;">a</span> and <span style="font-style:
+      italic;">b</span> are vectors/matrices:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b);	<span style="font-style: italic;">	% returned convoluted object with size which is size(a)+size(b)+1</span><br>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'same'</span>);<span style="font-style: italic;">	% returned convoluted object </span><span style="font-style: italic;">with</span><span style="font-style: italic;"> size which is size(a)<br></span>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'valid'</span>);<span style="font-style: italic;">	% returned convoluted object </span><span style="font-style: italic;">with</span><span style="font-style: italic;"> size which is size(a)</span>-size(b)+1<br>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'pad'</span>);<span style="font-style: italic;">	% pads 'a' with starting/ending values to minimize border effects<br></span>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'center'</span>);<span style="font-style: italic;">	% centers 'b' so that convolution does not shift 'a'<br></span>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'norm'</span>);<span style="font-style: italic;">	% normalizes</span><span style="font-style: italic;"> 'b' so that convolution does not change 'a' integral<br></span>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'background'</span>);<span style="font-style: italic;">% subtracts</span><span style="font-style: italic;"> minimal value in 'b' so that convolution does not change 'a' integra</span>l<br>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'deconv'</span>);	<span style="font-style: italic;">% deconvolution, but very sensitive to noise (use with caution)</span><br></pre>
+    When some data has to be convoluted with a response function (<span
+      style="font-style: italic;">e.g.</span> instrument resolution
+    function), the usual options to use should be:<br>
+    <pre style="margin-left: 40px;">&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconv</span>(a,b, <span style="color: rgb(204, 51, 204);">'same pad background center norm'</span>);<br>&gt;&gt; c = <span style="color: rgb(51, 102, 255);">fconvn</span>(a,b);	<span style="font-style: italic;">% same as above</span> in a shorter call</pre>
+    These convolution methods have been ported to <a href="iFunc.html">iFunc</a>
+    models as<br>
+    <ul>
+      <li><span style="font-weight: bold;">conv: </span>convolution
+        (calls fconv)<br>
+      </li>
+      <li><span style="font-weight: bold;">convn: </span>normalized
+        convolution (calls fconvn)<br>
+      </li>
+      <li><span style="font-weight: bold;">xcorr: </span>cross-correlation
+
+
+
+
+        (calls fconv in correlation mode)<br>
+      </li>
+    </ul>
+    If you wish to convolute two models, use<br>
+    <pre style="margin-left: 40px;">&gt;&gt; a = <span style="color: rgb(51, 102, 255);">convn</span>(lorz, 3)		<span style="font-style: italic;">% convolution of a Lorentzian with a Gaussian of width 3<br></span>&gt;&gt; a = <span style="color: rgb(51, 102, 255);">convn</span>(lorz, gauss)	<span style="font-style: italic;">% a Voigt function...<br></span>&gt;&gt; a = <span style="color: rgb(51, 102, 255);">convn</span>(lorz, <span style="color: rgb(204, 51, 204);">'double(b)'</span>)<span style="font-style: italic;">; </span>a.Constraint = <span style="color: rgb(204, 51, 204);">'global b'</span>;	% convolute with a global variable 'b'<span style="font-style: italic;"></span></pre>
+    where the vector/matrix<span style="font-style: italic;"> 'b'</span>
+    holds the response function (filter) <span style="font-style:
+      italic;">with the same axis binning</span> as the object <span
+      style="font-style: italic;">'a'</span>.<br>
+    <br>
+    <span style="color: rgb(255, 0, 0);">Warning: </span>The <span
+      style="font-style: italic;">fconv</span> and <span
+      style="font-style: italic;">fxcorr</span> functions require the <span
+      style="font-style: italic;">x</span> axis not to be coarsely
+    sampled. In case the models/data contain narrow peaks (described
+    with few points underneath e.g. less than 5), the fit model above
+    will fail convolving. One solution is to artificially create a finer
+    sampled axis, evaluate the function, and reduce back to the initial
+    number of points. The constraints are used to define the new finer
+    axis <span style="font-style: italic;">xx</span>, and the final
+    result is re-sampled with 1 point out of 5 :<br>
+    <pre style="margin-left: 40px;">&gt;&gt; h = <span style="color: rgb(51, 102, 255);">convn</span>(dho, gauss); <br>&gt;&gt; h.Constraint=<span style="color: rgb(204, 51, 204);">'x=linspace(min(x),max(x), 5*length(x))';</span><span style="color: rgb(51, 102, 255);"></span><span style="color: rgb(204, 51, 204);">	<span style="color: rgb(0, 0, 0); font-style: italic;">% artificially extend the 'x' axis</span><br><span style="color: rgb(0, 0, 0);">&gt;&gt; h = h + </span>'signal=signal(1:5:end);'<span style="color: rgb(0, 0, 0);">;</span></span>				<span style="font-style: italic;">% shrink 'signal' back to initial size</span><br></pre>
+    <pre style="margin-left: 40px;"><span style="color: rgb(51, 102, 255);"><span style="color: rgb(0, 0, 0);"></span></span></pre>
+    <h3><a class="mozTocH3" name="mozTocId854762"></a><span
+        style="font-weight: bold;">How to write manually a model
+        function</span></h3>
+    We suggest that you start from the<span style="color: rgb(51, 102,
+      255);"> 'gauss' </span>function in <span style="font-style:
+      italic;">iFit/Scripts/Models, </span>and customize at will.
+    Please retain the function core structure to ensure proper
+    execution. More complex models can be derived from e.g. the <span
+      style="color: rgb(51, 102, 255);">voigt</span> function.<br>
+    <pre style="margin-left: 40px;">&gt;&gt; edit gauss<br>&gt;&gt; edit voigt<br>&gt;&gt; <span style="color: rgb(51, 102, 255);">ifitmakefunc</span>(voigt)	<span style="font-style: italic;">% pop-up a dialogue</span><br>&gt;&gt; <span style="color: rgb(51, 102, 255);">edit</span>(voigt)		<span style="font-style: italic;">% same as ifitmakefunc for iFunc objects</span><br></pre>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <div style="text-align: center;">
+      <div style="text-align: center;"><span style="font-style: italic;">E.
+Farhi
+
+
+
+
+
+
+          - iFit/fit models - </span><span style="font-style: italic;">
+          oct.. 23, 2018 2.0 </span><span style="font-style: italic;"> </span>-
+        back to <a href="index.html">Main iFit Page </a><a
+          href="http://www.ill.eu/"><img title="ILL, Grenoble, France
+            &lt;www.ill.eu&gt;" src="images/ILL-web-jpeg.jpg" alt="ILL,
+            Grenoble, France &lt;www.ill.eu&gt;" style="border: 0px
+            solid ; width: 53px; height: 50px;" align="right"></a> </div>
+    </div>
+  </body>
+</html>

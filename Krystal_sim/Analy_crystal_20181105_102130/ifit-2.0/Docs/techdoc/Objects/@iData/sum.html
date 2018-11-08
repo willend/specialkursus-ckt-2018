@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sum</title>
+  <meta name="keywords" content="sum">
+  <meta name="description" content="s = sum(a,dim) : computes the sum of iData objects elements">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; sum.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sum
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>s = sum(a,dim) : computes the sum of iData objects elements</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [s,sigma] = sum(a,dim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s = sum(a,dim) : computes the sum of iData objects elements
+
+   @iData/sum function to compute the sum of the elements of the data set
+     sum(a,dim) accumulates along axis of rank dim. The axis is then removed.
+       If dim=0, sum is done on all axes and the total is returned as a scalar value. 
+         In this case, a second output argument holds the error bar.
+       If dim='radial', the sum is done radially (R=sqrt(sum(axes^2)).
+       sum(a,1) accumulates on first dimension (columns). 
+       camproj accumulates on all other axes.
+
+ input:  a: object or array (iData/array of)
+         dim: dimension to accumulate (int/array of, or 'radial')
+ output: s: sum of elements (iData/scalar)
+ ex:     c=sum(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/plus, iData/prod, iData/cumsum, iData/mean,
+ iData/camproj, iData/trapz, iData/cart2sph</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="camproj.html" class="code" title="function s = camproj(a,dim, center)">camproj</a>	s = camproj(a,dim) : projection/radial integration of iData objects elements</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="disp.html" class="code" title="function disp(s_in, name, flat)">disp</a>	disp(s) : display iData object (details)</li><li><a href="event.html" class="code" title="function b = event(a, dim, signal, err, monitor)">event</a>	c = event(a) : build an event list</li><li><a href="help.html" class="code" title="function c = help(s)">help</a>	c = help(s) : display iData information as a Dialogue window</li><li><a href="imroi.html" class="code" title="function [b, mask, f] = imroi(a, options)">imroi</a>	imroi: define a region of interest on a data set</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="load.html" class="code" title="function out = load(a, varargin)">load</a>	d = load(s, file, loader, ...): iData file loader</li><li><a href="peaks.html" class="code" title="function [sigma, position, amplitude, baseline] = peaks(a, dim, m)">peaks</a>	[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>	f = saveas(s, filename, format, options) : save iData object into various data formats</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of fill</title>
+  <meta name="keywords" content="fill">
+  <meta name="description" content="FILL fill-in over missing data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; fill.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/fill
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FILL fill-in over missing data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c=fill(a, n) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FILL fill-in over missing data
+   Y = FILL(X) replaces the missing data in X by extra/interpolating
+   the non-missing elements. The non finite values (NaN or Inf) in X are
+   considered as missing data.
+
+   FILL uses an iterative process that converges toward the solution.
+   Y = FILL(X,N) uses N iterations. By default, N = 100. If you
+   estimate that FILL did not totally converge, increase N:
+   Y = FILL(X,1000);
+
+ input:  a: object or array (iData)
+         n: number of iterations (integer)
+ output: c: filled object (iData)
+ ex:     a=iData([ ifitpath 'Data/Monitor_GV*']); b=hist(a); c=fill(b);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, accumarray, <a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>, histc, iData/plot, <a href="sum.html" class="code" title="function [s,sigma] = sum(a,dim)">sum</a>, iData/interp, iData/event, iData/squeeze, iData/pack</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isnan.html" class="code" title="function a = isnan(a)">isnan</a>	b = isnan(s) : True for NaN iData object elements</li><li><a href="isscalar.html" class="code" title="function a = isscalar(a)">isscalar</a>	b = isscalar(s) : True for scalar iData objects</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="meshgrid.html" class="code" title="function b = meshgrid(a, varargin)">meshgrid</a>	s = meshgrid(a) : transforms an iData object so that its axes are grids</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

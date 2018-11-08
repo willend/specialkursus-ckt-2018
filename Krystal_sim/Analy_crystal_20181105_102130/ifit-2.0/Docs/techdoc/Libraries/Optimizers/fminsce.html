@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of fminsce</title>
+  <meta name="keywords" content="fminsce">
+  <meta name="description" content="[MINIMUM,FVAL,EXITFLAG,OUTPUT] = fminsce(FUN,PARS,[OPTIONS],[CONSTRAINTS]) shuffled complex evolution">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Optimizers</a> &gt; fminsce.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Optimizers&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/fminsce
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[MINIMUM,FVAL,EXITFLAG,OUTPUT] = fminsce(FUN,PARS,[OPTIONS],[CONSTRAINTS]) shuffled complex evolution</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [pars,fval,exitflag,output] = fminsce(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [MINIMUM,FVAL,EXITFLAG,OUTPUT] = fminsce(FUN,PARS,[OPTIONS],[CONSTRAINTS]) shuffled complex evolution
+
+ fminsce finds a minimum of a function of several variables using the shuffled
+ complex evolution (SCE) algorithm originally introduced in 1992 by Duan et al. 
+ 
+ Calling:
+   fminsce(fun, pars) asks to minimize the 'fun' objective function with starting
+     parameters 'pars' (vector)
+   fminsce(fun, pars, options) same as above, with customized options (optimset)
+   fminsce(fun, pars, options, fixed) 
+     is used to fix some of the parameters. The 'fixed' vector is then 0 for
+     free parameters, and 1 otherwise.
+   fminsce(fun, pars, options, lb, ub) 
+     is used to set the minimal and maximal parameter bounds, as vectors.
+   fminsce(fun, pars, options, constraints) 
+     where constraints is a structure (see below).
+   fminsce(problem) where problem is a structure with fields
+     problem.objective:   function to minimize
+     problem.x0:          starting parameter values
+     problem.options:     optimizer options (see below)
+     problem.constraints: optimization constraints
+   fminsce(..., args, ...)
+     sends additional arguments to the objective function
+       criteria = FUN(pars, args, ...)
+
+ Example:
+   banana = @(x)100*(x(2)-x(1)^2)^2+(1-x(1))^2;
+   [x,fval] = fminsce(banana,[-1.2, 1])
+
+ Input:
+  FUN is the function to minimize (handle or string): criteria = FUN(PARS)
+  It needs to return a single value or vector.
+
+  PARS is a vector with initial guess parameters. You must input an
+  initial guess. PARS can also be given as a single-level structure.
+
+  OPTIONS is a structure with settings for the optimizer, 
+  compliant with optimset. Default options may be obtained with
+     o=fminsce('defaults')
+  options.MinFunEvals sets the minimum number of function evaluations to reach
+  An empty OPTIONS sets the default configuration.
+
+  CONSTRAINTS may be specified as a structure
+   constraints.min= vector of minimal values for parameters
+   constraints.max= vector of maximal values for parameters
+   constraints.fixed= vector having 0 where parameters are free, 1 otherwise
+   constraints.eval=  expression making use of 'p', 'constraints', and 'options' 
+                        and returning modified 'p'
+                      or function handle p=@constraints.eval(p)
+  An empty CONSTRAINTS sets no constraints.
+
+  Additional arguments are sent to the objective function.
+
+ Output:
+          MINIMUM is the solution which generated the smallest encountered
+            value when input into FUN.
+          FVAL is the value of the FUN function evaluated at MINIMUM.
+          EXITFLAG return state of the optimizer
+          OUTPUT additional information returned as a structure.
+
+ Reference: Q. Y. Duan et al, J. of Opt. Th. and Appl. 76 (1993) 501.
+ Contrib:   2006 Brecht Donckels, BIOMATH, brecht.donckels@ugent.be [SCE]
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

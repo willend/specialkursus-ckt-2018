@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of gaussnd</title>
+  <meta name="keywords" content="gaussnd">
+  <meta name="description" content="y = gaussnd(p, x, y, ..., signal) : nD Gaussian">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; gaussnd.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/gaussnd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>y = gaussnd(p, x, y, ..., signal) : nD Gaussian</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function y=gaussnd(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> y = gaussnd(p, x, y, ..., signal) : nD Gaussian
+
+   iFunc/gaussnd nD Gaussian fitting function
+
+     y = R0 * exp(-[x,y,...]' * G * [x,y,...]) 
+
+ a multi-dimensional Gaussian profile
+ &lt;http://en.wikipedia.org/wiki/Gaussian_function#Multi-dimensional_Gaussian_function&gt;
+
+ This model has no background, is centered, and has maximum intensity set to 1.
+ The parameters correspond to widths.
+
+ MODEL CREATION
+
+ gaussnd([w1 w2 ... wn ])
+   builds a 'n' Dimensional orthogonal Gaussian with widths [w1 w2 ...]
+ gaussnd(M)
+   where M is a square matrix [n x n] builds a 'n' Dimensional.
+   if M is non symmetric, it is made so from (M+M')/2
+ gaussnd('ResLibCal') extracts a 4D TAS resolution function from ResLibCal
+ gaussnd('defaults')
+   builds a 2D Gaussian
+ gaussnd and gaussnd('gui')
+   shows a Dialogue to enter the Gaussian matrix, widths or other option.
+
+ MODEL EVALUATION
+
+ input:  p: Gaussian model matrix (double, symmetric ndims*ndims)
+            p = [ ndims(G) * ndims(G) values ]
+          or 'guess'
+         x,y,...: axes (double)
+         signal: when values are given and p='guess', a guess of the parameters is performed (double)
+ output: y: model value
+ ex:     y=gaussnd([1 0 1 1], -10:10, -10:10); or plot(gaussnd)
+
+ Version: oct.. 23, 2018
+ See also iFunc, iFunc/fits, iFunc/plot, gauss2d, gauss
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="gaussnd.html" class="code" title="function y=gaussnd(varargin)">gaussnd</a>	y = gaussnd(p, x, y, ..., signal) : nD Gaussian</li><li><a href="gaussnd.html" class="code" title="function y=gaussnd(varargin)">gaussnd</a>	y = gaussnd(p, x, y, ..., signal) : nD Gaussian</li><li><a href="gaussnd.html" class="code" title="function y=gaussnd(varargin)">gaussnd</a>	y = gaussnd(p, x, y, ..., signal) : nD Gaussian</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="gaussnd.html" class="code" title="function y=gaussnd(varargin)">gaussnd</a>	y = gaussnd(p, x, y, ..., signal) : nD Gaussian</li><li><a href="gaussnd.html" class="code" title="function y=gaussnd(varargin)">gaussnd</a>	y = gaussnd(p, x, y, ..., signal) : nD Gaussian</li><li><a href="gaussnd.html" class="code" title="function y=gaussnd(varargin)">gaussnd</a>	y = gaussnd(p, x, y, ..., signal) : nD Gaussian</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

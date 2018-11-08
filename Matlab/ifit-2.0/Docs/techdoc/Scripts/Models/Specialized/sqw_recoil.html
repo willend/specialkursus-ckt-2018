@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_recoil</title>
+  <meta name="keywords" content="sqw_recoil">
+  <meta name="description" content="model = sqw_recoil(p, q ,w, {signal}) : Recoil dispersion(Q) for a single harmonic oscillator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Specialized</a> &gt; sqw_recoil.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Specialized&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_recoil
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model = sqw_recoil(p, q ,w, {signal}) : Recoil dispersion(Q) for a single harmonic oscillator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function signal=sqw_recoil(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model = sqw_recoil(p, q ,w, {signal}) : Recoil dispersion(Q) for a single harmonic oscillator
+
+   iFunc/sqw_recoil: a 2D S(q,w) with a recoil dispersion, isotropic harmonic oscillator 
+
+   This is a 2D recoil model for a single harmonic oscillator particle with given mass.
+   The mass defines the dispersion energy, while the harmonic oscillator energy
+   defines the Debye-Waller function, i.e. intensity vs Q.
+   This model is also known as 'impulse approximation' or 'short time' Gaussian. 
+
+   The dispersion has the form:
+      S(q,w) = 1/sqrt(2*pi*delta2).*exp( -(w - Er).^2/2./delta2 )
+   where
+      Er     = h2 q2/2/m
+      delta2 = Er.*coth(w0/2/kT)
+
+   You can build a recoil model for a given mass and oscillator energy with syntax:
+      sqw = sqw_recoil(mass)
+   or
+      sqw = sqw_recoil([ mass energy ])
+
+   You can of course tune other parameters once the model object has been created.
+   To model more than one oscillator/particle recoil, just add these models together.
+
+   Evaluate the model with syntax:
+     sqw(p, q, w)
+
+ input:  p: sqw_recoil model parameters (double)
+             p(1)= Mass       Mass of the scattering unit [g/mol]
+             p(2)= Ex_Energy  Harmonic Excitation Energy [meV]
+             p(3)= Amplitude 
+             p(4)= Temperature  Temperature [K]  
+         q:  axis along wavevector/momentum in Angs-1 (row,double)
+         w:  axis along energy in meV (column,double)
+ output: signal: model value
+
+
+ Example:
+   s=sqw_recoil(2); % Deuterium mass
+   plot(iData(s, [], 0:.1:20, (0:100)))  % q=0:20, energy=0:100
+
+ Reference: Schober, JNR 17 (2014) 109–357 - DOI 10.3233/JNR-140016
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc
+   &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

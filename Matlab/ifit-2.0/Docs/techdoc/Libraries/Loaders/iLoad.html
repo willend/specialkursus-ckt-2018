@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of iLoad</title>
+  <meta name="keywords" content="iLoad">
+  <meta name="description" content="[data, loader] = iLoad(file, loader, ...)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; iLoad.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/iLoad
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[data, loader] = iLoad(file, loader, ...)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [data, format] = iLoad(filename, loader, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [data, loader] = iLoad(file, loader, ...)
+
+ imports any data into Matlab. 
+
+ The file formats cache and MeX files can be rebuilt/checked with
+   iLoad force         update loaders cache and check importers
+   iLoad compile       force compilation of external importers (MeX)
+   iLoad save          save the cache to the user Preferences
+   iLoad config        get the loaders list as a configuration structure
+   iLoad formats       list of all supported file formats
+
+ The iLoad_ini configuration file can be loaded and saved in the Preference 
+ directory using 
+   [config, configfile] = iLoad('load config').
+   [config, configfile] = iLoad(config,'save config')
+
+   Default supported formats include: any text based including CSV, Lotus1-2-3, SUN sound, 
+     WAV sound, AVI movie, NetCDF, FITS, XLS, BMP GIF JPEG TIFF PNG ICO images,
+     HDF4, HDF5, MAT workspace, XML, CDF, JSON, YAML, IDL
+   Other specialized formats include: McStas, ILL, SPEC, ISIS/SPE, INX, EDF, Mantid.
+     SIF, MCCD/TIFF, ADSC, CBF, Analyze, NifTI, STL,PLY,OFF, CIF/CFL,
+     EZD/CCP4, Bruker Varian and JEOL NMR formats, Bruker OPUS, LabView LVM and TDMS,
+     Agilent and Thermo Finnigan MS, Quantum Design VMS, ENDF
+   Compressed files are also supported, with on-the-fly extraction (zip, gz, tar, Z).
+
+   Distant files are supported through e.g. URLs such as 
+     file://, ftp:// http:// and https://
+   File names may end with an internal anchor reference '#anchor&quot;, as used in HTML 
+     links, in which case the members matching the anchor are returned.
+
+ input arguments:
+   file:   file name, or cell of file names, or any Matlab variable, or a URL
+             or an empty string (then pops'up a file selector)
+   loader: a function name to use as import routine, OR a structure with:
+             loader = 'auto' (default) 
+             loader = 'gui' (asks for the format to use)
+             loader.method = 'function name'
+             loader.options= string of options to catenate after file name
+                          OR cell of options to use as additional arguments
+                             to the method
+           leave it empty ('') for automatic setting.
+   additional arguments are passed to the import routine.
+
+ output variables:
+   data:   a single structure containing file data, or a cell of structures
+   loader: the loader that was used for importation, or a cell of loaders.
+
+ example: iLoad; iLoad('file'); iLoad('http://path/name'); iLoad('file.zip')
+          iLoad('file#anchor');
+
+ See also: importdata, load, <a href="iLoad_ini.html" class="code" title="function config = iLoad_ini">iLoad_ini</a>, Loaders
+
+ Part of: Loaders utilities (ILL library)
+ Author:  E. Farhi &lt;farhi@ill.fr&gt;.
+ Version: oct.. 23, 2018
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="class2str.html" class="code" title="function str=class2str(this, data, options)">class2str</a>	This function creates a string containing Matlab code describing a variable.</li><li><a href="iLoad.html" class="code" title="function [data, format] = iLoad(filename, loader, varargin)">iLoad</a>	[data, loader] = iLoad(file, loader, ...)</li><li><a href="iLoad_ini.html" class="code" title="function config = iLoad_ini">iLoad_ini</a>	config = iLoad_ini User definitions of specific import formats to be used by iLoad</li><li><a href="ifitpath.html" class="code" title="function d = ifitpath">ifitpath</a>	ifitpath iFit library location</li><li><a href="read_anytext.html" class="code" title="function s = read_anytext(varargin)">read_anytext</a>	import any text using 'looktxt'.</li><li><a href="read_cbf.html" class="code" title="function [frame,vararg_remain] = read_cbf(filename,varargin)">read_cbf</a>	Read CBF/imgCIF x-ray file format</li><li><a href="uigetfiles.html" class="code" title="function [filename, pathname] = uigetfiles(filterspec, title, varargin)">uigetfiles</a>	uigetfiles: Multiple open file dialog box</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="iLoad.html" class="code" title="function [data, format] = iLoad(filename, loader, varargin)">iLoad</a>	[data, loader] = iLoad(file, loader, ...)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of kmeans</title>
+  <meta name="keywords" content="kmeans">
+  <meta name="description" content="[b,c] = kmeans(X, k) : k-means clustering of iData object">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; kmeans.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/kmeans
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[b,c] = kmeans(X, k) : k-means clustering of iData object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [s,c] = kmeans(a, k, method) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [b,c] = kmeans(X, k) : k-means clustering of iData object
+
+   @iData/kmeans function to partition the object X into k classes.
+
+   b = kmeans(X,k) partitions the Signal in the iData object X into k clusters.
+     The resulting object Signal contains numbers from 1 to 'k' which are indices
+     of segments/partitions.
+     When no cluster can be found, the result is empty.
+   b = kmeans(X)   assumes k=2 partitions
+
+   [b,c] = kmeans(X,k) also returns the centroid of the clusters/partitions/segments.
+
+   b = kmeans(X, k, 'otsu')
+     uses the Otsu method, for 2D data sets
+   b = kmeans(X, k, 'kmeans++')
+     uses the K-means++ method, for 2D data sets
+
+ input:  X: object or array (iData)
+         k: number of partitions wanted (integer, default is 2)
+         method: '' for default, 'otsu' for Otsu method (only for 2D images).
+ output: b: object or array with partition indices (iData)
+         c: centroid locations of clusters
+ ex:     a=iData(peaks); b=kmeans(a);
+
+ See: https://en.wikipedia.org/wiki/K-means_clustering
+ See: https://en.wikipedia.org/wiki/K-means%2B%2B
+ See: https://en.wikipedia.org/wiki/Otsu%27s_method
+
+ References:
+   Otsu N., A threshold selection method from gray-level histogram, IEEE Trans. Syst. Man Cybern. 9:62-66;1979
+   [1] J. B. MacQueen, &quot;Some Methods for Classification and Analysis of 
+       MultiVariate Observations&quot;, in Proc. of the fifth Berkeley
+       Symposium on Mathematical Statistics and Probability, L. M. L. Cam
+       and J. Neyman, eds., vol. 1, UC Press, 1967, pp. 281-297.
+   [2] D. Arthur and S. Vassilvitskii, &quot;k-means++: The Advantages of
+       Careful Seeding&quot;, Technical Report 2006-13, Stanford InfoLab, 2006.
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/uminus, iData/abs, iData/real, iData/imag, iData/uplus</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="abs.html" class="code" title="function a = abs(a)">abs</a>	b = abs(s) : absolute value of iData object</li><li><a href="cell.html" class="code" title="function [content,fields]=cell(s)">cell</a>	[content,fields]=cell(s) : convert iData objects into cells</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="cumsum.html" class="code" title="function [b,sigma] = cumsum(a,dim)">cumsum</a>	s = cumsum(a,dim) : computes the cumulative sum of iData objects elements</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="fliplr.html" class="code" title="function a = fliplr(a)">fliplr</a>	b = fliplr(s) : Flip object in left/right direction</li><li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="ind2sub.html" class="code" title="function data = ind2sub(data, index)">ind2sub</a>	ind2sub(s,index) : get indexed element in an iData array</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isfinite.html" class="code" title="function a = isfinite(a)">isfinite</a>	b = isfinite(s) : True for finite iData object elements</li><li><a href="isfloat.html" class="code" title="function a = isfloat(a)">isfloat</a>	b = isfloat(s) : True for float iData object elements</li><li><a href="isnan.html" class="code" title="function a = isnan(a)">isnan</a>	b = isnan(s) : True for NaN iData object elements</li><li><a href="label.html" class="code" title="function labl = label(this, varargin)">label</a>	b = label(s, alias, label) : Change iData label for a given alias/axis</li><li><a href="linspace.html" class="code" title="function v = linspace(a,b,n)">linspace</a>	v = linspace(a,b,n) : creates a linearly spaced vector of objects</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="minus.html" class="code" title="function c = minus(a,b)">minus</a>	c = minus(a,b) : computes the difference of iData objects</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="ones.html" class="code" title="function s = ones(iData_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iData array</li><li><a href="real.html" class="code" title="function a = real(a)">real</a>	b = real(s) : real value of iData object</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="round.html" class="code" title="function a = round(a)">round</a>	b = round(s) : upper integer round of iData object</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="single.html" class="code" title="function a=single(a)">single</a>	d = single(s) : convert iData into single floats</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sort.html" class="code" title="function a = sort(a,dim,mode)">sort</a>	s = sort(a,dim) : Sort iData objects axes in ascending or descending order</li><li><a href="sqrt.html" class="code" title="function a = sqrt(a)">sqrt</a>	b = sqrt(s) : square root value of iData object</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="sum.html" class="code" title="function [s,sigma] = sum(a,dim)">sum</a>	s = sum(a,dim) : computes the sum of iData objects elements</li><li><a href="unique.html" class="code" title="function s = unique(a,dim,mode)">unique</a>	s = unique(a,dim) : set unique iData objects axes with no repetitions</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

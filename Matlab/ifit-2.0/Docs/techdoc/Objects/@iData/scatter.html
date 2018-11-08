@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of scatter</title>
+  <meta name="keywords" content="scatter">
+  <meta name="description" content="h = scatter(s,option) : Plot a 2D/3D object as separate colored points">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; scatter.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/scatter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>h = scatter(s,option) : Plot a 2D/3D object as separate colored points</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function h = scatter3(a, option) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> h = scatter(s,option) : Plot a 2D/3D object as separate colored points
+
+   @iData/scatter function to plot a 2D or 3D object
+     2D and 3D objects are shown as separate colored points
+     The slice(a) method opens the interactive sliceomatic 3D viewer.
+   scatter(a, 'filled') produces a bubble plot which symbols are coloured and
+     proportional in size to intensity. Symbols are filled circles.
+   scatter(a, 'bubble') produces a bubble plot which symbols are coloured and
+     proportional in size to intensity. Symbols are empty circles.
+
+ input:  s: object or array (iData)
+         option: global option for 2D and 3D plots: 
+                 flat, interp, faceted (for shading)
+                 transparent, light, clabel, colorbar
+                 axis tight, axis auto, view2, view3, hide_axes
+                 painters (bitmap drawing), zbuffer (vectorial drawing)
+ output: h: graphics object handles (cell)
+ ex:     scatter(iData(peaks)); scatter(iData(flow));
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/plot</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="plot.html" class="code" title="function h=plot(a, varargin)">plot</a>	h = plot(s, method, ...) : plot iData object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

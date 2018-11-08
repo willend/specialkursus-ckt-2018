@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of dynamic_range</title>
+  <meta name="keywords" content="dynamic_range">
+  <meta name="description" content="iData_Sqw2D: dynamic_range: crop the S(|q|,w) to the available dynamic range">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_Sqw2D</a> &gt; dynamic_range.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_Sqw2D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/dynamic_range
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_Sqw2D: dynamic_range: crop the S(|q|,w) to the available dynamic range</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [s, sphi] = dynamic_range(s, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_Sqw2D: dynamic_range: crop the S(|q|,w) to the available dynamic range
+   for given incident neutron energy.
+
+ The dynamic range is defined from the momentum and energy conservation laws:
+  Ef         = Ei - w                                is positive
+  cos(theta) = (Ki.^2 + Kf.^2 - q.^2) ./ (2*Ki.*Kf)  is within [-1:1]
+
+ The incident neutron energy can be computed using:
+  Ei = 2.0721*Ki^2 = 81.8042/lambda^2 with Ki in [Angs-1] and lambda in [Angs]
+
+ conventions:
+ omega = Ei-Ef = energy lost by the neutron
+    omega &gt; 0, neutron looses energy, can not be higher than p.ei (Stokes)
+    omega &lt; 0, neutron gains energy, anti-Stokes
+
+ The scattering angle phi can be restricted to match a detection area
+ with the syntax:
+   sqw_Ei=dynamic_range(s, Ei, [angles])
+
+ The syntax:
+   [sqw_Ei, sphiw] = dynamic_range(s,...)
+ also returns the S(phi,w) data set, which shows the detected signal vs scattering 
+   angle and energy transfer.
+
+  Input arguments can be given in order, or with name-value pairs, or as a 
+    structure with named fields. In addition to Ei, one can specify 'lambda' or 'Ki'
+  e.g.:
+   sqw_Ei=dynamic_range(s, 'lambda', 2.36);
+   sqw_Ei=dynamic_range(s, 'Ki', 2.665);
+
+ syntax:
+   sqw_Ei        =dynamic_range(s, Ei)
+   [sqw_Ei,sphiw]=dynamic_range(s, Ei)
+   [sqw_Ei,sphiw]=dynamic_range(s, Ei, [min_angle max_angle])
+   [sqw_Ei,sphiw]=dynamic_range(s, 'Ei', Ei, 'angles', [min_angle max_angle])
+   [sqw_Ei,sphiw]=dynamic_range(s, 'lambda', lambda)
+
+ input:
+   s:      Sqw data set, e.g. 2D data set with w as 1st axis (rows, meV), q as 2nd axis (Angs-1).
+   Ei:     incoming neutron energy [meV]
+   angles: scattering detection range in [deg] as a vector. Min and Max values are used.
+   'lambda','Ki': additional named arguments to specify the incident energy
+ output:
+   sqw_Ei: S(q,w)   cropped to dynamic range for incident energy Ei.
+   sphiw:  S(phi,w) angular dynamic structure factor for incident energy Ei.
+
+ Example: s=iData_Sqw2D('SQW_coh_lGe.nc'); dynamic_range(s, 14.8, [-20 135])
+
+ See also: iData_Sqw2D/Bosify, iData_Sqw2D/deBosify, iData_Sqw2D/symmetrize, iData_Sqw2D/scattering_cross_section
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="iData_Sqw2D.html" class="code" title="">iData_Sqw2D</a>	</li><li><a href="symmetrize.html" class="code" title="function s=symmetrize(s)">symmetrize</a>	iData_Sqw2D: symmetrize(s): extend the S(|q|,w) in both energy sides</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="dos.html" class="code" title="function [g, fig] = dos(s, method, varargin)">dos</a>	iData_Sqw2D: dos: compute the generalised density of states (gDOS) from a S(q,w)</li><li><a href="scattering_cross_section.html" class="code" title="function sigma = scattering_cross_section(s, varargin)">scattering_cross_section</a>	iData_Sqw2D: scattering_cross_section: compute the total neutron scattering cross section for</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

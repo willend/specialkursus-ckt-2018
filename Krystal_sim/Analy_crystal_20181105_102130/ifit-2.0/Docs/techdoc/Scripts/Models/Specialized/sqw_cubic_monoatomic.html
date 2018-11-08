@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_cubic_monoatomic</title>
+  <meta name="keywords" content="sqw_cubic_monoatomic">
+  <meta name="description" content="model = sqw_cubic_monoatomic(p, h,k,l,w, {signal}) : cubic monoatomic dispersion(HKL) with DHO(energy)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Specialized</a> &gt; sqw_cubic_monoatomic.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Specialized&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_cubic_monoatomic
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model = sqw_cubic_monoatomic(p, h,k,l,w, {signal}) : cubic monoatomic dispersion(HKL) with DHO(energy)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function signal=sqw_cubic_monoatomic(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model = sqw_cubic_monoatomic(p, h,k,l,w, {signal}) : cubic monoatomic dispersion(HKL) with DHO(energy)
+
+   iFunc/sqw_cubic_monoatomic: a 4D S(q,w) with a HKL dispersion, and a DHO line
+      shape, for a simple monoatomic system on a cubic lattice. Only the 3 
+      acoustic modes are computed.
+
+ WARNING:
+      Single intensity and line width parameters are used here.
+      The HKL position is relative to the closest Bragg peak. 
+
+ Example:
+ s=sqw_cubic_monoatomic([2 3]); qh=linspace(0,.5,50);qk=qh; ql=qh; w=linspace(0.01,10,51);
+ f=iData(s,[],qh,qk,ql,w); scatter3(log(f(:,:,1,:)),'filled');
+
+ References: https://en.wikipedia.org/wiki/Phonon
+  E. Meisterhofer &lt;http://lampx.tugraz.at/~hadley/ss1/phonons/scdos/sc.pdf&gt; 2013
+  Kittel, Solid State Physics, Wiley, New York, 7th ed. (1996), pp 99-103.
+
+ input:  p: sqw_cubic_monoatomic model parameters (double)
+           p(1)=C_ratio C1/C2 force constant ratio first/second neighbours.
+           p(2)=E0      sqrt(C1/m) energy [meV]
+           p(3)=Gamma   dispersion DHO half-width in energy [meV]
+           p(4)=Temperature of the material [K]
+           p(5)=Amplitude
+           p(6)=Background (constant)
+         qh: axis along QH in rlu (row,double)
+         qk: axis along QK in rlu (column,double)
+         ql: axis along QL in rlu (page,double)
+         w:  axis along energy in meV (double)
+    signal: when values are given, a guess of the parameters is performed (double)
+ output: signal: model value
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc/fits, iFunc/plot, gauss, sqw_phonons, <a href="sqw_sine3d.html" class="code" title="function signal=sqw_sine3d(varargin)">sqw_sine3d</a>, sqw_vaks
+   &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

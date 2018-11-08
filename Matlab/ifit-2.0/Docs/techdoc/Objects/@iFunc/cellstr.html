@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of cellstr</title>
+  <meta name="keywords" content="cellstr">
+  <meta name="description" content="ret = cellstr(s) : convert iFunc into a cell of strings">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; cellstr.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/cellstr
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ret = cellstr(s) : convert iFunc into a cell of strings</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ret, header] = cellstr(s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ret = cellstr(s) : convert iFunc into a cell of strings
+
+   @iFunc/cellstr: function to convert iFunc objects into a cell of
+       strings e.g. for further evaluation. 
+   Returns the iFunc expression to evaluate
+
+ input:  s: object or array (iFunc) 
+ output: ret: iFunc identification (cellstr)
+
+ Version: oct.. 23, 2018
+ See also  iFunc/struct, iFunc/char</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cellstr.html" class="code" title="function [ret, header] = cellstr(s)">cellstr</a>	ret = cellstr(s) : convert iFunc into a cell of strings</li><li><a href="char.html" class="code" title="function [ret, header] = char(s)">char</a>	ret = char(s) : convert iFunc into character</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/parameter in model objects</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cellstr.html" class="code" title="function [ret, header] = cellstr(s)">cellstr</a>	ret = cellstr(s) : convert iFunc into a cell of strings</li><li><a href="char.html" class="code" title="function [ret, header] = char(s)">char</a>	ret = char(s) : convert iFunc into character</li><li><a href="disp.html" class="code" title="function disp(s_in, name)">disp</a>	disp(s) : display iFunc object (details)</li><li><a href="display.html" class="code" title="function d = display(s_in, name)">display</a>	d = display(s) : display iFunc object (from command line)</li><li><a href="feval.html" class="code" title="function [signal, model, ax, name] = feval(model, p, varargin)">feval</a>	[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields</li><li><a href="mlock.html" class="code" title="function a = mlock(a, varargin)">mlock</a>	b = mlock(s, parameters, ...) : sets parameter lock (fix) for further fit using the model 's'</li><li><a href="munlock.html" class="code" title="function a = munlock(a, varargin)">munlock</a>	b = munlock(s, parameters, ...) : free parameter lock (clear) for further fit using the model 's'</li><li><a href="plot.html" class="code" title="function h = plot(a, p, varargin)">plot</a>	h = plot(model, parameters, axes, ...) plot a model</li><li><a href="publish.html" class="code" title="function filename = publish(a, filename, section, message)">publish</a>	b = publish(s) : export the Model object as an HTML document.</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, varargin)">saveas</a>	f = saveas(s, filename, format, options) : save iFunc object into various data formats</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iFunc indexed assignement</li><li><a href="xlim.html" class="code" title="function a = xlim(a, varargin)">xlim</a>	b = xlim(s, parameters, [min max], ...) : sets parameter bounds (min,max) for further fit using the model 's'</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

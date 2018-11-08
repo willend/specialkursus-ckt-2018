@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of plot</title>
+  <meta name="keywords" content="plot">
+  <meta name="description" content="iFunc_McCode/plot: runs the model in --trace mode and capture the output">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iFunc_subclasses</a> &gt; <a href="index.html">@iFunc_McCode</a> &gt; plot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iFunc_subclasses/@iFunc_McCode&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/plot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iFunc_McCode/plot: runs the model in --trace mode and capture the output</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [comps, fig, model]=plot(model, p, options, match) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iFunc_McCode/plot: runs the model in --trace mode and capture the output
+ grab all MCDISPLAY lines, and render the TRACE information into a figure.
+
+  plot(model)
+     displays the given McCode model with its defaults/current parameters.
+  plot(model, parameters)
+     same as above, but uses the given parameters (vector, structure, cell, string)
+  plot(model, parameters, options)
+     same as above, and specifies an output file format to generate
+  plot(model, parameters, options, match)
+     same as above, and only plot component names that match 'match'
+  plot(iFunc_McCode)
+     displays the default instrument geometry (templateDIFF)
+  [comps, fig] = plot(...)
+     returns the list of components, figure used for display and updated model.
+     
+ Example:
+   model = mccode('templateDIFF')
+   plot(model)
+     a figure is generated, which shows the instrument geometry.
+
+ syntax:
+   [comps, fig, model]=plot(model, p, options, match)
+
+ input:
+   model:      instrument simulation as obtained with 'mccode' (iFunc)
+               or path to an instrument definition to compile.
+   parameters: parameters to use, as a vector, cell, structure... or empty for default
+   options:    rendering/export options. Can contain 
+     'html','x3d','png','pdf','fig','tif','jpg','eps', 'svg' or empty for no output
+   match:      token to only render components that match it, or empty for all.
+   
+ output:
+   comps: a list of component specifications (structure array)
+   fig:   figure handle
+   model: model, updated or created (iFunc)
+
+ See also: mccode, iFunc, iFunc/feval, http://www.mcstas.org</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="plot.html" class="code" title="function [comps, fig, model]=plot(model, p, options, match)">plot</a>	iFunc_McCode/plot: runs the model in --trace mode and capture the output</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="iFunc_McCode.html" class="code" title="">iFunc_McCode</a>	</li><li><a href="plot.html" class="code" title="function [comps, fig, model]=plot(model, p, options, match)">plot</a>	iFunc_McCode/plot: runs the model in --trace mode and capture the output</li><li><a href="publish.html" class="code" title="function filename = publish(self, filename)">publish</a>	iFunc_McCode: publish: generate a readable HTML document and export results to</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of smooth</title>
+  <meta name="keywords" content="smooth">
+  <meta name="description" content="Z = smooth(Y) : smooth iData objects">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; smooth.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/smooth
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Z = smooth(Y) : smooth iData objects</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = smooth(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Z = smooth(Y) : smooth iData objects
+
+   @iData/smooth function to smooth iData objects
+     The smooth method uses a Robust spline smoothing or Savitzky-Golay algorithm
+     The spline smoothing relies on a frequency spline smoothing (discrete cosine
+     transform), whereas the Savitzky-Golay uses a generalized moving average 
+     with filter coefficients determined by an unweighted linear least-squares 
+     regression and a polynomial model of specified degree (default is 2).
+     The spline method is shape preserving, whereas the Savitzky-Golay may lead
+     to important distribution modifications.
+
+   Z = SMOOTH(Y) automatically smoothes the uniformly-sampled array Y. Y
+   can be any N-D noisy array (time series, images, 3D data,...). Non
+   finite data (NaN or Inf) are treated as missing values.
+
+   Z = SMOOTH(Y,S) smoothes the data Y using the smoothing parameter S.
+   S must be a real positive scalar. The larger S is, the smoother the
+   output will be. If the smoothing parameter S is omitted (see previous
+   option) or empty (i.e. S = []), it is automatically determined using
+   the generalized cross-validation (GCV) method.
+
+   Z = SMOOTH(Y,W) or Z = SMOOTH(Y,W,S) specifies a weighting array W of
+   real positive values, that must have the same size as Y. Note that a
+   nil weight corresponds to a missing value.
+
+   Z = SMOOTH(Y,'sgolay') uses the Savitzky-Golay method (2nd order)
+   Z = SMOOTH(Y,'sgolay',degree) uses the Savitzky-Golay method with polynomial 
+   degree specified by degree.
+   Z = SMOOTH(Y,span,'sgolay',degree) uses the number of data points specified 
+   by span in the Savitzky-Golay calculation. span must be odd and degree must 
+   be less than span.
+   Z = SMOOTH(Y,span,'sgolay',degree,dimensions) specifies the dimensions along
+   which the Savitzky-Golay filter should be applied (integer or vector up to ndims).
+
+   Z = SMOOTH(Y, 'gauss', [ widths ]) uses a nD gaussian convolution
+
+   Robust smoothing
+   ----------------
+   Z = SMOOTHN(...,'robust') carries out a robust smoothing that minimizes
+   the influence of outlying data.
+
+   Reference
+   --------- 
+   Garcia D, Robust smoothing of gridded data in one and higher dimensions
+   with missing values. Computational Statistics &amp; Data Analysis, 2010. 
+   &lt;a href=&quot;matlab:web('http://www.biomecardio.com/pageshtm/publi/csda10.pdf')&quot;&gt;PDF download&lt;/a&gt;
+   http://www.biomecardio.com/matlab/smoothn.html
+
+   Numerical recipes in C. p 650
+
+ input:  a: object or array (iData/array of)
+ output: s: smoothed data set (iData)
+ ex:     c=smooth(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/interp</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ceil.html" class="code" title="function a = ceil(a)">ceil</a>	b = ceil(s) : upper integer round of iData object</li><li><a href="convn.html" class="code" title="function c = convn(a,b)">convn</a>	c = convn(a,b) : computes the convolution of an iData object with a response function</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="permute.html" class="code" title="function a = permute(a, order)">permute</a>	c = permute(a, order) : Permute object dimensions from iData objects/arrays</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of peaks</title>
+  <meta name="keywords" content="peaks">
+  <meta name="description" content="[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; peaks.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/peaks
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [sigma, position, amplitude, baseline] = peaks(a, dim, m) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData
+
+   @iData/peaks function to compute an estimate of peak position and width along
+     dimension 'dim'
+
+ input:  a: object or array (iData/array of)
+         dim: dimension to use. Default is 1 (int)
+         m: typical peak width or 0 for automatic guess (int)
+ output: half_width: width of peaks (scalar/array)
+         center:     center of peaks (scalar/array)
+         amplitude:  amplitude of peaks (scalar/array)
+         baseline:   baseline (background) (iData)
+ ex:     c=peaks(a);
+
+ References: Slavic, NIM 112 (1973) 253 ; M. Morhac, NIM A 600 (2009) 478 
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/median, iData/mean, iData/std</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="abs.html" class="code" title="function a = abs(a)">abs</a>	b = abs(s) : absolute value of iData object</li><li><a href="camproj.html" class="code" title="function s = camproj(a,dim, center)">camproj</a>	s = camproj(a,dim) : projection/radial integration of iData objects elements</li><li><a href="ceil.html" class="code" title="function a = ceil(a)">ceil</a>	b = ceil(s) : upper integer round of iData object</li><li><a href="cell.html" class="code" title="function [content,fields]=cell(s)">cell</a>	[content,fields]=cell(s) : convert iData objects into cells</li><li><a href="circshift.html" class="code" title="function a=circshift(a, dim, shift)">circshift</a>	b=circshift(a, rank, shift): shifts the axis of specified rank by a value</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="diff.html" class="code" title="function a = diff(a)">diff</a>	b = diff(s) : computes the difference long 1st axis of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="interp.html" class="code" title="function b = interp(a, varargin)">interp</a>	[b...] = interp(s, ...) : interpolate iData object</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isreal.html" class="code" title="function a = isreal(a)">isreal</a>	b = isreal(s) : True for real iData object elements</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="log.html" class="code" title="function a = log(a)">log</a>	b = log(s) : natural logarithm value of iData object</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="ones.html" class="code" title="function s = ones(iData_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iData array</li><li><a href="peaks.html" class="code" title="function [sigma, position, amplitude, baseline] = peaks(a, dim, m)">peaks</a>	[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</li><li><a href="prod.html" class="code" title="function [s,sigma] = prod(a,dim)">prod</a>	s = prod(a,dim) : computes the product of iData objects elements</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="round.html" class="code" title="function a = round(a)">round</a>	b = round(s) : upper integer round of iData object</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sqrt.html" class="code" title="function a = sqrt(a)">sqrt</a>	b = sqrt(s) : square root value of iData object</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li><li><a href="sum.html" class="code" title="function [s,sigma] = sum(a,dim)">sum</a>	s = sum(a,dim) : computes the sum of iData objects elements</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="peaks.html" class="code" title="function [sigma, position, amplitude, baseline] = peaks(a, dim, m)">peaks</a>	[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>
