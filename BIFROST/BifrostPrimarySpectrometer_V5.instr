@@ -23,6 +23,9 @@ ax=0,      ay=2.14,   az=-1.24,
 bx = 0,    by = 0,    bz =  2.47,
 cx = 6.71, cy = 0,    cz =  0,
 Omega=0
+
+lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
+sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1
 )
 
 DECLARE
@@ -168,7 +171,8 @@ double DM         = 3.355;   /* Monochromator d-spacing in Angs */
 double wi		  = 0.01; 	/* Monochromator width*/
 
 
-int i;   
+int i
+double Samplechoice;;   
 %}
 
 INITIALIZE
@@ -1656,20 +1660,23 @@ AT (0, 0, 0.2) RELATIVE PREVIOUS
 
 COMPONENT SamplePos = Arm()
 AT (0, 0, 0.7) RELATIVE Lmon_sample
+EXTEND %{
+  Samplechoice=rand01();
+%}
   
-COMPONENT v_sample = Single_crystal(
-    xwidth = 0.002, 
-   yheight = 0.1, 
-    zdepth = 0.1,
-    mosaic = 30, reflections = SXfile,
-    ax=ax, ay=ay, az=az,
-    bx=bx, by=by, bz=bz,
-    cx=cx, cy=cy, cz=cz)
-AT (0, 0, 0) RELATIVE SamplePos
-ROTATED (0,Omega,0) RELATIVE SamplePos
+//COMPONENT v_sample = Single_crystal(
+//    xwidth = 0.002, 
+//   yheight = 0.1, 
+//    zdepth = 0.1,
+//    mosaic = 30, reflections = SXfile,
+//    ax=ax, ay=ay, az=az,
+//    bx=bx, by=by, bz=bz,
+//    cx=cx, cy=cy, cz=cz)
+//AT (0, 0, 0) RELATIVE SamplePos
+//ROTATED (0,Omega,0) RELATIVE SamplePos
 
-COMPONENT Sample_output = PSD_monitor_4PI(radius=0.5, nx=180, ny=180, filename="Sample_output", restore_neutron=1)
-  AT (0,0,0) RELATIVE SamplePos
+//COMPONENT Sample_output = PSD_monitor_4PI(radius=0.5, nx=180, ny=180, filename="Sample_output", restore_neutron=1)
+//  AT (0,0,0) RELATIVE SamplePos
   
 //V-sample
 //COMPONENT v_sample = V_sample(
@@ -1682,6 +1689,50 @@ COMPONENT Sample_output = PSD_monitor_4PI(radius=0.5, nx=180, ny=180, filename="
 //    focus_xw=0.05, 
 //    focus_yh=0.1)
 // AT (0, 0, 0.7) RELATIVE Lmon_sample
+
+COMPONENT Magnon = Magnon_bcc(
+    radius=0.02,
+    yheight=0.03,
+    sigma_abs=0, 
+    sigma_inc=1, 
+    a=aa,  
+    J1=sample_J, 
+    J2=0,
+    D=0.0,
+    s=1,
+    DW=1,
+    verbose=Verbose, 
+    T=TT, 
+    FM = FerroMagnet,
+    target_index=0,
+    focus_xw=0, 
+    focus_yh=0,
+    focus_aw=180, /* For statistics considerations, only a small angular */
+    focus_ah=0.1)   /* band arround sample is illuminated */
+  WHEN (inelastic>0 && Samplechoice<inelastic)  AT (0, 0, 5.1) RELATIVE Lmon_sample
+  ROTATED (0, Rotation, 0) RELATIVE Lmon_sample
+EXTEND %{
+   p/=mcipinelastic;
+   p*=mcipimultiplier;
+%}
+
+
+COMPONENT Lattice = Single_crystal(order=1, 
+     reflections = "BCC_fake.lau", mosaic=30, radius = 0.02, yheight = 0.03,   delta_d_d=1e-3,
+     ax =-aa , ay = 0, az =0 , bx =0 , by =0, bz = aa , cx =0 , cy = aa , cz =0, barns=1)
+  WHEN (inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 5.1) RELATIVE source
+  ROTATED (0, Rotation, 0) RELATIVE source
+EXTEND %{
+   p/=(1-mcipinelastic);
+   // Remove direct beam
+   if(!SCATTERED) ABSORB;
+%}
+
+COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=64,nqa=401,nqb=401,qamin=0.5,qamax=4.5,qamin=0.5,qbmax=4.5,index=-2,Emin=8, Emax=16, yheight=0.1)
+AT (0,0,0) RELATIVE Magnon
+
+COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd")
+AT (0,0,0) RELATIVE Magnon
 
 
 COMPONENT Mono_Cradle = Arm()
