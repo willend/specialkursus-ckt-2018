@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of trapz</title>
+  <meta name="keywords" content="trapz">
+  <meta name="description" content="s = trapz(a,dim) : computes the integral of iData objects elements along given dimension">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; trapz.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/trapz
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>s = trapz(a,dim) : computes the integral of iData objects elements along given dimension</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [s,sigma] = trapz(a,dim, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s = trapz(a,dim) : computes the integral of iData objects elements along given dimension
+
+   @iData/trapz function to compute the integral of the data set along a given dimension
+     trapz(a,dim) integrates along axis of rank dim. The axis is then removed.
+       default is to use dim=1. 
+       If dim=0, integration is done on all axes and the total is returned as a
+         scalar value. In this case, a second output argument holds the error bar.
+       If dim='radial', the integration is done radially (R=sqrt(sum(axes^2)).
+       trapz is complementary to sum and camproj, but takes into account axes.
+     trapz(a,'radial', center) specifies the 'center' of the integration 
+       (vector of coordinates) or a single value used as center on all axes 
+       (for instance 0). All axes are assumed to be distances.
+
+ input:  a: object or array (iData/array of)
+         dim: dimension to integrate (int/array of, or 'radial')
+ output: s: integral of elements (iData/scalar)
+ ex:     c=trapz(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/cumsum, iData/camproj, iData/sum</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cart2sph.html" class="code" title="function s = cart2sph(a, center)">cart2sph</a>	s = cart2sph(a,dim) : cartesian to polar/spherical representation of iData objects</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

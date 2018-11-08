@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of subsasgn</title>
+  <meta name="keywords" content="subsasgn">
+  <meta name="description" content="b = subsasgn(a,index,b) : iData indexed assignement">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; subsasgn.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/subsasgn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>b = subsasgn(a,index,b) : iData indexed assignement</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = subsasgn(a,S,val) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> b = subsasgn(a,index,b) : iData indexed assignement
+
+   @iData/subsasgn: function defines indexed assignement 
+   such as a(1:2,3) = b
+   The special syntax a{0} multiplies the value by the Monitor and then assigns 
+   the Signal, and a{n} assigns the axis of rank n.
+     When the assigned value is a char, the axis definition is set (as in setaxis).
+     When the assigned value is numeric, the axis value is set (as in set).
+   The special syntax a{'alias'} is a quick way to define an alias.
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/subsref</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="char.html" class="code" title="function c = char(s)">char</a>	c = char(s) : convert iData into character</li><li><a href="diff.html" class="code" title="function a = diff(a)">diff</a>	b = diff(s) : computes the difference long 1st axis of iData object</li><li><a href="double.html" class="code" title="function a=double(a)">double</a>	d = double(s) : convert iData into doubles</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getalias.html" class="code" title="function [link, label, names] = getalias(this,alias)">getalias</a>	[link, label,names] = getalias(s, 'AliasName') : get iData alias</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/alias in iData objects</li><li><a href="islogical.html" class="code" title="function a = islogical(a)">islogical</a>	b = islogical(s) : True for logical iData object elements</li><li><a href="isnumeric.html" class="code" title="function a = isnumeric(a)">isnumeric</a>	b = isnumeric(s) : True for numeric iData object elements</li><li><a href="isscalar.html" class="code" title="function a = isscalar(a)">isscalar</a>	b = isscalar(s) : True for scalar iData objects</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="label.html" class="code" title="function labl = label(this, varargin)">label</a>	b = label(s, alias, label) : Change iData label for a given alias/axis</li><li><a href="mean.html" class="code" title="function b = mean(a, dim)">mean</a>	b = mean(s, dim) : mean value of iData object</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="ones.html" class="code" title="function s = ones(iData_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iData array</li><li><a href="prod.html" class="code" title="function [s,sigma] = prod(a,dim)">prod</a>	s = prod(a,dim) : computes the product of iData objects elements</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iData indexed assignement</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="transpose.html" class="code" title="function a = transpose(a)">transpose</a>	b = transpose(s) : non-conjugate transpose of iData object</li><li><a href="union.html" class="code" title="function [ai,bi] = union(a, b)">union</a>	[ai,bi] = union(a, b) : computes object union area and values</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iData indexed assignement</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

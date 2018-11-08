@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of dos</title>
+  <meta name="keywords" content="dos">
+  <meta name="description" content="iData_Sqw2D: dos: compute the generalised density of states (gDOS) from a S(q,w)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_Sqw2D</a> &gt; dos.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_Sqw2D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/dos
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_Sqw2D: dos: compute the generalised density of states (gDOS) from a S(q,w)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [g, fig] = dos(s, method, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_Sqw2D: dos: compute the generalised density of states (gDOS) from a S(q,w)
+
+   g = dos(s, method, n, T, DW)
+
+ compute: iData_Sqw2D -&gt; generalised Density of States gDOS [p=1]
+
+  The returned generalised density of states corresponds with the 1-phonon term in the
+  the incoherent Gaussian approximation. This density of states is normalised to 1.
+
+       gDOS(q,w) = S(q,w) w^2/q^2                   Bellissent
+       gDOS(q,w) = S(q,w) w  /q^2/[1 + n(hw)]       Carpenter/Price
+  and:
+       gDOS(w)   = lim(q-&gt;0) [ gDOS(q,w) ]
+
+       gDOS(q,w) = w*q*S(q,w)*exp(2W(q))/[Qmax^4 - Qmin^4]/(1+n(w)) Bredov/Oskotskii
+       gDOS(w)   = trapz(g, 2)
+
+  The Bredov/Oskotskii methodology provides the best gDOS estimate, using the
+    whole data set.
+
+  LIMITATIONS/WARNINGS:
+  The incoherent approximation states that the gDOS from an incoherent S(q,w) is 
+    roughly equal to that obtained from a coherent S(q,w). However, the 
+    applicability to a coherent dynamic structure factor S(q,w) should be
+    taken with great care, as this formalism then does not fully hold.
+  This implementation is in principle exact for an isotropic monoatomic material,
+    e.g. a liquid, powder, or cubic crystal. 
+  This routine should better be applied on an incoherent dynamic S(q,w) data set.
+
+  The method to use in the gDOS computation can be given as 2nd argument
+       gDOS = dos(Sqw, 'Bredov')         more accurate as it uses 100% of data
+       gDOS = dos(Sqw, 'Carpenter')      Temperature must be a property
+       gDOS = dos(Sqw, 'Bellissent')     simple yet efficient
+
+  The gDOS is stored in the 'gDOS' property of the initial Sqw object, and is 
+    retrieved without recomputation when available. 
+  To force a recomputation of the gDOS, use:
+       dos(Sqw, 'method', 0) or dos(Sqw, 'method', 'force')
+
+  Input arguments can be given in order, or with name-value pairs, or as a 
+    structure with named fields.
+
+ References: Price J. et al, Non Cryst Sol 92 (1987) 153
+         Bellissent-Funel et al, J. Mol. Struct. 250 (1991) 213
+         Carpenter and Pelizarri, Phys. Rev. B 12, 2391 (1975)
+         Suck et al, Journal of Alloys and Compounds 342 (2002) 314
+         Bredov et al., Sov. Phys. Solid State 9, 214 (1967)
+         V.S. Oskotskii, Sov. Phys. Solid State 9 (1967), 420.
+         H. Schober, Journal of Neutron Research 17 (2014) 109–357. (esp. p307-315)
+
+ syntax:
+   g = dos(s)
+   g = dos(s, method, n, T, DW)
+   g = dos(s, 'method', method, 'n', n, 'T', T, 'DW', dw)
+
+ input:
+   s:      Sqw data set e.g. 2D data set with w as 1st axis (rows, meV), q as 2nd axis (Angs-1).
+   method: 'Carpenter','Bellissent' or 'Bredov' (default)
+   n:      number of low-angle values to integrate (integer). Default is 10 when omitted.
+           when 0 or 'force', the gDOS is re-computed. Only for Carpenter/Bellissent.
+   T:      optional temperature to use for computation (leave undefined for automatic).
+   DW:     optional Debye-Waller coefficient gamma=&lt;u^2&gt; [Angs^2] e.g. 0.005
+           The Debye-Waller function is      2W(q)=gamma*q^2
+           The Debye-Waller factor   is exp(-2W(q))
+
+ output:
+   g:      gDOS(w)   (1D iData versus energy)
+
+ Example: Sqw=iData_Sqw2D('D2O_liq_290_coh.sqw.zip'); g = dos(Bosify(symmetrize(Sqw))); plot(g);
+
+ See also: iData_Sqw2D/multi_phonons, iData_Sqw2D/incoherent
+           iData_vDOS/multi_phonons, iData_vDOS/multi_phonons
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="dynamic_range.html" class="code" title="function [s, sphi] = dynamic_range(s, varargin)">dynamic_range</a>	iData_Sqw2D: dynamic_range: crop the S(|q|,w) to the available dynamic range</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="iData_Sqw2D.html" class="code" title="">iData_Sqw2D</a>	</li><li><a href="thermochemistry.html" class="code" title="function [t, fig]=thermochemistry(s, T, options)">thermochemistry</a>	iData_Sqw2D/thermochemistry: compute thermodynamic quantities for 2D S(q,w) data sets.</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

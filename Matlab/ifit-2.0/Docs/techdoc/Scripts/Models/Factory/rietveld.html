@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of rietveld</title>
+  <meta name="keywords" content="rietveld">
+  <meta name="description" content="model=rietveld(sample, instrument, ....) Rietveld refinement of powder/single crystal">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; rietveld.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/rietveld
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model=rietveld(sample, instrument, ....) Rietveld refinement of powder/single crystal</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function y = rietveld(sample, instr, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model=rietveld(sample, instrument, ....) Rietveld refinement of powder/single crystal
+
+ This function builds a fit model from:
+   * a sample structure
+   * a McCode instrument model (usually a diffractometer)
+ The model can then be used for refinement as a usual fit model:
+   fits(model, data_set, parameters, options, constraints)
+
+ MODEL CREATION
+
+ Any powder structure can be entered, and there is no limitation on the number
+   of parameters/atoms in the cell. The powder/crystal model takes into account 
+     Biso (thermal motions), charge, occupancy, spin
+   Equally, the instrument model can be of any complexity, including sample
+   environments, other sample phases (incl. amorphous), multi-dimensional PSD 
+   detectors, ... It is possible to specify which monitor file to use from 
+   the McCode instrument. The instrument resolution function is not computed
+   using the legacy Caglioti formalism, but is fully convoluted with the
+   sample component from the McStas instrument description.
+   The default, and recommended, instrument is templateDIFF, but others are possible
+   including TOF-diffractometers, PSD-diffractometers, and even Laue.
+
+ Once set, the fit parameters may be constraint with either the usual 'constraints'
+   argument to 'fits', or by setting the model constraints such as:
+     model.Sample_a     = 'fix';     % fix 'a' lattice parameter
+     model.Sample_alpha = [80 110];  % restrict alpha lattice angle in degrees
+ 
+ Parameters of the model can be entered as any of:
+ * a structure with one field 'structure.&lt;atom&gt;' per atom in the cell, named from the atom, e.g.
+     p.structure.Al1=[x y z {Biso occ spin charge}] where {Biso occ spin charge} are optional
+     p.Al1          =[...] can also be used for a compact specification (see exemple below).
+   plus additional fields
+     p.cell=[a b c alpha beta gamma] lattice cell parameters (Angs and deg)
+     p.Spgr='space group' as Number, Hall or Hermman-Mauguin
+
+   In addition, the 'CFML_write' field allows to set the name of the intermediate
+     reflection file written by the CrysFML routines, and usable by the PowderN
+     and Isotropic_Sqw McStas components. The default intermediate file is
+     'reflections.laz'.
+   The optional 'mode' argument to the sample description can be 'p' for powders
+     (default) or 'x' for single crystal.
+
+ * a vector array where Z is the atomic number
+     p=[ a b c alpha beta gamma (Z x y z Biso occ spin charge) (...) ... ]
+
+ * a CIF/CFL/PCR/shellX file name from which structure is extracted.
+
+ * a McCode instrument description file name (.instr extension) to specify
+     the instrument model to use. The default instrument is 'templateDIFF.instr'
+
+ * a char with label/value pairs separated by ';' to build a structure.
+
+ * the string 'defaults' or 'gui' to use a default model, or pop-up dialogue box.
+
+ * All additional arguments are sent to the instrument model.
+
+ MODEL EVALUATION
+
+ The dimensionality and axes of the model is that of the monitor in the instrument, 
+ and its parameters are that from the sample with that of the instrument.
+
+ Example: refine a NaCaAlF powder structure with the templateDIFF McStas instrument
+    Sample.title = 'Na2Ca3Al2F14';
+    Sample.cell  = [10.242696  10.242696  10.242696  90.000  90.000  90.000];
+    Sample.Spgr  = 'I 21 3';
+    Sample.Ca1   = [0.46737  0.00000  0.25000  0.60046  0.50000   0.0   2.0];
+    Sample.Al1   = [0.24994  0.24994  0.24994  0.18277  0.33333   0.0   3.0];
+    Sample.Na1   = [0.08468  0.08468  0.08468  2.25442  0.33330   0.0   1.0];
+    Sample.F1    = [0.13782  0.30639  0.12023  0.56669  1.00000   0.0  -1.0];
+    Sample.F2    = [0.36209  0.36363  0.18726  1.42140  1.00000   0.0  -1.0];
+    Sample.F3    = [0.46123  0.46123  0.46123  0.88899  0.33333   0.0  -1.0];
+ The resulting hklF2 file 'reflections.laz' will be used by the instrument Powder 
+ parameter and the model is computed at constant wavelength lambda=2.36 (given as char)
+    f = rietveld(Sample, 'templateDIFF.instr',' Powder=reflections.laz; lambda=&quot;2.36&quot;');
+ you may plot the model (using McStas) in the [10 170] angular range:
+    plot(f, f.Guess, linspace(-.2,.2,50),linspace(10,170,300));
+ Then 'f' is an iFunc Rietveld model. Then perform the Rietveld refinement:
+    p = fits(measurement, f); % where measurement holds a measured powder diffractogram
+
+ See also: <a href="mccode.html" class="code" title="function y = mccode(instr, options, parameters)">mccode</a>, iFunc, iData, iFunc/fits
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="mccode.html" class="code" title="function y = mccode(instr, options, parameters)">mccode</a>	y = mccode(instr, options, parameters) : McCode (McStas/McXtrace) instrument</li><li><a href="mccode.html" class="code" title="function y = mccode(instr, options, parameters)">mccode</a>	y = mccode(instr, options, parameters) : McCode (McStas/McXtrace) instrument</li><li><a href="mccode.html" class="code" title="function y = mccode(instr, options, parameters)">mccode</a>	y = mccode(instr, options, parameters) : McCode (McStas/McXtrace) instrument</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

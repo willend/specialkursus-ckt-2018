@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of save</title>
+  <meta name="keywords" content="save">
+  <meta name="description" content="f = save(s, filename, format, options) : save iFunc object into various data formats">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; save.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/save
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>f = save(s, filename, format, options) : save iFunc object into various data formats</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [filename,format] = save(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> f = save(s, filename, format, options) : save iFunc object into various data formats
+
+   @iFunc/save function to save models
+     This function saves the content of iFunc objects. The default format is 'yaml'.
+   save(iFunc,'formats')
+     prints a list of supported export formats.
+   save(iFunc,'file.ext')            determine file format from the extension
+   save(iFunc,'file','format')       sets file format explicitly
+     To load back a model from an m-file, type its file name at the prompt.
+     To load back a model from an mat-file, type 'load filename.mat' at the prompt.
+     To load back a model from a YAML, JSON, XML, use iFunc('filename')
+
+ input:  s: object or array (iFunc)
+         filename: name of file to save to. Extension, if missing, is appended (char)
+                   If the filename already exists, the file is overwritten.
+                   If given as filename='gui', a file selector pops-up
+         format: data format to use (char), or determined from file name extension
+           'json' save as JSON JavaScript Object Notation, ascii
+           'm'    save as a flat Matlab .m file (a function which returns an iFunc object or structure)
+           'mat'  save as a '.mat' binary file (same as 'save', RECOMMENDED)
+           'xml'  save as XML file, ascii.
+           'yaml' save as YAML format, ascii, RECOMMENDED, DEFAULT
+         as well as other lossy formats
+           'fig'  save as a Matlab figure
+           'gif','bmp','png','tiff','jpeg','ps','pdf','ill','eps' save as an image
+           'hdf4' save as an HDF4 immage
+           'html' save as Hypertext Markup Language document, appended to any existing document
+
+           'gui' when filename extension is not specified, a format list pops-up
+         options: specific format options, which are usually plot options
+           default is 'view2 axis tight'.
+
+ output: f: filename(s) used to save data (char)
+ ex:     b=save(a, 'file', 'yaml'); c=iFunc(b);
+         b=save(a, 'file', 'gif', 'axis tight');
+
+ Version: oct.. 23, 2018
+ See also <a href="iFunc.html" class="code" title="">iFunc</a>, <a href="saveas.html" class="code" title="function [filename,format] = saveas(a, varargin)">saveas</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, varargin)">saveas</a>	f = saveas(s, filename, format, options) : save iFunc object into various data formats</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="feval.html" class="code" title="function [signal, model, ax, name] = feval(model, p, varargin)">feval</a>	[signal, model, axes, name] = feval(model, parameters, x,y, ...) evaluate a function</li><li><a href="publish.html" class="code" title="function filename = publish(a, filename, section, message)">publish</a>	b = publish(s) : export the Model object as an HTML document.</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, varargin)">saveas</a>	f = saveas(s, filename, format, options) : save iFunc object into various data formats</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

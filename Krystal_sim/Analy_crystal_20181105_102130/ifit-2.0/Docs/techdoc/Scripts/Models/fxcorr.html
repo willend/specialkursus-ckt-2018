@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of fxcorr</title>
+  <meta name="keywords" content="fxcorr">
+  <meta name="description" content="FXCORR Correlation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="index.html">Models</a> &gt; fxcorr.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/fxcorr
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FXCORR Correlation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function y=fxcorr(x, h, shape) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">FXCORR Correlation
+   y = FXCORR(x, h) correlates x and h.
+   It works with x and h being of any dimensionality. When only one argument is given, 
+     the auto-correlation is computed.
+   The accuracy of the conv and xcorr operators depends on the sampling. Peaks should
+     be describes with at least 5 points underneath.
+   This is the same as calling 
+     fconv(x,h, 'correlation');
+
+      x = input vector (signal)
+      h = input vector (filter)
+  shape = optional shape of the return value
+          full         Returns the full two-dimensional correlation.
+          same         Returns the central part of the correlation of the same size as x.
+          valid        Returns only those parts of the correlation that are computed
+                       without the zero-padded edges. Using this option, y has size
+                       [mx-mh+1,nx-nh+1] when all(size(x) &gt;= size(h)).
+          pad          Pads the x signal by replicating its starting/ending values
+                       in order to minimize the correlation side effects.
+          center       Centers the h filter so that correlation does not shift
+                       the x signal.
+          normalize    Normalizes the h filter so that the correlation does not
+                       change the x signal integral.
+          background   Remove the background from the filter h (subtracts the minimal value)
+          deconv       Performs a deconvolution/decorrelation
+
+ ex:     c=fxcorr(a,b);
+
+      See also <a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">FCONV</a>, CONV, CONV2, FILTER, FILTER2, FFT, IFFT
+
+ Version: oct.. 23, 2018
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">fconv</a>	FCONV Fast Convolution/Correlation</li><li><a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">fconv</a>	FCONV Fast Convolution/Correlation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

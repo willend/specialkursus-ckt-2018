@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of set</title>
+  <meta name="keywords" content="set">
+  <meta name="description" content="[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; set.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/set
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function this = set(this,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties
+
+   @iFunc/set function to set iFunc properties.
+   set(s, 'PropertyName', Propertyvalue, ...}) 
+     sets values into given property names for the iFunc object s.
+     The PropertyName can be any iFunc object field, or a model parameter name
+       or 'p' to designate the vector of parameter values.
+   set(s, 'Struct.Field', ...)
+     sets values from given structure fields into the iFunc object s.
+   set(s, CellNames, CellValues, ...)
+     sets values from given cells into the iFunc object s.
+   set(s) indicates the signification of the iFunc base properties
+   The input iFunc object is updated if no output argument is specified.
+
+   A faster syntax for the 'set' method is: s.PropertyName = PropertyValue
+   To set a constraint on a model parameter, use:
+     s.parameter='fix'     % to lock its value during a fit process
+     s.parameter='clear'   % to unlock value during a fit process
+     s.parameter=[min max] % to bound value
+     s.parameter=[nan nan] % to remove bound constraint
+     s.parameter=''        % to remove all constraints on 'parameter'
+     s.Constraint=''       % to remove all constraints
+
+   When the Property is a model parameter name 
+
+ ex      : set(iFunc,'Title','A nice Title')
+
+ Version: oct.. 23, 2018
+ See also <a href="iFunc.html" class="code" title="">iFunc</a>, iFunc/get, iFunc/setalias, iFunc/setaxis</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="disp.html" class="code" title="function disp(s_in, name)">disp</a>	disp(s) : display iFunc object (details)</li><li><a href="iFunc.html" class="code" title="">iFunc</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iFunc indexed assignement</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fits.html" class="code" title="function [pars_out,criteria,message,output] = fits(model, a, pars, options, constraints, varargin)">fits</a>	[pars,criteria,message,output] = fits(model, data, pars, options, constraints, ...) : fit a model on a data set</li><li><a href="plot.html" class="code" title="function h = plot(a, p, varargin)">plot</a>	h = plot(model, parameters, axes, ...) plot a model</li><li><a href="publish.html" class="code" title="function filename = publish(a, filename, section, message)">publish</a>	b = publish(s) : export the Model object as an HTML document.</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iFunc properties</li><li><a href="subplot.html" class="code" title="function h=subplot(a, varargin)">subplot</a>	h = subplot(s) : plot iFunc array as subplots</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

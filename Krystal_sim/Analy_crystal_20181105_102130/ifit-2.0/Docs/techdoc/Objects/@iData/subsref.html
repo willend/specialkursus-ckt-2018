@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of subsref</title>
+  <meta name="keywords" content="subsref">
+  <meta name="description" content="b = subsref(a,s) : iData indexed references">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; subsref.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/subsref
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>b = subsref(a,s) : iData indexed references</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = subsref(a,S) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> b = subsref(a,s) : iData indexed references
+
+   @iData/subsref: function returns subset indexed references
+     such as a(1:2) or a.field.
+   The special syntax a{0} where a is a single iData returns the 
+     Signal/Monitor, and a{n} returns the axis of rank n.
+   When given an iFunc model, the iData axes are used to evaluate the model
+     signal = iData(model)
+     signal = iData(model, p)  uses given parameters
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/subsasgn</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="abs.html" class="code" title="function a = abs(a)">abs</a>	b = abs(s) : absolute value of iData object</li><li><a href="char.html" class="code" title="function c = char(s)">char</a>	c = char(s) : convert iData into character</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="double.html" class="code" title="function a=double(a)">double</a>	d = double(s) : convert iData into doubles</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getalias.html" class="code" title="function [link, label, names] = getalias(this,alias)">getalias</a>	[link, label,names] = getalias(s, 'AliasName') : get iData alias</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/alias in iData objects</li><li><a href="islogical.html" class="code" title="function a = islogical(a)">islogical</a>	b = islogical(s) : True for logical iData object elements</li><li><a href="isnan.html" class="code" title="function a = isnan(a)">isnan</a>	b = isnan(s) : True for NaN iData object elements</li><li><a href="isnumeric.html" class="code" title="function a = isnumeric(a)">isnumeric</a>	b = isnumeric(s) : True for numeric iData object elements</li><li><a href="isscalar.html" class="code" title="function a = isscalar(a)">isscalar</a>	b = isscalar(s) : True for scalar iData objects</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="not.html" class="code" title="function a = not(a)">not</a>	b = not(s) : computes the logical 'not' of iData object</li><li><a href="prod.html" class="code" title="function [s,sigma] = prod(a,dim)">prod</a>	s = prod(a,dim) : computes the product of iData objects elements</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sqrt.html" class="code" title="function a = sqrt(a)">sqrt</a>	b = sqrt(s) : square root value of iData object</li><li><a href="squeeze.html" class="code" title="function a = squeeze(a)">squeeze</a>	c = squeeze(a) : remove singleton dimensions from iData objects/arrays</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="times.html" class="code" title="function c = times(a,b)">times</a>	c = times(a,b) : computes the product of iData objects</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="clim.html" class="code" title="function a = clim(a, lims, exclude)">clim</a>	b = clim(s,[ cmin cmax ]) : Reduce iData C axis limits</li><li><a href="dog.html" class="code" title="function s = dog(dim,a, varargin)">dog</a>	s= dog(dim,a) : split iData objects elements along dimension</li><li><a href="fill.html" class="code" title="function c=fill(a, n)">fill</a>	FILL fill-in over missing data</li><li><a href="fits.html" class="code" title="function [pars_out,criteria,message,output] = fits(a, model, pars, options, constraints, varargin)">fits</a>	[pars,criteria,message,output] = fits(a, model, pars, options, constraints, ...) : fit data set on a model</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="getframe.html" class="code" title="function frame = getframe(a, dim, options)">getframe</a>	frame = getframe(s, dim, options) : create an iData object thumbnail/frame matrix</li><li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="interp.html" class="code" title="function b = interp(a, varargin)">interp</a>	[b...] = interp(s, ...) : interpolate iData object</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="pca.html" class="code" title="function b = pca(a, varargin)">pca</a>	[b] = pca(X, k) : Principal component analysis of iData object(s)</li><li><a href="reducevolume.html" class="code" title="function s = reducevolume(a, R)">reducevolume</a>	h = reducevolume(s, factor) : reduce an iData object size</li><li><a href="resize.html" class="code" title="function b = resize(a, varargin)">resize</a>	c = resize(a) : resize/rebin the object Signal</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="smooth.html" class="code" title="function b = smooth(a, varargin)">smooth</a>	Z = smooth(Y) : smooth iData objects</li><li><a href="sort.html" class="code" title="function a = sort(a,dim,mode)">sort</a>	s = sort(a,dim) : Sort iData objects axes in ascending or descending order</li><li><a href="squeeze.html" class="code" title="function a = squeeze(a)">squeeze</a>	c = squeeze(a) : remove singleton dimensions from iData objects/arrays</li><li><a href="subsasgn.html" class="code" title="function b = subsasgn(a,S,val)">subsasgn</a>	b = subsasgn(a,index,b) : iData indexed assignement</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="unique.html" class="code" title="function s = unique(a,dim,mode)">unique</a>	s = unique(a,dim) : set unique iData objects axes with no repetitions</li><li><a href="xlim.html" class="code" title="function a = xlim(a, lims, exclude)">xlim</a>	b = xlim(s,[ xmin xmax ]) : Reduce iData X axis limits</li><li><a href="ylim.html" class="code" title="function a = ylim(a, lims, exclude)">ylim</a>	b = ylim(s,[ ymin ymax ]) : Reduce iData Y axis limits</li><li><a href="zlim.html" class="code" title="function a = zlim(a, lims, exclude)">zlim</a>	b = zlim(s,[ zmin zmax ]) : Reduce iData Z axis limits</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

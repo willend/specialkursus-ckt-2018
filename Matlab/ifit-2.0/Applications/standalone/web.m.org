@@ -1,0 +1,157 @@
+function url = web(varargin)
+% WEB Open Web browser on site or files.
+%    WEB opens up an empty internal web browser.  The default internal web
+%    browser includes a toolbar with standard web browser icons, and an address
+%    box showing the current address.
+% 
+%    WEB URL displays the specified URL (Uniform Resource Locator) in an
+%    internal web browser window.  If one or more internal web browsers are
+%    already running, the last active browser (determined by the last
+%    browser which had focus) will be reused.  If the URL is located underneath
+%    docroot, then it will automatically be displayed inside the Help
+%    browser.  If the file is on the MATLAB path, a fully qualified name is
+%    not necessary.  Also, the file can be referenced relative to the
+%    current working directory.
+
+if length(varargin)
+  url = varargin{1};
+else
+  url = '';
+end
+
+if isempty(url)
+  url = fullfile(ifitpath,'Docs','index.html');
+end
+
+h=private_help(url);
+if ~isempty(h)
+  url = h;
+  if isstruct(h), return; end
+end
+
+% launches our internal Web browser which follows 'matlab:' URL's
+webbrowser(url, 'system');
+
+% ------------------------------------------------------------------------------
+
+function h=private_help(varargin)
+% HELP Display help text in Command Window, for iFit commands and methods
+%
+% HELP FUN displays a description of and syntax for the function FUN.
+%     When FUN is in multiple directories on the MATLAB path, HELP displays
+%     information about the first FUN found on the path.
+%
+% HELP PATHNAME/FUN displays help for the function FUN in the PATHNAME
+%     directory. Use this syntax to get help for overloaded functions.
+%
+% HELP CLASSNAME.METHODNAME displays help for the method METHODNAME of
+%     the fully qualified class CLASSNAME. To determine CLASSNAME for
+%     METHODNAME, use CLASS(OBJ), where METHODNAME is of the same class as
+%     the object OBJ.
+%
+%     HELP CLASSNAME displays help for the fully qualified class CLASSNAME.
+%
+% example: help iData/cos; help iFunc
+
+persistent allfiles allfiles_txt
+
+if isempty(allfiles)
+  allfiles = getAllFiles(ifitpath);
+  docfiles = cell(size(allfiles));
+  docfiles_txt = cell(size(allfiles));
+  doccount     = 0;
+  doccount_txt = 0;
+  % keep only HTML and TXT files
+  for index=1:numel(allfiles)
+    [p,f,e] = fileparts(allfiles{index});
+    if strcmp(lower(e),'.html')
+      doccount=doccount+1;
+      docfiles(doccount) = allfiles(index);
+    end
+    if strcmp(lower(e),'.txt')
+      doccount_txt=doccount_txt+1;
+      docfiles_txt(doccount_txt) = allfiles(index);
+    end
+  end
+  allfiles     = docfiles(1:doccount); % store only HTML/TXT files
+  allfiles_txt = docfiles_txt(1:doccount_txt); % store only TXT files
+  clear docfiles docfiles_txt;
+end
+
+h = '';
+if length(varargin)
+  url = varargin{1};
+else
+  url = '';
+end
+if isempty(url), return; end
+
+if strcmp(url, 'config')
+  h.html = allfiles;
+  h.txt  = allfiles_txt;
+  return
+end
+if~isdeployed
+  % attempts to guess what to display. Is there a match with words (file + last path token) ?
+  [p,f,e]   = fileparts(url);
+  [dummy,p] = fileparts(p); % f=filename; p=last path name.
+  index = [];
+  % first searches for token.txt and token.html
+  if isempty(dir(url))
+    url = [ p f ];
+    if ~isempty(which([ url '.html' ])) && feature('ShowFigureWindows') && usejava('jvm')
+      h = which([ url '.html' ]); % prefer HTML over TXT when Java/Display
+    elseif ~isempty(which([ url '.html' ]))
+      h = which([ url '.html' ]); % use HTML if no TXT
+    elseif ~isempty(which([ url '.txt' ]))
+      h = which([ url '.txt' ]); % prefer TXT when no Java/no Display
+    else
+      h = which(url);
+    end
+  end
+  if isempty(h)
+    if ~feature('ShowFigureWindows')
+      % search for a TXT file when no Display is available
+      tok_file = strfind(lower(allfiles_txt),lower(f));
+      tok_path = strfind(lower(allfiles_txt),lower(p));
+      criteria_txt = cellfun('prodofsize',tok_file) + cellfun('prodofsize',tok_path);
+      [criteria_txt, index] = max(criteria_txt);
+    end
+    if isempty(index)
+      % build a token search count with HTML and TXT
+      tok_file = strfind(lower(allfiles),lower(f));
+      tok_path = strfind(lower(allfiles),lower(p));
+      criteria = cellfun('prodofsize',tok_file) + cellfun('prodofsize',tok_path);
+      
+      % get the best criteria (max number of occurrences)
+      [criteria, index] = max(criteria);
+    end
+    
+    % the URL to display
+    h = allfiles{index};
+  end
+  
+  % display the help URL
+  % webbrowser(h, 'system');
+end
+
+% ------------------------------------------------------------------------------
+
+function fileList = getAllFiles(dirName)
+
+  dirData = dir(dirName);      % Get the data for the current directory
+  dirIndex = [dirData.isdir];  % Find the index for directories
+  fileList = {dirData(~dirIndex).name}';  %'# Get a list of the files
+  if ~isempty(fileList)
+    fileList = cellfun(@(x) fullfile(dirName,x),...  % Prepend path to files
+                       fileList,'UniformOutput',false);
+  end
+  subDirs = {dirData(dirIndex).name};  % Get a list of the subdirectories
+  validIndex = ~ismember(subDirs,{'.','..'});  % Find index of subdirectories
+                                               %   that are not '.' or '..'
+  for iDir = find(validIndex)                  % Loop over valid subdirectories
+    nextDir = fullfile(dirName,subDirs{iDir});    % Get the subdirectory path
+    fileList = [fileList; getAllFiles(nextDir)];  % Recursively call getAllFiles
+  end
+  
+% end getAllFiles

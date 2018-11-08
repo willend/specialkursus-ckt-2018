@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of read_lvm</title>
+  <meta name="keywords" content="read_lvm">
+  <meta name="description" content="LVM_IMPORT Imports data from a LabView LVM file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; read_lvm.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/read_lvm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>LVM_IMPORT Imports data from a LabView LVM file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data = read_lvm(filename,verbose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">LVM_IMPORT Imports data from a LabView LVM file
+ DATA = LVM_IMPORT(FILENAME,VERBOSE) returns the data from a LVM (.lvm)
+  ASCII text file created by LabView.
+
+ FILENAME    The name of the .lvm file, with or without &quot;.lvm&quot; extension
+
+ VERBOSE     How many messages to display. Default is 1 (few messages),
+              0 = silent, 2 = display file information and all messages
+
+ DATA        The data found in the LVM file. DATA is a structure with 
+              fields corresponding to the Segments in the file (see below) 
+              and LVM file header information.
+
+
+ This function imports data from a text-formatted LabView Measurement File
+  (LVM, extension &quot;.lvm&quot;) into MATLAB. A LVM file can have multiple
+  Segments, so that multiple measurements can be combined in a single
+  file. The output variable DATA is a structure with fields named
+  'Segment1', 'Segment2', etc. Each Segment field is a structure with
+  details about the data in the Segment and the actual data in the field
+  named 'data'. The column labels and units are stored as cell arrays that
+  correspond to the columns in the array of data.
+ The size of the data array depends on the type of x-axis data that is
+  stored in the LVM file and the number of channels (num_channels).
+  There are three cases:
+  1) No x-data is included in the file ('No')
+   The data array will have num_channels columns (one column per channel
+   of data).
+  2) One column of x-data is included in the file ('One')
+   The first column of the data array will be the x-values, and the data
+   array will have num_channels+1 columns.
+  3) Each channel has its own x-data ('Multi')
+   Each channel has two columns, one for x-values, and one for data. The
+   data array will have num_channels*2 columns, with the x-values and
+   corresponding data in alternating columns. For example, in a Segment
+   with 4 channels, columns 1,3,5,7 will be the x-values for the data in
+   columns 2,4,6,8.
+
+ Note: because MATLAB only works with a &quot;.&quot; decimal separator, importing
+  large LVM files that use a &quot;,&quot; (or other character) will be noticeably
+  slower. Use a &quot;.&quot; decimal separator to avoid this issue.
+
+ The LVM file specification is available at:
+   http://zone.ni.com/devzone/cda/tut/p/id/4139
+
+ Contrib from:
+ http://www.mathworks.com/matlabcentral/fileexchange/19913-lvm-file-import
+
+
+ Example:
+
+  Use the following command to read in the data from a file containing two
+   Segments:
+
+ &gt;&gt; d=lvm_import('testfile.lvm');
+
+ Importing testfile.lvm:
+
+ Import complete. 2 Segments found.
+
+ &gt;&gt; d
+ d = 
+       X_Columns: 'One'
+            user: 'hopcroft'
+     Description: 'Pressure, Flowrate, Heat, Power, Analog Voltage, Pump on, Temp'
+            date: '2008/03/26'
+            time: '12:18:02.156616'
+           clock: [2008 3 26 12 18 2.156616]
+        Segment1: [1x1 struct]
+        Segment2: [1x1 struct]
+
+ &gt;&gt; d.Segment1
+ ans = 
+            Notes: 'Some notes regarding this data set'
+     num_channels: 8
+          y_units: {8x1 cell}
+          x_units: {8x1 cell}
+               X0: [8x1 double]
+          Delta_X: [8x1 double]
+    column_labels: {9x1 cell}
+             data: [211x9 double]
+          Comment: 'This data rulz'
+
+ &gt;&gt; d.Segment1.column_labels{2}
+ ans =
+ Thermocouple1
+
+ &gt;&gt; plot(d.Segment1.data(:,1),d.Segment1.data(:,2));
+ &gt;&gt; xlabel(d.Segment1.column_labels{1});
+ &gt;&gt; ylabel(d.Segment1.column_labels{2});
+
+
+
+ M.A. Hopcroft
+      &lt; mhopeng at gmail.com &gt;
+
+ See also: <a href="read_tdms.html" class="code" title="function data=read_tdms(filename)">read_tdms</a>, <a href="read_igor.html" class="code" title="function data = read_igor(filename)">read_igor</a>, <a href="read_idl.html" class="code" title="function outargs=read_idl(varargin)">read_idl</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

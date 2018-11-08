@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of symmetrize</title>
+  <meta name="keywords" content="symmetrize">
+  <meta name="description" content="iData_Sqw2D: symmetrize(s): extend the S(|q|,w) in both energy sides">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_Sqw2D</a> &gt; symmetrize.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_Sqw2D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/symmetrize
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_Sqw2D: symmetrize(s): extend the S(|q|,w) in both energy sides</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function s=symmetrize(s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_Sqw2D: symmetrize(s): extend the S(|q|,w) in both energy sides
+  The resulting S(q,w) is the combination of S(q,w) and S(q,-w), which
+  is thus symmetric in energy:
+     S(q,w) = S(q,-w)
+
+  The incoming data set should NOT contain the Bose factor, that is it
+    should be 'classical'.
+  To obtain a 'classical' S(q,w) from an experiment, use first:
+    deBosify(s, T)
+
+ The positive energy values in the S(q,w) map correspond to Stokes processes, 
+ i.e. material gains energy, and neutrons loose energy when down-scattered.
+
+ syntax:
+   s_sym = symmetrize(s)
+
+ input:
+   s:  Sqw data set (classical, often labelled as S*)
+        2D data set with w as 1st axis (rows, meV), q as 2nd axis (Angs-1).
+ output:
+   s:  S(|q|,w) symmetrised in energy, classical.
+
+ Example: Sqw=iData_Sqw2D('SQW_coh_lGe.nc'); symmetrize(s);
+
+ See also: iData_Sqw2D/Bosify, iData_Sqw2D/deBosify,
+           iData_Sqw2D/dynamic_range, iData_Sqw2D/scattering_cross_section
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="dynamic_range.html" class="code" title="function [s, sphi] = dynamic_range(s, varargin)">dynamic_range</a>	iData_Sqw2D: dynamic_range: crop the S(|q|,w) to the available dynamic range</li><li><a href="muphocor.html" class="code" title="function g = muphocor(s, varargin)">muphocor</a>	run MUPHOCOR on the given S(q,w) data set, incident wavelength and Temperature</li><li><a href="scattering_cross_section.html" class="code" title="function sigma = scattering_cross_section(s, varargin)">scattering_cross_section</a>	iData_Sqw2D: scattering_cross_section: compute the total neutron scattering cross section for</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

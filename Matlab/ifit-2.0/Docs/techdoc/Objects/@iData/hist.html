@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of hist</title>
+  <meta name="keywords" content="hist">
+  <meta name="description" content="hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; hist.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/hist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c=hist(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets
+
+   @iData/hist function to compute the accumulated histogram from an event data
+     set. This is similar to a call to hist and accumarray.
+
+   hist(a, axis1, axis2, ...) specify the axes as bin edges. The axes 
+     should be vectors or a single value that indicates the number of bins in the
+     range [min, max] of the corresponding axis rank in the initial object. 
+     The bin edges vectors have length(a{k])+1 elements. A default of 33 bins 
+     is used when not specified.
+
+   hist(a, [ bin1 bin2 ...]) same as above when specifying the number of bins.
+
+   hist(a, ..., 'Fun', FUN) 
+     applies the function FUN to each subset of elements of VAL.  FUN is
+     a function that accepts a column vector and returns
+     a numeric, logical, or char scalar, or a scalar cell.  A has the same class
+     as the values returned by FUN.  FUN is @SUM by default.  Specify FUN as []
+     for the default behavior.
+
+   hist(a, ..., 'fill')
+     performs an interpolation between the events to fill unset histogram bins.
+
+ The histogram can be converted back to an event list using the 'event' method.
+
+ input:  a: object or array (iData)
+         axis1, axis2, ...: bins or number of bins  (vector or scalar)
+ output: c: histogrammed object (iData)
+ ex:     a=iData([ ifitpath 'Data/Monitor_GV*']); b=hist(a);
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, accumarray, <a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>, histc, iData/plot, <a href="sum.html" class="code" title="function [s,sigma] = sum(a,dim)">sum</a>, iData/interp, iData/event</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cell.html" class="code" title="function [content,fields]=cell(s)">cell</a>	[content,fields]=cell(s) : convert iData objects into cells</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="event.html" class="code" title="function b = event(a, dim, signal, err, monitor)">event</a>	c = event(a) : build an event list</li><li><a href="fill.html" class="code" title="function c=fill(a, n)">fill</a>	FILL fill-in over missing data</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isnumeric.html" class="code" title="function a = isnumeric(a)">isnumeric</a>	b = isnumeric(s) : True for numeric iData object elements</li><li><a href="isscalar.html" class="code" title="function a = isscalar(a)">isscalar</a>	b = isscalar(s) : True for scalar iData objects</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="linspace.html" class="code" title="function v = linspace(a,b,n)">linspace</a>	v = linspace(a,b,n) : creates a linearly spaced vector of objects</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="min.html" class="code" title="function [m,id] = min(a,b, dim)">min</a>	[m,id] = min(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="not.html" class="code" title="function a = not(a)">not</a>	b = not(s) : computes the logical 'not' of iData object</li><li><a href="rmalias.html" class="code" title="function this = rmalias(this,names)">rmalias</a>	s = rmalias(s, AliasName) : removes iData aliases</li><li><a href="rmaxis.html" class="code" title="function this = rmaxis(this,rank)">rmaxis</a>	s = rmaxis(s, Axis) : delete iData axes</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sqrt.html" class="code" title="function a = sqrt(a)">sqrt</a>	b = sqrt(s) : square root value of iData object</li><li><a href="strfind.html" class="code" title="function [match, field] = strfind(s, varargin)">strfind</a>	[match, field]=strfind(s, pattern, option) : search for pattern in iData</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="interp.html" class="code" title="function b = interp(a, varargin)">interp</a>	[b...] = interp(s, ...) : interpolate iData object</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="meshgrid.html" class="code" title="function b = meshgrid(a, varargin)">meshgrid</a>	s = meshgrid(a) : transforms an iData object so that its axes are grids</li><li><a href="slice.html" class="code" title="function h = slice(a, method)">slice</a>	slice(s) : Plot a 2D/3D object with slice rendering</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

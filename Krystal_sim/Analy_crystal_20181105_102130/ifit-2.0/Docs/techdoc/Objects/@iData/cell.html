@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of cell</title>
+  <meta name="keywords" content="cell">
+  <meta name="description" content="[content,fields]=cell(s) : convert iData objects into cells">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; cell.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/cell
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[content,fields]=cell(s) : convert iData objects into cells</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [content,fields]=cell(s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [content,fields]=cell(s) : convert iData objects into cells
+
+   @iData/cell function to convert iData objects into cells
+
+ input:  s: iData single object (iData)
+ output: content: content of the iData structure (cell)
+         fields:  field names of the iData object (cell)
+
+ Version: oct.. 23, 2018
+ See also  iData/cell, iData/double, iData/struct,
+           iData/char, iData/size</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cat.html" class="code" title="function b = cat(varargin)">cat</a>	s = cat(dim,a,...) : catenate iData objects elements along dimension</li><li><a href="commandhistory.html" class="code" title="function [s,fig] = commandhistory(a, fig, varargin)">commandhistory</a>	commandhistory(s) : show the command history of iData object</li><li><a href="corrcoef.html" class="code" title="function c = corrcoef(a, b)">corrcoef</a>	c = corrcoef(a,b) : correlation coefficient with an iData object</li><li><a href="dog.html" class="code" title="function s = dog(dim,a, varargin)">dog</a>	s= dog(dim,a) : split iData objects elements along dimension</li><li><a href="double.html" class="code" title="function a=double(a)">double</a>	d = double(s) : convert iData into doubles</li><li><a href="fileattrib.html" class="code" title="function [b, link] = fileattrib(a, field, allfields)">fileattrib</a>	[attribute, link] = fileattrib(s, field) : return a field Attribute</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iData, field, option) : look for iData fields</li><li><a href="findstr.html" class="code" title="function [match, field] = findstr(s, str, option)">findstr</a>	[match, field]=findstr(s, str, option) : look for strings stored in iData</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="getalias.html" class="code" title="function [link, label, names] = getalias(this,alias)">getalias</a>	[link, label,names] = getalias(s, 'AliasName') : get iData alias</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="getframe.html" class="code" title="function frame = getframe(a, dim, options)">getframe</a>	frame = getframe(s, dim, options) : create an iData object thumbnail/frame matrix</li><li><a href="gradient.html" class="code" title="function b = gradient(a, dim)">gradient</a>	g = gradient(a, dim) : computes the gradient (derivative) of iData objects</li><li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="interp.html" class="code" title="function b = interp(a, varargin)">interp</a>	[b...] = interp(s, ...) : interpolate iData object</li><li><a href="isfield.html" class="code" title="function b = isfield(a, field)">isfield</a>	b = isfield(s, field) : check existence of field/alias in iData objects</li><li><a href="jacobian.html" class="code" title="function [b, j] = jacobian(a, varargin)">jacobian</a>	[b, j] = jacobian(a, new_axes, 'new_axes_labels'...) : computes the gradient (derivative) of iData objects</li><li><a href="kmeans.html" class="code" title="function [s,c] = kmeans(a, k, method)">kmeans</a>	[b,c] = kmeans(X, k) : k-means clustering of iData object</li><li><a href="label.html" class="code" title="function labl = label(this, varargin)">label</a>	b = label(s, alias, label) : Change iData label for a given alias/axis</li><li><a href="load.html" class="code" title="function out = load(a, varargin)">load</a>	d = load(s, file, loader, ...): iData file loader</li><li><a href="logical.html" class="code" title="function a=logical(a)">logical</a>	d = logical(s) : convert iData into logical array</li><li><a href="pack.html" class="code" title="function b = pack(a)">pack</a>	b = pack(a) : compress iData storage to save memory</li><li><a href="peaks.html" class="code" title="function [sigma, position, amplitude, baseline] = peaks(a, dim, m)">peaks</a>	[half_width, center, amplitude, baseline] = peaks(s, dim, m) : peak position and width of iData</li><li><a href="reducevolume.html" class="code" title="function s = reducevolume(a, R)">reducevolume</a>	h = reducevolume(s, factor) : reduce an iData object size</li><li><a href="rotate.html" class="code" title="function s = rotate(a, theta)">rotate</a>	s = rotate(a, theta) : computes the rotation of iData objects around the origin</li><li><a href="saveas.html" class="code" title="function [filename,format] = saveas(a, filename, format, options)">saveas</a>	f = saveas(s, filename, format, options) : save iData object into various data formats</li><li><a href="single.html" class="code" title="function a=single(a)">single</a>	d = single(s) : convert iData into single floats</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

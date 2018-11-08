@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of mccode</title>
+  <meta name="keywords" content="mccode">
+  <meta name="description" content="y = mccode(instr, options, parameters) : McCode (McStas/McXtrace) instrument">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; mccode.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/mccode
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>y = mccode(instr, options, parameters) : McCode (McStas/McXtrace) instrument</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function y = mccode(instr, options, parameters) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> y = mccode(instr, options, parameters) : McCode (McStas/McXtrace) instrument
+
+   iFunc/mccode a McCode instrument
+     y=model instrument
+
+ MODEL CREATION:
+ ------------------------------------------------------------------------------
+ mccode(description)
+       creates a model with specified McCode instrument 
+       The instrument may be given as an '.instr' McCode description, or directly
+       as an executable. Distant URL (ftp, http, https) can also be used.
+ mccode('')
+       requests a McCode file (*.instr,*.out) with a file selector.
+ mccode('gui')   and 'mccode'  alone.
+       list all available instruments in a list for a selection.
+ mccode('defaults')
+       uses templateDIFF.instr neutron powder diffractometer as example.
+ mccode(description, options) also specifies additional McCode options, e.g.
+   options.dir:         directory where to store results, or set automatically (string)
+                          the last simulation files are stored therein 'sim'.
+                        dir can also be 'pwd' for current, or 'tmp' for temporary location.
+   options.ncount:      number of neutron events per iteration, e.g. 1e6 (double)
+   options.mpi:         number of processors/cores to use with MPI on localhost (integer) 
+                          when MPI is available, and mpi options is not given,
+                          all cores are then used.
+   options.machines:    filename containing the list of machines/nodes to use (string)
+   options.seed:        random number seed to use for each iteration (double)
+   options.gravitation: 0 or 1 to set gravitation handling in neutron propagation (boolean)
+   options.monitor:     a single monitor name to read, or left empty for the last (string).
+                        this can be a wildcard expression.
+   options.mccode:      set the executable path to 'mcrun' (default, neutrons) or 'mxrun' (xrays)
+   options.mpirun:      set the executable path to 'mpirun'. You can set
+                        it to 'none' to not use MPI.
+   options.compile:     0 or 1 to compilation the executable. The default is to compile.
+
+   All options are stored and assignable in model.UserData.options.
+   options can also be given as a string, e.g. 'ncount=1e6; monitor=*Theta*; compile=1'
+   the 'monitor' option can also include further expressions, such as:
+     options.monitor='*Theta*; signal=max(signal)/std(signal)^2;'
+
+   When the instrument file name contains a path specification, it is used for
+   compilation and execution (recommended). If it is used as a single file name,
+   or the target directory as no read, write or execute permissions,
+   a temporary directory is created and the instrument is copied there, which may
+   cause issues if local components are to be used.
+
+ mccode(description, options, parameters) 
+   Specifies the instrument parameters values to use as default. These values can
+   be given as a string e.g. 'QM=1; lambda=2.36' or a structure.
+
+ The instrument parameters of type 'double' are used as model parameters. Other
+ parameters (e.g. of type string and int) are stored in UserData.Parameters_Constant
+ You may still specify their value when using e.g. syntax with a string or structure:
+   feval(model, 'lambda=2.36; Powder=&quot;Al.laz&quot;')
+   iData(model, 'lambda=2.36; Powder=&quot;Al.laz&quot;')
+   iData(model, struct('lambda',2.36,'Powder','Al.laz'))
+
+ The options ncount, seed, gravitation, monitor can be changed for the model 
+ evaluation, with e.g.:
+   model.UserData.options.ncount     =1e5;
+   model.UserData.options.gravitation=1;
+   model.UserData.options.monitor    ='*Theta*';
+
+ Additional information is stored in the model.UserData, such as the instrument
+ source, which you may view with:
+   TextEdit(model.UserData.instrument_source)
+
+ MODEL EVALUATION:
+ ------------------------------------------------------------------------------
+ model(p) 
+   evaluates the model with given parameters (vector, cell, structure). Only
+   scalar/double parameters of the instrument can be varied. Other parameters are kept fixed.
+ model(p, nan) 
+   evaluates the model and return the raw McCode data set (monitor).
+ model(p, x,y,...) 
+   evaluates the model and interpolates the McCode data set onto given axes.
+
+ The model 'value' is the last monitor, or set from 
+   model.UserData.options.monitor
+ It can be converted to an iData with iData(model, ...)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="rietveld.html" class="code" title="function y = rietveld(sample, instr, varargin)">rietveld</a>	model=rietveld(sample, instrument, ....) Rietveld refinement of powder/single crystal</li><li><a href="rietveld.html" class="code" title="function y = rietveld(sample, instr, varargin)">rietveld</a>	model=rietveld(sample, instrument, ....) Rietveld refinement of powder/single crystal</li><li><a href="rietveld.html" class="code" title="function y = rietveld(sample, instr, varargin)">rietveld</a>	model=rietveld(sample, instrument, ....) Rietveld refinement of powder/single crystal</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

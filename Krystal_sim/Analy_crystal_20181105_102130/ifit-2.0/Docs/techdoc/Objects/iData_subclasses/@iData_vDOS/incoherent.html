@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of incoherent</title>
+  <meta name="keywords" content="incoherent">
+  <meta name="description" content="iData_vDOS: incoherent: compute the incoherent gaussian approximation scattering law S(q,w) from an initial density of states vDOS">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_vDOS</a> &gt; incoherent.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_vDOS&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/incoherent
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_vDOS: incoherent: compute the incoherent gaussian approximation scattering law S(q,w) from an initial density of states vDOS</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Sqw, Iqt, Wq, Tall] = incoherent(gw, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_vDOS: incoherent: compute the incoherent gaussian approximation scattering law S(q,w) from an initial density of states vDOS
+
+   [Sqw, Iqt, Wq, Tall] = incoherent(gw, q, T, m, n, DW)
+
+ compute: Density of States -&gt; Incoherent approximation S(q,w)
+
+ The input argument 'gw' should be a vibrational density of states (vDOS) as
+   obtained from an experiment (e.g. Bedov/Oskotskii estimate), molecular 
+   dynamics, or lattice dynamics. In the so-called incoherent approximation,
+   the vDOS obtained from incoherent and coherent scattering laws are equal.
+
+ The result is the dynamic structure factor (scattering law) for neutrons, in
+   the incoherent gaussian approximation. The corresponding intermediate 
+   scattering function is also returned. These should be e.g. multiplied by the
+   neutron scattering bound cross section 'sigma_inc' [barns]. This calculation
+   includes the Debye-Waller factor.
+
+ This implementation is in principle exact for an isotropic monoatomic material,
+   e.g. a liquid, powder, or cubic crystal. 
+ This methodology is equivalent to the LEAPR module of NJOY (&quot;phonon expansion&quot;)
+   to compute S(alpha,beta) from a vibrational density of states.
+
+ For a poly-atomic material with a set of non-equivalent atoms with relative 
+   concentration Ci and mass Mi and bound scattering cross section sigma_i, 
+   one should use:
+
+   m     = [sum_i Ci sigma_i]/[sum_i Ci sigma_i/Mi]      weighted mass
+   sigma = sum_i Ci sigma_i                              weighted cross section
+
+ conventions:
+ w = Ei-Ef = energy lost by the neutron
+    w &gt; 0, neutron looses energy, can not be higher than Ei (Stokes)
+    w &lt; 0, neutron gains energy, anti-Stokes
+
+ Theory:
+   T1(w) = g(w)./hw.*(nw+1)
+   f0    = \int T1(w) dw
+   fp    = f0^p
+   W(q)  = h^2*q^2/2/m*f(0)
+   Tp    = conv( T1, Tp-1 )
+
+ The first term returned is the Elastic Incoherent [p=0]
+    S(q,w)[p=0] = (1/4/pi)*exp(-2*W(q)).*delta(w)
+ the other terms are obtained by iterative auto-convolution by the vDOS
+    S(q,w)[p]   = 1/4pi/!p exp(-2*W(q)).*(2*W(q)).^p*Tp(w)
+
+ Reference:
+   H. Schober, Journal of Neutron Research 17 (2014) 109–357
+     DOI 10.3233/JNR-140016 (see esp. pages 328-331)
+   V.S. Oskotskii, Sov. Phys. Solid State 9 (1967), 420.
+   A. Sjolander, Arkiv for Fysik 14 (1958), 315.
+
+ syntax:
+   [Sqw, Iqt, Wq, Tall] = incoherent(gw)
+   [Sqw, Iqt, Wq, Tall] = incoherent(gw, q, T, m, n, DW)
+   [Sqw, Iqt, Wq, Tall] = incoherent(gw, 'q', q, 'T', T, 'm', m, 'n', n, 'DW', dw)
+
+ Missing arguments (or given as [] empty), are searched within the initial density 
+   of states object. Input arguments can be given in order, or with name-value 
+   pairs, or as a structure with named fields.
+
+ input:
+   gw: the vibrational density of states per [meV] [iData]
+   q:  the momentum axis [Angs-1, vector]
+   T:  temperature [K]
+   m:  mass of the scattering unit [g/mol]
+   n:  number of iterations in the series expansion, e.g. 5
+   DW: Debye-Waller coefficient gamma=&lt;u^2&gt; [Angs^2] e.g. 0.005
+       The Debye-Waller function is      2W(q)=gamma*q^2
+       The Debye-Waller factor   is exp(-2W(q))
+
+ output:
+   Sqw:  neutron weighted S(q,w) incoherent terms, to be summed [iData_Sqw2D array]
+   Iqt:  I(q,t) incoherent terms, to be summed [iData array]
+   Wq:   half Debye-Waller factor. The DW function is exp(-2*Wq)  [iData vs q]
+   Tp:   p-phonon terms [iData array]
+
+ Example:
+   s   = sqw_phonons('POSCAR_Al', 'emt');
+   gw  = dos(s);
+   Sqw = incoherent(gw, [], 300);
+   subplot(Sqw);
+
+ See also: iData_Sqw2D/multi_phonons
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

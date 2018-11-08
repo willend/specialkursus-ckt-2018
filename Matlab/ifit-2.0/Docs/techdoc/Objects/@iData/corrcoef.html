@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of corrcoef</title>
+  <meta name="keywords" content="corrcoef">
+  <meta name="description" content="c = corrcoef(a,b) : correlation coefficient with an iData object">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; corrcoef.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/corrcoef
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>c = corrcoef(a,b) : correlation coefficient with an iData object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c = corrcoef(a, b) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> c = corrcoef(a,b) : correlation coefficient with an iData object
+
+   @iData/corrcoef function to compute the correlation of an object with other data
+     http://en.wikipedia.org/wiki/Correlation_coefficient
+
+ input:  a: iData or iFunc object, or numerical vector
+         b: iData or iFunc object, or numerical vector
+ output: c: correlation coefficient between -1 and 1
+ ex:     b=corrcoef(a); c=corrcoef(a, gauss);
+
+ Version: oct.. 23, 2018
+ See also <a href="corrcoef.html" class="code" title="function c = corrcoef(a, b)">corrcoef</a>, <a href="iData.html" class="code" title="">iData</a>, iData/mean, iData/fits</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cell.html" class="code" title="function [content,fields]=cell(s)">cell</a>	[content,fields]=cell(s) : convert iData objects into cells</li><li><a href="corrcoef.html" class="code" title="function c = corrcoef(a, b)">corrcoef</a>	c = corrcoef(a,b) : correlation coefficient with an iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="find.html" class="code" title="function a=find(a)">find</a>	d = find(s) : find iData signal non zeros values</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="intersect.html" class="code" title="function [ai,bi] = intersect(a, b)">intersect</a>	[ai,bi] = intersect(a, b) : computes object intersection area and values</li><li><a href="isfinite.html" class="code" title="function a = isfinite(a)">isfinite</a>	b = isfinite(s) : True for finite iData object elements</li><li><a href="isnumeric.html" class="code" title="function a = isnumeric(a)">isnumeric</a>	b = isnumeric(s) : True for numeric iData object elements</li><li><a href="meshgrid.html" class="code" title="function b = meshgrid(a, varargin)">meshgrid</a>	s = meshgrid(a) : transforms an iData object so that its axes are grids</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="corrcoef.html" class="code" title="function c = corrcoef(a, b)">corrcoef</a>	c = corrcoef(a,b) : correlation coefficient with an iData object</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

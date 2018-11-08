@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of fmindemo</title>
+  <meta name="keywords" content="fmindemo">
+  <meta name="description" content="FMINDEMO optimization cross-comparison">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Optimizers</a> &gt; fmindemo.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Optimizers&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/fmindemo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FMINDEMO optimization cross-comparison</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function abstract=fmindemo(dim, option, repeat_num) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FMINDEMO optimization cross-comparison
+ 
+ A systematic test of all optimization methods is performed using a set of test
+ problems. Starting configurations are chosen randomly.
+ The option flag may contain the following keywords:
+    'verbose' displays individual detailed optimization results.
+    'rand'    adds a 10% gaussian random noise to all functions
+ The test can be repeated iteratively so that a Monte Carlo sampling of starting
+ parameters give a better stastistical estimate of each method efficiency.
+
+ Calling:
+   fmindemo(dimensionality=vector, option='verbose, rand', repetitions)
+ Example:
+   fmindemo([ 2 10 50],1)  % detailed test with 2,5 and 10 parameters
+   fmindemo(2,[], 10)      % 2 parameters optimization repeated 10 times
+
+ Contrib:
+ Test functions from Nikolaus Hansen, 2001-2007. e-mail: hansen@bionik.tu-berlin.de
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fmindemo.html" class="code" title="function abstract=fmindemo(dim, option, repeat_num)">fmindemo</a>	FMINDEMO optimization cross-comparison</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fmindemo.html" class="code" title="function abstract=fmindemo(dim, option, repeat_num)">fmindemo</a>	FMINDEMO optimization cross-comparison</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

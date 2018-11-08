@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of thermochemistry</title>
+  <meta name="keywords" content="thermochemistry">
+  <meta name="description" content="iData_Sqw2D/thermochemistry: compute thermodynamic quantities for 2D S(q,w) data sets.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_Sqw2D</a> &gt; thermochemistry.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_Sqw2D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/thermochemistry
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_Sqw2D/thermochemistry: compute thermodynamic quantities for 2D S(q,w) data sets.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [t, fig]=thermochemistry(s, T, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_Sqw2D/thermochemistry: compute thermodynamic quantities for 2D S(q,w) data sets.
+
+ Compute thermodynamics quantities.
+ When missing, the generalised density of states (gDOS) is estimated 
+ from the 2D sqw object.
+
+ The input 2D data set should be e.g. a 2D S(q,w), with axes |q|,energy
+ in [Angs-1,meV]. 
+
+ the function returns an array of iData objects:
+   DOS                                 [modes/energy unit/unit cell]
+   entropy                           S [eV/K/cell]
+   internal_energy                   U [eV/cell]
+   helmholtz_energy                  F [eV/cell]
+   heat_capacity at constant volume Cv [eV/K/cell]
+
+ Reference: https://wiki.fysik.dtu.dk/ase/ase/thermochemistry/thermochemistry.html#background
+            D.A. McQuarrie. Statistical Mechanics. University Science Books, 2000.
+
+ syntax:
+   t = thermochemistry(s)
+   t = thermochemistry(s, Tmin:Tmax)
+
+ input:
+   s: a 2D sqw data set [|Q|,Energy] (iData_Sqw2D)
+   T: temperature range. When not given, T=1:500 [K]
+   options: can be 'plot' to display the results.
+         The 'newplot' option does the same but opens a new figure instead of
+         re-using an existing one.
+
+ output:
+   t:   iData array with [DOS S U F Cv ]
+   fig: figure handle
+
+ See also: iData_Sqw2D/dos, iData_vDOS</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="dos.html" class="code" title="function [g, fig] = dos(s, method, varargin)">dos</a>	iData_Sqw2D: dos: compute the generalised density of states (gDOS) from a S(q,w)</li><li><a href="thermochemistry.html" class="code" title="function [t, fig]=thermochemistry(s, T, options)">thermochemistry</a>	iData_Sqw2D/thermochemistry: compute thermodynamic quantities for 2D S(q,w) data sets.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="thermochemistry.html" class="code" title="function [t, fig]=thermochemistry(s, T, options)">thermochemistry</a>	iData_Sqw2D/thermochemistry: compute thermodynamic quantities for 2D S(q,w) data sets.</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

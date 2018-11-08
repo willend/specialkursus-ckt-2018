@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of pca</title>
+  <meta name="keywords" content="pca">
+  <meta name="description" content="[b] = pca(X, k) : Principal component analysis of iData object(s)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; pca.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/pca
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[b] = pca(X, k) : Principal component analysis of iData object(s)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = pca(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [b] = pca(X, k) : Principal component analysis of iData object(s)
+
+   @iData/pca function to perform a Principal component analysis of object(s)
+
+   b = pca(a,k) computes the principal component analysis of an object in a k-D
+     space representation. This corresponds to a classification of the objects
+     rows, searching for similarities/correlations. The resulting principal 
+     component coefficients object contains the same number of rows as 'a', and
+     k columns for coordinates.
+     Rows (rank 1) of X correspond to observations and further ranks correspond 
+     to variables.
+   b = pca(a) assumes k=2 (2D space classifier).
+   b = pca([a1 a2 ...], k) performs the PCA along all objects specified in the 
+     array, and return the principal component coefficients. The resulting object
+     contains as many rows as the number of objects specified, and k columns.
+   b = pca(a, key, value, ...)
+     specifies the PCA configuration as key=value pairs:
+       'NumComponents',k
+         Number of components requested, specified as the comma-separated pair
+         consisting of 'NumComponents' and a scalar integer k satisfying 
+         0 &lt; k &lt;= p, where p is the number of original variables in X. When 
+         specified, pca returns the first k PCA coefficients.
+       'Centered', True(default) or False
+         Center the variables by subtracting the mean values
+       'VariableWeights', false or 'variance'
+         'variance' to normalize variables to their variance (default)
+
+ input:  X: object or array (iData)
+         k: number of components wanted (integer, default is 2)
+ output: b: principal component object (iData)
+ ex:     b=pca(a); plot(b); text(b{1},b{2}, get(a,'Title'));
+
+ See: http://en.wikipedia.org/wiki/Principal_component_analysis
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/kmeans, iData/cwt, iData/corrcoef</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cat.html" class="code" title="function b = cat(varargin)">cat</a>	s = cat(dim,a,...) : catenate iData objects elements along dimension</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iData object properties</li><li><a href="isscalar.html" class="code" title="function a = isscalar(a)">isscalar</a>	b = isscalar(s) : True for scalar iData objects</li><li><a href="mean.html" class="code" title="function b = mean(a, dim)">mean</a>	b = mean(s, dim) : mean value of iData object</li><li><a href="pca.html" class="code" title="function b = pca(a, varargin)">pca</a>	[b] = pca(X, k) : Principal component analysis of iData object(s)</li><li><a href="set.html" class="code" title="function this = set(this,varargin)">set</a>	[s,...] = set(s, 'PropertyName', Propertyvalue, ...) : set iData properties</li><li><a href="setalias.html" class="code" title="function this = setalias(this,names,links,labels)">setalias</a>	[s,...] = setalias(s, AliasName, AliasLink, {AliasLabel}) : set iData aliases</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="sort.html" class="code" title="function a = sort(a,dim,mode)">sort</a>	s = sort(a,dim) : Sort iData objects axes in ascending or descending order</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li><li><a href="subsref.html" class="code" title="function b = subsref(a,S)">subsref</a>	b = subsref(a,s) : iData indexed references</li><li><a href="union.html" class="code" title="function [ai,bi] = union(a, b)">union</a>	[ai,bi] = union(a, b) : computes object union area and values</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="pca.html" class="code" title="function b = pca(a, varargin)">pca</a>	[b] = pca(X, k) : Principal component analysis of iData object(s)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

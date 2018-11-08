@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of fconv</title>
+  <meta name="keywords" content="fconv">
+  <meta name="description" content="FCONV Fast Convolution/Correlation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="index.html">Models</a> &gt; fconv.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/fconv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>FCONV Fast Convolution/Correlation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function y=fconv(x, h, shape) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">FCONV Fast Convolution/Correlation
+   y = FCONV(x, h, shape) convolves x and h. A deconvolution mode is also possible.
+   The correlation, instead of the convolution, can also be computed.
+   This FFT based convolution should provide the same results as conv2 and convn.
+   It works with x and h being of any dimensionality. When only one argument is given,
+     the auto-convolution/correlation is computed.
+   The accuracy of the conv and xcorr operators depends on the sampling. Peaks should
+     be describes with at least 5 points underneath.
+
+  x     = input vector (signal)
+  h     = input vector (filter)
+  shape = optional shape of the return value
+          full         Returns the full two-dimensional convolution.
+          same         Returns the central part of the convolution of the same size as x.
+          valid        Returns only those parts of the convolution that are computed
+                       without the zero-padded edges. Using this option, y has size
+                       [mx-mh+1,nx-nh+1] when all(size(x) &gt;= size(h)).
+          deconv       Performs an FFT deconvolution.
+          deconv_iter  Performs an iterative deconvolution.
+          correlation  Compute the correlation instead of the convolution (one
+                       of the FFT's is then conjugated).
+          pad          Pads the x signal by replicating its starting/ending values
+                       in order to minimize the convolution side effects.
+          center       Centers the h filter so that convolution does not shift
+                       the x signal.
+          normalize    Normalizes the h filter so that the convolution does not
+                       change the x signal integral.
+          background   Remove the background from the filter h (subtracts the minimal value)
+
+ ex:     c=fconv(a,b); c=fconv(a,b, 'same pad background center normalize');
+
+      See also <a href="fconvn.html" class="code" title="function y=fconvn(x, h)">FCONVN</a>, <a href="fxcorr.html" class="code" title="function y=fxcorr(x, h, shape)">FXCORR</a>, CONV, CONV2, FILTER, FILTER2, FFT, IFFT
+
+ Version: oct.. 23, 2018
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">fconv</a>	FCONV Fast Convolution/Correlation</li><li><a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">fconv</a>	FCONV Fast Convolution/Correlation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">fconv</a>	FCONV Fast Convolution/Correlation</li><li><a href="fconv.html" class="code" title="function y=fconv(x, h, shape)">fconv</a>	FCONV Fast Convolution/Correlation</li><li><a href="fconvn.html" class="code" title="function y=fconvn(x, h)">fconvn</a>	FCONVN Fast Convolution with nomalization and centering of the filter.</li><li><a href="fconvn.html" class="code" title="function y=fconvn(x, h)">fconvn</a>	FCONVN Fast Convolution with nomalization and centering of the filter.</li><li><a href="fxcorr.html" class="code" title="function y=fxcorr(x, h, shape)">fxcorr</a>	FXCORR Correlation</li><li><a href="fxcorr.html" class="code" title="function y=fxcorr(x, h, shape)">fxcorr</a>	FXCORR Correlation</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

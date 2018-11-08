@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of scattering_cross_section</title>
+  <meta name="keywords" content="scattering_cross_section">
+  <meta name="description" content="iData_Sqw2D: scattering_cross_section: compute the total neutron scattering cross section for">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_Sqw2D</a> &gt; scattering_cross_section.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_Sqw2D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/scattering_cross_section
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_Sqw2D: scattering_cross_section: compute the total neutron scattering cross section for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function sigma = scattering_cross_section(s, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_Sqw2D: scattering_cross_section: compute the total neutron scattering cross section for
+   incoming neutron energy. The S(|q|,w) should be the non-classical
+   dynamic structure factor. 
+
+   sigma = scattering_cross_section(s, Ei, M)
+
+   Such data sets are obtained from e.g. xray and neutron scattering 
+   experiments on isotropic density materials (liquids, powders, amorphous
+   systems). 
+
+   Data sets from analytical models and molecular dynamics simulations must 
+   be symmetrised in energy, and the detailed balance must be applied to 
+   take into account the material temperature on the inelastic part.
+
+   The incident neutron energy is given in [meV], and may be computed:
+     Ei = 2.0721*Ki^2 = 81.8042/lambda^2 with Ki in [Angs-1] and lambda in [Angs]
+     
+   The S(|q|,w) is first restricted to the achievable dynamic range:
+     Ef         = Ei - w                                is positive
+     cos(theta) = (Ki.^2 + Kf.^2 - q.^2) ./ (2*Ki.*Kf)  is within [-1:1]
+   and then integrated as XS = 1/2Ki^2 \int q S(q,w) dq dw
+
+   The computed value must then be multiplied by the tabulated bound cross-section
+   from e.g. Sears, Neut. News 3 (1992) 26.
+
+   When the weight M of the scattering unit is given, it is used to multiply the
+    cross section by the estimated Debye-Waller-like factor so that it equals
+    [A/(A+1)]^2 at Ei=1eV to gradually go from the bound (thermal) to the free 
+    cross section at 1 eV. The threshold of 1eV is used by e.g. OpenMC.
+     W  = 2e-3*(log(M)-log(M+1));
+     DW = exp(W*Ei) = exp(2e-3*(log(M)-log(M+1))*Ei)
+   Above the epithermal energy threshold, the DW factor is kept fixed. 
+
+   For a poly-atomic scatterer, the effective mass is computed by weighting
+   with the bound cross sections for elements A, e.g.
+     r = sqrt(sum((A/(A+1))^2 * sigma_bound(A)) / sum(sigma_bound(A)));
+     M = r/(1-r)
+   For instance, for H2O (twice A=1 sigma=80.2 and A=18 sigma=4.2):
+     r = sqrt((2*(1/(1+1))^2*80.2+(18/(18+1))^2*4.2)/(2*80.2+4.2)) = 0.52
+     M = r/(1-r) = 1.06 i.e. scattering is mostly the hydrogen one.
+   WARNING: this factor is NOT the Debye-Waller factor exp(-&lt;u2&gt;Q2) !
+
+ A classical S(|q|,w) obeys S(|q|,w) = S(|q|,-w) and is usually given
+ on the positive energy side (w&gt;0).
+ The non classical S(q,w), needed by this function, can be obtained from a 
+ classical S(q,w) (which is symmetric in energy) with e.g.:
+   extend to +/- energy range
+     s = symmetrize(s); 
+   apply detailed balance (Bose factor). Omit T if you do not know it.
+     s = Bosify(s, T);
+
+ The positive energy values in the S(q,w) map correspond to Stokes processes, 
+ i.e. material gains energy, and neutrons loose energy when down-scattered.
+
+ syntax:
+   sigma = scattering_cross_section(s, Ei)
+   sigma = scattering_cross_section(s, Ei, M)
+   sigma = scattering_cross_section(s, 'Ei',Ei, 'M',M)
+   sigma = scattering_cross_section(s, 'lambda', lambda)
+
+ input:
+   s: Sqw data set (non classical, with T Bose factor e.g from experiment)
+        e.g. 2D data set with w as 1st axis (rows, meV), q as 2nd axis (Angs-1).
+   Ei: incoming neutron energy [meV]
+   M: molar weight of the atom/molecule in [g/mol].
+     when given empty, it is searched 'weight' or 'mass' is the object.
+     Default is set to 0, i.e. the Debye-Waller factor is not taken into account.
+   'lambda','Ki': additional named arguments to specify the incident energy
+ output:
+   sigma: cross section per scattering unit (scalar or iData)
+          to be multiplied afterwards by the bound cross section [barn]
+
+ Example: s=iData_Sqw2D('SQW_coh_lGe.nc'); 
+          sigma = scattering_cross_section(Bosify(symmetrize(s),1235), 14.6);
+
+ See also: iData_Sqw2D/Bosify, iData_Sqw2D/deBosify, iData_Sqw2D/symmetrize, iData_Sqw2D/dynamic_range
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="dynamic_range.html" class="code" title="function [s, sphi] = dynamic_range(s, varargin)">dynamic_range</a>	iData_Sqw2D: dynamic_range: crop the S(|q|,w) to the available dynamic range</li><li><a href="iData_Sqw2D.html" class="code" title="">iData_Sqw2D</a>	</li><li><a href="symmetrize.html" class="code" title="function s=symmetrize(s)">symmetrize</a>	iData_Sqw2D: symmetrize(s): extend the S(|q|,w) in both energy sides</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

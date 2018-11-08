@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of cif2hkl</title>
+  <meta name="keywords" content="cif2hkl">
+  <meta name="description" content="file_out = cif2hkl(file_in, file_out, lambda, mode, verbose)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; cif2hkl.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/cif2hkl
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>file_out = cif2hkl(file_in, file_out, lambda, mode, verbose)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [file_out, result] = cif2hkl(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> file_out = cif2hkl(file_in, file_out, lambda, mode, verbose)
+
+ Read a CIF/CFL/SHX/PCR crystallographic description
+       and generates a HKL F^2 reflection list.
+
+ When the argument is a chemical formula (elements separated with spaces), or 
+ a COD ID, a search in the Crystallography Open Database is made.
+
+  file_out = cif2hkl('cod: Mg O');
+  file_out = cif2hkl('cod: O3 Sr Ti');
+  file_out = cif2hkl('cod: 1532356');
+
+ The formula should be given in Hill notation, e.g. C, then H, then other
+ elements in alphabetical order.
+
+  file_out = cif2hkl('gui');        show a dialogue box to enter COD ID, formula, file path
+
+ This requires proxy settings to be set (when behind a firewall)
+   ProxyHost='proxy.ill.fr'; % Proxy address if you are behind a proxy [e.g. myproxy.mycompany.com or empty]
+   ProxyPort=8888;           % Proxy port if you are behind a proxy [8888 or 0 or empty]
+   java.lang.System.setProperty('http.proxyHost', ProxyHost); 
+   com.mathworks.mlwidgets.html.HTMLPrefs.setUseProxy(true);
+   com.mathworks.mlwidgets.html.HTMLPrefs.setProxyHost(ProxyHost);
+   java.lang.System.setProperty('http.proxyPort', num2str(ProxyPort));
+   com.mathworks.mlwidgets.html.HTMLPrefs.setProxyPort(num2str(ProxyPort));
+
+ Syntax: [file_out, result] = cif2hkl(file_in, file_out, lambda, mode, verbose)
+
+ Input:
+   file_in:   name of CIF/CFL/PCR/ShellX file (char) or COD entry or COD formula
+   file_out:  name of output file, or empty for '&lt;file_in&gt;.laz' (char)
+   lambda:    minimum wavelength used for generation of HKL peaks. Default is 0.5  (scalar, Angs)
+   mode:      file conversion mode 'p'=powder, 'x'=single crystal, '-'=no/unactivated
+   verbose:   verbosity level, 0 or 1 (scalar)
+ Output:
+   file_out:  the path to the generated output
+   result:    command result (char)
+
+ Revision: oct.. 23, 2018
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

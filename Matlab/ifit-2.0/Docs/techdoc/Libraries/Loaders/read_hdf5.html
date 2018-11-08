@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of read_hdf5</title>
+  <meta name="keywords" content="read_hdf5">
+  <meta name="description" content="READ_HDF5 Returns the contents of an HDF5 file as a structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; read_hdf5.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/read_hdf5
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>READ_HDF5 Returns the contents of an HDF5 file as a structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data = read_hdf5(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> READ_HDF5 Returns the contents of an HDF5 file as a structure
+   The READ_HDF5 function reads an HDF5 file and returns the contents of
+   that file as the fields of a structure.  Groups are treated as elements
+   of their parent structure.  If the file cannot be opened a -1 is
+   returned.
+
+   data = read_hdf5(filename)
+
+ The returned structure has:
+ data.&lt;group&gt;.&lt;data&gt;             the main branch holding the HDF4 data sets
+ data.&lt;group&gt;.Attributes.&lt;data&gt;  the sub-structure holding all attributes with  
+                 similar structure as the main branch
+
+   Example
+       data=read_hdf5('input.h5');
+
+ (c) E.Farhi, ILL. License: EUPL.
+ See also: <a href="read_hdf4.html" class="code" title="function data = read_hdf4(filename)">read_hdf4</a>, <a href="read_nc.html" class="code" title="function S = read_nc(File,varargin)">read_nc</a>, <a href="read_cdf.html" class="code" title="function s = read_cdf(filename)">read_cdf</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

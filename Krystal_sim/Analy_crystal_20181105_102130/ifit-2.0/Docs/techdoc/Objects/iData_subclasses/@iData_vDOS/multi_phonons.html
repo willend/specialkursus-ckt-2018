@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of multi_phonons</title>
+  <meta name="keywords" content="multi_phonons">
+  <meta name="description" content="iData_vDOS: multi_phonons: compute the integrated multi-phonon generalised density of states (gDOS) from an initial vibrational density of states (vDOS)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iData_subclasses</a> &gt; <a href="index.html">@iData_vDOS</a> &gt; multi_phonons.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iData_subclasses/@iData_vDOS&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/multi_phonons
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iData_vDOS: multi_phonons: compute the integrated multi-phonon generalised density of states (gDOS) from an initial vibrational density of states (vDOS)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Gw, Tsym] = multi_phonons(gw, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iData_vDOS: multi_phonons: compute the integrated multi-phonon generalised density of states (gDOS) from an initial vibrational density of states (vDOS)
+
+   Gw = multi_phonons(gw, Ki, T, m, n)
+
+ compute: Density of States -&gt; multi-phonon gDOS terms
+
+ The input argument 'gw' should be a vibrational density of states (vDOS) as
+   obtained from an experiment (e.g. Bedov/Oskotskii estimate), molecular 
+   dynamics, or lattice dynamics. In the so-called incoherent approximation,
+   the vDOS obtained from incoherent and coherent scattering laws are equal.
+ This method is equivalent to the 'incoherent' one, but provides the
+   density-of-states gDOS instead of a scattering law Sinc(q,w).
+
+ The result is the 'neutron weighted' (generalised) density of states (gDOS),
+   which should be compared with:
+
+   Gw -&gt; \int q. I(q,w) /Ki/Kf dq ~ \int I(theta, w) sin(theta) d(theta)
+
+   where I(q,w) and I(theta,w) are the measured scattering intensity as a function 
+   of the momentum q or scattering angle theta.
+   In practice, the measured I(q,w) contains both the single phonon and multi-phonon
+   terms (and potentially multiple scattering).
+   These should be e.g. multiplied by the neutron scattering bound cross section
+   'sigma' [barns]. This calculation includes the Debye-Waller factor.
+
+ The 1st element of the result 'Gw' is the generalised density of states, as computed
+   in the Oskotskii formalism. The following terms are the multi-phonon contributions.
+   The generalised density of states (gDOS) is the sum of the terms in this expansion.
+
+ This implementation is in principle exact for an isotropic monoatomic material,
+   e.g. a liquid, powder, or cubic crystal. This methodology is equivalent to 
+   an iteration of the MUPHOCOR code.
+
+ For a poly-atomic material with a set of non-equivalent atoms with relative 
+   concentration Ci, mass Mi and bound scattering cross section sigma_i, 
+   one should use:
+
+   sigma = sum_i Ci sigma_i                              weighted cross section
+   m     = [sum_i Ci sigma_i]/[sum_i Ci sigma_i/Mi]      weighted mass
+
+ Reference:
+   H. Schober, Journal of Neutron Research 17 (2014) 109–357
+     DOI 10.3233/JNR-140016 (see esp. pages 328-331)
+   V.S. Oskotskii, Sov. Phys. Solid State 9 (1967), 420.
+   A. Sjolander, Arkiv for Fysik 14 (1958), 315.
+   W. Reichardt, MUPHOCOR Karlsruhe Report 13.03.01p06L (1984)
+
+ syntax:
+   Gw = multi_phonons(gw, Ki, T, m, n)
+   Gw = multi_phonons(gw, 'Ki',Ki, 'T',T, 'm',m, 'n',n)
+   Gw = multi_phonons(gw, 'lambda', lambda)
+
+ Missing arguments (or given as [] empty), are searched within the initial density 
+   of states object. Input arguments can be given in order, or with name-value 
+   pairs, or as a structure with named fields.
+
+ input:
+   gw:   the vibrational density of states per [meV] [iData]
+   Ki:   incident wavevector [Angs-1]. Ki=2*pi/lambda=0.695*sqrt(Ei)
+   T:    temperature [K]
+   m:    mass [g/mol]
+   phi:  detector angles, min and max [deg]
+   n:    number of iterations in the series expansion, e.g. 5
+   DW: Debye-Waller coefficient gamma=&lt;u^2&gt; [Angs^2] e.g. 0.005
+       The Debye-Waller function is      2W(q)=gamma*q^2
+       The Debye-Waller factor   is exp(-2W(q))
+   'lambda','Ei': additional named arguments to specify the incident energy
+
+ output:
+   Gw:   neutron weighted gDOS terms, to be summed [iData_vDOS array]
+   Tp:   p-phonon terms [iData array]
+
+ Example: s=sqw_cubic_monoatomic; gw=dos(s); 
+   mp=multi_phonons(gw); gdos=plus(mp); plot( [gw mp ]);
+ 
+
+ See also: iData_Sqw2D/dos, iData_vDOS/incoherent
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="iData_vDOS.html" class="code" title="">iData_vDOS</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="iData_vDOS.html" class="code" title="">iData_vDOS</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of read_idl</title>
+  <meta name="keywords" content="read_idl">
+  <meta name="description" content="READ_IDL:  restores variable from an IDL save file into Matlab">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; read_idl.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/read_idl
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>READ_IDL:  restores variable from an IDL save file into Matlab</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function outargs=read_idl(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> READ_IDL:  restores variable from an IDL save file into Matlab
+ variables.
+
+   s=read_idl(filename)
+
+ Input arguments (can appear in any order, and all are optional):
+
+   - filename: complete path specification for the save file
+   - 'lowercase': convert variable names from ALL CAPS to all lowercase
+   - 'verbose': print out analysis of file structure
+   - 'restore_verbose': print out lots of stuff while restoring variables
+   - 'debug': both verbose and restore_verbose
+
+ This version restores every variable it knows how to do, and puts them
+ all into the output argument array or a struct whose field names are the
+ IDL variable names, and field values are the IDL variables themselves.
+ The latter (single structure) method is the default.
+ 
+ To create a MATLAB variable from one of the fields in the single 
+ structure, do this:
+   fields=fieldnames(outargs);
+   eval([fields{n} '=outargs.' fields{n} ';']);
+
+
+ Output is a struct array with fields &quot;name&quot; and &quot;value&quot;, where
+ &quot;name&quot; is the name of the variable, and &quot;value&quot; is a cell array
+ containing the variable, whatever it may be.  Could be a scalar, numeric
+ array, string, struct, array of structs, nested structs, what have you.
+
+ References:
+ restore_idl by Charles Pelizzari, 2013
+   used in iLoad/read_idl, BSD
+   &lt;http://jp.mathworks.com/matlabcentral/fileexchange/43899-restore-idl&gt;
+
+ See also: <a href="read_tdms.html" class="code" title="function data=read_tdms(filename)">read_tdms</a>, <a href="read_lvm.html" class="code" title="function data = read_lvm(filename,verbose)">read_lvm</a>, <a href="read_igor.html" class="code" title="function data = read_igor(filename)">read_igor</a>, <a href="read_fig.html" class="code" title="function s = read_fig(filename)">read_fig</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

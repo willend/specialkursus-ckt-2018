@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of read_pdb</title>
+  <meta name="keywords" content="read_pdb">
+  <meta name="description" content="result = PDB_Geometry(fname) read a PDB file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; read_pdb.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/read_pdb
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>result = PDB_Geometry(fname) read a PDB file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function result = read_pdb(name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> result = PDB_Geometry(fname) read a PDB file
+
+       Compute SAXS characteristics of molecule described in file fname.
+       Input -     fname --&gt; valid PDB file.
+       Output      result --&gt; structure with fields describing SAXS profile.
+
+       result.Rg_charge = Radius of gyration of molecule weighting
+           each residue by its charge.
+       result.Rg_volume = Rg weighting residues by their volume.
+       result.Rg_contrast = Rg weighting by their contrast above the
+       solvent density (eg. charge - volume * rho_water).
+       result.Rg_sphere = Rg if protein were densely packed into a sphere;
+       result.Ne = Total charge of protein.
+       result.Ne_excess =  Excess charge relative to solvent. 
+       result.Protein_Density= Density of protein relative to solvent.
+       result.Protein_Volume= Total volume of protein.
+
+       result.pofr = Pair correlation function of protein p(r)
+                       p(|r|) = integral of rho(r+r')rho(r') for all r' and averaged over 
+                           all diretions r.  Normalized so integral of
+                           p(|r|) is one.
+                           r  - pofr(:,1)
+                           p(r) - pofr(:,2)
+
+       result.Ivq = Intensity versus q for protein I(q)
+                       q = Ivq(:,1); I = Ivq(:,2)
+ See also: <a href="read_xyz.html" class="code" title="function s = read_xyz(filename)">read_xyz</a>, <a href="read_poscar.html" class="code" title="function s = read_poscar(filename)">read_poscar</a>, <a href="read_mrc.html" class="code" title="function [Data] = read_mrc(file)">read_mrc</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

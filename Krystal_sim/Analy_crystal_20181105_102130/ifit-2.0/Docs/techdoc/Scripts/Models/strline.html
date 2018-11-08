@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of strline</title>
+  <meta name="keywords" content="strline">
+  <meta name="description" content="y = strline(p, x, [y]) : Straight line">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="index.html">Models</a> &gt; strline.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/strline
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>y = strline(p, x, [y]) : Straight line</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function y=strline(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> y = strline(p, x, [y]) : Straight line
+
+   iFunc/strline Straight line fitting function
+     y=p(2)+p(1)*x;
+     The p(1)=Gradient parameter is the slope of the straight line.
+
+ strline(slope)          creates a model with specified slope/gradient
+ strline([ parameters ]) creates a model with specified model parameters
+
+ input:  p: Straight line model parameters (double)
+            p = [ Gradient BackGround ]
+          or 'guess'
+         x: axis (double)
+         y: when values are given and p='guess', a guess of the parameters is performed (double)
+ output: y: model value
+ ex:     y=strline([1 1], -10:10); or plot(strline);
+
+ Version: oct.. 23, 2018
+ See also iFunc, iFunc/fits, iFunc/plot, <a href="quadline.html" class="code" title="function y=quadline(varargin)">quadline</a>, <a href="plane2d.html" class="code" title="function signal=plane2d(varargin)">plane2d</a>
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="powerlaw.html" class="code" title="function y=powerlaw(varargin)">powerlaw</a>	y = powerlaw(p, x, [y]) : power law model</li><li><a href="powerlaw.html" class="code" title="function y=powerlaw(varargin)">powerlaw</a>	y = powerlaw(p, x, [y]) : power law model</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of read_anytext</title>
+  <meta name="keywords" content="read_anytext">
+  <meta name="description" content="import any text using 'looktxt'.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Libraries</a> &gt; <a href="index.html">Loaders</a> &gt; read_anytext.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Libraries/Loaders&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/read_anytext
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>import any text using 'looktxt'.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function s = read_anytext(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> import any text using 'looktxt'.
+   data = read_anytext(filename, options...)
+
+ The possible options are:
+'--catenate'     Catenates similar numerical fields (which have similar dimensions 
+                and names. Recommended.
+'--fast'      When numerical data blocks only use isspace(3) separators 
+                (\n \r \f \t \v and space), the reading can be made faster with 
+                even lower memory requirements. Recommended.
+'--headers'   Extracts headers for each numerical field. Recommended.
+'--wrapped'   Catenates single wrapped output lines with previous matrices 
+                (e.g. caused by the 80 chars per line limit in old data formats 
+                written by fortran codes). Recommended.
+'--section=SEC' Classifies fields into sections matching word SEC. This option 
+                can be repeated with different SEC words.
+'--metadata=META' Extracts lines containing word META as user metadata. This 
+                option can be repeated with different META items.
+'--makerows=NAME'    When a numerical data block label matching NAME is found, it 
+                is transformed into a row vector. This may be used for wrapped 
+                files (--wrapped option). This option can be repeatedwith as 
+                different NAME tokens.
+'--help'      Lists all possible options.
+'--silent'    Suppress processing messages except errors.
+
+ the importation consists in performing the following tasks:
+ * handle arguments, looking for options (possibly with &quot;string&quot;) and filenames
+ * launch looktxt with Matlab/binary format on temporary file
+ * import the MAT file as a structure
+
+ read_anytext('compile') check looktxt and recompiles if needed
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="iLoad.html" class="code" title="function [data, format] = iLoad(filename, loader, varargin)">iLoad</a>	[data, loader] = iLoad(file, loader, ...)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

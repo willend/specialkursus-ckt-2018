@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of findfield</title>
+  <meta name="keywords" content="findfield">
+  <meta name="description" content="[match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iFunc</a> &gt; findfield.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iFunc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/findfield
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [match, types, dims] = findfield(s, field, option) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields
+
+   @iFunc/findfield function to look for iFunc fields, type and number of elements
+
+   [match,type,n] = findfield(iFunc) returns the names of all iFunc fields
+   [match,type,n] = findfield(iFunc, field) returns the names of all iFunc fields 
+     that match 'field'
+   The optional 'option' argument can contain one or more keywords:
+     The 'exact'   option will search for the exact occurences.
+     The 'case'    option specifies a case sensitive search. 
+     The 'numeric' option will return only numerical fields.
+     The 'char'    option will return only character fields.
+     The 'cache'   option allows to re-use a previous field search cache for  
+                     faster consecutive searches on the same object.
+     The 'first'   option returns the first match (with shortest name/link).
+     The 'biggest' option returns the biggest match (has max nb of elements).
+
+   The cache mechanism allows to do iterative searches on the same object, e.g.
+     findfield(s,'Title') and then findfield(s,'Signal','cache numeric')
+
+ input:  s: object or array (iFunc)
+         field: field name to search, or '' (char).
+         option: empty or 'exact' 'case' 'char' or 'numeric' (char)
+ output: match:  names of iFunc fields (cellstr)
+         types:  types of iFunc fields (cellstr), e.g. 'double', 'char', 'struct'...
+         nelements: total number of elements in iFunc fields (double)
+ ex:     findfield(iFunc) or findfield(iFunc,'Name') or findfield(s,'Name','exact case')
+
+ Version: oct.. 23, 2018
+ See also <a href="iFunc.html" class="code" title="">iFunc</a>, iFunc/set, iFunc/get</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="cellstr.html" class="code" title="function [ret, header] = cellstr(s)">cellstr</a>	ret = cellstr(s) : convert iFunc into a cell of strings</li><li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields</li><li><a href="get.html" class="code" title="function [varargout] = get(this,varargin)">get</a>	[...] = get(s, 'PropertyName', ...) : get iFunc object properties</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iFunc object</li><li><a href="transpose.html" class="code" title="function a = transpose(a)">transpose</a>	b = transpose(s) : non-conjugate transpose of iFunc object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="findfield.html" class="code" title="function [match, types, dims] = findfield(s, field, option)">findfield</a>	[match, types, nelements]=findfield(iFunc, field, option) : look for iFunc fields</li><li><a href="findstr.html" class="code" title="function [match, field] = findstr(s, str, option)">findstr</a>	[match, field]=findstr(s, str, option) : look for strings stored in iFunc</li><li><a href="publish.html" class="code" title="function filename = publish(a, filename, section, message)">publish</a>	b = publish(s) : export the Model object as an HTML document.</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

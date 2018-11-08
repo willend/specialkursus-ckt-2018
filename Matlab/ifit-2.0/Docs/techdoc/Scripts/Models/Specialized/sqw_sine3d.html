@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_sine3d</title>
+  <meta name="keywords" content="sqw_sine3d">
+  <meta name="description" content="model = sqw_sine3d(p, h,k,l,w, {signal}) : sine dispersion(HKL) with DHO(energy)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Specialized</a> &gt; sqw_sine3d.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Specialized&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_sine3d
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model = sqw_sine3d(p, h,k,l,w, {signal}) : sine dispersion(HKL) with DHO(energy)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function signal=sqw_sine3d(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model = sqw_sine3d(p, h,k,l,w, {signal}) : sine dispersion(HKL) with DHO(energy)
+
+   iFunc/sqw_sine3d: a 4D S(q,w) with a 3D HKL sine dispersion, and a DHO line
+      shape. The sine dispersion can be tuned with energy gaps at zone centre
+      and boundary, as well as a periodicity of the sine wave.
+
+ WARNING: Single intensity and line width parameters are used here.
+
+ Along a principal Q axis, the dispersion has the form:
+       w = E0 + (E1-E0)*sin(Q_freq*pi*(Q-Q0));
+ This is a sine wave which goes from w=E0 at Q=Q0, up to w=E1 at 1/2Q_freq.
+ The inter-atomic distance between the scattering units (atoms) is thus:
+       d=a*Q_freq/2 [in Angs, with a=lattice parameter]
+
+ A spin wave could for instance mostly use Q0=0, Q_freq=1,  E0=0, E1&gt;0
+   For a simple ferromagnetic magnon the gap width is E1-E0=4JS 
+     with J=exchange energy and S=magnetic moment of spins.
+ An acoustic branch could use           Q0=0, Q_freq=.5, E0=0, E1&gt;0
+   The sound velocity in acoustic branches is:
+       c=E1*Q_freq*pi*1.519e2*a/2 [in m/s, with a=lattice parameter]
+ An optical branch could use            Q0=0, Q_freq=.2, E0&gt;E1 E1&gt;0
+
+ To shift the minimum/maximum Q of the dispersion, move QH0,QK0,QL0
+ To change the extent of the dispersion in Q, vary QH_freq,QK_freq,QL_freq
+ To change to minimum and maximum energy, move E0 and E1_qh,E1_qk,E1_ql
+ To model an incomensurate dispersion, move both QH0,QK0,QL0 and the
+   QH_freq,QL_freq,QK_freq to incomensurate (non rational) values.
+
+ To quickly create predefined models, use:
+   model=sqw_sine3d(Emax)      creates an acoustic dispersion up to Emax
+   model=sqw_sine3d([ E0 E1 ]) creates an optical dispersion from E0 to E1
+   model=sqw_sine3d([ E0 E1 Q_freq ])    creates a dispersion from E0 to E1
+                                      with given Q frequency, e.g. .5, 1 or 2
+ Of course, as for any iFunc model, parameter values can be changed afterwards.
+
+ To model more than one branch, just add these models together, e.g.:
+     disp3 = sqw_sine3d(5) + sqw_sine3d([ 10 8 ]) + sqw_sine3d([ 2 4 1 ])
+ which is an acoustic plus optical branch, and a spin wave with 2 meV gap.
+
+ Example:
+   s=sqw_sine3d(5); qh=linspace(0,1,50);qk=qh; ql=qh'; w=linspace(0.01,10,50);
+   f=iData(s,s.p,qh,qk,ql,w); plot(log(f(:,:,1,:)));
+
+ Reference: https://en.wikipedia.org/wiki/Phonon
+
+ input:  p: sqw_sine3d model parameters (double)
+             p(1)= E1_qh   energy at QH half period [meV]
+             p(2)= E1_qk   energy at QK half period [meV]
+             p(3)= E1_ql   energy at QL half period [meV]
+             p(4)= E0      zone-centre energy gap [meV]
+             p(5)= QH0     QH zone-centre [rlu]
+             p(6)= QK0     QK zone-centre [rlu]
+             p(7)= QL0     QL zone-centre [rlu]
+             p(8)= QH_freq QH frequency [multiples of pi]
+             p(9)= QK_freq QK frequency [multiples of pi]
+             p(10)=QL_freq QL frequency [multiples of pi]
+             p(11)=Gamma   dispersion DHO half-width in energy [meV]
+             p(12)=Temperature of the material [K]
+             p(13)=Amplitude
+             p(14)=Background (constant)
+          or p='guess'
+         qh: axis along QH in rlu (row,double)
+         qk: axis along QK in rlu (column,double)
+         ql: axis along QL in rlu (page,double)
+         w:  axis along energy in meV (double)
+    signal: when values are given, a guess of the parameters is performed (double)
+ output: signal: model value
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc/fits, iFunc/plot, gauss, sqw_phonons, <a href="sqw_cubic_monoatomic.html" class="code" title="function signal=sqw_cubic_monoatomic(varargin)">sqw_cubic_monoatomic</a>, sqw_vaks
+   &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of sqw_spinw</title>
+  <meta name="keywords" content="sqw_spinw">
+  <meta name="description" content="model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Scripts</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Factory</a> &gt; sqw_spinw.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Scripts/Models/Factory&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/sqw_spinw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function signal=sqw_spinw(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave
+
+   iFunc/sqw_spinw: a 4D S(q,w) with a 3D HKL dispersion obtained from the
+   spinw package from S. Toth. A SpinW object must first be created, and is then
+   converted into an iFunc model for HKL evaluation. The intensity is computed
+   for a neutron scattering experiment.
+
+ MODEL CREATION:
+
+   To create the Model, the following syntax should be used:
+       s = sqw_spinw(sq, options);
+   or
+       s = sqw_spinw('CIF_filename', options);
+   with:
+       sq:        a spinw object from &lt;a href=&quot;https://www.psi.ch/spinw/spinw&quot;&gt;SpinW&lt;/a&gt;.
+          when omitted, use a square lattice Heisenberg Antiferromagnet with S = 1 and J = 1
+       options:   a set of options to be used for the Model evaluation (structure)
+         options.component: the component to use as intensity, as documented in 
+              &lt;a href=&quot;matlab:doc sw_egrid&quot;&gt;sw_egrid&lt;/a&gt;
+              Default is 'Sperp'. Suggested is also 'Sxx+Syy+Szz'.
+   You can get a default model (squareAF) with:
+       s = sqw_spinw('defaults');
+
+ MODEL EVALUATION (once created):
+
+   Once the model is created, you may evaluate it using the standard evaluation call:
+     value = s(p, h,k,l,w)
+   or
+     f=iData(s,p,qh,qk,ql,w); % to get an iData object back
+   with:
+         p: sqw_spinw model parameters (double)
+             p(1)=Gamma       energy broadening [meV]
+             p(2)=Temperature of the material [K]
+             p(3)=Amplitude
+             p(4...)= coupling parameters of the Hamiltonian
+          or p='guess'
+         qh: axis along QH in rlu (row,double)
+         qk: axis along QK in rlu (column,double)
+         ql: axis along QL in rlu (page,double)
+         w:  axis along energy in meV (double)
+    signal: when values are given, a guess of the parameters is performed (double)
+ output: signal: model value
+
+ Example:
+   sq = sw_model('squareAF',2,0);  % create the SW object
+   s  = sqw_spinw(sq);                % create the Model
+   qh = linspace(0.01,1.5,30);qk=qh; ql=qh'; w=linspace(0.01,10,50);
+   f  = iData(s,s.p,qh,qk,ql,w); plot(log(f(:,:,1,:))); % evaluate and plot
+
+ Reference: https://en.wikipedia.org/wiki/Phonon
+ SpinW &lt;https://github.com/tsdev/spinw&gt;
+       &lt;https://www.psi.ch/spinw/spinw&gt;
+       S. Toth and B. Lake, J. Phys.: Condens. Matter 27, 166002 (2015).
+
+ Version: oct.. 23, 2018
+ See also iData, iFunc/fits, iFunc/plot, gauss, <a href="sqw_phonons.html" class="code" title="function signal=sqw_phonons(configuration, varargin)">sqw_phonons</a>, sqw_cubic_monoatomic, <a href="sqw_vaks.html" class="code" title="function signal=sqw_vaks(varargin)">sqw_vaks</a>, sqw_sine3d
+   &lt;a href=&quot;matlab:doc(iFunc,'Models')&quot;&gt;iFunc:Models&lt;/a&gt;
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a>	model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</li><li><a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a>	model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</li><li><a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a>	model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a>	model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</li><li><a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a>	model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</li><li><a href="sqw_spinw.html" class="code" title="function signal=sqw_spinw(varargin)">sqw_spinw</a>	model = sqw_spinw(sw, options) : 3D dispersion(HKL) spin-wave</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

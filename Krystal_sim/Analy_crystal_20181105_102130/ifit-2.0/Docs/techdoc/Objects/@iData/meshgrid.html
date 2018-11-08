@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of meshgrid</title>
+  <meta name="keywords" content="meshgrid">
+  <meta name="description" content="s = meshgrid(a) : transforms an iData object so that its axes are grids">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="index.html">@iData</a> &gt; meshgrid.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/@iData&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/meshgrid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>s = meshgrid(a) : transforms an iData object so that its axes are grids</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function b = meshgrid(a, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> s = meshgrid(a) : transforms an iData object so that its axes are grids
+
+   @iData/meshgrid function to transform iData object axes so that they are
+     on a regular grid, as obtained from ndgrid. When the initial axes are not
+     perpendicular/regular, the object Signal is interpolated on the new grid.
+   meshgrid(a, 'vector' ...) forces all axes as vectors
+   meshgrid(a, 'grid' ...)   forces all axes as grid with same size as Signal
+   meshgrid(a, dims, ...)    specifies the size of the histogram
+   meshgrid(a, 'fill' ...)   fills empty histogram bins (e.g. when converting from an event list)
+   meshgrid(a, 'method' ...) uses specified method for interpolation as one of
+                    linear (default), spline, cubic, or nearest
+
+   A meshgrid histogram can be converted back into an event list with the 'event' method.
+
+ input:  a: object or array (iData)
+         method: 'linear','cubic','spline','nearest'
+                 'vector' to get only vector axes
+                 'fill'   to replace NaN's in the final data set
+ output: s: object (iData)
+ ex:     c=meshgrid(a); c=meshgrid(a, 'vector linear')
+         c=meshgrid(a, 100, 'fill')
+
+ Version: oct.. 23, 2018
+ See also <a href="iData.html" class="code" title="">iData</a>, iData/interp, iData/hist, iData/event, iData/fill</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ceil.html" class="code" title="function a = ceil(a)">ceil</a>	b = ceil(s) : upper integer round of iData object</li><li><a href="copyobj.html" class="code" title="function a = copyobj(a)">copyobj</a>	b = copyobj(s) : makes a copy of iData object</li><li><a href="end.html" class="code" title="function b = end(s,k,n)">end</a>	b = end(s,index,n) : end value for iData objects</li><li><a href="fill.html" class="code" title="function c=fill(a, n)">fill</a>	FILL fill-in over missing data</li><li><a href="getaxis.html" class="code" title="function [val, lab] = getaxis(s,ax)">getaxis</a>	[val, lab] = getaxis(s, AxisIndex) : get iData axis value and label</li><li><a href="hist.html" class="code" title="function c=hist(a, varargin)">hist</a>	hist(a, axis1, axis2, ...) computes the accumulated histogram from event data sets</li><li><a href="iData.html" class="code" title="">iData</a>	</li><li><a href="interp.html" class="code" title="function b = interp(a, varargin)">interp</a>	[b...] = interp(s, ...) : interpolate iData object</li><li><a href="isempty.html" class="code" title="function y = isempty(s)">isempty</a>	isempty(s) : true for empty iData object</li><li><a href="isnumeric.html" class="code" title="function a = isnumeric(a)">isnumeric</a>	b = isnumeric(s) : True for numeric iData object elements</li><li><a href="isscalar.html" class="code" title="function a = isscalar(a)">isscalar</a>	b = isscalar(s) : True for scalar iData objects</li><li><a href="isvector.html" class="code" title="function v = isvector(s)">isvector</a>	b = isvector(s) : True for vector iData object</li><li><a href="max.html" class="code" title="function [m,id] = max(a,b, dim)">max</a>	[m,id] = max(a,b, dim) : computes the maximum value of iData object(s)</li><li><a href="meshgrid.html" class="code" title="function b = meshgrid(a, varargin)">meshgrid</a>	s = meshgrid(a) : transforms an iData object so that its axes are grids</li><li><a href="ndims.html" class="code" title="function v=ndims(s)">ndims</a>	d = ndims(s) : get the dimensionality of iData object</li><li><a href="ones.html" class="code" title="function s = ones(iData_in,varargin)">ones</a>	s = ones(s,N,M,P,...) : initialize an iData array</li><li><a href="prod.html" class="code" title="function [s,sigma] = prod(a,dim)">prod</a>	s = prod(a,dim) : computes the product of iData objects elements</li><li><a href="reshape.html" class="code" title="function a = reshape(a, varargin)">reshape</a>	c = reshape(a) : reshape the object Signal</li><li><a href="setaxis.html" class="code" title="function this = setaxis(this, rank, alias, value)">setaxis</a>	s = setaxis(s, rank, alias, value) : set iData axes</li><li><a href="size.html" class="code" title="function y=size(s, dim)">size</a>	size(s) : get iData object size (number of elements)</li><li><a href="strfind.html" class="code" title="function [match, field] = strfind(s, varargin)">strfind</a>	[match, field]=strfind(s, pattern, option) : search for pattern in iData</li><li><a href="zeros.html" class="code" title="function s = zeros(iData_in,varargin)">zeros</a>	s = zeros(s,N,M,P,...) : initialize an iData array</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="camproj.html" class="code" title="function s = camproj(a,dim, center)">camproj</a>	s = camproj(a,dim) : projection/radial integration of iData objects elements</li><li><a href="cart2sph.html" class="code" title="function s = cart2sph(a, center)">cart2sph</a>	s = cart2sph(a,dim) : cartesian to polar/spherical representation of iData objects</li><li><a href="corrcoef.html" class="code" title="function c = corrcoef(a, b)">corrcoef</a>	c = corrcoef(a,b) : correlation coefficient with an iData object</li><li><a href="event.html" class="code" title="function b = event(a, dim, signal, err, monitor)">event</a>	c = event(a) : build an event list</li><li><a href="imroi.html" class="code" title="function [b, mask, f] = imroi(a, options)">imroi</a>	imroi: define a region of interest on a data set</li><li><a href="meshgrid.html" class="code" title="function b = meshgrid(a, varargin)">meshgrid</a>	s = meshgrid(a) : transforms an iData object so that its axes are grids</li><li><a href="std.html" class="code" title="function [s, f] = std(a, dim)">std</a>	[half_width, center] = std(s, dim) : standard deviation of iData</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>

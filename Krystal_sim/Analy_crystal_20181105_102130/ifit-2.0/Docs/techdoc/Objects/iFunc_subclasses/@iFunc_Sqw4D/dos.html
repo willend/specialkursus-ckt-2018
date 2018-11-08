@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>ifit.mccode.org - Description of dos</title>
+  <meta name="keywords" content="dos">
+  <meta name="description" content="iFunc_Sqw4D: dos: compute the density of states (vDOS)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">Objects</a> &gt; <a href="#">iFunc_subclasses</a> &gt; <a href="index.html">@iFunc_Sqw4D</a> &gt; dos.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Objects/iFunc_subclasses/@iFunc_Sqw4D&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1><a href="http://ifit.mccode.org">iFit</a>/dos
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>iFunc_Sqw4D: dos: compute the density of states (vDOS)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [DOS, DOS_partials] = dos(s, n, nQ, method) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> iFunc_Sqw4D: dos: compute the density of states (vDOS)
+
+  The routine can be used with 4D models to compute the vibrational density of 
+   states (vDOS), aka phonon spectrum.
+
+    DOS = dos(s)    returns the vibrational density of states (vDOS)
+      the vDOS and the partials per mode are also stored in the model UserData.
+    DOS = dos(s, n) 
+      does the same with n-bins on the vDOS (n=100). 
+      'n' can also be a vector of energy values.
+    DOS = dos(s, n, nQ) 
+      does the same with nQ-bins for the HKL average (n=21)
+    DOS = dos(s, n, nQ, method) 
+      specifies the method among '4d', 'powder' and 'fast' estimate.
+
+    To smooth the resulting distribution, use:
+      sDOS = smooth(DOS); plot(sDOS);
+
+    If the DOS has already been calculated, it is re-used. To force calculation
+    use a non-0 value or 'force' for 'n'.
+
+ input:
+   s:      S(q,w) 4D model (iFunc_Sqw4D)
+   n:      number/vector of energy values (scalar/vector). Optional. Default is nmodes*10
+   nQ:     number of Q-grid binning (integer). Optional. Default is 21
+   method: optional, can be '4D' (default) or 'powder' or 'fast'
+
+ output:
+   DOS:          DOS(w)   (1D iData versus energy)
+   DOS_partials: DOS(w) per mode (1D iData array, versus energy)
+
+ See also: iFunc_Sqw4D/max
+
+ Example: Sqw=sqw_cubic_monoatomic; D=dos(Sqw);
+ (c) E.Farhi, ILL. License: EUPL.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="max.html" class="code" title="function [m, DOS] = max(s)">max</a>	iFunc_Sqw4D: max: get a quick estimate of the max dispersion frequency</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="band_structure.html" class="code" title="function [S, qLim, fig] = band_structure(f, qLim, E, options)">band_structure</a>	band_structure: evaluates a 4D S(q,w) model along specified k-path / bands</li><li><a href="publish.html" class="code" title="function filename = publish(self, filename, section, message)">publish</a>	iFunc_Sqw4D: publish: generate a readable HTML document and export results to</li><li><a href="thermochemistry.html" class="code" title="function [t, fig]=thermochemistry(s, T, options)">thermochemistry</a>	iFunc_Sqw4D/thermochemistry: compute thermodynamic quantities for 4D S(q,w) models.</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Tue 23-Oct-2018 22:44:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005. <a href="http://ifit.mccode.org">iFit</a> (c) E.Farhi/<a href="http://www.ill.eu">ILL</a> EUPL 1.1</address>
+</body>
+</html>
