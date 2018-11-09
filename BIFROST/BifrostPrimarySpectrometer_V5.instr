@@ -22,8 +22,7 @@ string SXfile="C_diamond.lau",
 ax=0,      ay=2.14,   az=-1.24,
 bx = 0,    by = 0,    bz =  2.47,
 cx = 6.71, cy = 0,    cz =  0,
-Omega=0
-
+Omega=0,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1
 )
@@ -171,8 +170,8 @@ double DM         = 3.355;   /* Monochromator d-spacing in Angs */
 double wi		  = 0.01; 	/* Monochromator width*/
 
 
-int i
-double Samplechoice;;   
+int i;
+double Samplechoice;  
 %}
 
 INITIALIZE
@@ -722,6 +721,9 @@ Lmin=WaveMin, Lmax=WaveMax, acc_power=power, cold_frac=0.500000, sector="W",
 tmax_multiplier=1.500000, n_pulses=Npulse, c_performance=1.0, t_performance=1.0, tfocus_dist=6.32962,tfocus_time=6.32962/v_0, tfocus_width=1.2*chopPulseOpening)
 AT (0, 0, 0) RELATIVE Origin
 ROTATED (0,0,0) RELATIVE Origin
+EXTEND %{
+  Samplechoice=rand01();
+%}
 
 /*
 // A simple source to test the system. Use instead of ESS source to benchmark the guide
@@ -1709,8 +1711,8 @@ COMPONENT Magnon = Magnon_bcc(
     focus_yh=0,
     focus_aw=180, /* For statistics considerations, only a small angular */
     focus_ah=0.1)   /* band arround sample is illuminated */
-  WHEN (inelastic>0 && Samplechoice<inelastic)  AT (0, 0, 5.1) RELATIVE Lmon_sample
-  ROTATED (0, Rotation, 0) RELATIVE Lmon_sample
+  WHEN (inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
+  ROTATED (0, Omega, 0) RELATIVE SamplePos
 EXTEND %{
    p/=mcipinelastic;
    p*=mcipimultiplier;
@@ -1720,8 +1722,8 @@ EXTEND %{
 COMPONENT Lattice = Single_crystal(order=1, 
      reflections = "BCC_fake.lau", mosaic=30, radius = 0.02, yheight = 0.03,   delta_d_d=1e-3,
      ax =-aa , ay = 0, az =0 , bx =0 , by =0, bz = aa , cx =0 , cy = aa , cz =0, barns=1)
-  WHEN (inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 5.1) RELATIVE source
-  ROTATED (0, Rotation, 0) RELATIVE source
+  WHEN (inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 0) RELATIVE SamplePos
+  ROTATED (0, Omega, 0) RELATIVE SamplePos
 EXTEND %{
    p/=(1-mcipinelastic);
    // Remove direct beam
@@ -1736,10 +1738,10 @@ AT (0,0,0) RELATIVE Magnon
 
 
 COMPONENT Mono_Cradle = Arm()
-AT (0.0, 0.0, 1.2) RELATIVE  v_sample  ROTATED (0,OMA, 0) RELATIVE  v_sample
+AT (0.0, 0.0, 1.2) RELATIVE  SamplePos  ROTATED (0,OMA, 0) RELATIVE SamplePos
 
 COMPONENT XY_ARM = Arm() 
-AT (0.0, 0.0, 1.2) RELATIVE  v_sample
+AT (0.0, 0.0, 1.2) RELATIVE  SamplePos
 
 COMPONENT monochromator_flat = Monochromator_curved(
     mosaich=60, 
@@ -1829,7 +1831,7 @@ AT (0.027638,0,0.030387) RELATIVE XY_ARM ROTATED (0,3*dphi,0) RELATIVE Mono_Crad
 
 /*                                on mono, pointing towards sample */
 COMPONENT Mono_Out = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE  v_sample
+AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE SamplePos
 
 
 
