@@ -22,7 +22,7 @@ string SXfile="C_diamond.lau",
 ax=0,      ay=2.14,   az=-1.24,
 bx = 0,    by = 0,    bz =  2.47,
 cx = 6.71, cy = 0,    cz =  0,
-Omega=0,
+Omega=0,TwoTheta,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1
 )
@@ -1736,12 +1736,15 @@ AT (0,0,0) RELATIVE Magnon
 COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd")
 AT (0,0,0) RELATIVE Magnon
 
+COMPONENT Sample_out = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta,0) RELATIVE SamplePos
 
 COMPONENT Mono_Cradle = Arm()
-AT (0.0, 0.0, 1.2) RELATIVE  SamplePos  ROTATED (0,OMA, 0) RELATIVE SamplePos
+AT (0.0, 0.0, 1.2) RELATIVE  Sample_out  ROTATED (0,OMA, 0) RELATIVE Sample_out
 
 COMPONENT XY_ARM = Arm() 
-AT (0.0, 0.0, 1.2) RELATIVE  SamplePos
+  AT (0.0, 0.0, 0) RELATIVE Mono_Cradle ROTATED (0,0,0) RELATIVE SamplePos
 
 COMPONENT monochromator_flat = Monochromator_curved(
     mosaich=60, 
@@ -1831,7 +1834,7 @@ AT (0.027638,0,0.030387) RELATIVE XY_ARM ROTATED (0,3*dphi,0) RELATIVE Mono_Crad
 
 /*                                on mono, pointing towards sample */
 COMPONENT Mono_Out = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE SamplePos
+AT (0,0,0) RELATIVE Mono_Cradle ROTATED(0,TTA,0) RELATIVE Sample_out
 
 
 
