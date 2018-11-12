@@ -15,7 +15,9 @@ int printMValues=0,
 double power = 2.0,
 double BWopen=161,
 OMA=37.072,// our values 
-TTA=74.144, 
+TTA=74.144,
+OMA2=30.628,
+TTA2=61.256,
 phi=37, 
 dphi=0.5,
 string SXfile="C_diamond.lau",
@@ -24,8 +26,8 @@ bx = 0,    by = 0,    bz =  2.47,
 cx = 6.71, cy = 0,    cz =  0,
 Omega=0,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
-sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1
-)
+sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
+INCOH=1)
 
 DECLARE
 %{
@@ -1665,7 +1667,6 @@ SPLIT 100 COMPONENT SamplePos = Arm()
 AT (0, 0, 0.7) RELATIVE Lmon_sample
 EXTEND %{
   Samplechoice=rand01();
-  scatt_5meV=0;
 %}
   
 //COMPONENT v_sample = Single_crystal(
@@ -1683,17 +1684,23 @@ EXTEND %{
 //  AT (0,0,0) RELATIVE SamplePos
   
 //V-sample
-//COMPONENT v_sample = V_sample(
-//    radius=0.005, 
-//   thickness=0.002, 
-//    zdepth=0.01,
-//  xwidth=0.01,
-//    yheight = 0.01)
-//, 
-//    focus_xw=0.05, 
-//    focus_yh=0.1)
-// AT (0, 0, 0.7) RELATIVE Lmon_sample
-
+COMPONENT v_sample = Incoherent(
+   radius=0.005, 
+   thickness=0.002, 
+   zdepth=0.01,
+   xwidth=0.01,
+   yheight = 0.01,
+   target_index=12,
+   focus_xw=2, 
+   focus_yh=0.4)
+WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
+EXTEND %{
+  double scale=rand01();
+  vx=vx*(1+scale);
+  vy=vy*(1+scale);
+  vz=vz*(1+scale);
+%}
+  
 COMPONENT Magnon = Magnon_bcc(
     radius=0.02,
     yheight=0.03,
@@ -1713,7 +1720,7 @@ COMPONENT Magnon = Magnon_bcc(
     focus_yh=0.4)
   //focus_aw=180, /* For statistics considerations, only a small angular */
   //focus_ah=20)   /* band arround sample is illuminated */
-  WHEN (inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
+  WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
   ROTATED (0, Omega, 0) RELATIVE SamplePos
 EXTEND %{
    p/=mcipinelastic;
@@ -1724,7 +1731,7 @@ EXTEND %{
 COMPONENT Lattice = Single_crystal(order=1, 
      reflections = "BCC_fake.lau", mosaic=30, radius = 0.02, yheight = 0.03,   delta_d_d=1e-3,
      ax =-aa , ay = 0, az =0 , bx =0 , by =0, bz = aa , cx =0 , cy = aa , cz =0, barns=1)
-  WHEN (inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 0) RELATIVE SamplePos
+  WHEN (!INCOH && inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 0) RELATIVE SamplePos
   ROTATED (0, Omega, 0) RELATIVE SamplePos
 EXTEND %{
    p/=(1-mcipinelastic);
@@ -1732,7 +1739,7 @@ EXTEND %{
    if(!SCATTERED) ABSORB;
 %}
 
-COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=41,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-2,Emin=0, Emax=20, yheight=0.1)
+COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-4,Emin=0, Emax=10, yheight=0.1)
 AT (0,0,0) RELATIVE Magnon
 
 COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
@@ -1784,6 +1791,9 @@ GROUP outgoing
   
  COMPONENT Mono_Cradle10 = Arm()
 AT (0.0, 0.0, 1.2) RELATIVE  Sample_out10  ROTATED (0,OMA, 0) RELATIVE Zrot10
+
+ COMPONENT Mono_Cradle10_2 = Arm()
+AT (0.0, 0.0, 1.5) RELATIVE  Sample_out10  ROTATED (0,OMA2, 0) RELATIVE Zrot10
 
   COMPONENT Zrot20 = Arm()
   AT (0.0, 0.0, 1.2) RELATIVE  Sample_out20
@@ -2204,8 +2214,7 @@ COMPONENT monochromator7_50 = Monochromator_curved(
     DM=DM)
 AT (0,0,0.0137*3) RELATIVE Mono_Cradle50 ROTATED (0,3*dphi,0) RELATIVE Mono_Cradle50
 
-  
-  /*                                on mono, pointing towards sample */
+
 COMPONENT Mono_Out10 = Arm()
 AT (0,0,0) RELATIVE Mono_Cradle10 ROTATED(0,TTA,0) RELATIVE Zrot10
 
@@ -2221,7 +2230,8 @@ AT (0,0,0) RELATIVE Mono_Cradle40 ROTATED(0,TTA,0) RELATIVE Zrot40
 COMPONENT Mono_Out50 = Arm()
 AT (0,0,0) RELATIVE Mono_Cradle50 ROTATED(0,TTA,0) RELATIVE Zrot50
 
-  
+/* 1st Shell of components around first set of analysers */
+/* Catching the scattered beam... */
 COMPONENT psd_monitor10 = PSD_monitor(
     filename="test_fil_analyser10", 
     xmin=-0.1, 
@@ -2229,7 +2239,7 @@ COMPONENT psd_monitor10 = PSD_monitor(
     ymin=-0.1, 
     ymax=0.1,restore_neutron=1)
 AT (0, 0, 1) RELATIVE Mono_Out10
-  GROUP psds
+  GROUP shell1
   
 COMPONENT psd_monitor20 = PSD_monitor(
     filename="test_fil_analyser20", 
@@ -2238,7 +2248,7 @@ COMPONENT psd_monitor20 = PSD_monitor(
     ymin=-0.1, 
     ymax=0.1,restore_neutron=1)
 AT (0, 0, 1) RELATIVE Mono_Out20
-GROUP psds
+GROUP shell1
   
 COMPONENT psd_monitor30 = PSD_monitor(
     filename="test_fil_analyser30", 
@@ -2247,7 +2257,7 @@ COMPONENT psd_monitor30 = PSD_monitor(
     ymin=-0.1, 
     ymax=0.1,restore_neutron=1)
 AT (0, 0, 1) RELATIVE Mono_Out30
-GROUP psds
+GROUP shell1
   
 COMPONENT psd_monitor40 = PSD_monitor(
     filename="test_fil_analyser40", 
@@ -2256,7 +2266,7 @@ COMPONENT psd_monitor40 = PSD_monitor(
     ymin=-0.1, 
     ymax=0.1,restore_neutron=1)
 AT (0, 0, 1) RELATIVE Mono_Out40
-GROUP psds
+GROUP shell1
   
 COMPONENT psd_monitor50 = PSD_monitor(
     filename="test_fil_analyser50", 
@@ -2265,8 +2275,270 @@ COMPONENT psd_monitor50 = PSD_monitor(
     ymin=-0.1, 
     ymax=0.1,restore_neutron=1)
 AT (0, 0, 1) RELATIVE Mono_Out50
-GROUP psds
+GROUP shell1
+
+/* And the transmitted beam... */
+
+COMPONENT psd_monitor10_t = PSD_monitor(
+    filename="test_fil_analyser10t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out10
+  GROUP shell1
   
+COMPONENT psd_monitor20_t = PSD_monitor(
+    filename="test_fil_analyser20t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out20
+GROUP shell1
+  
+COMPONENT psd_monitor30_t = PSD_monitor(
+    filename="test_fil_analyser30t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out30
+GROUP shell1
+  
+COMPONENT psd_monitor40_t = PSD_monitor(
+    filename="test_fil_analyser40t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out40
+GROUP shell1
+  
+COMPONENT psd_monitor50_t = PSD_monitor(
+    filename="test_fil_analyser50t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out50
+GROUP shell1
+
+/* 2nd Shell of components around first set of analysers */
+/* Catching the scattered beam, monitoring energy */
+COMPONENT e_monitor10 = Monitor_nD(
+    filename="emon_analyser10", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out10
+  GROUP shell2
+  
+COMPONENT e_monitor20 = Monitor_nD(
+    filename="emon_analyser20", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out20
+GROUP shell2
+  
+COMPONENT e_monitor30 = Monitor_nD(
+    filename="emon_analyser30", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out30
+GROUP shell2
+  
+COMPONENT e_monitor40 = Monitor_nD(
+    filename="emon_analyser40", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out40
+GROUP shell2
+  
+COMPONENT e_monitor50 = Monitor_nD(
+    filename="emon_analyser50", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out50
+GROUP shell2
+
+/* And the transmitted beam... */
+
+COMPONENT e_monitor10_t = Monitor_nD(
+    filename="emon_analyser10t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out10
+  GROUP shell2
+  
+COMPONENT e_monitor20_t = Monitor_nD(
+    filename="emon_analyser20t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out20
+GROUP shell2
+  
+COMPONENT e_monitor30_t = Monitor_nD(
+    filename="emon_analyser30t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out30
+GROUP shell2
+  
+COMPONENT e_monitor40_t = Monitor_nD(
+    filename="emon_analyser40t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out40
+GROUP shell2
+  
+COMPONENT e_monitor50_t = Monitor_nD(
+    filename="emon_analyser50t", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Sample_out50
+GROUP shell2
+
+
+/* Second set of analysers */
+COMPONENT monochromator1_10_2 = Monochromator_curved(
+    mosaich=60,
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7,
+    DM=DM)
+AT (0, 0, 0) RELATIVE Mono_Cradle10_2
+
+COMPONENT monochromator2_10_2 = Monochromator_curved(
+    mosaich=60,
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7,
+    DM=DM)
+AT (0, 0, -0.0137) RELATIVE Mono_Cradle10_2 ROTATED (0,-dphi,0) RELATIVE Mono_Cradle10_2
+
+COMPONENT monochromator3_10_2 = Monochromator_curved(
+    mosaich=60,
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7,
+    DM=DM)
+AT (0,0,-0.0137*2) RELATIVE Mono_Cradle10_2 ROTATED (0,-2*dphi,0) RELATIVE Mono_Cradle10_2
+
+COMPONENT monochromator4_10_2 = Monochromator_curved(
+    mosaich=60,
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7,
+    DM=DM)
+AT (0,0,-0.0137*3) RELATIVE Mono_Cradle10_2 ROTATED (0,-3*dphi,0) RELATIVE Mono_Cradle10_2
+
+COMPONENT monochromator5_10_2 = Monochromator_curved(
+    mosaich=60,
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7,
+    DM=DM)
+  AT (0,0,0.0137) RELATIVE Mono_Cradle10_2 ROTATED (0,dphi,0) RELATIVE Mono_Cradle10_2
+
+COMPONENT monochromator6_10_2 = Monochromator_curved(
+    mosaich=60,
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7,
+    DM=DM)
+AT (0,0,0.0137*2) RELATIVE Mono_Cradle10_2 ROTATED (0,2*dphi,0) RELATIVE Mono_Cradle10_2
+
+  COMPONENT monochromator7_10_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+    AT (0,0,0.0137*3) RELATIVE Mono_Cradle10_2 ROTATED (0,3*dphi,0) RELATIVE Mono_Cradle10_2
+
+
+COMPONENT Mono_Out10_2= Arm()
+AT (0,0,0) RELATIVE Mono_Cradle10_2 ROTATED(0,TTA2,0) RELATIVE Zrot10
+  
+COMPONENT psd_monitor10_2 = PSD_monitor(
+    filename="test_fil_analyser10_2", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out10_2
+  GROUP shell3
+
+COMPONENT psd_monitor10_t_2 = PSD_monitor(
+    filename="test_fil_analyser10t_2", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,restore_neutron=1)
+AT (0, 0, 2) RELATIVE Sample_out10
+  GROUP shell3
+
+COMPONENT e_monitor10_2 = Monitor_nD(
+    filename="emon_analyser10_2", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[6.5 7.5]",restore_neutron=1)
+AT (0, 0, 1) RELATIVE Mono_Out10_2
+  GROUP shell4
+
+COMPONENT e_monitor10_t_2 = Monitor_nD(
+    filename="emon_analyser10t_2", 
+    xmin=-0.1, 
+    xmax=0.1, 
+    ymin=-0.1, 
+    ymax=0.1,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 2) RELATIVE Sample_out10
+  GROUP shell4
+ 
+
+  /*  
 COMPONENT e_monitor10 = Monitor_nD(
     xwidth=0.2,
     yheight=0.2,
@@ -2286,7 +2558,7 @@ AT (0, 0, 1.001) RELATIVE  Mono_Out40
 
 
   COMPONENT e_monitor60 = COPY(e_monitor10)
-AT (0, 0, 1.001) RELATIVE  Mono_Out50
+  AT (0, 0, 1.001) RELATIVE  Mono_Out50*/
 
   /*  COMPONENT All_e10= Monitor_nD(options="E limits=[0 10] bins=500", xwidth=0.2, yheight=0.2)
       AT (0, 0, 0) RELATIVE e_monitor10*/
