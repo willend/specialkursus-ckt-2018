@@ -734,7 +734,7 @@ COMPONENT v_sample = Incoherent(
    zdepth=0.01,
    xwidth=0.01,
    yheight = 0.01,
-   target_index=18,
+   target_index=4,
    focus_xw=3, 
    focus_yh=0.4)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
@@ -759,7 +759,7 @@ COMPONENT Magnon = Magnon_bcc(
     verbose=Verbose, 
     T=TT, 
     FM = FerroMagnet,
-    target_index=17,
+    target_index=3,
     focus_xw=3, 
     focus_yh=0.4)
   //focus_aw=180, /* For statistics considerations, only a small angular */
@@ -786,6 +786,9 @@ EXTEND %{
 COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-4,Emin=0, Emax=10, yheight=0.1)
 AT (0,0,0) RELATIVE Magnon
 
+COMPONENT Target_focus=Arm()
+  AT (1,0,0) RELATIVE SamplePos
+  
 COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
 AT (0,0,0) RELATIVE Magnon
 
