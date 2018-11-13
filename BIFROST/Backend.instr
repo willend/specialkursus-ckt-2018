@@ -1,0 +1,1650 @@
+DEFINE INSTRUMENT EGCESE(
+WaveMin=2.6, // Minimum wavelength from moderator
+WaveMax=4.5, // Maximum wavelength from moderator
+E_0=4.0, // Lowest energy in wavelength band.
+L_0=0, // Alternative: Lowest wavelength in wavelength band
+chopPulseOpening=0.004, // Opening time of pulse shapping chopper [s]
+DivSlit0_width=0.1, // opening of Divergence Slit nr 0
+DivSlit1_width=0.1,  // opening of Divergence Slit nr 1
+DivSlit2_width=0.1,  // opening of Divergence Slit nr 2
+DivSlit3_width=0.1,  // opening of Divergence Slit nr 3
+Npulse=1,
+int print=0, // print values of interest for debugging. McTrace does not work when this is set to 1.
+int makeVirtualSource=0, // if 1 print all neutrons to virtual source file 
+int printMValues=0,
+double power = 2.0,
+double BWopen=161,
+OMA=37.072,// our values 
+TTA=74.1432,
+OMA2=30.628,
+TTA2=61.256,
+phi=37, 
+dphi1=0.3320,
+dphi2=0.3320,
+dphi3=0.3320,
+string MCPLfile="BIFROST_mcpl.gz",
+ax=0,      ay=2.14,   az=-1.24,
+bx = 0,    by = 0,    bz =  2.47,
+cx = 6.71, cy = 0,    cz =  0,
+Omega=0,
+TwoTheta=40,
+lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
+sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
+INCOH=1, REP=1)
+
+DECLARE
+%{
+// M-value and element length arrays
+double elementLength6S[150];
+double mValues6verticalS[150];
+double mValues6horizontalS[150];
+double elementLength3S[150];
+double mValues3verticalS[150];
+double mValues3horizontalS[150];
+double elementLength1S[150];
+double mValues1verticalS[150];
+double mValues1horizontalS[150];
+
+
+// Transferred parameters
+double chopPulseFrequencyOrder=14; // Number of chopper pulses pr moderator pulse. It will automatically be reduced when nesesary and a warning will be written in the promt. 
+double sampleSizeX=0.010; // Width of monitors at sample position. Guide optimized for up to 0.015, intruments optimized for 0.001 to 0.01.
+double sampleSizeY=0.010; // Height of monitors at sample position. Guide optimized for up to 0.015, intruments optimized for 0.001 to 0.01.
+double chopBWPos=78;  // Distance from pulse shapping choppers to BW Chopper
+double PscOff=0.0306;
+double discD=0.04;
+double monigap_length = 0.02; // Length of the moni-gap
+double FOCopen1=38.26;
+double FOCopen2=52.01;
+
+//Chopper translation parameters adjusting for engineering margins
+
+//The precise values relate to the FOC chopper document, the value 'u' is calculated from the guide width, and
+//the engineering margin is 3 mm
+
+// u for the bunker = 0.00031 
+// u for the traight section = 0.00123 
+
+//Add engineering margin to this and get. 
+
+double ChopTransBunker=0.00331; //To accomodate floor deformations in the bunker
+double ChopTransE2=0.00423; //To accomodate floor deformations in the E02 hall (piles)
+
+
+
+
+
+
+
+double x_div;
+double y_div;
+int flag;
+double u = 1e-5;
+
+/*************************************** Chopper Variables  *******************************************/
+
+double lambda_0; double lambda_1;
+double v_0; double v_1;
+double InstLength;
+double chopPulseOffset;  double chopPulsePhaseOffset;  double chopPulseDist; double chopPulseOpen; 
+double chopPulse2PhaseOffset;
+double chopFrameOverlap1Offset;   double chopFrameOverlap1PhaseOffset; //double chopFrameOverlap1Pos; 
+double chopFrameOverlap1Open;
+double chopFrameOverlap2Offset;   double chopFrameOverlap2PhaseOffset; //double chopFrameOverlap2Pos; 
+double chopFrameOverlap2Open;
+double chopBWOffset;   double chopBWPhaseOffset; //double chopBWPos; 
+double chopBWOpen;
+double t_samp_center; double t_samp_0; double t_samp_1;
+double chopBW_t0; double  chopBW_t1;
+
+double PulseHighFluxOffset;
+double WavelengthBand;
+double ModPulseLengthHighF;
+double chopPulsePossibleOpening;
+
+
+/////  Martin's cutting parameters:
+double sample_dist = 0.5;
+double startXposition_straight = 49.303484;
+
+
+double length5 = 17.995800;
+//double benderStartXposition =6.380700;
+double benderStartXposition =24.376254 ;
+
+// straiht:
+double length2 = 90.0;
+
+// Focus ellipse:
+double length1 = 22.114200;
+double Linx1 = 24.364542;
+double Loutx1 = 2.250342;
+double Liny1 = 23.034433;
+double Louty1 = 0.920233;
+double alpha1 = 3.1;
+double Qc1 = 0.021700;
+double R01 = 0.990000;
+double smallaxis_y1 = 0.090000/2;
+double smallaxis_x1 = 0.060000/2;
+
+
+
+double elementLength1_part_1[50]; 
+double mValues1vertical_part_1[50]; 
+double mValues1horizontal_part_1[50];
+double elementLength1_part_2[5]; 
+double mValues1vertical_part_2[5]; 
+double mValues1horizontal_part_2[5];
+double elementLength1_part_3[5]; 
+double mValues1vertical_part_3[5]; 
+double mValues1horizontal_part_3[5];
+double elementLength1_part_4[5]; 
+double mValues1vertical_part_4[5]; 
+double mValues1horizontal_part_4[5];
+
+int counter = 0;
+
+double chopper_coordinate_offset = 4.439;
+
+
+double curve_rot = 0; // has to be either 180 or -180. Determines curve to left or right
+
+double chopFrameOverlap1Pos;
+double chopFrameOverlap2Pos;
+
+// These parameters are no longer safe to change
+double DivSlit0Gap=0.02; // Hole in guide required for Divergence slit nr 0 (at the end of guide)
+double DivSlit1Gap=0.02; // Hole in guide required for Divergence slit nr 1
+double DivSlit2Gap=0.02; // Hole in guide required for Divergence slit nr 2
+double DivSlit3Gap=0.02; // Hole in guide required for Divergence slit nr 3
+
+double DivSlit1Pos=1.0814;  // Position of Divergence Slit nr 1
+double DivSlit2Pos=1.661; // Position of Divergence Slit nr 2
+double DivSlit3Pos=2.961; // Position of Divergence Slit nr 3
+// Old divJaw pos:
+//double DivSlit1Pos=1.191;  // Position of Divergence Slit nr 1
+//double DivSlit2Pos=1.661; // Position of Divergence Slit nr 2
+//double DivSlit3Pos=2.961; // Position of Divergence Slit nr 3
+double chopGap=0.04;
+double BW_chopGap=0.04;
+double chopFrameOverlap1Pos= 8.530;    // Distance from moderator to first frame owerlap chopper
+double chopFrameOverlap2Pos= 14.973;    // Distance from moderator to second frame owerlap chopper
+
+double benderAngle = 0.01886551; // Mads numbers = 0.0183513513514;
+double DM         = 3.355;   /* Monochromator d-spacing in Angs */
+double wi		  = 0.01; 	/* Monochromator width*/
+
+
+int i;
+double Samplechoice;
+int scatt_5meV;
+%}
+
+INITIALIZE
+%{
+
+
+// If there is set a value of L_0, overwrite E_0 and calculate E_0 from L_0 
+if (L_0>0){
+	E_0=81.82/(L_0*L_0);
+}
+
+
+
+// Following is all the m-values for the entire guide hardcoaded in arrays along with the element lengths for each m-value. 
+// It is important to note that the naming convention here goes the opposite way of the neutron path, meaning that mValues1 describes the m-values on the element closest to the sample and mValues6 are closest to the source.
+
+ //// Part 1 //// 
+ elementLength1_part_1[0] = 0.50000; 
+ mValues1vertical_part_1[0] = 1.50; 
+ mValues1horizontal_part_1[0] = 1.50;
+
+ elementLength1_part_1[1] = 0.50000; 
+ mValues1vertical_part_1[1] = 1.50; 
+ mValues1horizontal_part_1[1] = 1.50;
+
+ elementLength1_part_1[2] = 0.50000; 
+ mValues1vertical_part_1[2] = 1.50; 
+ mValues1horizontal_part_1[2] = 1.50;
+
+ elementLength1_part_1[3] = 0.50000; 
+ mValues1vertical_part_1[3] = 1.50; 
+ mValues1horizontal_part_1[3] = 1.50;
+
+ elementLength1_part_1[4] = 0.50000; 
+ mValues1vertical_part_1[4] = 1.50; 
+ mValues1horizontal_part_1[4] = 1.50;
+
+ elementLength1_part_1[5] = 0.50000; 
+ mValues1vertical_part_1[5] = 1.50; 
+ mValues1horizontal_part_1[5] = 1.50;
+
+ elementLength1_part_1[6] = 0.50000; 
+ mValues1vertical_part_1[6] = 1.50; 
+ mValues1horizontal_part_1[6] = 1.50;
+
+ elementLength1_part_1[7] = 0.50000; 
+ mValues1vertical_part_1[7] = 1.50; 
+ mValues1horizontal_part_1[7] = 1.50;
+
+ elementLength1_part_1[8] = 0.50000; 
+ mValues1vertical_part_1[8] = 1.50; 
+ mValues1horizontal_part_1[8] = 1.50;
+
+ elementLength1_part_1[9] = 0.50000; 
+ mValues1vertical_part_1[9] = 1.50; 
+ mValues1horizontal_part_1[9] = 1.50;
+
+ elementLength1_part_1[10] = 0.50000; 
+ mValues1vertical_part_1[10] = 1.50; 
+ mValues1horizontal_part_1[10] = 1.50;
+
+ elementLength1_part_1[11] = 0.50000; 
+ mValues1vertical_part_1[11] = 1.50; 
+ mValues1horizontal_part_1[11] = 1.50;
+
+ elementLength1_part_1[12] = 0.50000; 
+ mValues1vertical_part_1[12] = 1.50; 
+ mValues1horizontal_part_1[12] = 1.50;
+
+ elementLength1_part_1[13] = 0.50000; 
+ mValues1vertical_part_1[13] = 1.50; 
+ mValues1horizontal_part_1[13] = 1.50;
+
+ elementLength1_part_1[14] = 0.50000; 
+ mValues1vertical_part_1[14] = 1.50; 
+ mValues1horizontal_part_1[14] = 1.50;
+
+ elementLength1_part_1[15] = 0.50000; 
+ mValues1vertical_part_1[15] = 1.50; 
+ mValues1horizontal_part_1[15] = 1.50;
+
+ elementLength1_part_1[16] = 0.50000; 
+ mValues1vertical_part_1[16] = 1.50; 
+ mValues1horizontal_part_1[16] = 1.50;
+
+ elementLength1_part_1[17] = 0.50000; 
+ mValues1vertical_part_1[17] = 1.50; 
+ mValues1horizontal_part_1[17] = 1.50;
+
+ elementLength1_part_1[18] = 0.50000; 
+ mValues1vertical_part_1[18] = 1.50; 
+ mValues1horizontal_part_1[18] = 1.50;
+
+ elementLength1_part_1[19] = 0.50000; 
+ mValues1vertical_part_1[19] = 1.50; 
+ mValues1horizontal_part_1[19] = 1.50;
+
+ elementLength1_part_1[20] = 0.50000; 
+ mValues1vertical_part_1[20] = 1.50; 
+ mValues1horizontal_part_1[20] = 1.50;
+
+ elementLength1_part_1[21] = 0.50000; 
+ mValues1vertical_part_1[21] = 1.50; 
+ mValues1horizontal_part_1[21] = 1.50;
+
+ elementLength1_part_1[22] = 0.50000; 
+ mValues1vertical_part_1[22] = 2.00; 
+ mValues1horizontal_part_1[22] = 1.50;
+
+ elementLength1_part_1[23] = 0.50000; 
+ mValues1vertical_part_1[23] = 2.00; 
+ mValues1horizontal_part_1[23] = 1.50;
+
+ elementLength1_part_1[24] = 0.50000; 
+ mValues1vertical_part_1[24] = 2.00; 
+ mValues1horizontal_part_1[24] = 1.50;
+
+ elementLength1_part_1[25] = 0.50000; 
+ mValues1vertical_part_1[25] = 2.00; 
+ mValues1horizontal_part_1[25] = 1.50;
+
+ elementLength1_part_1[26] = 0.50000; 
+ mValues1vertical_part_1[26] = 2.00; 
+ mValues1horizontal_part_1[26] = 1.50;
+
+ elementLength1_part_1[27] = 0.50000; 
+ mValues1vertical_part_1[27] = 2.00; 
+ mValues1horizontal_part_1[27] = 1.50;
+
+ elementLength1_part_1[28] = 0.50000; 
+ mValues1vertical_part_1[28] = 2.00; 
+ mValues1horizontal_part_1[28] = 1.50;
+
+ elementLength1_part_1[29] = 0.50000; 
+ mValues1vertical_part_1[29] = 2.00; 
+ mValues1horizontal_part_1[29] = 1.50;
+
+ elementLength1_part_1[30] = 0.50000; 
+ mValues1vertical_part_1[30] = 2.00; 
+ mValues1horizontal_part_1[30] = 1.50;
+
+ elementLength1_part_1[31] = 0.50000; 
+ mValues1vertical_part_1[31] = 2.00; 
+ mValues1horizontal_part_1[31] = 1.50;
+
+ elementLength1_part_1[32] = 0.50000; 
+ mValues1vertical_part_1[32] = 2.00; 
+ mValues1horizontal_part_1[32] = 2.00;
+
+ elementLength1_part_1[33] = 0.50000; 
+ mValues1vertical_part_1[33] = 2.00; 
+ mValues1horizontal_part_1[33] = 2.00;
+
+ elementLength1_part_1[34] = 0.50000; 
+ mValues1vertical_part_1[34] = 2.00; 
+ mValues1horizontal_part_1[34] = 2.00;
+
+ elementLength1_part_1[35] = 0.50000; 
+ mValues1vertical_part_1[35] = 2.00; 
+ mValues1horizontal_part_1[35] = 2.00;
+
+ elementLength1_part_1[36] = 0.01580;  // Gap 
+ mValues1vertical_part_1[36] = 0.00; 
+ mValues1horizontal_part_1[36] = 0.00;
+
+ elementLength1_part_1[37] = 0.48420; 
+ mValues1vertical_part_1[37] = 2.00; 
+ mValues1horizontal_part_1[37] = 2.00;
+
+ elementLength1_part_1[38] = 0.50000; 
+ mValues1vertical_part_1[38] = 2.00; 
+ mValues1horizontal_part_1[38] = 2.50;
+
+ elementLength1_part_1[39] = 0.50000; 
+ mValues1vertical_part_1[39] = 2.50; 
+ mValues1horizontal_part_1[39] = 2.50;
+
+ elementLength1_part_1[40] = 0.14320; 
+ mValues1vertical_part_1[40] = 2.50; 
+ mValues1horizontal_part_1[40] = 2.50;
+
+ 
+ //// Part 2 //// 
+ elementLength1_part_2[0] = 0.31680; 
+ mValues1vertical_part_2[0] = 2.50; 
+ mValues1horizontal_part_2[0] = 2.50;
+
+ elementLength1_part_2[1] = 0.50000; 
+ mValues1vertical_part_2[1] = 3.00; 
+ mValues1horizontal_part_2[1] = 3.00;
+
+ elementLength1_part_2[2] = 0.46320; 
+ mValues1vertical_part_2[2] = 3.00; 
+ mValues1horizontal_part_2[2] = 3.00;
+
+ 
+ //// Part 3 //// 
+ elementLength1_part_3[0] = 0.0596; 
+ mValues1vertical_part_3[0] = 3.00; 
+ mValues1horizontal_part_3[0] = 3.00;
+
+ elementLength1_part_3[1] = 0.500; 
+ mValues1vertical_part_3[1] = 3.50; 
+ mValues1horizontal_part_3[1] = 3.00;
+
+ 
+ //// Part 4 //// 
+ elementLength1_part_4[0] = 0.06670 ; 
+ mValues1vertical_part_4[0] = 3.50; 
+ mValues1horizontal_part_4[0] = 3.00;
+
+ elementLength1_part_4[1] = 0.50000; 
+ mValues1vertical_part_4[1] = 3.50; 
+ mValues1horizontal_part_4[1] = 3.5;
+
+// A bit extra due to mismatch in coating lengths after rounding element length to 0.5 meters:
+// 0.47 cm of this is applied in last tested version (sep 12 2018)
+ elementLength1_part_4[2] = 0.0047;  
+ mValues1vertical_part_4[2] = 3.50; 
+ mValues1horizontal_part_4[2] = 3.5;
+
+elementLength3S[0]=0.50;
+mValues3verticalS[0]=2.000000;
+mValues3horizontalS[0]=2.500000;
+elementLength3S[1]=0.50;
+mValues3verticalS[1]=2.000000;
+mValues3horizontalS[1]=2.500000;
+elementLength3S[2]=0.50;
+mValues3verticalS[2]=2.000000;
+mValues3horizontalS[2]=2.500000;
+elementLength3S[3]=0.50;
+mValues3verticalS[3]=2.000000;
+mValues3horizontalS[3]=2.500000;
+elementLength3S[4]=0.50;
+mValues3verticalS[4]=2.000000;
+mValues3horizontalS[4]=2.500000;
+elementLength3S[5]=0.50;
+mValues3verticalS[5]=2.000000;
+mValues3horizontalS[5]=2.500000;
+elementLength3S[6]=0.50;
+mValues3verticalS[6]=2.000000;
+mValues3horizontalS[6]=2.500000;
+
+// Moni gap
+elementLength3S[7]=monigap_length;
+mValues3verticalS[7]=0;
+mValues3horizontalS[7]=0;
+
+
+elementLength3S[7+1]=0.50-monigap_length;
+mValues3verticalS[7+1]=2.000000;
+mValues3horizontalS[7+1]=2.000000;
+elementLength3S[8+1]=0.50;
+mValues3verticalS[8+1]=2.000000;
+mValues3horizontalS[8+1]=2.000000;
+elementLength3S[9+1]=0.50;
+mValues3verticalS[9+1]=2.000000;
+mValues3horizontalS[9+1]=2.000000;
+elementLength3S[10+1]=0.50;
+mValues3verticalS[10+1]=2.000000;
+mValues3horizontalS[10+1]=2.000000;
+elementLength3S[11+1]=0.50;
+mValues3verticalS[11+1]=2.000000;
+mValues3horizontalS[11+1]=2.000000;
+elementLength3S[12+1]=0.50;
+mValues3verticalS[12+1]=2.000000;
+mValues3horizontalS[12+1]=2.000000;
+elementLength3S[13+1]=0.50;
+mValues3verticalS[13+1]=1.500000;
+mValues3horizontalS[13+1]=2.000000;
+elementLength3S[14+1]=0.50;
+mValues3verticalS[14+1]=1.500000;
+mValues3horizontalS[14+1]=2.000000;
+elementLength3S[15+1]=0.50;
+mValues3verticalS[15+1]=1.500000;
+mValues3horizontalS[15+1]=2.000000;
+elementLength3S[16+1]=0.50;
+mValues3verticalS[16+1]=1.500000;
+mValues3horizontalS[16+1]=2.000000;
+elementLength3S[17+1]=0.50;
+mValues3verticalS[17+1]=1.500000;
+mValues3horizontalS[17+1]=2.000000;
+elementLength3S[18+1]=0.50;
+mValues3verticalS[18+1]=1.500000;
+mValues3horizontalS[18+1]=2.000000;
+elementLength3S[19+1]=0.50;
+mValues3verticalS[19+1]=1.500000;
+mValues3horizontalS[19+1]=2.000000;
+elementLength3S[20+1]=0.50;
+mValues3verticalS[20+1]=1.500000;
+mValues3horizontalS[20+1]=2.000000;
+elementLength3S[21+1]=0.50;
+mValues3verticalS[21+1]=1.500000;
+mValues3horizontalS[21+1]=2.000000;
+elementLength3S[22+1]=0.50;
+mValues3verticalS[22+1]=1.500000;
+mValues3horizontalS[22+1]=2.000000;
+elementLength3S[23+1]=0.50;
+mValues3verticalS[23+1]=1.500000;
+mValues3horizontalS[23+1]=1.500000;
+elementLength3S[24+1]=0.50;
+mValues3verticalS[24+1]=1.500000;
+mValues3horizontalS[24+1]=1.500000;
+elementLength3S[25+1]=0.50;
+mValues3verticalS[25+1]=1.500000;
+mValues3horizontalS[25+1]=1.500000;
+elementLength3S[26+1]=0.50;
+mValues3verticalS[26+1]=1.500000;
+mValues3horizontalS[26+1]=1.500000;
+elementLength3S[27+1]=0.50;
+mValues3verticalS[27+1]=1.500000;
+mValues3horizontalS[27+1]=1.500000;
+elementLength3S[28+1]=0.50;
+mValues3verticalS[28+1]=1.500000;
+mValues3horizontalS[28+1]=1.500000;
+elementLength3S[29+1]=0.50;
+mValues3verticalS[29+1]=1.500000;
+mValues3horizontalS[29+1]=1.500000;
+elementLength3S[30+1]=0.50;
+mValues3verticalS[30+1]=1.500000;
+mValues3horizontalS[30+1]=1.500000;
+elementLength3S[31+1]=0.50;
+mValues3verticalS[31+1]=1.500000;
+mValues3horizontalS[31+1]=1.500000;
+elementLength3S[32+1]=0.50;
+mValues3verticalS[32+1]=1.500000;
+mValues3horizontalS[32+1]=1.500000;
+elementLength3S[33+1]=0.50;
+mValues3verticalS[33+1]=1.500000;
+mValues3horizontalS[33+1]=1.500000;
+elementLength3S[34+1]=0.50;
+mValues3verticalS[34+1]=1.500000;
+mValues3horizontalS[34+1]=1.500000;
+elementLength3S[35+1]=0.50;
+mValues3verticalS[35+1]=1.500000;
+mValues3horizontalS[35+1]=1.500000;
+elementLength3S[36+1]=0.50;
+mValues3verticalS[36+1]=1.500000;
+mValues3horizontalS[36+1]=1.500000;
+elementLength3S[37+1]=0.50;
+mValues3verticalS[37+1]=1.500000;
+mValues3horizontalS[37+1]=1.500000;
+elementLength3S[38+1]=0.50;
+mValues3verticalS[38+1]=1.500000;
+mValues3horizontalS[38+1]=1.500000;
+elementLength3S[39+1]=0.50;
+mValues3verticalS[39+1]=1.500000;
+mValues3horizontalS[39+1]=1.500000;
+elementLength3S[40+1]=0.50;
+mValues3verticalS[40+1]=1.500000;
+mValues3horizontalS[40+1]=1.500000;
+elementLength3S[41+1]=0.50;
+mValues3verticalS[41+1]=1.500000;
+mValues3horizontalS[41+1]=1.500000;
+elementLength3S[42+1]=0.50;
+mValues3verticalS[42+1]=1.500000;
+mValues3horizontalS[42+1]=1.500000;
+elementLength3S[43+1]=0.50;
+mValues3verticalS[43+1]=1.500000;
+mValues3horizontalS[43+1]=1.500000;
+elementLength3S[44+1]=0.50;
+mValues3verticalS[44+1]=1.500000;
+mValues3horizontalS[44+1]=1.500000;
+elementLength3S[45+1]=0.50;
+mValues3verticalS[45+1]=1.500000;
+mValues3horizontalS[45+1]=1.500000;
+elementLength3S[46+1]=0.50;
+mValues3verticalS[46+1]=1.500000;
+mValues3horizontalS[46+1]=1.500000;
+elementLength3S[47+1]=0.50;
+mValues3verticalS[47+1]=1.500000;
+mValues3horizontalS[47+1]=1.500000;
+elementLength3S[48+1]=0.50;
+mValues3verticalS[48+1]=1.500000;
+mValues3horizontalS[48+1]=1.500000;
+elementLength3S[49+1]=0.50 - 0.0712; // Slightly shorter segment last
+mValues3verticalS[49+1]=1.500000;
+mValues3horizontalS[49+1]=1.500000;
+
+
+elementLength6S[0]=0.488444444444444;
+mValues6verticalS[0]=3.500000;
+mValues6horizontalS[0]=3.000000;
+elementLength6S[1]=0.488444444444444;
+mValues6verticalS[1]=3.500000;
+mValues6horizontalS[1]=3.000000;
+elementLength6S[2]=0.488444444444444;
+mValues6verticalS[2]=3.000000;
+mValues6horizontalS[2]=2.500000;
+elementLength6S[3]=0.488444444444444;
+mValues6verticalS[3]=3.000000;
+mValues6horizontalS[3]=2.500000;
+elementLength6S[4]=0.488444444444444;
+mValues6verticalS[4]=2.500000;
+mValues6horizontalS[4]=2.500000;
+elementLength6S[5]=0.488444444444444;
+mValues6verticalS[5]=2.500000;
+mValues6horizontalS[5]=2.000000;
+elementLength6S[6]=0.488444444444444;
+mValues6verticalS[6]=2.500000;
+mValues6horizontalS[6]=1.500000;
+
+elementLength6S[7]=0.061218888888892 ; // Shorter due to window #1
+mValues6verticalS[7]=2.500000;
+mValues6horizontalS[7]=1.500000;
+
+elementLength6S[8]=0.02349; // feeder window #1
+mValues6verticalS[8]=0;
+mValues6horizontalS[8]=0;
+
+elementLength6S[9]=0.488444444444444 - 0.061218888888892 - 0.02349; // End of piece 7 (the window and start of the mirror si substracted from its length)
+mValues6verticalS[9]=2.000000;
+mValues6horizontalS[9]=1.500000;
+
+elementLength6S[10]=0.076264444; // shorter due to window #2
+mValues6verticalS[10]=2.000000;
+mValues6horizontalS[10]=1.500000;
+
+elementLength6S[11]=0.015; // feeder window #2
+mValues6verticalS[11]=0;
+mValues6horizontalS[11]=0;
+
+elementLength6S[12]=0.488444444444444 - 0.015 - 0.076264444 - 0.00047; // End of Feeder (after window 2)
+mValues6verticalS[12]=2.0;
+mValues6horizontalS[12]=1.5;
+
+/************************************************/
+/*                  Chopper calculations                    */
+/************************************************/
+ 
+PulseHighFluxOffset=2.0e-4; // Time from T0 to high pulse.
+ModPulseLengthHighF=2.86e-3; // width of high pulse
+
+InstLength=162.0;
+chopPulseDist= 4.41+0.032+2.0-0.1;  // Distance fro moderator to Pulse chapping chopper
+//chopFrameOverlap1Pos= 2.0;    // Distance from pulse shapping choppers to first frame owerlap chopper
+//chopFrameOverlap2Pos=7.0;     // Distance from pulse shapping choppers to second frame owerlap chopper
+//chopBWPos=71.4403;           // Distance from pulse shapping choppers to tail romval chopper
+
+if  (chopPulseFrequencyOrder*chopPulseOpening > 170.0/360.0/14.0) {    /******* Check if pulse shapping chopper opening is large enough for requested frequency or reduce frequency *******/
+	 chopPulseFrequencyOrder=floor(170.0/360.0/14.0/chopPulseOpening);
+	printf(" \n \n Warning: Impossible combination of chopPulseFrequencyOrder and chopPulseOpening chosen, chopPulseFrequencyOrder reduced to: %f  \n", chopPulseFrequencyOrder);
+}
+
+lambda_1=1.0/(0.1106*sqrt(E_0));  /**** general chopper calculations **********/
+WavelengthBand = 1/(InstLength-chopPulseDist)/14.0/2.528e-4;
+lambda_0=lambda_1-WavelengthBand;
+v_0=3956.0/lambda_1;  
+v_1=3956.0/lambda_0;
+
+t_samp_center=PulseHighFluxOffset+ModPulseLengthHighF/2.0+(InstLength/v_1+InstLength/v_0)/2.0;
+t_samp_0=t_samp_center-1.0/14.0/2.0;
+t_samp_1=t_samp_center+1.0/14.0/2.0;
+
+/***********  Pulse shaping chopper calculations **********/
+chopPulseOffset=(chopPulseDist/v_1+chopPulseDist/v_0)/2.0+ModPulseLengthHighF/2.0+PulseHighFluxOffset;
+chopPulsePossibleOpening=chopPulseDist/v_0-chopPulseOffset;
+chopPulsePhaseOffset=  (chopPulseOffset+ chopPulseOpening/2.0)*14.0*chopPulseFrequencyOrder*360.0-170.0/2.0;
+chopPulse2PhaseOffset= chopPulsePhaseOffset- 360.0*(chopPulseOpening*14.0*chopPulseFrequencyOrder)+170.0;
+
+if  (chopPulseFrequencyOrder == 0) { 
+	chopPulsePhaseOffset= 0;
+	chopPulse2PhaseOffset= 0;
+		printf(" \n \n Warning: Pulse shaping chopper parked! Setting the offsets to zero");
+}
+
+
+/*********** Frame Overlap chopper calculations ******************/
+chopFrameOverlap1Open= 1.0/14.0/InstLength*(chopFrameOverlap1Pos)*1.5 ;
+chopFrameOverlap1Offset=(  ( (chopFrameOverlap1Pos)/v_1+(chopFrameOverlap1Pos)/v_0)/2.0+PulseHighFluxOffset+ModPulseLengthHighF/2.0) ;
+chopFrameOverlap1PhaseOffset=  (chopFrameOverlap1Offset)*14.0*360.0;
+
+chopFrameOverlap2Open= 1.0/14.0/InstLength*(chopFrameOverlap2Pos)*1.65 ;
+chopFrameOverlap2Offset=(  ( (chopFrameOverlap2Pos)/v_1+(chopFrameOverlap2Pos)/v_0)/2.0+PulseHighFluxOffset+ModPulseLengthHighF/2.0) ;
+chopFrameOverlap2PhaseOffset=  (chopFrameOverlap2Offset)*14.0*360.0;
+
+/********** Bandwidth chopper calculations ****************/
+
+//chopBW_t0= chopPulseOffset-chopPulseOpening/2.0 + (t_samp_0-(chopPulseOffset-chopPulseOpening/2.0)) / (InstLength-chopPulseDist) * (InstLength-chopBWPos) ;
+//chopBW_t1= chopPulseOffset+chopPulseOpening/2.0 + (t_samp_1-(chopPulseOffset+chopPulseOpening/2.0)) / (InstLength-chopPulseDist) * (InstLength-chopBWPos);
+chopBW_t0= PulseHighFluxOffset+ModPulseLengthHighF/2.0 + chopBWPos/v_1;
+chopBW_t1=  PulseHighFluxOffset+ModPulseLengthHighF/2.0 + chopBWPos/v_0;
+
+chopBWOpen= 360.0/InstLength*(chopBWPos-chopPulseDist*1); //Here Jonas put a multiplier on the choppulsedist
+chopBWOffset=(chopBW_t0+chopBW_t1)/2.0;
+chopBWPhaseOffset=  (chopBWOffset)*14.0*360.0;
+
+if (printMValues==1) {
+	// Will print all coating values to a file if this is toggled on 
+	FILE* fp = fopen("CoatingDistributions.txt", "w");
+	fprintf(fp,"Coating Distributions. From moderator towards sample:\n");
+	fprintf(fp,"m_horizontal , m_vertical , elementlength:\n");
+	fprintf(fp,"NBOA:\n");
+	for (i = 0 ; i < 13 ; i++){
+		fprintf(fp,"%f , %f , %f\n",mValues6horizontalS[i],mValues6verticalS[i],elementLength6S[i]);
+	}
+
+	fprintf(fp,"\nCurved section:\n");
+	fprintf(fp,"(%f,%f) , %f , %f\n",3.000000,3.500000,2.500000,18.0);
+	
+	fprintf(fp,"\nExpanding ellipse:\n");
+	for (i = 0 ; i < 51 ; i++){
+		fprintf(fp,"%f , %f , %f\n",mValues3horizontalS[i],mValues3verticalS[i],elementLength3S[i]);
+	}
+	
+	fprintf(fp,"\nLong Straight Section\n");
+	fprintf(fp,"%f , %f , %f\n",1.500000,1.000000,90.0);
+
+	fprintf(fp,"\nFocusing Ellipse\n");
+	for (i = 0 ; i < 41 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_1[i], mValues1vertical_part_1[i],elementLength1_part_1[i]);
+	}
+	fprintf(fp,"2 cm gap for divJaw 3\n");
+	for (i = 0 ; i < 3 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_2[i], mValues1vertical_part_2[i],elementLength1_part_2[i]);
+	}
+	fprintf(fp,"2 cm gap for divJaw 2\n");
+	for (i = 0 ; i < 2 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_3[i], mValues1vertical_part_3[i],elementLength1_part_3[i]);
+	}
+fprintf(fp,"2 cm gap for divJaw 1 \n");
+	for (i = 0 ; i < 3 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_4[i], mValues1vertical_part_4[i],elementLength1_part_4[i]);
+	}
+
+
+fclose(fp);
+}
+
+
+printf("\n part 3 length: %f\n",DivSlit2Pos-DivSlit1Gap/2.0-DivSlit2Gap/2.0-DivSlit1Pos);
+printf("\n part 4 length: %f\n",DivSlit1Pos-DivSlit1Gap/2.0-sample_dist);
+
+%}
+TRACE
+
+COMPONENT Origin = Progress_bar()
+ AT (0,0,0) ABSOLUTE
+
+  COMPONENT Source_MCPL = MCPL_input(filename=MCPLfile, repeat_count=REP, E_smear=0.01,pos_smear=0.001, dir_smear=0.001)
+  AT (0,0,0) ABSOLUTE  
+
+COMPONENT SamplePos = Arm()
+AT (0, 0, 0) RELATIVE Origin
+EXTEND %{
+  Samplechoice=rand01();
+%}
+  
+ 
+//V-sample
+COMPONENT v_sample = Incoherent(
+   radius=0.005, 
+   thickness=0.002, 
+   zdepth=0.01,
+   xwidth=0.01,
+   yheight = 0.01,
+   target_index=4,
+   focus_xw=3, 
+   focus_yh=0.4)
+WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
+EXTEND %{
+  double scale=rand01();
+  vx=vx*(1+scale);
+  vy=vy*(1+scale);
+  vz=vz*(1+scale);
+%}
+  
+COMPONENT Magnon = Magnon_bcc(
+    radius=0.02,
+    yheight=0.03,
+    sigma_abs=0, 
+    sigma_inc=1, 
+    a=aa,  
+    J1=sample_J, 
+    J2=0,
+    D=0.0,
+    s=1,
+    DW=1,
+    verbose=Verbose, 
+    T=TT, 
+    FM = FerroMagnet,
+    target_index=3,
+    focus_xw=3, 
+    focus_yh=0.4)
+  //focus_aw=180, /* For statistics considerations, only a small angular */
+  //focus_ah=20)   /* band arround sample is illuminated */
+  WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
+  ROTATED (0, Omega, 0) RELATIVE SamplePos
+EXTEND %{
+   p/=mcipinelastic;
+   p*=mcipimultiplier;
+%}
+
+
+COMPONENT Lattice = Single_crystal(order=1, 
+     reflections = "BCC_fake.lau", mosaic=30, radius = 0.02, yheight = 0.03,   delta_d_d=1e-3,
+     ax =-aa , ay = 0, az =0 , bx =0 , by =0, bz = aa , cx =0 , cy = aa , cz =0, barns=1)
+  WHEN (!INCOH && inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 0) RELATIVE SamplePos
+  ROTATED (0, Omega, 0) RELATIVE SamplePos
+EXTEND %{
+   p/=(1-mcipinelastic);
+   // Remove direct beam
+   if(!SCATTERED) ABSORB;
+%}
+
+COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-4,Emin=0, Emax=10, yheight=0.1)
+AT (0,0,0) RELATIVE Magnon
+
+COMPONENT Target_focus=Arm()
+  AT (1,0,0) RELATIVE SamplePos
+  
+COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
+AT (0,0,0) RELATIVE Magnon
+
+COMPONENT Sample_out1 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta,0) RELATIVE SamplePos
+
+  COMPONENT Sample_out2 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+10,0) RELATIVE SamplePos
+
+COMPONENT Sample_out3 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+20,0) RELATIVE SamplePos
+
+COMPONENT Sample_out4 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+30,0) RELATIVE SamplePos
+
+  COMPONENT Sample_out5 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+40,0) RELATIVE SamplePos
+
+COMPONENT Sample_out6 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+50,0) RELATIVE SamplePos
+
+COMPONENT Sample_out7 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+60,0) RELATIVE SamplePos
+
+  COMPONENT Sample_out8 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+70,0) RELATIVE SamplePos
+
+COMPONENT Sample_out9 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+80,0) RELATIVE SamplePos
+
+COMPONENT PSD_outgoing = Monitor_nD(radius=1.5, yheight= 0.3, options="banana theta bins=360 limits=[0 180] y bins=60")
+  AT (0,0,0) RELATIVE SamplePos
+  
+COMPONENT PSD_out1 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana1", restore_neutron=1)
+AT (0.0,0.0,1.544) RELATIVE Sample_out1
+  //GROUP outgoing
+  
+COMPONENT PSD_out2 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana2", restore_neutron=1)
+AT (0.0,0.0,1.623) RELATIVE Sample_out2
+  //GROUP outgoing
+
+COMPONENT PSD_out3 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana3", restore_neutron=1)
+AT (0.0,0.0,1.701) RELATIVE Sample_out3
+//GROUP outgoing
+
+  COMPONENT PSD_out4 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana4", restore_neutron=1)
+AT (0.0,0.0,1.544) RELATIVE Sample_out4
+  //GROUP outgoing
+  
+COMPONENT PSD_out5 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana5", restore_neutron=1)
+AT (0.0,0.0,1.623) RELATIVE Sample_out5
+  //GROUP outgoing
+
+COMPONENT PSD_out6 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana6", restore_neutron=1)
+AT (0.0,0.0,1.701) RELATIVE Sample_out6
+//GROUP outgoing
+
+  COMPONENT PSD_out7 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana7", restore_neutron=1)
+AT (0.0,0.0,1.544) RELATIVE Sample_out7
+  //GROUP outgoing
+  
+COMPONENT PSD_out8 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana8", restore_neutron=1)
+AT (0.0,0.0,1.623) RELATIVE Sample_out8
+  //GROUP outgoing
+
+COMPONENT PSD_out9 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana9", restore_neutron=1)
+AT (0.0,0.0,1.701) RELATIVE Sample_out9
+//GROUP outgoing
+
+  
+COMPONENT Zrot1 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE  Sample_out1
+  ROTATED (0,0,-90) RELATIVE Sample_out1
+ 
+COMPONENT Mono_Cradle1 = Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot1  ROTATED (0,OMA,0) RELATIVE Zrot1
+
+COMPONENT Zrot2 = Arm()
+  AT (0.0, 0.0, 1.623) RELATIVE  Sample_out2
+  ROTATED (0,0,-90) RELATIVE Sample_out2
+  
+COMPONENT Mono_Cradle2= Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot2  ROTATED (0,OMA,0) RELATIVE Zrot2
+
+COMPONENT Zrot3 = Arm()
+  AT (0.0, 0.0, 1.701) RELATIVE  Sample_out3
+  ROTATED (0,0,-90) RELATIVE Sample_out3
+  
+COMPONENT Mono_Cradle3= Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot3  ROTATED (0,OMA,0) RELATIVE Zrot3
+
+COMPONENT Zrot4 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE  Sample_out4
+  ROTATED (0,0,-90) RELATIVE Sample_out4
+ 
+COMPONENT Mono_Cradle4 = Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot4  ROTATED (0,OMA,0) RELATIVE Zrot4
+
+COMPONENT Zrot5 = Arm()
+  AT (0.0, 0.0, 1.623) RELATIVE  Sample_out5
+  ROTATED (0,0,-90) RELATIVE Sample_out5
+  
+COMPONENT Mono_Cradle5= Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot5  ROTATED (0,OMA,0) RELATIVE Zrot5
+
+COMPONENT Zrot6 = Arm()
+  AT (0.0, 0.0, 1.701) RELATIVE  Sample_out6
+  ROTATED (0,0,-90) RELATIVE Sample_out6
+  
+COMPONENT Mono_Cradle6= Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot6  ROTATED (0,OMA,0) RELATIVE Zrot6
+
+
+COMPONENT Zrot7 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE  Sample_out7
+  ROTATED (0,0,-90) RELATIVE Sample_out7
+ 
+COMPONENT Mono_Cradle7 = Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot7  ROTATED (0,OMA,0) RELATIVE Zrot7
+
+COMPONENT Zrot8 = Arm()
+  AT (0.0, 0.0, 1.623) RELATIVE  Sample_out8
+  ROTATED (0,0,-90) RELATIVE Sample_out8
+  
+COMPONENT Mono_Cradle8= Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot8  ROTATED (0,OMA,0) RELATIVE Zrot8
+
+COMPONENT Zrot9 = Arm()
+  AT (0.0, 0.0, 1.701) RELATIVE  Sample_out9
+  ROTATED (0,0,-90) RELATIVE Sample_out9
+  
+COMPONENT Mono_Cradle9= Arm()
+  AT (0.0, 0.0, 0.0) RELATIVE Zrot9  ROTATED (0,OMA,0) RELATIVE Zrot9
+  
+
+COMPONENT monochromator_1_1 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot1 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle1
+
+  
+COMPONENT monochromator_1_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot1 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle1
+
+COMPONENT monochromator_1_3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.024803, 0, -0.017581) RELATIVE Zrot1 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle1
+
+
+  COMPONENT monochromator_1_4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot1 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle1
+  
+
+COMPONENT monochromator_1_5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0, 0, 0) RELATIVE Zrot1 ROTATED (0,0,0) RELATIVE Mono_Cradle1
+
+COMPONENT monochromator_1_6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot1 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle1
+
+  COMPONENT monochromator_1_7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.024390, 0, 0.01815) RELATIVE Zrot1 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle1
+
+
+  COMPONENT monochromator_1_8 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot1 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle1
+
+
+  COMPONENT monochromator_1_9 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot1 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle1
+
+
+COMPONENT monochromator_2_1 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.050550, 0, -0.036386) RELATIVE Zrot2 ROTATED (0,-4*dphi2,0) RELATIVE Mono_Cradle2
+
+  
+COMPONENT monochromator_2_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.037756, 0, -0.027509) RELATIVE Zrot2 ROTATED (0,-3*dphi2,0) RELATIVE Mono_Cradle2
+
+
+COMPONENT monochromator_2_3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.025065, 0, -0.018485) RELATIVE Zrot2 ROTATED (0,-2*dphi2,0) RELATIVE Mono_Cradle2
+
+
+  COMPONENT monochromator_2_4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.012479 , 0, -0.009315) RELATIVE Zrot2 ROTATED (0,-dphi2,0) RELATIVE Mono_Cradle2
+  
+
+COMPONENT monochromator_2_5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0, 0, 0) RELATIVE Zrot2 ROTATED (0,0,0) RELATIVE Mono_Cradle2
+
+COMPONENT monochromator_2_6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.012370, 0, 0.009459) RELATIVE Zrot2 ROTATED (0,dphi2,0) RELATIVE Mono_Cradle2
+
+  COMPONENT monochromator_2_7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.024630, 0, 0.019060) RELATIVE Zrot2 ROTATED (0,2*dphi2,0) RELATIVE Mono_Cradle2
+
+
+  COMPONENT monochromator_2_8 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.036778, 0, 0.028802) RELATIVE Zrot2 ROTATED (0,3*dphi2,0) RELATIVE Mono_Cradle2
+
+
+  COMPONENT monochromator_2_9 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.048813, 0, 0.038685) RELATIVE Zrot2 ROTATED (0,4*dphi2,0) RELATIVE Mono_Cradle2
+
+
+COMPONENT monochromator_3_1 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.051087, 0, -0.038165) RELATIVE Zrot3 ROTATED (0,-4*dphi3,0) RELATIVE Mono_Cradle3
+
+  
+COMPONENT monochromator_3_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.038150, 0, -0.028846) RELATIVE Zrot3 ROTATED (0,-3*dphi3,0) RELATIVE Mono_Cradle3
+
+
+COMPONENT monochromator_3_3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.025323 , 0, -0.019378) RELATIVE Zrot3 ROTATED (0,-2*dphi3,0) RELATIVE Mono_Cradle3
+
+
+  COMPONENT monochromator_3_4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (-0.012605 , 0, -0.009762) RELATIVE Zrot3 ROTATED (0,-dphi3,0) RELATIVE Mono_Cradle3
+  
+
+COMPONENT monochromator_3_5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0, 0, 0) RELATIVE Zrot3 ROTATED (0,0,0) RELATIVE Mono_Cradle3
+
+COMPONENT monochromator_3_6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.012492, 0, 0.009907) RELATIVE Zrot3 ROTATED (0,dphi3,0) RELATIVE Mono_Cradle3
+
+  COMPONENT monochromator_3_7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.024868, 0, 0.019958) RELATIVE Zrot3 ROTATED (0,2*dphi3,0) RELATIVE Mono_Cradle3
+
+
+  COMPONENT monochromator_3_8 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.037127, 0, 0.030152) RELATIVE Zrot3 ROTATED (0,3*dphi3,0) RELATIVE Mono_Cradle3
+
+
+  COMPONENT monochromator_3_9 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi,
+    yheight=0.231,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0.049267, 0, 0.040487) RELATIVE Zrot3 ROTATED (0,4*dphi3,0) RELATIVE Mono_Cradle3
+
+
+COMPONENT monochromator_4_1 = COPY(monochromator_1_1)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot4 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle4
+
+  
+COMPONENT monochromator_4_2 = COPY(monochromator_1_2)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot4 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle4
+
+COMPONENT monochromator_4_3 = COPY(monochromator_1_3)
+ AT (-0.024803, 0, -0.017581) RELATIVE Zrot4 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle4
+
+
+  COMPONENT monochromator_4_4 = COPY(monochromator_1_4)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot4 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle4
+  
+
+COMPONENT monochromator_4_5 = COPY(monochromator_1_5)
+ AT (0, 0, 0) RELATIVE Zrot4 ROTATED (0,0,0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_4_6 = COPY(monochromator_1_6)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot4 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_4_7 = COPY(monochromator_1_7)
+ AT (0.024390, 0, 0.01815) RELATIVE Zrot4 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle4
+
+
+  COMPONENT monochromator_4_8 = COPY(monochromator_1_8)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot4 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle4
+
+
+  COMPONENT monochromator_4_9 = COPY(monochromator_1_9)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot4 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle4
+
+
+  COMPONENT monochromator_5_1 = COPY(monochromator_2_1)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot5 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle5
+
+  
+COMPONENT monochromator_5_2 = COPY(monochromator_2_2)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot5 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle5
+
+COMPONENT monochromator_5_3 = COPY(monochromator_2_3)
+ AT (-0.024803, 0, -0.017581) RELATIVE Zrot5 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle5
+
+
+  COMPONENT monochromator_5_4 = COPY(monochromator_2_4)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot5 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle5
+  
+
+COMPONENT monochromator_5_5 = COPY(monochromator_2_5)
+ AT (0, 0, 0) RELATIVE Zrot5 ROTATED (0,0,0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_6 = COPY(monochromator_2_6)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot5 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_7 = COPY(monochromator_2_7)
+ AT (0.024390, 0, 0.01815) RELATIVE Zrot5 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle5
+
+
+  COMPONENT monochromator_5_8 = COPY(monochromator_2_8)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot5 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle5
+
+
+  COMPONENT monochromator_5_9 = COPY(monochromator_2_9)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot5 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle5
+
+
+    COMPONENT monochromator_6_1 = COPY(monochromator_3_1)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot6 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle6
+
+  
+COMPONENT monochromator_6_2 = COPY(monochromator_3_2)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot6 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle6
+
+COMPONENT monochromator_6_3 = COPY(monochromator_3_3)
+ AT (-0.024803, 0, -0.017581) RELATIVE Zrot6 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle6
+
+
+  COMPONENT monochromator_6_4 = COPY(monochromator_3_4)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot6 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle6
+  
+
+COMPONENT monochromator_6_5 = COPY(monochromator_3_5)
+ AT (0, 0, 0) RELATIVE Zrot6 ROTATED (0,0,0) RELATIVE Mono_Cradle6
+
+  COMPONENT monochromator_6_6 = COPY(monochromator_3_6)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot6 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle6
+
+  COMPONENT monochromator_6_7 = COPY(monochromator_3_7)
+ AT (0.024390, 0, 0.01815) RELATIVE Zrot6 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle6
+
+
+  COMPONENT monochromator_6_8 = COPY(monochromator_3_8)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot6 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle6
+
+
+  COMPONENT monochromator_6_9 = COPY(monochromator_3_9)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot6 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle6
+
+  
+  COMPONENT monochromator_7_1 = COPY(monochromator_1_1)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot7 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle7
+
+  
+COMPONENT monochromator_7_2 = COPY(monochromator_1_2)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot7 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle7
+
+COMPONENT monochromator_7_3 = COPY(monochromator_1_3)
+ AT (-0.024803, 0, -0.017581) RELATIVE Zrot7 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle7
+
+
+  COMPONENT monochromator_7_4 = COPY(monochromator_1_4)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot7 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle7
+  
+
+COMPONENT monochromator_7_5 = COPY(monochromator_1_5)
+ AT (0, 0, 0) RELATIVE Zrot7 ROTATED (0,0,0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_7_6 = COPY(monochromator_1_6)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot7 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_7_7 = COPY(monochromator_1_7)
+ AT (0.024390, 0, 0.01815) RELATIVE Zrot7 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle7
+
+
+  COMPONENT monochromator_7_8 = COPY(monochromator_1_8)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot7 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle7
+
+
+  COMPONENT monochromator_7_9 = COPY(monochromator_1_9)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot7 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle7
+
+
+  COMPONENT monochromator_8_1 = COPY(monochromator_2_1)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot8 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle8
+
+  
+COMPONENT monochromator_8_2 = COPY(monochromator_2_2)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot8 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle8
+
+COMPONENT monochromator_8_3 = COPY(monochromator_2_3)
+ AT (-0.024803, 0, -0.017581) RELATIVE Zrot8 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle8
+
+
+  COMPONENT monochromator_8_4 = COPY(monochromator_2_4)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot8 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle8
+  
+
+COMPONENT monochromator_8_5 = COPY(monochromator_2_5)
+ AT (0, 0, 0) RELATIVE Zrot8 ROTATED (0,0,0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_6 = COPY(monochromator_2_6)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot8 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_7 = COPY(monochromator_2_7)
+ AT (0.024390, 0, 0.01815) RELATIVE Zrot8 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle8
+
+
+  COMPONENT monochromator_8_8 = COPY(monochromator_2_8)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot8 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle8
+
+
+  COMPONENT monochromator_8_9 = COPY(monochromator_2_9)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot8 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle8
+
+
+    COMPONENT monochromator_9_1 = COPY(monochromator_3_1)
+  AT (-0.050007, 0, -0.034582) RELATIVE Zrot9 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle9
+
+  
+COMPONENT monochromator_9_2 = COPY(monochromator_3_2)
+  AT (-0.037356, 0, -0.026154) RELATIVE Zrot9 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle9
+
+COMPONENT monochromator_9_3 = COPY(monochromator_3_3)
+ AT (-0.024803, 0, -0.017581) RELATIVE Zrot9 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle9
+
+
+  COMPONENT monochromator_9_4 = COPY(monochromator_3_4)
+  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot9 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle9
+  
+
+COMPONENT monochromator_9_5 = COPY(monochromator_3_5)
+ AT (0, 0, 0) RELATIVE Zrot9 ROTATED (0,0,0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_6 = COPY(monochromator_3_6)
+  AT (0.012247, 0, 0.009004) RELATIVE Zrot9 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_7 = COPY(monochromator_3_7)
+ AT (0.024390, 0, 0.01815) RELATIVE Zrot9 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle9
+
+
+  COMPONENT monochromator_9_8 = COPY(monochromator_3_8)
+  AT (0.036426, 0, 0.027435) RELATIVE Zrot9 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle9
+
+
+  COMPONENT monochromator_9_9 = COPY(monochromator_3_9)
+  AT (0.048353, 0, 0.036859) RELATIVE Zrot9 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle9
+
+ 
+  
+  
+COMPONENT Mono_Out1 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle1 ROTATED(0,TTA,0) RELATIVE Zrot1
+
+COMPONENT Mono_Out2 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle2 ROTATED(0,TTA,0) RELATIVE Zrot2
+
+COMPONENT Mono_Out3 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle3 ROTATED(0,TTA,0) RELATIVE Zrot3
+
+COMPONENT Mono_Out4 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle4 ROTATED(0,TTA,0) RELATIVE Zrot4
+
+COMPONENT Mono_Out5 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle5 ROTATED(0,TTA,0) RELATIVE Zrot5
+
+COMPONENT Mono_Out6 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle6 ROTATED(0,TTA,0) RELATIVE Zrot6
+
+
+COMPONENT Mono_Out7 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle7 ROTATED(0,TTA,0) RELATIVE Zrot7
+
+COMPONENT Mono_Out8 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle8 ROTATED(0,TTA,0) RELATIVE Zrot8
+
+COMPONENT Mono_Out9 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle9 ROTATED(0,TTA,0) RELATIVE Zrot9
+
+
+  
+/* 1st Shell of components around first set of analysers */
+/* Catching the scattered beam... */
+COMPONENT psd_monitor1 = PSD_monitor(
+    filename="analyser1_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+  GROUP shell1
+  
+COMPONENT psd_monitor2 = PSD_monitor(
+    filename="analyser2_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell1
+  
+COMPONENT psd_monitor3 = PSD_monitor(
+    filename="analyser3_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell1
+
+COMPONENT psd_monitor4 = PSD_monitor(
+    filename="analyser4_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+  GROUP shell1
+  
+COMPONENT psd_monitor5 = PSD_monitor(
+    filename="analyser5_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell1
+  
+COMPONENT psd_monitor6 = PSD_monitor(
+    filename="analyser6_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell1
+
+COMPONENT psd_monitor7 = PSD_monitor(
+    filename="analyser7_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+  GROUP shell1
+  
+COMPONENT psd_monitor8 = PSD_monitor(
+    filename="analyser8_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell1
+  
+COMPONENT psd_monitor9 = PSD_monitor(
+    filename="analyser9_psd", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell1
+
+COMPONENT e_monitor1 = Monitor_nD(
+    filename="analyser1_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+  GROUP shell2
+  
+COMPONENT e_monitor2 = Monitor_nD(
+    filename="analyser2_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell2
+  
+COMPONENT e_monitor3 = Monitor_nD(
+    filename="analyser3_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell2
+ 
+COMPONENT e_monitor4 = Monitor_nD(
+    filename="analyser4_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+  GROUP shell2
+  
+COMPONENT e_monitor5 = Monitor_nD(
+    filename="analyser5_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell2
+  
+COMPONENT e_monitor6 = Monitor_nD(
+    filename="analyser6_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell2
+
+  COMPONENT e_monitor7 = Monitor_nD(
+    filename="analyser7_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+  GROUP shell2
+  
+COMPONENT e_monitor8 = Monitor_nD(
+    filename="analyser8_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell2
+  
+COMPONENT e_monitor9 = Monitor_nD(
+    filename="analyser9_emon", 
+    xmin=-0.05, 
+    xmax=0.05, 
+    ymin=-0.15, 
+    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell2
+FINALLY
+%{
+%}
+END
+
