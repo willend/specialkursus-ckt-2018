@@ -1875,7 +1875,7 @@ COMPONENT Zrot9 = Arm()
   AT (0.0, 0.0, 1.701) RELATIVE  Sample_out9
   ROTATED (0,0,-90) RELATIVE Sample_out9
   
-COMPONENT Mono_Cradle9= Arm()
+SPLIT 10 COMPONENT Mono_Cradle9= Arm()
   AT (0.0, 0.0, 0.0) RELATIVE Zrot9  ROTATED (0,OMA,0) RELATIVE Zrot9
   
 
