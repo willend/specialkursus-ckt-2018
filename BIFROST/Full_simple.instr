@@ -1,6 +1,6 @@
 DEFINE INSTRUMENT EGCESE(
-WaveMin=2.6, // Minimum wavelength from moderator
-WaveMax=4.5, // Maximum wavelength from moderator
+WaveMin=2.75, // Minimum wavelength from moderator
+WaveMax=4.4, // Maximum wavelength from moderator
 E_0=4.0, // Lowest energy in wavelength band.
 L_0=0, // Alternative: Lowest wavelength in wavelength band
 chopPulseOpening=0.004, // Opening time of pulse shapping chopper [s]
@@ -178,6 +178,8 @@ double wi		  = 0.01; 	/* Monochromator width*/
 int i;
 double Samplechoice;
 int scatt_5meV;
+ double Lthis;
+ double Tmin,Tmax;
 %}
 
 INITIALIZE
@@ -719,14 +721,54 @@ COMPONENT Origin = Progress_bar()
 
 
 
-COMPONENT Source=Source_div(xwidth=0.02,yheight=0.02,focus_aw=1.8,focus_ah=2,lambda0=(WaveMax+WaveMin)/2,dlambda=(WaveMax-WaveMin)/2)
-  AT (0,0,-0.021) ABSOLUTE
+  COMPONENT Source=Source_div(xwidth=0.02,yheight=0.02,focus_aw=1.8,focus_ah=2,lambda0=(WaveMax+WaveMin)/2,dlambda=(WaveMax-WaveMin)/2)
+  AT (0,0,-0.7) ABSOLUTE
 EXTEND %{
-  t=(117200.0/1e6)+rand01()*(181000-117200.0)/1e6;
-  /* Hack the intensity to be ~ order of what the real, full instrument provides */
-  p=p*3.9e10/0.0062;
-%}
+  Lthis = (2*PI/V2K)/sqrt(vx*vx + vy*vy + vz*vz);
+  Tmin=117200.0/1e6;
+  Tmax=181000/1e6;
 
+  /* Create the arrival time proportional to inverse wavelength */
+  t=Tmin+(Tmax-Tmin)*(1-((Lthis-mcipWaveMin)/(mcipWaveMax-mcipWaveMin)));
+  p*=3e12;
+%}
+COMPONENT Div2d_sample_B = Divergence_monitor(
+    nh = 200, nv = 200, filename = "Div2d_sample_B", xwidth = sampleSizeX,
+    yheight = sampleSizeY, maxdiv_h = 0.750000, maxdiv_v = 0.750000,restore_neutron=1)
+  AT (0,0, u) RELATIVE PREVIOUS
+  EXTEND
+    %{
+    x_div = RAD2DEG*atan2(vx,vz);
+    y_div = RAD2DEG*atan2(vy,vz);
+    if (SCATTERED) flag=1; else flag=0;
+    %}
+  
+  COMPONENT acceptance_x_divx_maxdiv = DivPos_monitor(
+   nh = 200, ndiv = 200, filename = "acceptance_x_divx_maxdiv", restore_neutron=1,
+   xwidth = 2*sampleSizeX, yheight = sampleSizeY, maxdiv_h = 1.500000) WHEN (y_div<0.750000 && y_div>-0.750000)
+ AT (0, 0, u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_y_divy_maxdiv = DivPos_y_monitor(
+   npos = 200, ndiv = 200, filename = "acceptance_y_divy_maxdiv", restore_neutron=1,
+   xwidth = sampleSizeX, yheight = 2*sampleSizeY, maxdiv = 1.500000) WHEN (x_div<0.750000 && x_div>-0.750000)
+ AT (0, 0, u) RELATIVE PREVIOUS
+  
+ COMPONENT ToFatSample = TOF_monitor(
+    nt = 2000, filename = "ToFatSample.dat",restore_neutron=1, xwidth = 0.1,
+    yheight = 0.1, tmax = 5.5*72.0*1e6/v_0)
+  AT (0, 0, u) RELATIVE  PREVIOUS
+  
+COMPONENT Lmon_sample = L_monitor(
+    nL = 400, filename = "Lmon_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, Lmin = 2, Lmax = 6)
+  AT (0, 0,u) RELATIVE PREVIOUS
+  
+COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale */
+    options="Lambda bins=500 limits=[0.5 120] TOF bins=500 limits=[0 5]",
+    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,
+    yheight = sampleSizeY)
+  AT (0, 0, 0) RELATIVE PREVIOUS
+  
 COMPONENT SamplePos = Arm()
 AT (0, 0, 0) RELATIVE Origin
 EXTEND %{
