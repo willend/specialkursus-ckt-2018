@@ -1659,12 +1659,6 @@ COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember 
     yheight = 0.2, Lmin = lambda_0/2.0, Lmax = 200)
   AT (0, 0, u) RELATIVE PREVIOUS
 
-COMPONENT collimator_linear = Collimator_linear(
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.05, 
-   ymax=0.05)
-AT (0, 0, 0.2) RELATIVE PREVIOUS
 
 SPLIT 100 COMPONENT SamplePos = Arm()
 AT (0, 0, 0.7) RELATIVE Lmon_sample
