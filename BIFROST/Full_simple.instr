@@ -720,7 +720,7 @@ COMPONENT Origin = Progress_bar()
 
 
 COMPONENT Source=Source_div(xwidth=0.02,yheight=0.02,focus_aw=1.8,focus_ah=2,lambda0=(WaveMax+WaveMin)/2,dlambda=(WaveMax-WaveMin)/2)
-  AT (0,0,0) ABSOLUTE
+  AT (0,0,-0.021) ABSOLUTE
 EXTEND %{
   t=(117200.0/1e6)+rand01()*(181000-117200.0)/1e6;
 %}
