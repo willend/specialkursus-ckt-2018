@@ -1484,163 +1484,127 @@ AT (0,0,0) RELATIVE Mono_Cradle9 ROTATED(0,TTA,0) RELATIVE Zrot9
 /* Catching the scattered beam... */
 COMPONENT psd_monitor1 = PSD_monitor(
     filename="analyser1_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.2976,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out1
   GROUP shell1
   
 COMPONENT psd_monitor2 = PSD_monitor(
     filename="analyser2_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.3048,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out2
 GROUP shell1
   
 COMPONENT psd_monitor3 = PSD_monitor(
     filename="analyser3_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.1886,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out3
 GROUP shell1
 
 COMPONENT psd_monitor4 = PSD_monitor(
     filename="analyser4_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.2976, restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out4
   GROUP shell1
   
 COMPONENT psd_monitor5 = PSD_monitor(
     filename="analyser5_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.3048,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out5
 GROUP shell1
   
 COMPONENT psd_monitor6 = PSD_monitor(
     filename="analyser6_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.1886,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out6
 GROUP shell1
 
 COMPONENT psd_monitor7 = PSD_monitor(
     filename="analyser7_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.2976, restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out7
   GROUP shell1
   
 COMPONENT psd_monitor8 = PSD_monitor(
     filename="analyser8_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.3048,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out8
 GROUP shell1
   
 COMPONENT psd_monitor9 = PSD_monitor(
     filename="analyser9_psd", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.1886,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell1
 
 COMPONENT e_monitor1 = Monitor_nD(
     filename="analyser1_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out1
   GROUP shell2
   
 COMPONENT e_monitor2 = Monitor_nD(
     filename="analyser2_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.3048,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out2
 GROUP shell2
   
 COMPONENT e_monitor3 = Monitor_nD(
     filename="analyser3_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.1886,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out3
 GROUP shell2
  
 COMPONENT e_monitor4 = Monitor_nD(
     filename="analyser4_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+   yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out4
   GROUP shell2
   
 COMPONENT e_monitor5 = Monitor_nD(
     filename="analyser5_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.3048,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out5
 GROUP shell2
   
 COMPONENT e_monitor6 = Monitor_nD(
     filename="analyser6_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.1886,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out6
 GROUP shell2
 
   COMPONENT e_monitor7 = Monitor_nD(
     filename="analyser7_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out7
   GROUP shell2
   
 COMPONENT e_monitor8 = Monitor_nD(
     filename="analyser8_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.3048,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out8
 GROUP shell2
   
 COMPONENT e_monitor9 = Monitor_nD(
     filename="analyser9_emon", 
-    xmin=-0.05, 
-    xmax=0.05, 
-    ymin=-0.15, 
-    ymax=0.15,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    xwidth=0.04,
+    yheight=0.1886,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell2
 FINALLY
