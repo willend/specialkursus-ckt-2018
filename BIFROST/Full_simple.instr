@@ -729,7 +729,7 @@ EXTEND %{
   Tmax=181000/1e6;
 
   /* Create the arrival time proportional to inverse wavelength */
-  t=Tmin+(Tmax-Tmin)*(1-((Lthis-mcipWaveMin)/(mcipWaveMax-mcipWaveMin)));
+  t=Tmin+(Tmax-Tmin)*(Lthis-mcipWaveMin)/(mcipWaveMax-mcipWaveMin);
   p*=3e12;
 %}
 COMPONENT Div2d_sample_B = Divergence_monitor(
