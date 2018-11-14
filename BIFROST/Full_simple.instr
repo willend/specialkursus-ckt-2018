@@ -723,6 +723,8 @@ COMPONENT Source=Source_div(xwidth=0.02,yheight=0.02,focus_aw=1.8,focus_ah=2,lam
   AT (0,0,-0.021) ABSOLUTE
 EXTEND %{
   t=(117200.0/1e6)+rand01()*(181000-117200.0)/1e6;
+  /* Hack the intensity to be ~ order of what the real, full instrument provides */
+  p=p*3.9e10/0.0062;
 %}
 
 COMPONENT SamplePos = Arm()
