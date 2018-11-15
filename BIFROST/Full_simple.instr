@@ -30,7 +30,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1, REP=1)
+INCOH=1,INCOHspread=0)
 
 DECLARE
 %{
@@ -723,7 +723,7 @@ COMPONENT Origin = Progress_bar()
 
 
   COMPONENT Source=Source_div(xwidth=0.02,yheight=0.02,focus_aw=1.8,focus_ah=2,lambda0=(WaveMax+WaveMin)/2,dlambda=(WaveMax-WaveMin)/2)
-  AT (0,0,-0.7) ABSOLUTE
+  AT (0,0,-0.000001) ABSOLUTE
 EXTEND %{
   Lthis = (2*PI/V2K)/sqrt(vx*vx + vy*vy + vz*vz);
   Tmin=117200.0/1e6;
@@ -743,8 +743,86 @@ COMPONENT Div2d_sample_B = Divergence_monitor(
     y_div = RAD2DEG*atan2(vy,vz);
     if (SCATTERED) flag=1; else flag=0;
     %}
-  
-  COMPONENT acceptance_x_divx_maxdiv = DivPos_monitor(
+
+COMPONENT Div2d_sample = Divergence_monitor(
+    nh = 200, nv = 200, filename = "Div2d_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, maxdiv_h = 2.250000, maxdiv_v = 2.250000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT PSD_sample_large = PSD_monitor(
+    nx = 60, ny = 60, filename = "PSD_sample_large", restore_neutron=1,
+    xwidth = 6*sampleSizeX, yheight = 6*sampleSizeY)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT PSD_sample_small = PSD_monitor(
+    nx = 20, ny = 20, filename = "PSD_sample_small", restore_neutron=1,
+    xwidth = sampleSizeX, yheight = sampleSizeY)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT HPSD_sample = PSDlin_monitor(
+    nx = 100, filename="HPSD_sample",xwidth = 4*sampleSizeX, yheight = sampleSizeY, restore_neutron=1)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT VPSD_sample = PSDlin_y_monitor(
+    ny = 100, filename="VPSD_sample",xwidth = sampleSizeX, yheight = 4*sampleSizeY, restore_neutron=1)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Hdiv_sample = Hdiv_monitor(
+    nh = 200, filename = "Hdiv_sample", xwidth = sampleSizeX,
+    yheight = sampleSizeY, h_maxdiv = 2.250000, restore_neutron=1)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Vdiv_sample = Vdiv_monitor(
+    nv = 200, filename = "Vdiv_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, v_maxdiv = 2.250000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_x_divx = DivPos_monitor(
+   nh = 200, ndiv = 200, filename = "acceptance_x_divx",
+   xwidth = 2*sampleSizeX, yheight = sampleSizeY, maxdiv_h = 1.500000, restore_neutron=1)
+ AT (0, 0, u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_y_divy = DivPos_y_monitor(
+   npos = 200, ndiv = 200, filename = "acceptance_y_divy",
+   xwidth = sampleSizeX, yheight = 2*sampleSizeY, maxdiv = 1.500000, restore_neutron=1)
+ AT (0, 0, u) RELATIVE PREVIOUS
+
+COMPONENT Lmon_sample_B = L_monitor(
+    nL = 300, filename = "Lmon_sample_B", xwidth = 0.010000, restore_neutron=1,
+    yheight = 0.010000, Lmin = sampleSizeY, Lmax = 8.000000) WHEN flag
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Div2d_sample_maxdiv = Divergence_monitor(
+    nh = 200, nv = 200, filename = "Div2d_sample_maxdiv", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, maxdiv_h = 2.250000, maxdiv_v = 2.250000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT PSD_sample_maxdiv = PSD_monitor(
+    nx = 200, ny = 200, filename = "PSD_sample_maxdiv", restore_neutron=1,
+    xwidth = 3*sampleSizeX, yheight = 3*sampleSizeY) WHEN (x_div<0.750000 && x_div>-0.750000 && y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT HPSD_sample_maxdiv = PSDlin_monitor(
+    nx = 100, filename="HPSD_sample_maxdiv",xwidth = 4*sampleSizeX, yheight = sampleSizeY, restore_neutron=1)
+  WHEN (x_div<0.750000 && x_div>-0.750000 && y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT VPSD_sample_maxdiv = PSDlin_y_monitor(
+    ny = 100, filename="VPSD_sample_maxdiv",xwidth = sampleSizeX, yheight = 4*sampleSizeY, restore_neutron=1)
+  WHEN (x_div<0.750000 && x_div>-0.750000 && y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Hdiv_sample_maxdiv = Hdiv_monitor(
+    nh = 200, filename = "Hdiv_sample_maxdiv", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, h_maxdiv = 2.250000) WHEN (y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Vdiv_sample_maxdiv = Vdiv_monitor(
+    nv = 200, filename = "Vdiv_sample_maxdiv", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, v_maxdiv = 2.250000) WHEN (x_div<0.750000 && x_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_x_divx_maxdiv = DivPos_monitor(
    nh = 200, ndiv = 200, filename = "acceptance_x_divx_maxdiv", restore_neutron=1,
    xwidth = 2*sampleSizeX, yheight = sampleSizeY, maxdiv_h = 1.500000) WHEN (y_div<0.750000 && y_div>-0.750000)
  AT (0, 0, u) RELATIVE PREVIOUS
@@ -788,7 +866,7 @@ COMPONENT v_sample = Incoherent(
    focus_yh=0.4)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
 EXTEND %{
-  if (mcipINCOH) {
+  if (mcipINCOH && mcipINCOHspread) {
     double scale=rand01();
     vx=vx*(1+scale);
     vy=vy*(1+scale);

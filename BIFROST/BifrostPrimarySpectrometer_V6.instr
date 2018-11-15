@@ -30,7 +30,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1)
+INCOH=1,INCOHspread=0)
 
 DECLARE
 %{
@@ -1642,16 +1642,9 @@ COMPONENT Lmon_sample = L_monitor(
     yheight = sampleSizeY, Lmin = 2, Lmax = 6)
   AT (0, 0,u) RELATIVE PREVIOUS
   
-/*  COMPONENT TofLambdaSampleZoomOut = TOFLambda_monitor( // Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale 
-    nL = 500, nt = 500, tmin = 0, tmax = 5e6,
-    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,
-    yheight = sampleSizeY, Lmin = 0.5, Lmax = 120)
-  AT (0, 0, 0) RELATIVE PREVIOUS
-*/
-
 COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale */
     options="Lambda bins=500 limits=[0.5 120] TOF bins=500 limits=[0 5]",
-    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,
+    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,restore_neutron=1,
     yheight = sampleSizeY)
   AT (0, 0, 0) RELATIVE PREVIOUS
   
@@ -1661,8 +1654,8 @@ COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember 
   AT (0, 0, u) RELATIVE PREVIOUS
 
 
-SPLIT 100 COMPONENT SamplePos = Arm()
-AT (0, 0, 0.7) RELATIVE Lmon_sample
+COMPONENT SamplePos = Arm()
+ AT (0, 0,0.580000) RELATIVE EndOfelement_1
 EXTEND %{
   Samplechoice=rand01();
   flag_sample=0;
@@ -1679,7 +1672,7 @@ COMPONENT v_sample = Incoherent(
    focus_yh=0.4)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
 EXTEND %{
-  if (mcipINCOH) {
+  if (mcipINCOH && mcipINCOHspread) {
     double scale=rand01();
     vx=vx*(1+scale);
     vy=vy*(1+scale);

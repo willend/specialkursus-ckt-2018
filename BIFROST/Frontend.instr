@@ -1641,16 +1641,9 @@ COMPONENT Lmon_sample = L_monitor(
     yheight = sampleSizeY, Lmin = 2, Lmax = 6)
   AT (0, 0,u) RELATIVE PREVIOUS
   
-/*  COMPONENT TofLambdaSampleZoomOut = TOFLambda_monitor( // Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale 
-    nL = 500, nt = 500, tmin = 0, tmax = 5e6,
-    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,
-    yheight = sampleSizeY, Lmin = 0.5, Lmax = 120)
-  AT (0, 0, 0) RELATIVE PREVIOUS
-*/
-
 COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale */
     options="Lambda bins=500 limits=[0.5 120] TOF bins=500 limits=[0 5]",
-    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,
+    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,restore_neutron=1,
     yheight = sampleSizeY)
   AT (0, 0, 0) RELATIVE PREVIOUS
   
@@ -1661,7 +1654,7 @@ COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember 
 
 
   COMPONENT MCPL = MCPL_output(filename="BIFROST", merge_mpi=1)  
-AT (0, 0, 0.7) RELATIVE Lmon_sample
+ AT (0, 0,0.580000) RELATIVE EndOfelement_1
   
 
 FINALLY

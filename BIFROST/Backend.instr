@@ -30,7 +30,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1, REP=1)
+INCOH=1, REP=1,INCOHspread=0)
 
 DECLARE
 %{
@@ -739,7 +739,7 @@ COMPONENT v_sample = Incoherent(
    focus_yh=0.4)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
 EXTEND %{
-  if (mcipINCOH) {
+  if (mcipINCOH && mcipINCOHspread) {
     double scale=rand01();
     vx=vx*(1+scale);
     vy=vy*(1+scale);
