@@ -28,7 +28,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1,INCOHspread=0,sample_focusW=3,sample_focusH=0.2)
+INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15)
 
 DECLARE
 %{
@@ -783,7 +783,7 @@ COMPONENT Origin = Progress_bar()
 
 
   COMPONENT Source=Source_div(xwidth=0.01,yheight=0.01,focus_aw=1.8,focus_ah=2,lambda0=(WaveMax+WaveMin)/2,dlambda=(WaveMax-WaveMin)/2)
-  AT (0,0,-0.001) ABSOLUTE
+  AT (0,0,-0.005) ABSOLUTE
 EXTEND %{
   Lthis = (2*PI/V2K)/sqrt(vx*vx + vy*vy + vz*vz);
   Tmin=117200.0/1e6;
@@ -921,7 +921,7 @@ COMPONENT v_sample = Incoherent(
    radius=0.005, 
    //thickness=0.002,
    yheight = 0.01,
-   target_index=5,
+   target_index=11,
    focus_xw=sample_focusW, 
    focus_yh=sample_focusH)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
@@ -949,7 +949,7 @@ COMPONENT Magnon = Magnon_bcc(
     verbose=Verbose, 
     T=TT, 
     FM = FerroMagnet,
-    target_index=4,
+    target_index=10,
     focus_xw=sample_focusW, 
     focus_yh=sample_focusH)
   //focus_aw=180, /* For statistics considerations, only a small angular */
@@ -977,14 +977,11 @@ EXTEND %{
 COMPONENT RemoveDirect = Arm()
 AT (0,0,0) RELATIVE Magnon
 EXTEND %{
-  if(!flag_sample) ABSORB;
+  //if(!flag_sample) ABSORB;
 %}  
 
   COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-5,Emin=0, Emax=10, yheight=0.1)
 AT (0,0,0) RELATIVE Magnon
-
-COMPONENT Target_focus=Arm()
-  AT (1,0,0) RELATIVE SamplePos
   
 COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
 AT (0,0,0) RELATIVE Magnon
@@ -1009,6 +1006,9 @@ COMPONENT Sample_out4 = Arm()
   AT (0,0,0) RELATIVE SamplePos
   ROTATED (0,TwoTheta+40,0) RELATIVE SamplePos
 
+    COMPONENT Target_focus=Arm()
+  AT (0,0,1) RELATIVE Sample_out5
+    
 COMPONENT Sample_out6 = Arm()
   AT (0,0,0) RELATIVE SamplePos
   ROTATED (0,TwoTheta+50,0) RELATIVE SamplePos
