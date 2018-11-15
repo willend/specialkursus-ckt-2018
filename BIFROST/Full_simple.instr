@@ -904,10 +904,16 @@ COMPONENT Lmon_sample = L_monitor(
   
 COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale */
     options="Lambda bins=500 limits=[0.5 120] TOF bins=500 limits=[0 5]",
-    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,
+    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,restore_neutron=1,
     yheight = sampleSizeY)
   AT (0, 0, 0) RELATIVE PREVIOUS
   
+  COMPONENT L_monSampleZoomout = L_monitor(
+    nL = 1000, filename = "L_monsampleZoomOut.dat",restore_neutron=1, xwidth = 0.2,
+    yheight = 0.2, Lmin = lambda_0/2.0, Lmax = 200)
+  AT (0, 0, u) RELATIVE PREVIOUS
+
+
 COMPONENT SamplePos = Arm()
 AT (0, 0, 0) RELATIVE Origin
 EXTEND %{
