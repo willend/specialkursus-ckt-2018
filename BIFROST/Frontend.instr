@@ -19,9 +19,7 @@ TTA=74.1432,
 OMA2=30.628,
 TTA2=61.256,
 phi=37, 
-dphi1=0.3320,
-dphi2=0.3320,
-dphi3=0.3320,
+dphi=0.3320,
 string SXfile="C_diamond.lau",
 ax=0,      ay=2.14,   az=-1.24,
 bx = 0,    by = 0,    bz =  2.47,
@@ -30,7 +28,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1)
+INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15)
 
 DECLARE
 %{

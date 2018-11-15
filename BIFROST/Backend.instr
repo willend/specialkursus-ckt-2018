@@ -19,9 +19,7 @@ TTA=74.1432,
 OMA2=30.628,
 TTA2=61.256,
 phi=37, 
-dphi1=0.3320,
-dphi2=0.3320,
-dphi3=0.3320,
+dphi=0.3320,
 string MCPLfile="BIFROST_mcpl.gz",
 ax=0,      ay=2.14,   az=-1.24,
 bx = 0,    by = 0,    bz =  2.47,
@@ -30,7 +28,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1, REP=1,INCOHspread=0)
+INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15)
 
 DECLARE
 %{
@@ -172,13 +170,21 @@ double chopFrameOverlap2Pos= 14.973;    // Distance from moderator to second fra
 
 double benderAngle = 0.01886551; // Mads numbers = 0.0183513513514;
 double DM         = 3.355;   /* Monochromator d-spacing in Angs */
-double wi		  = 0.01; 	/* Monochromator width*/
-
-
+double wi1		  = 0.013; 	/* Monochromator width*/
+double wi2		  = 0.0135; 	/* Monochromator width*/
+double wi3		  = 0.014; 	/* Monochromator width*/
+ 
 int i;
 double Samplechoice;
 int scatt_5meV;
  int flag_sample;
+ double FourUpPosX1,FourUpPosY1,ThreeUpPosX1,ThreeUpPosY1,TwoUpPosX1,TwoUpPosY1,OneUpPosX1,OneUpPosY1;
+ double FourDownPosX1,FourDownPosY1,ThreeDownPosX1,ThreeDownPosY1,TwoDownPosX1,TwoDownPosY1,OneDownPosX1,OneDownPosY1;
+ double FourUpPosX2,FourUpPosY2,ThreeUpPosX2,ThreeUpPosY2,TwoUpPosX2,TwoUpPosY2,OneUpPosX2,OneUpPosY2;
+ double FourDownPosX2,FourDownPosY2,ThreeDownPosX2,ThreeDownPosY2,TwoDownPosX2,TwoDownPosY2,OneDownPosX2,OneDownPosY2;
+ double FourUpPosX3,FourUpPosY3,ThreeUpPosX3,ThreeUpPosY3,TwoUpPosX3,TwoUpPosY3,OneUpPosX3,OneUpPosY3;
+ double FourDownPosX3,FourDownPosY3,ThreeDownPosX3,ThreeDownPosY3,TwoDownPosX3,TwoDownPosY3,OneDownPosX3,OneDownPosY3;
+
 %}
 
 INITIALIZE
@@ -711,7 +717,61 @@ fclose(fp);
 
 printf("\n part 3 length: %f\n",DivSlit2Pos-DivSlit1Gap/2.0-DivSlit2Gap/2.0-DivSlit1Pos);
 printf("\n part 4 length: %f\n",DivSlit1Pos-DivSlit1Gap/2.0-sample_dist);
+/* Spatial positions for the mono blades - module 1*/
+FourUpPosX1 = -50.007;
+FourUpPosY1 = 34.582;
+ThreeUpPosX1 = -37.356;
+ThreeUpPosY1 = 26.154;
+TwoUpPosX1 = -24.803;
+TwoUpPosY1 = 17.581;
+OneUpPosX1 = -12.351;
+OneUpPosY1 = 8.862;
+OneDownPosX1 = 12.247;
+OneDownPosY1 = -9.004;
+TwoDownPosX1 = 24.390;
+TwoDownPosY1 = -18.150;
+ThreeDownPosX1 = 36.426;
+ThreeDownPosY1 = -27.435;
+FourDownPosX1 = 48.353;
+FourDownPosY1 = -36.859;
+ 
+/* Spatial positions for the mono blades - module 2*/
+FourUpPosX2 = -50.550;
+FourUpPosY2 = 36.386;
+ThreeUpPosX2 = -37.756;
+ThreeUpPosY2 = 27.509;
+TwoUpPosX2 = -25.065;
+TwoUpPosY2 = 18.485;
+OneUpPosX2 = -12.479;
+OneUpPosY2 = 9.315;
+OneDownPosX2 = 12.370;
+OneDownPosY2 = -9.459;
+TwoDownPosX2 = 24.630;
+TwoDownPosY2 = -19.060;
+ThreeDownPosX2 = 36.778;
+ThreeDownPosY2 = -28.802;
+FourDownPosX2 = 48.813;
+FourDownPosY2 = -38.685;
 
+/* Spatial positions for the mono blades - module 3*/
+FourUpPosX3 = -51.087;
+FourUpPosY3 = 38.165;
+ThreeUpPosX3 = -38.150;
+ThreeUpPosY3 = 28.846;
+TwoUpPosX3 = -25.323;
+TwoUpPosY3 = 19.378;
+OneUpPosX3 = -12.605;
+OneUpPosY3 = 9.762;
+OneDownPosX3 = 12.492;
+OneDownPosY3 = -9.907;
+TwoDownPosX3 = 24.868;
+TwoDownPosY3 = -19.958;
+ThreeDownPosX3 = 37.127;
+ThreeDownPosY3 = -30.152;
+FourDownPosX3 = 49.267;
+FourDownPosY3 = -40.487;
+
+ 
 %}
 TRACE
 
@@ -734,9 +794,9 @@ COMPONENT v_sample = Incoherent(
    radius=0.005, 
    //thickness=0.002,
    yheight = 0.01,
-   target_index=5,
-   focus_xw=3, 
-   focus_yh=0.4)
+   target_index=11,
+   focus_xw=sample_focusW, 
+   focus_yh=sample_focusH)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
 EXTEND %{
   if (mcipINCOH && mcipINCOHspread) {
@@ -762,9 +822,9 @@ COMPONENT Magnon = Magnon_bcc(
     verbose=Verbose, 
     T=TT, 
     FM = FerroMagnet,
-    target_index=4,
-    focus_xw=3, 
-    focus_yh=0.4)
+    target_index=10,
+    focus_xw=sample_focusW, 
+    focus_yh=sample_focusH)
   //focus_aw=180, /* For statistics considerations, only a small angular */
   //focus_ah=20)   /* band arround sample is illuminated */
   WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
@@ -790,14 +850,11 @@ EXTEND %{
 COMPONENT RemoveDirect = Arm()
 AT (0,0,0) RELATIVE Magnon
 EXTEND %{
-  if(!flag_sample) ABSORB;
+  //if(!flag_sample) ABSORB;
 %}  
 
   COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-5,Emin=0, Emax=10, yheight=0.1)
 AT (0,0,0) RELATIVE Magnon
-
-COMPONENT Target_focus=Arm()
-  AT (1,0,0) RELATIVE SamplePos
   
 COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
 AT (0,0,0) RELATIVE Magnon
@@ -822,6 +879,9 @@ COMPONENT Sample_out4 = Arm()
   AT (0,0,0) RELATIVE SamplePos
   ROTATED (0,TwoTheta+40,0) RELATIVE SamplePos
 
+    COMPONENT Target_focus=Arm()
+  AT (0,0,1) RELATIVE Sample_out5
+    
 COMPONENT Sample_out6 = Arm()
   AT (0,0,0) RELATIVE SamplePos
   ROTATED (0,TwoTheta+50,0) RELATIVE SamplePos
@@ -841,653 +901,620 @@ COMPONENT Sample_out9 = Arm()
 COMPONENT PSD_outgoing = Monitor_nD(radius=1.5, yheight= 0.3, options="banana theta bins=360 limits=[0 180] y bins=60")
   AT (0,0,0) RELATIVE SamplePos
   
-COMPONENT PSD_out1 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana1", restore_neutron=1)
+COMPONENT PSD_out1 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana1", restore_neutron=1)
 AT (0.0,0.0,1.544) RELATIVE Sample_out1
   //GROUP outgoing
   
-COMPONENT PSD_out2 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana2", restore_neutron=1)
+COMPONENT PSD_out2 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana2", restore_neutron=1)
 AT (0.0,0.0,1.623) RELATIVE Sample_out2
   //GROUP outgoing
 
-COMPONENT PSD_out3 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana3", restore_neutron=1)
+COMPONENT PSD_out3 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana3", restore_neutron=1)
 AT (0.0,0.0,1.701) RELATIVE Sample_out3
 //GROUP outgoing
 
-  COMPONENT PSD_out4 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana4", restore_neutron=1)
+  COMPONENT PSD_out4 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana4", restore_neutron=1)
 AT (0.0,0.0,1.544) RELATIVE Sample_out4
   //GROUP outgoing
   
-COMPONENT PSD_out5 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana5", restore_neutron=1)
+COMPONENT PSD_out5 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana5", restore_neutron=1)
 AT (0.0,0.0,1.623) RELATIVE Sample_out5
   //GROUP outgoing
 
-COMPONENT PSD_out6 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana6", restore_neutron=1)
+COMPONENT PSD_out6 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana6", restore_neutron=1)
 AT (0.0,0.0,1.701) RELATIVE Sample_out6
 //GROUP outgoing
 
-  COMPONENT PSD_out7 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana7", restore_neutron=1)
+  COMPONENT PSD_out7 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana7", restore_neutron=1)
 AT (0.0,0.0,1.544) RELATIVE Sample_out7
   //GROUP outgoing
   
-COMPONENT PSD_out8 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana8", restore_neutron=1)
+COMPONENT PSD_out8 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana8", restore_neutron=1)
 AT (0.0,0.0,1.623) RELATIVE Sample_out8
   //GROUP outgoing
 
-COMPONENT PSD_out9 = PSD_monitor(xwidth=0.3, yheight=0.3, nx=100, ny=100, filename="PSD_before_ana9", restore_neutron=1)
+COMPONENT PSD_out9 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana9", restore_neutron=1)
 AT (0.0,0.0,1.701) RELATIVE Sample_out9
 //GROUP outgoing
 
-  
-COMPONENT Zrot1 = Arm()
-  AT (0.0, 0.0, 1.544) RELATIVE  Sample_out1
-  ROTATED (0,0,-90) RELATIVE Sample_out1
+
  
+COMPONENT Zrot1 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE Sample_out1
+
 COMPONENT Mono_Cradle1 = Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot1  ROTATED (0,OMA,0) RELATIVE Zrot1
+  AT (0.0, 0.0, 0) RELATIVE Zrot1
+  ROTATED (0,0,90) RELATIVE Zrot1
 
 COMPONENT Zrot2 = Arm()
-  AT (0.0, 0.0, 1.623) RELATIVE  Sample_out2
-  ROTATED (0,0,-90) RELATIVE Sample_out2
-  
-COMPONENT Mono_Cradle2= Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot2  ROTATED (0,OMA,0) RELATIVE Zrot2
+  AT (0.0, 0.0, 1.623) RELATIVE Sample_out2
+
+COMPONENT Mono_Cradle2 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot2
+  ROTATED (0,0,90) RELATIVE Zrot2
 
 COMPONENT Zrot3 = Arm()
-  AT (0.0, 0.0, 1.701) RELATIVE  Sample_out3
-  ROTATED (0,0,-90) RELATIVE Sample_out3
-  
-COMPONENT Mono_Cradle3= Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot3  ROTATED (0,OMA,0) RELATIVE Zrot3
+  AT (0.0, 0.0, 1.701) RELATIVE Sample_out3
+
+COMPONENT Mono_Cradle3 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot3
+  ROTATED (0,0,90) RELATIVE Zrot3
 
 COMPONENT Zrot4 = Arm()
-  AT (0.0, 0.0, 1.544) RELATIVE  Sample_out4
-  ROTATED (0,0,-90) RELATIVE Sample_out4
- 
+  AT (0.0, 0.0, 1.544) RELATIVE Sample_out4
+
 COMPONENT Mono_Cradle4 = Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot4  ROTATED (0,OMA,0) RELATIVE Zrot4
+  AT (0.0, 0.0, 0) RELATIVE Zrot4
+  ROTATED (0,0,90) RELATIVE Zrot4
 
 COMPONENT Zrot5 = Arm()
-  AT (0.0, 0.0, 1.623) RELATIVE  Sample_out5
-  ROTATED (0,0,-90) RELATIVE Sample_out5
-  
-COMPONENT Mono_Cradle5= Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot5  ROTATED (0,OMA,0) RELATIVE Zrot5
+  AT (0.0, 0.0, 1.623) RELATIVE Sample_out5
+
+COMPONENT Mono_Cradle5 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot5
+  ROTATED (0,0,90) RELATIVE Zrot5
 
 COMPONENT Zrot6 = Arm()
-  AT (0.0, 0.0, 1.701) RELATIVE  Sample_out6
-  ROTATED (0,0,-90) RELATIVE Sample_out6
-  
-COMPONENT Mono_Cradle6= Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot6  ROTATED (0,OMA,0) RELATIVE Zrot6
+  AT (0.0, 0.0, 1.701) RELATIVE Sample_out6
 
+COMPONENT Mono_Cradle6 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot6
+  ROTATED (0,0,90) RELATIVE Zrot6
 
 COMPONENT Zrot7 = Arm()
-  AT (0.0, 0.0, 1.544) RELATIVE  Sample_out7
-  ROTATED (0,0,-90) RELATIVE Sample_out7
- 
+  AT (0.0, 0.0, 1.544) RELATIVE Sample_out7
+
 COMPONENT Mono_Cradle7 = Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot7  ROTATED (0,OMA,0) RELATIVE Zrot7
+  AT (0.0, 0.0, 0) RELATIVE Zrot7
+  ROTATED (0,0,90) RELATIVE Zrot7
 
 COMPONENT Zrot8 = Arm()
-  AT (0.0, 0.0, 1.623) RELATIVE  Sample_out8
-  ROTATED (0,0,-90) RELATIVE Sample_out8
-  
+  AT (0.0, 0.0, 1.623) RELATIVE Sample_out8
+
 COMPONENT Mono_Cradle8= Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot8  ROTATED (0,OMA,0) RELATIVE Zrot8
+  AT (0.0, 0.0, 0) RELATIVE Zrot8
+  ROTATED (0,0,90) RELATIVE Zrot8
 
 COMPONENT Zrot9 = Arm()
-  AT (0.0, 0.0, 1.701) RELATIVE  Sample_out9
-  ROTATED (0,0,-90) RELATIVE Sample_out9
-  
-SPLIT 10 COMPONENT Mono_Cradle9= Arm()
-  AT (0.0, 0.0, 0.0) RELATIVE Zrot9  ROTATED (0,OMA,0) RELATIVE Zrot9
+  AT (0.0, 0.0, 1.701) RELATIVE Sample_out9
+
+COMPONENT Mono_Cradle9 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot9
+  ROTATED (0,0,90) RELATIVE Zrot9
   
 
 COMPONENT monochromator_1_1 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot1 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle1
+  AT (FourUpPosY1*0.001,  0, FourUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle1
 
   
 COMPONENT monochromator_1_2 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot1 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle1
+  AT (ThreeUpPosY1*0.001,  0, ThreeUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle1
 
 COMPONENT monochromator_1_3 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.024803, 0, -0.017581) RELATIVE Zrot1 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle1
+  AT (TwoUpPosY1*0.001,  0, TwoUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle1
 
 
   COMPONENT monochromator_1_4 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot1 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle1
+AT (OneUpPosY1*0.001,  0, OneUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle1
   
 
 COMPONENT monochromator_1_5 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0, 0, 0) RELATIVE Zrot1 ROTATED (0,0,0) RELATIVE Mono_Cradle1
+  AT (0, 0, 0) RELATIVE Mono_Cradle1 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle1
 
 COMPONENT monochromator_1_6 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot1 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle1
+AT (OneDownPosY1*0.001,  0, OneDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle1
 
   COMPONENT monochromator_1_7 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.024390, 0, 0.01815) RELATIVE Zrot1 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle1
+AT (TwoDownPosY1*0.001,  0, TwoDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle1
 
 
   COMPONENT monochromator_1_8 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot1 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle1
+AT (ThreeDownPosY1*0.001,  0, ThreeDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle1
 
-
+  
   COMPONENT monochromator_1_9 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi1,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot1 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle1
+AT (FourDownPosY1*0.001,  0, FourDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle1
+
 
 
 COMPONENT monochromator_2_1 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.050550, 0, -0.036386) RELATIVE Zrot2 ROTATED (0,-4*dphi2,0) RELATIVE Mono_Cradle2
+  AT (FourUpPosY2*0.001,  0, FourUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle2
 
   
 COMPONENT monochromator_2_2 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.037756, 0, -0.027509) RELATIVE Zrot2 ROTATED (0,-3*dphi2,0) RELATIVE Mono_Cradle2
-
+  AT (ThreeUpPosY2*0.001,  0, ThreeUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle2
 
 COMPONENT monochromator_2_3 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.025065, 0, -0.018485) RELATIVE Zrot2 ROTATED (0,-2*dphi2,0) RELATIVE Mono_Cradle2
+  AT (TwoUpPosY2*0.001,  0, TwoUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle2
 
 
   COMPONENT monochromator_2_4 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.012479 , 0, -0.009315) RELATIVE Zrot2 ROTATED (0,-dphi2,0) RELATIVE Mono_Cradle2
+AT (OneUpPosY2*0.001,  0, OneUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle2
   
 
 COMPONENT monochromator_2_5 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0, 0, 0) RELATIVE Zrot2 ROTATED (0,0,0) RELATIVE Mono_Cradle2
+  AT (0, 0, 0) RELATIVE Mono_Cradle2 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle2
 
 COMPONENT monochromator_2_6 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.012370, 0, 0.009459) RELATIVE Zrot2 ROTATED (0,dphi2,0) RELATIVE Mono_Cradle2
+AT (OneDownPosY2*0.001,  0, OneDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle2
 
   COMPONENT monochromator_2_7 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.024630, 0, 0.019060) RELATIVE Zrot2 ROTATED (0,2*dphi2,0) RELATIVE Mono_Cradle2
+AT (TwoDownPosY2*0.001,  0, TwoDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle2
 
 
   COMPONENT monochromator_2_8 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.036778, 0, 0.028802) RELATIVE Zrot2 ROTATED (0,3*dphi2,0) RELATIVE Mono_Cradle2
+AT (ThreeDownPosY2*0.001,  0, ThreeDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle2
 
-
+  
   COMPONENT monochromator_2_9 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi2,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.048813, 0, 0.038685) RELATIVE Zrot2 ROTATED (0,4*dphi2,0) RELATIVE Mono_Cradle2
+AT (FourDownPosY2*0.001,  0, FourDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle2
+
+  
 
 
 COMPONENT monochromator_3_1 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.051087, 0, -0.038165) RELATIVE Zrot3 ROTATED (0,-4*dphi3,0) RELATIVE Mono_Cradle3
+  AT (FourUpPosY3*0.001,  0, FourUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle3
 
   
 COMPONENT monochromator_3_2 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.038150, 0, -0.028846) RELATIVE Zrot3 ROTATED (0,-3*dphi3,0) RELATIVE Mono_Cradle3
-
+  AT (ThreeUpPosY3*0.001,  0, ThreeUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle3
 
 COMPONENT monochromator_3_3 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.025323 , 0, -0.019378) RELATIVE Zrot3 ROTATED (0,-2*dphi3,0) RELATIVE Mono_Cradle3
+  AT (TwoUpPosY3*0.001,  0, TwoUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle3
 
 
   COMPONENT monochromator_3_4 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (-0.012605 , 0, -0.009762) RELATIVE Zrot3 ROTATED (0,-dphi3,0) RELATIVE Mono_Cradle3
+AT (OneUpPosY3*0.001,  0, OneUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle3
   
 
 COMPONENT monochromator_3_5 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0, 0, 0) RELATIVE Zrot3 ROTATED (0,0,0) RELATIVE Mono_Cradle3
+  AT (0, 0, 0) RELATIVE Mono_Cradle3 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle3
 
 COMPONENT monochromator_3_6 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.012492, 0, 0.009907) RELATIVE Zrot3 ROTATED (0,dphi3,0) RELATIVE Mono_Cradle3
+AT (OneDownPosY3*0.001,  0, OneDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle3
 
   COMPONENT monochromator_3_7 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.024868, 0, 0.019958) RELATIVE Zrot3 ROTATED (0,2*dphi3,0) RELATIVE Mono_Cradle3
+AT (TwoDownPosY3*0.001,  0, TwoDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle3
 
 
   COMPONENT monochromator_3_8 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.037127, 0, 0.030152) RELATIVE Zrot3 ROTATED (0,3*dphi3,0) RELATIVE Mono_Cradle3
+AT (ThreeDownPosY3*0.001,  0, ThreeDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle3
 
-
+  
   COMPONENT monochromator_3_9 = Monochromator_curved(
     mosaich=60, 
     mosaicv=60,
-    zwidth=wi,
+    zwidth=wi3,
     yheight=0.231,
     NH=1,
     NV=1,
     r0=0.7, 
     DM=DM)
-  AT (0.049267, 0, 0.040487) RELATIVE Zrot3 ROTATED (0,4*dphi3,0) RELATIVE Mono_Cradle3
+AT (FourDownPosY3*0.001,  0, FourDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle3
+
 
 
 COMPONENT monochromator_4_1 = COPY(monochromator_1_1)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot4 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle4
-
+  AT (FourUpPosY1*0.001,  0, FourUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle4
   
 COMPONENT monochromator_4_2 = COPY(monochromator_1_2)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot4 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle4
+  AT (ThreeUpPosY1*0.001,  0, ThreeUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle4
 
 COMPONENT monochromator_4_3 = COPY(monochromator_1_3)
- AT (-0.024803, 0, -0.017581) RELATIVE Zrot4 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle4
-
+  AT (TwoUpPosY1*0.001,  0, TwoUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle4
 
   COMPONENT monochromator_4_4 = COPY(monochromator_1_4)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot4 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle4
-  
+AT (OneUpPosY1*0.001,  0, OneUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle4  
 
 COMPONENT monochromator_4_5 = COPY(monochromator_1_5)
- AT (0, 0, 0) RELATIVE Zrot4 ROTATED (0,0,0) RELATIVE Mono_Cradle4
+  AT (0, 0, 0) RELATIVE Mono_Cradle4 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle4
 
   COMPONENT monochromator_4_6 = COPY(monochromator_1_6)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot4 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle4
+AT (OneDownPosY1*0.001,  0, OneDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle4
+
 
   COMPONENT monochromator_4_7 = COPY(monochromator_1_7)
- AT (0.024390, 0, 0.01815) RELATIVE Zrot4 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle4
-
+AT (TwoDownPosY1*0.001,  0, TwoDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle4
 
   COMPONENT monochromator_4_8 = COPY(monochromator_1_8)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot4 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle4
-
+AT (ThreeDownPosY1*0.001,  0, ThreeDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle4
 
   COMPONENT monochromator_4_9 = COPY(monochromator_1_9)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot4 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle4
-
+AT (FourDownPosY1*0.001,  0, FourDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle4
 
   COMPONENT monochromator_5_1 = COPY(monochromator_2_1)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot5 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle5
-
-  
+  AT (FourUpPosY2*0.001,  0, FourUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle5
 COMPONENT monochromator_5_2 = COPY(monochromator_2_2)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot5 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle5
+  AT (ThreeUpPosY2*0.001,  0, ThreeUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle5
 
 COMPONENT monochromator_5_3 = COPY(monochromator_2_3)
- AT (-0.024803, 0, -0.017581) RELATIVE Zrot5 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle5
-
+  AT (TwoUpPosY2*0.001,  0, TwoUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle5
 
   COMPONENT monochromator_5_4 = COPY(monochromator_2_4)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot5 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle5
+AT (OneUpPosY2*0.001,  0, OneUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle5
   
-
 COMPONENT monochromator_5_5 = COPY(monochromator_2_5)
- AT (0, 0, 0) RELATIVE Zrot5 ROTATED (0,0,0) RELATIVE Mono_Cradle5
+   AT (0, 0, 0) RELATIVE Mono_Cradle5 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle5
 
   COMPONENT monochromator_5_6 = COPY(monochromator_2_6)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot5 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle5
+AT (OneDownPosY2*0.001,  0, OneDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle5
 
   COMPONENT monochromator_5_7 = COPY(monochromator_2_7)
- AT (0.024390, 0, 0.01815) RELATIVE Zrot5 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle5
-
+AT (TwoDownPosY2*0.001,  0, TwoDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle5
 
   COMPONENT monochromator_5_8 = COPY(monochromator_2_8)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot5 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle5
-
+AT (ThreeDownPosY2*0.001,  0, ThreeDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle5
 
   COMPONENT monochromator_5_9 = COPY(monochromator_2_9)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot5 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle5
+AT (FourDownPosY2*0.001,  0, FourDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle5
 
-
-    COMPONENT monochromator_6_1 = COPY(monochromator_3_1)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot6 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle6
-
+COMPONENT monochromator_6_1 = COPY(monochromator_3_1)
+  AT (FourUpPosY3*0.001,  0, FourUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle6
   
 COMPONENT monochromator_6_2 = COPY(monochromator_3_2)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot6 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle6
+  AT (ThreeUpPosY3*0.001,  0, ThreeUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle6
 
 COMPONENT monochromator_6_3 = COPY(monochromator_3_3)
- AT (-0.024803, 0, -0.017581) RELATIVE Zrot6 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle6
-
+  AT (TwoUpPosY3*0.001,  0, TwoUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle6
 
   COMPONENT monochromator_6_4 = COPY(monochromator_3_4)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot6 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle6
+AT (OneUpPosY3*0.001,  0, OneUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle6
   
-
 COMPONENT monochromator_6_5 = COPY(monochromator_3_5)
- AT (0, 0, 0) RELATIVE Zrot6 ROTATED (0,0,0) RELATIVE Mono_Cradle6
+  AT (0, 0, 0) RELATIVE Mono_Cradle6 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle6
 
   COMPONENT monochromator_6_6 = COPY(monochromator_3_6)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot6 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle6
+AT (OneDownPosY3*0.001,  0, OneDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle6
 
   COMPONENT monochromator_6_7 = COPY(monochromator_3_7)
- AT (0.024390, 0, 0.01815) RELATIVE Zrot6 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle6
-
+AT (TwoDownPosY3*0.001,  0, TwoDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle6
 
   COMPONENT monochromator_6_8 = COPY(monochromator_3_8)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot6 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle6
+AT (ThreeDownPosY3*0.001,  0, ThreeDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle6
 
 
   COMPONENT monochromator_6_9 = COPY(monochromator_3_9)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot6 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle6
+AT (FourDownPosY3*0.001,  0, FourDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle6
 
-  
-  COMPONENT monochromator_7_1 = COPY(monochromator_1_1)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot7 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle7
 
+COMPONENT monochromator_7_1 = COPY(monochromator_1_1)
+  AT (FourUpPosY1*0.001,  0, FourUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle7
   
 COMPONENT monochromator_7_2 = COPY(monochromator_1_2)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot7 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle7
+  AT (ThreeUpPosY1*0.001,  0, ThreeUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle7
 
 COMPONENT monochromator_7_3 = COPY(monochromator_1_3)
- AT (-0.024803, 0, -0.017581) RELATIVE Zrot7 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle7
-
+  AT (TwoUpPosY1*0.001,  0, TwoUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle7
 
   COMPONENT monochromator_7_4 = COPY(monochromator_1_4)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot7 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle7
-  
+AT (OneUpPosY1*0.001,  0, OneUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle7  
 
 COMPONENT monochromator_7_5 = COPY(monochromator_1_5)
- AT (0, 0, 0) RELATIVE Zrot7 ROTATED (0,0,0) RELATIVE Mono_Cradle7
+  AT (0, 0, 0) RELATIVE Mono_Cradle7 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle7
 
   COMPONENT monochromator_7_6 = COPY(monochromator_1_6)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot7 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle7
+AT (OneDownPosY1*0.001,  0, OneDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle7
+
 
   COMPONENT monochromator_7_7 = COPY(monochromator_1_7)
- AT (0.024390, 0, 0.01815) RELATIVE Zrot7 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle7
-
+AT (TwoDownPosY1*0.001,  0, TwoDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle7
 
   COMPONENT monochromator_7_8 = COPY(monochromator_1_8)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot7 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle7
-
+AT (ThreeDownPosY1*0.001,  0, ThreeDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle7
 
   COMPONENT monochromator_7_9 = COPY(monochromator_1_9)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot7 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle7
-
+AT (FourDownPosY1*0.001,  0, FourDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle7
 
   COMPONENT monochromator_8_1 = COPY(monochromator_2_1)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot8 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle8
-
-  
+  AT (FourUpPosY2*0.001,  0, FourUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle8
 COMPONENT monochromator_8_2 = COPY(monochromator_2_2)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot8 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle8
+  AT (ThreeUpPosY2*0.001,  0, ThreeUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle8
 
 COMPONENT monochromator_8_3 = COPY(monochromator_2_3)
- AT (-0.024803, 0, -0.017581) RELATIVE Zrot8 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle8
-
+  AT (TwoUpPosY2*0.001,  0, TwoUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle8
 
   COMPONENT monochromator_8_4 = COPY(monochromator_2_4)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot8 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle8
+AT (OneUpPosY2*0.001,  0, OneUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle8
   
-
 COMPONENT monochromator_8_5 = COPY(monochromator_2_5)
- AT (0, 0, 0) RELATIVE Zrot8 ROTATED (0,0,0) RELATIVE Mono_Cradle8
+   AT (0, 0, 0) RELATIVE Mono_Cradle8 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle8
 
   COMPONENT monochromator_8_6 = COPY(monochromator_2_6)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot8 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle8
+AT (OneDownPosY2*0.001,  0, OneDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle8
 
   COMPONENT monochromator_8_7 = COPY(monochromator_2_7)
- AT (0.024390, 0, 0.01815) RELATIVE Zrot8 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle8
-
+AT (TwoDownPosY2*0.001,  0, TwoDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle8
 
   COMPONENT monochromator_8_8 = COPY(monochromator_2_8)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot8 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle8
-
+AT (ThreeDownPosY2*0.001,  0, ThreeDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle8
 
   COMPONENT monochromator_8_9 = COPY(monochromator_2_9)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot8 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle8
+AT (FourDownPosY2*0.001,  0, FourDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle8
 
-
-    COMPONENT monochromator_9_1 = COPY(monochromator_3_1)
-  AT (-0.050007, 0, -0.034582) RELATIVE Zrot9 ROTATED (0,-4*dphi1,0) RELATIVE Mono_Cradle9
-
+COMPONENT monochromator_9_1 = COPY(monochromator_3_1)
+  AT (FourUpPosY3*0.001,  0, FourUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle9
   
 COMPONENT monochromator_9_2 = COPY(monochromator_3_2)
-  AT (-0.037356, 0, -0.026154) RELATIVE Zrot9 ROTATED (0,-3*dphi1,0) RELATIVE Mono_Cradle9
+  AT (ThreeUpPosY3*0.001,  0, ThreeUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle9
 
 COMPONENT monochromator_9_3 = COPY(monochromator_3_3)
- AT (-0.024803, 0, -0.017581) RELATIVE Zrot9 ROTATED (0,-2*dphi1,0) RELATIVE Mono_Cradle9
-
+  AT (TwoUpPosY3*0.001,  0, TwoUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle9
 
   COMPONENT monochromator_9_4 = COPY(monochromator_3_4)
-  AT (-0.012351 , 0, -0.008862) RELATIVE Zrot9 ROTATED (0,-dphi1,0) RELATIVE Mono_Cradle9
+AT (OneUpPosY3*0.001,  0, OneUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle9
   
-
 COMPONENT monochromator_9_5 = COPY(monochromator_3_5)
- AT (0, 0, 0) RELATIVE Zrot9 ROTATED (0,0,0) RELATIVE Mono_Cradle9
+  AT (0, 0, 0) RELATIVE Mono_Cradle9 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle9
 
   COMPONENT monochromator_9_6 = COPY(monochromator_3_6)
-  AT (0.012247, 0, 0.009004) RELATIVE Zrot9 ROTATED (0,dphi1,0) RELATIVE Mono_Cradle9
+AT (OneDownPosY3*0.001,  0, OneDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle9
 
   COMPONENT monochromator_9_7 = COPY(monochromator_3_7)
- AT (0.024390, 0, 0.01815) RELATIVE Zrot9 ROTATED (0,2*dphi1,0) RELATIVE Mono_Cradle9
-
+AT (TwoDownPosY3*0.001,  0, TwoDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle9
 
   COMPONENT monochromator_9_8 = COPY(monochromator_3_8)
-  AT (0.036426, 0, 0.027435) RELATIVE Zrot9 ROTATED (0,3*dphi1,0) RELATIVE Mono_Cradle9
-
+AT (ThreeDownPosY3*0.001,  0, ThreeDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle9
 
   COMPONENT monochromator_9_9 = COPY(monochromator_3_9)
-  AT (0.048353, 0, 0.036859) RELATIVE Zrot9 ROTATED (0,4*dphi1,0) RELATIVE Mono_Cradle9
+AT (FourDownPosY3*0.001,  0, FourDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle9
 
- 
   
-  
+
+   
 COMPONENT Mono_Out1 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle1 ROTATED(0,TTA,0) RELATIVE Zrot1
+AT (0,0,0) RELATIVE Mono_Cradle1 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle1
 
 COMPONENT Mono_Out2 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle2 ROTATED(0,TTA,0) RELATIVE Zrot2
+AT (0,0,0) RELATIVE Mono_Cradle2 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle2
 
 COMPONENT Mono_Out3 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle3 ROTATED(0,TTA,0) RELATIVE Zrot3
+AT (0,0,0) RELATIVE Mono_Cradle3 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle3
 
-COMPONENT Mono_Out4 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle4 ROTATED(0,TTA,0) RELATIVE Zrot4
+  COMPONENT Mono_Out4 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle4 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle4
 
-COMPONENT Mono_Out5 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle5 ROTATED(0,TTA,0) RELATIVE Zrot5
+    COMPONENT Mono_Out5 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle5 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle5
 
-COMPONENT Mono_Out6 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle6 ROTATED(0,TTA,0) RELATIVE Zrot6
+  COMPONENT Mono_Out6 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle6 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle6
 
+  COMPONENT Mono_Out7 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle7 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle7
 
-COMPONENT Mono_Out7 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle7 ROTATED(0,TTA,0) RELATIVE Zrot7
+  COMPONENT Mono_Out8 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle8 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle8
 
-COMPONENT Mono_Out8 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle8 ROTATED(0,TTA,0) RELATIVE Zrot8
-
-COMPONENT Mono_Out9 = Arm()
-AT (0,0,0) RELATIVE Mono_Cradle9 ROTATED(0,TTA,0) RELATIVE Zrot9
-
+  COMPONENT Mono_Out9 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle9 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle9
 
   
 /* 1st Shell of components around first set of analysers */
@@ -1497,7 +1524,7 @@ COMPONENT psd_monitor1 = PSD_monitor(
     xwidth=0.04,
     yheight=0.2976,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out1
-  GROUP shell1
+ GROUP shell1
   
 COMPONENT psd_monitor2 = PSD_monitor(
     filename="analyser2_psd", 
@@ -1553,14 +1580,14 @@ COMPONENT psd_monitor9 = PSD_monitor(
     xwidth=0.04,
     yheight=0.1886,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out9
-GROUP shell1
+GROUP shell1 
 
 COMPONENT e_monitor1 = Monitor_nD(
     filename="analyser1_emon", 
     xwidth=0.04,
     yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out1
-  GROUP shell2
+   GROUP shell2
   
 COMPONENT e_monitor2 = Monitor_nD(
     filename="analyser2_emon", 
@@ -1615,8 +1642,136 @@ COMPONENT e_monitor9 = Monitor_nD(
     filename="analyser9_emon", 
     xwidth=0.04,
     yheight=0.1886,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out9
+    AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell2
+
+ 
+COMPONENT BIGpsd_monitor1 = PSD_monitor(
+    filename="BIGanalyser1_psd", 
+    xwidth=0.1,
+    yheight=2*0.2976,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+ GROUP shell3
+  
+COMPONENT BIGpsd_monitor2 = PSD_monitor(
+    filename="BIGanalyser2_psd", 
+    xwidth=0.1,
+    yheight=2*0.3048,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell3
+  
+COMPONENT BIGpsd_monitor3 = PSD_monitor(
+    filename="BIGanalyser3_psd", 
+    xwidth=0.1,
+    yheight=2*0.1886,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell3
+
+COMPONENT BIGpsd_monitor4 = PSD_monitor(
+    filename="BIGanalyser4_psd", 
+    xwidth=0.1,
+    yheight=2*0.2976, restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+  GROUP shell3
+  
+COMPONENT BIGpsd_monitor5 = PSD_monitor(
+    filename="BIGanalyser5_psd", 
+    xwidth=0.1,
+    yheight=2*0.3048,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell3
+  
+COMPONENT BIGpsd_monitor6 = PSD_monitor(
+    filename="BIGanalyser6_psd", 
+    xwidth=0.1,
+    yheight=2*0.1886,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell3
+
+COMPONENT BIGpsd_monitor7 = PSD_monitor(
+    filename="BIGanalyser7_psd", 
+    xwidth=0.1,
+    yheight=2*0.2976, restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+  GROUP shell3
+  
+COMPONENT BIGpsd_monitor8 = PSD_monitor(
+    filename="BIGanalyser8_psd", 
+    xwidth=0.1,
+    yheight=2*0.3048,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell3
+  
+COMPONENT BIGpsd_monitor9 = PSD_monitor(
+    filename="BIGanalyser9_psd", 
+    xwidth=0.1,
+    yheight=2*0.1886,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell3 
+
+COMPONENT BIGe_monitor1 = Monitor_nD(
+    filename="BIGanalyser1_emon", 
+    xwidth=0.1,
+    yheight=2*0.2976,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+   GROUP shell4
+  
+COMPONENT BIGe_monitor2 = Monitor_nD(
+    filename="BIGanalyser2_emon", 
+    xwidth=0.1,
+    yheight=2*0.3048,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell4
+  
+COMPONENT BIGe_monitor3 = Monitor_nD(
+    filename="BIGanalyser3_emon", 
+    xwidth=0.1,
+    yheight=2*0.1886,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell4
+ 
+COMPONENT BIGe_monitor4 = Monitor_nD(
+    filename="BIGanalyser4_emon", 
+    xwidth=0.1,
+   yheight=2*0.2976,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+  GROUP shell4
+  
+COMPONENT BIGe_monitor5 = Monitor_nD(
+    filename="BIGanalyser5_emon", 
+    xwidth=0.1,
+    yheight=2*0.3048,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell4
+  
+COMPONENT BIGe_monitor6 = Monitor_nD(
+    filename="BIGanalyser6_emon", 
+    xwidth=0.1,
+    yheight=2*0.1886,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell4
+
+  COMPONENT BIGe_monitor7 = Monitor_nD(
+    filename="BIGanalyser7_emon", 
+    xwidth=0.1,
+    yheight=2*0.2976,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+  GROUP shell4
+  
+COMPONENT BIGe_monitor8 = Monitor_nD(
+    filename="BIGanalyser8_emon", 
+    xwidth=0.1,
+    yheight=2*0.3048,options="E bins=128 limits=[0 10]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell4
+  
+COMPONENT BIGe_monitor9 = Monitor_nD(
+    filename="BIGanalyser9_emon", 
+    xwidth=0.1,
+    yheight=2*0.1886,options="E bins=128 limits=[0 10]",restore_neutron=1)
+    AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell4
+   
 FINALLY
 %{
 %}
