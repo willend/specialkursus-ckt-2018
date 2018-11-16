@@ -28,7 +28,7 @@ Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
 sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15,REP=1)
+INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15,REP=1,focus_EF=5)
 
 DECLARE
 %{
@@ -824,7 +824,7 @@ COMPONENT Magnon = Magnon_bcc(
     FM = FerroMagnet,
     target_index=10,
     focus_xw=sample_focusW, 
-    focus_yh=sample_focusH)
+    focus_yh=sample_focusH,focus_ef=focus_EF)
   //focus_aw=180, /* For statistics considerations, only a small angular */
   //focus_ah=20)   /* band arround sample is illuminated */
   WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
