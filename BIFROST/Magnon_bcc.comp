@@ -54,6 +54,7 @@
 * J1:     [meV] spin-spin interaction 1 (nn)
 * J2:     [meV] spin-spin interaction 2 (nnn)
 * D:      [mev] single ion anisotropy
+* focus_ef [meV]      For use in backscattering geometry, picks closest solution if focus_ef nonzero
 * focus_r: [m]        Radius of sphere containing target.
 * focus_xw: [m]       horiz. dimension of a rectangular area
 * focus_yh: [m]       vert.  dimension of a rectangular area
@@ -79,7 +80,7 @@
 DEFINE COMPONENT Magnon_bcc
 DEFINITION PARAMETERS ()
 SETTING PARAMETERS (radius,yheight,sigma_abs,sigma_inc,a,FM=0,J1,J2,D,s,DW,T,
-target_x=0, target_y=0, target_z=0, int target_index=0,F2=1,focus_r=0,focus_xw=0,focus_yh=0,focus_aw=0,focus_ah=0,verbose=0)
+		    target_x=0, target_y=0, target_z=0, int target_index=0,F2=1,focus_r=0,focus_xw=0,focus_yh=0,focus_aw=0,focus_ah=0,verbose=0, focus_ef=0)
 OUTPUT PARAMETERS (V_rho, V_my_s, V_my_a_v, DV, parms)
 /* Neutron parameters: (x,y,z,vx,vy,vz,t,sx,sy,sz,p) */
 SHARE
@@ -331,9 +332,10 @@ TRACE
   double omega;              /* energy transfer */
   int nf, index;                   /* Number of allowed final velocities */
   double vf_list[2];             /* List of allowed final velocities */
+  double ef_list[2];             /* List of allowed final energies */
   double J_factor, coherence_factor;            /* Jacobian from delta fnc.s in cross section  + AFM coherence factor */
   double f1, f2;            /* probed values of omega_q minus omega */
-  double p1,p2,p3,p4,p5;    /* temporary multipliers */
+  double p1,p2,p3,p4,p5,p6;    /* temporary multipliers */
 
   if(cylinder_intersect(&t0, &t1, x, y, z, vx, vy, vz, radius, yheight))
   {
@@ -384,7 +386,22 @@ TRACE
       parms[14]=0;
       parms[15]=FM;
     findroots(0, v_i, v_i+SE2V*sqrt(8*s*fabs(J1)+6*s*fabs(J2)+s*fabs(D)), vf_list, &nf, omega_q, parms);
-    index=(int)floor(rand01()*nf);
+    p6=1;
+    if (!focus_ef) {
+      index=(int)floor(rand01()*nf);
+    } else {
+      int kk;
+      double def=1e9;
+      double defn;
+      for (kk=0; kk<nf;kk++) {
+	defn=fabs(vf_list[kk]*vf_list[kk]*VS2E-focus_ef);
+	if (defn<=def) {
+	  def=defn;
+	  index=kk;
+	}
+      }
+      p6=1.0/nf;
+    }
 //fatalerror("1 line after after call of findroots");
 /*    printf("Root index: %i %g \n", index, vf_list[index]); */
     v_f=vf_list[index];
@@ -429,7 +446,7 @@ TRACE
         /* Cross section factor approx */
     p4 = 2*VS2E*v_f/J_factor;  /* Jacobian of delta functions in cross section */
     p5 = coherence_factor;  /* Cross section factor 2 */
-    p *= p1*p2*p3*p4*p5;
+    p *= p1*p2*p3*p4*p5*p6;
 
  if (verbose==1){    printf("p factors : %g %g %g %g %g Omega: %g \n", p1, p2, p3, p4, p5, omega);
       printf("J_factor %g l_full %g, v_f/v_i %g, DW %g, kappa2 %g, bose_factor%g, fabs(omega) %g, coherence %g \n",
