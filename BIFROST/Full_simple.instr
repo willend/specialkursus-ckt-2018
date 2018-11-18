@@ -763,9 +763,9 @@ ThreeDownPosY2 = -28.802;
 FourDownPosX2 = 48.813;
 FourDownPosY2 = -38.685;
 
-sprintf(monopts1,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-15 15]",TOFmin,TOFmax,TOFbins,30);
-sprintf(monopts2,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-15 15]",TOFmin,TOFmax,TOFbins,30);
-sprintf(monopts3,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-9.5 9.5]",TOFmin,TOFmax,TOFbins,19);
+sprintf(monopts1,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-0.15 0.15]",TOFmin,TOFmax,TOFbins,30);
+sprintf(monopts2,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-0.15 0.15]",TOFmin,TOFmax,TOFbins,30);
+sprintf(monopts3,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-0.095 0.095]",TOFmin,TOFmax,TOFbins,19);
  %}
 TRACE
 
