@@ -27,8 +27,14 @@ cx = 6.71, cy = 0,    cz =  0,
 Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
-sample_J=2, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
-INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15,focus_EF=5)
+sample_J1=1.5, sample_J2=0.5, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
+INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15,focus_EF=5,
+TOFmin=0.1172,TOFmax=0.186,int TOFbins=1024)
+
+/* TOFmax calculated from:
+   Latest sample arrival time ~181000 \mu s = 0,181 s @ WL mand 2.75-4.4A 
+   + 1.5 * travel time for longest flight path for a 5meV neutron. V=sqrt(E)*SE2V = 978.04 m/s. 1.5 *  (1.701 + 1.623 m) / ( 987.04 m/s) = 0.005 s
+   ~ 0.186 s */
 
 DECLARE
 %{
@@ -186,7 +192,9 @@ int scatt_5meV;
  double FourDownPosX2,FourDownPosY2,ThreeDownPosX2,ThreeDownPosY2,TwoDownPosX2,TwoDownPosY2,OneDownPosX2,OneDownPosY2;
  double FourUpPosX3,FourUpPosY3,ThreeUpPosX3,ThreeUpPosY3,TwoUpPosX3,TwoUpPosY3,OneUpPosX3,OneUpPosY3;
  double FourDownPosX3,FourDownPosY3,ThreeDownPosX3,ThreeDownPosY3,TwoDownPosX3,TwoDownPosY3,OneDownPosX3,OneDownPosY3;
-
+ char monopts1[128];
+ char monopts2[128];
+ char monopts3[128];
 %}
 
 INITIALIZE
@@ -755,26 +763,10 @@ ThreeDownPosY2 = -28.802;
 FourDownPosX2 = 48.813;
 FourDownPosY2 = -38.685;
 
-/* Spatial positions for the mono blades - module 3*/
-FourUpPosX3 = -51.087;
-FourUpPosY3 = 38.165;
-ThreeUpPosX3 = -38.150;
-ThreeUpPosY3 = 28.846;
-TwoUpPosX3 = -25.323;
-TwoUpPosY3 = 19.378;
-OneUpPosX3 = -12.605;
-OneUpPosY3 = 9.762;
-OneDownPosX3 = 12.492;
-OneDownPosY3 = -9.907;
-TwoDownPosX3 = 24.868;
-TwoDownPosY3 = -19.958;
-ThreeDownPosX3 = 37.127;
-ThreeDownPosY3 = -30.152;
-FourDownPosX3 = 49.267;
-FourDownPosY3 = -40.487;
-
- 
-%}
+sprintf(monopts1,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-15 15]",TOFmin,TOFmax,TOFbins,30);
+sprintf(monopts2,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-15 15]",TOFmin,TOFmax,TOFbins,30);
+sprintf(monopts3,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-9.5 9.5]",TOFmin,TOFmax,TOFbins,19);
+ %}
 TRACE
 
 COMPONENT Origin = Progress_bar()
@@ -947,8 +939,8 @@ COMPONENT Magnon = Magnon_bcc(
     sigma_abs=0, 
     sigma_inc=1, 
     a=aa,  
-    J1=sample_J, 
-    J2=0,
+    J1=sample_J1, 
+    J2=sample_J2,
     D=0.0,
     s=1,
     DW=1,
@@ -1715,6 +1707,70 @@ COMPONENT psd_monitor9 = PSD_monitor(
 AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell1 
 
+COMPONENT t_monitor1 = Monitor_nD(
+    filename="analyser1_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts1,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+GROUP shell3
+
+COMPONENT t_monitor2 = Monitor_nD(
+    filename="analyser2_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts2,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell3
+
+  COMPONENT t_monitor3 = Monitor_nD(
+    filename="analyser3_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts3,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell3
+
+  COMPONENT t_monitor4 = Monitor_nD(
+    filename="analyser4_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts1,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+GROUP shell3
+
+  COMPONENT t_monitor5 = Monitor_nD(
+    filename="analyser5_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts2,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell3
+
+  COMPONENT t_monitor6 = Monitor_nD(
+    filename="analyser6_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts3,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell3
+
+    COMPONENT t_monitor7 = Monitor_nD(
+    filename="analyser7_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts1,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+GROUP shell3
+  
+    COMPONENT t_monitor8 = Monitor_nD(
+    filename="analyser8_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts2,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell3
+  
+    COMPONENT t_monitor9 = Monitor_nD(
+    filename="analyser9_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts3,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell3
+
+
 COMPONENT e_monitor1 = Monitor_nD(
     filename="analyser1_emon", 
     xwidth=0.04,
@@ -1778,133 +1834,7 @@ COMPONENT e_monitor9 = Monitor_nD(
     AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell2
 
- 
-COMPONENT BIGpsd_monitor1 = PSD_monitor(
-    filename="BIGanalyser1_psd", 
-    xwidth=0.1,
-    yheight=2*0.2976,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out1
- GROUP shell3
-  
-COMPONENT BIGpsd_monitor2 = PSD_monitor(
-    filename="BIGanalyser2_psd", 
-    xwidth=0.1,
-    yheight=2*0.3048,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out2
-GROUP shell3
-  
-COMPONENT BIGpsd_monitor3 = PSD_monitor(
-    filename="BIGanalyser3_psd", 
-    xwidth=0.1,
-    yheight=2*0.1886,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out3
-GROUP shell3
 
-COMPONENT BIGpsd_monitor4 = PSD_monitor(
-    filename="BIGanalyser4_psd", 
-    xwidth=0.1,
-    yheight=2*0.2976, restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out4
-  GROUP shell3
-  
-COMPONENT BIGpsd_monitor5 = PSD_monitor(
-    filename="BIGanalyser5_psd", 
-    xwidth=0.1,
-    yheight=2*0.3048,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out5
-GROUP shell3
-  
-COMPONENT BIGpsd_monitor6 = PSD_monitor(
-    filename="BIGanalyser6_psd", 
-    xwidth=0.1,
-    yheight=2*0.1886,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out6
-GROUP shell3
-
-COMPONENT BIGpsd_monitor7 = PSD_monitor(
-    filename="BIGanalyser7_psd", 
-    xwidth=0.1,
-    yheight=2*0.2976, restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out7
-  GROUP shell3
-  
-COMPONENT BIGpsd_monitor8 = PSD_monitor(
-    filename="BIGanalyser8_psd", 
-    xwidth=0.1,
-    yheight=2*0.3048,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out8
-GROUP shell3
-  
-COMPONENT BIGpsd_monitor9 = PSD_monitor(
-    filename="BIGanalyser9_psd", 
-    xwidth=0.1,
-    yheight=2*0.1886,restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out9
-GROUP shell3 
-
-COMPONENT BIGe_monitor1 = Monitor_nD(
-    filename="BIGanalyser1_emon", 
-    xwidth=0.1,
-    yheight=2*0.2976,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out1
-   GROUP shell4
-  
-COMPONENT BIGe_monitor2 = Monitor_nD(
-    filename="BIGanalyser2_emon", 
-    xwidth=0.1,
-    yheight=2*0.3048,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out2
-GROUP shell4
-  
-COMPONENT BIGe_monitor3 = Monitor_nD(
-    filename="BIGanalyser3_emon", 
-    xwidth=0.1,
-    yheight=2*0.1886,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out3
-GROUP shell4
- 
-COMPONENT BIGe_monitor4 = Monitor_nD(
-    filename="BIGanalyser4_emon", 
-    xwidth=0.1,
-   yheight=2*0.2976,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out4
-  GROUP shell4
-  
-COMPONENT BIGe_monitor5 = Monitor_nD(
-    filename="BIGanalyser5_emon", 
-    xwidth=0.1,
-    yheight=2*0.3048,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out5
-GROUP shell4
-  
-COMPONENT BIGe_monitor6 = Monitor_nD(
-    filename="BIGanalyser6_emon", 
-    xwidth=0.1,
-    yheight=2*0.1886,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out6
-GROUP shell4
-
-  COMPONENT BIGe_monitor7 = Monitor_nD(
-    filename="BIGanalyser7_emon", 
-    xwidth=0.1,
-    yheight=2*0.2976,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out7
-  GROUP shell4
-  
-COMPONENT BIGe_monitor8 = Monitor_nD(
-    filename="BIGanalyser8_emon", 
-    xwidth=0.1,
-    yheight=2*0.3048,options="E bins=128 limits=[0 10]",restore_neutron=1)
-AT (0, 0, 1.623) RELATIVE Mono_Out8
-GROUP shell4
-  
-COMPONENT BIGe_monitor9 = Monitor_nD(
-    filename="BIGanalyser9_emon", 
-    xwidth=0.1,
-    yheight=2*0.1886,options="E bins=128 limits=[0 10]",restore_neutron=1)
-    AT (0, 0, 1.623) RELATIVE Mono_Out9
-GROUP shell4
-   
 FINALLY
 %{
 %}
