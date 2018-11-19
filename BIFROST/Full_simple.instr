@@ -27,9 +27,9 @@ cx = 6.71, cy = 0,    cz =  0,
 Omega=0,
 TwoTheta=40,
 lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
-sample_J1=1.5, sample_J2=0.5, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
+sample_J1=1.5, sample_J2=0, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
 INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15,focus_EF=5,
-TOFmin=0.1172,TOFmax=0.186,int TOFbins=1024)
+TOFmin=0.1172,TOFmax=0.186,int TOFbins=256)
 
 /* TOFmax calculated from:
    Latest sample arrival time ~181000 \mu s = 0,181 s @ WL mand 2.75-4.4A 
@@ -195,6 +195,8 @@ int scatt_5meV;
  char monopts1[128];
  char monopts2[128];
  char monopts3[128];
+ char monoptsevent[128];
+
 %}
 
 INITIALIZE
@@ -766,7 +768,10 @@ FourDownPosY2 = -38.685;
 sprintf(monopts1,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-0.15 0.15]",TOFmin,TOFmax,TOFbins,30);
 sprintf(monopts2,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-0.15 0.15]",TOFmin,TOFmax,TOFbins,30);
 sprintf(monopts3,"TOF limits=[%g %g] bins=%i, y bins=%i limits=[-0.095 0.095]",TOFmin,TOFmax,TOFbins,19);
- %}
+
+sprintf(monoptsevent,"TOF, y, user1,list all neutrons");
+
+%}
 TRACE
 
 COMPONENT Origin = Progress_bar()
@@ -923,6 +928,7 @@ COMPONENT v_sample = Incoherent(
    focus_xw=sample_focusW, 
    focus_yh=sample_focusH)
 WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
+  ROTATED (0,Omega,0) RELATIVE SamplePos
 EXTEND %{
   if (mcipINCOH && mcipINCOHspread) {
     double scale=rand01();
@@ -952,7 +958,7 @@ COMPONENT Magnon = Magnon_bcc(
     focus_yh=sample_focusH,focus_ef=focus_EF)
   //focus_aw=180, /* For statistics considerations, only a small angular */
   //focus_ah=20)   /* band arround sample is illuminated */
-  WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0, 0,0) RELATIVE SamplePos
+  WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0,0,0) RELATIVE SamplePos
   ROTATED (0, Omega, 0) RELATIVE SamplePos
 EXTEND %{
    p/=mcipinelastic;
@@ -979,10 +985,10 @@ EXTEND %{
 %}  
 
   COMPONENT Sqqw = Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-5,Emin=0, Emax=10, yheight=0.1)
-AT (0,0,0) RELATIVE Magnon
+  AT (0,0,0) RELATIVE Magnon ROTATED (0,0,0) RELATIVE Magnon
   
 COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
-AT (0,0,0) RELATIVE Magnon
+AT (0,0,0) RELATIVE Magnon ROTATED (0,0,0) RELATIVE Magnon
 
 COMPONENT Sample_out1 = Arm()
   AT (0,0,0) RELATIVE SamplePos
@@ -1644,6 +1650,8 @@ AT (0,0,0) RELATIVE Mono_Cradle9 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle9
   
 /* 1st Shell of components around first set of analysers */
 /* Catching the scattered beam... */
+
+  
 COMPONENT psd_monitor1 = PSD_monitor(
     filename="analyser1_psd", 
     xwidth=0.04,
@@ -1668,7 +1676,7 @@ GROUP shell1
 COMPONENT psd_monitor4 = PSD_monitor(
     filename="analyser4_psd", 
     xwidth=0.04,
-    yheight=0.2976, restore_neutron=1)
+    yheight=0.2976, restore_neutron=1,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out4
   GROUP shell1
   
@@ -1689,7 +1697,7 @@ GROUP shell1
 COMPONENT psd_monitor7 = PSD_monitor(
     filename="analyser7_psd", 
     xwidth=0.04,
-    yheight=0.2976, restore_neutron=1)
+    yheight=0.2976, restore_neutron=1,restore_neutron=1)
 AT (0, 0, 1.623) RELATIVE Mono_Out7
   GROUP shell1
   
@@ -1707,6 +1715,54 @@ COMPONENT psd_monitor9 = PSD_monitor(
 AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell1 
 
+
+COMPONENT event_monitor1 = Monitor_nD(
+    filename="event1", 
+    xwidth=0.04, username1="Sample-rotation",user2=TwoTheta, username2="A4", user3=1, username3="Bank-ID",
+    yheight=0.2976,options="auto TOF y energy user1 user2 user3, list all neutrons",restore_neutron=1 )
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+GROUP shell0
+
+COMPONENT event_monitor2 = Monitor_nD(
+    filename="event2", 
+    xwidth=0.04, user1=Omega, username1="Sample-rotation",user2=TwoTheta+10, username2="A4", user3=2, username3="Bank-ID",
+    yheight=0.3048,options="auto TOF y energy user1 user2 user3, list all neutrons",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell0
+
+  COMPONENT event_monitor3 = Monitor_nD(
+    filename="event3", 
+    xwidth=0.04, user1=Omega, username1="Sample rotation",user2=TwoTheta+20, username2="A4", user3=3, username3="Bank ID",
+    yheight=0.1886,options="auto TOF y energy user1 user2 user3, list all neutrons",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell0
+
+COMPONENT event_monitor4 = COPY(event_monitor1)(user2=TwoTheta+30,user3=4,filename="event4")
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+GROUP shell0
+
+COMPONENT event_monitor5 = COPY(event_monitor2)(user2=TwoTheta+40,user3=5,filename="event5")
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell0
+
+COMPONENT event_monitor6 = COPY(event_monitor3)(user2=TwoTheta+50,user3=6,filename="event6")
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell0
+
+
+COMPONENT event_monitor7 = COPY(event_monitor1)(user2=TwoTheta+60,user3=7,filename="event7")
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+GROUP shell0
+
+COMPONENT event_monitor8 = COPY(event_monitor2)(user2=TwoTheta+70,user3=8,filename="event8")
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell0
+
+COMPONENT event_monitor9 = COPY(event_monitor3)(user2=TwoTheta+80,user3=9,filename="event9")
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell0
+
+  
 COMPONENT t_monitor1 = Monitor_nD(
     filename="analyser1_tmon", 
     xwidth=0.04,
@@ -1770,7 +1826,6 @@ GROUP shell3
 AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell3
 
-
 COMPONENT e_monitor1 = Monitor_nD(
     filename="analyser1_emon", 
     xwidth=0.04,
@@ -1833,8 +1888,7 @@ COMPONENT e_monitor9 = Monitor_nD(
     yheight=0.1886,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
     AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell2
-
-
+  
 FINALLY
 %{
 %}
