@@ -1715,7 +1715,7 @@ COMPONENT psd_monitor9 = PSD_monitor(
 AT (0, 0, 1.623) RELATIVE Mono_Out9
 GROUP shell1 
 
-
+  /*
 COMPONENT event_monitor1 = Monitor_nD(
     filename="event1", 
     xwidth=0.04, username1="Sample-rotation",user2=TwoTheta, username2="A4", user3=1, username3="Bank-ID",
@@ -1761,7 +1761,7 @@ GROUP shell0
 COMPONENT event_monitor9 = COPY(event_monitor3)(user2=TwoTheta+80,user3=9,filename="event9")
 AT (0, 0, 1.623) RELATIVE Mono_Out5
 GROUP shell0
-
+  */
   
 COMPONENT t_monitor1 = Monitor_nD(
     filename="analyser1_tmon", 
