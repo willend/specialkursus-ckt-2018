@@ -30,11 +30,11 @@ dEmatrix = zeros(46,30,256);
 
 %The scattering plane coordinates for the magnon sample.
 Hbar = zeros(46,30,256);  %The symmetric Q_H direction with the Miller index H.
-Kbar = zeros(46,30,246);  %The symmetric Q_L direction with the Miller index L.
+Kbar = zeros(46,30,256);  %The symmetric Q_L direction with the Miller index L.
 
 figure(1)
 hold on
-for nn = 30
+for nn = 40
     cd(path)
     cd(num2str(nn))
     %d = dir(fullfile(path,'**\analyser1_tmon.t_y'));
@@ -87,33 +87,40 @@ for nn = 30
     %The scattering vector size
     Q = sqrt(ki.^2+kf^2-2*cos(TwoTheta+alpha)'.*ki.*kf)./1e10;
     
+    %The scattering vectors 
+    %Hbar_v = ((ki - kf.*cos(TwoTheta + alpha)').*cos(deg2rad(nn)) + kf.*sin(TwoTheta+alpha)'.*sin(deg2rad(nn)))./1e10; 
+    %Kbar_v = ((ki - kf.*cos(TwoTheta + alpha)').*sin(deg2rad(nn)) - kf.*sin(TwoTheta+alpha)'.*cos(deg2rad(nn)))./1e10;
+    
+    Hbar_v = Q.*sin(TwoTheta + alpha)'.*cos(deg2rad(2*nn)) + Q.*cos(TwoTheta + alpha)'.*sin(deg2rad(2*nn));
+    Kbar_v = Q.*sin(TwoTheta + alpha)'.*sin(deg2rad(2*nn)) - Q.*cos(TwoTheta + alpha)'.*cos(deg2rad(2*nn));
+    
     DeltaE(find(t==0))=NaN;
     Q(find(t==0))=NaN;
-    
+    Hbar_v(find(t==0))=NaN;
+    Kbar_v(find(t==0))=NaN;
+
     Qmatrix(nn+1,:,:) = Q;
     dEmatrix(nn+1,:,:) = DeltaE;
-    
-    
-   % H = [1:4];
-    %K = [1:4];
-   % for s = 1:size(H)
-        
-  %  end
-    
+    Hbar(nn+1,:,:) = Hbar_v;
+    Kbar(nn+1,:,:) = Kbar_v;
  
 %     figure(1)
 %     plot(Data)
 %     view(0,90)
 %     xlim([tof(1) tof(end)])
 %     ylim([y(1) y(end)])
-% %     figure(2)
-    plot(Q,DeltaE,'.','color',[0,nn,nn]*0.02)
-    xlabel('Q [Å^{-1}]')
-    ylabel('Energy [meV]')
-    %xlim([0 1])
+%     figure(1)
+%     plot(Q,DeltaE,'.','color',[0,nn,nn]*0.02)
+%     xlabel('Q [Å^{-1}]')
+%     ylabel('Energy [meV]')
+%     xlim([0 1])
+    
+    plot(Hbar_v,Kbar_v,'.','color',[0,nn,nn]*0.02)
+    xlabel('Q_H [Å^{-1}]')
+    ylabel('Q_K [Å^{-1}]')
 end
 
-%plot(Qmatrix,dEmatrix,'o')
+%plot(Hbar(nn+1,:,:),Kbar(nn+1,:,:))
 %     plot(Qmatrix(40,:,:),dEmatrix(40,:,:),'.','color',[0,0,0])
 %     xlabel('Q [Å^{-1}]')
 %     ylabel('Energy [meV]')
