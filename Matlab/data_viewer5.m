@@ -1,6 +1,6 @@
 % hygge mcstas
 close all
-clear all
+%clear all
 
 NuN=NaN;
 
@@ -30,15 +30,15 @@ wd = [0.2976 0.3048 0.3119];
 wad = wd.*Lsa./(Lsa + Lad);
 
 
-Qmatrix = zeros(46,30,256);
-dEmatrix = zeros(46,30,256);
+Qmatrix = zeros(30,30,256);
+dEmatrix = zeros(30,30,256);
 
 %The scattering plane coordinates for the magnon sample.
-Hbar = zeros(46,30,256);  %The symmetric Q_H direction with the Miller index H.
-Kbar = zeros(46,30,256);  %The symmetric Q_L direction with the Miller index L.
+Hbar = zeros(30,30,256);  %The symmetric Q_H direction with the Miller index H.
+Kbar = zeros(30,30,256);  %The symmetric Q_L direction with the Miller index L.
 
 %Empty intensity matrix
-In = zeros(46,30,256);
+In = zeros(30,30,256);
 
 tic
 figure(1)
@@ -47,7 +47,7 @@ hold on
 
 for nn = 0:29
     
-    for iii=0:1
+    for iii=0:0
         if mod(iii,2)==0
             path_i=path;
         else
@@ -116,13 +116,18 @@ for nn = 0:29
             Q = sqrt(ki.^2+kf^2-2*cos(TwoTheta+alpha+deg2rad(kkk*10)+deg2rad(iii*5))'.*ki.*kf)./1e10;
             Q(find(I==0))=NuN;
             
-            theta2 = acos((-kf^2+ki.^2+(Q*1e10).^2)./(2*ki.*Q*1e10));
-            %The scattering vectors
-            Hbar_v = ((ki - kf.*cos(TwoTheta + deg2rad(kkk*10) + deg2rad(iii*5) + alpha)').*cos(deg2rad(nn*2)) + kf.*sin(TwoTheta + deg2rad(kkk*10)+deg2rad(iii*5) + alpha)'.*sin(deg2rad(nn*2)))./1e10;
-            Kbar_v = ((ki - kf.*cos(TwoTheta + deg2rad(kkk*10) +deg2rad(iii*5)+ alpha)').*sin(deg2rad(nn*2)) - kf.*sin(TwoTheta + deg2rad(kkk*10)+deg2rad(iii*5) + alpha)'.*cos(deg2rad(nn*2)))./1e10;
-            %Hbar_v = Q.*cos(theta2).*cos(deg2rad(2*nn)) + Q.*sin(theta2).*sin(deg2rad(2*nn));
-            %Kbar_v = Q.*cos(theta2).*sin(deg2rad(2*nn)) - Q.*sin(theta2).*cos(deg2rad(2*nn));
+            beta = acos((-kf^2+ki.^2+(Q*1e10).^2)./(2*ki.*Q*1e10));
+            two_theta=TwoTheta+alpha+deg2rad(kkk*10)+deg2rad(iii*5);
+            phi=deg2rad(2*nn);
             
+%             Hbar_v=cos(phi).*Q.*cos(beta)-Q.*sin(phi).*sin(beta);
+%             Kbar_v=-Q.*sin(phi).*cos(beta)-Q.*cos(phi).*sin(beta);
+            
+            %The scattering vectors
+%             Hbar_v = ((ki - kf.*cos(TwoTheta + deg2rad(kkk*10) + deg2rad(iii*5) + alpha)').*cos(deg2rad(nn*2)) - kf.*sin(TwoTheta + deg2rad(kkk*10)+deg2rad(iii*5) + alpha)'.*sin(deg2rad(nn*2)))./1e10;
+%             Kbar_v = ((ki - kf.*cos(TwoTheta + deg2rad(kkk*10) +deg2rad(iii*5)+ alpha)').*sin(deg2rad(nn*2)) + kf.*sin(TwoTheta + deg2rad(kkk*10)+deg2rad(iii*5) + alpha)'.*cos(deg2rad(nn*2)))./1e10;
+            Hbar_v = Q.*cos(beta).*cos(phi) + Q.*sin(beta).*sin(phi);
+            Kbar_v = Q.*cos(beta).*sin(phi) - Q.*sin(beta).*cos(phi);
             %Hbar_v = Q.*sin(TwoTheta + deg2rad(kkk*10) + alpha)'.*cos(deg2rad(2*nn)) + Q.*cos(TwoTheta + deg2rad(kkk*10) + alpha)'.*sin(deg2rad(2*nn));
             %Kbar_v = Q.*sin(TwoTheta + deg2rad(kkk*10) + alpha)'.*sin(deg2rad(2*nn)) - Q.*cos(TwoTheta + deg2rad(kkk*10) + alpha)'.*cos(deg2rad(2*nn));
             
@@ -131,13 +136,17 @@ for nn = 0:29
             Hbar_v(find(t==0))=NuN;
             Kbar_v(find(t==0))=NuN;
             
-            %Hbar_s=zeros(30,256);Kbar_s=zeros(30,256);I_sis=zeros(30,256);
+%             Hbar_s=zeros(30,256);Kbar_s=zeros(30,256);I_sis=zeros(30,256);E_lem=zeros(30,256);
+% 
+%             vals = [2.7 2.8];
+%             Hbar_s(find(DeltaE>vals(1) & DeltaE<vals(2)))=Hbar_v(find(DeltaE>vals(1) & DeltaE<vals(2)));
+%             Kbar_s(find(DeltaE>vals(1) & DeltaE<vals(2)))=Kbar_v(find(DeltaE>vals(1) & DeltaE<vals(2)));
+%             %I_sis(find(DeltaE>vals(1) & DeltaE<vals(2)))=I(find(DeltaE>vals(1) & DeltaE<vals(2)));
+%             E_lem(find(DeltaE>vals(1) & DeltaE<vals(2)))=DeltaE(find(DeltaE>vals(1) & DeltaE<vals(2)));
+% 
+%             Hbar_s(find(t==0))=NuN;
+%             Kbar_s(find(t==0))=NuN;
             
-            %         vals = [.8 9.0];
-            %         Hbar_s(find(DeltaE>vals(1) & DeltaE<vals(2)))=Hbar_v(DeltaE>vals(1) & DeltaE<vals(2));
-            %         Kbar_s(find(DeltaE>vals(1) & DeltaE<vals(2)))=Kbar_v(find(DeltaE>vals(1) & DeltaE<vals(2)));
-            %         I_sis(find(DeltaE>vals(1) & DeltaE<vals(2)))=I(find(DeltaE>vals(1) & DeltaE<vals(2)));
-            %
             %         N=size(I_sis);
             %         if N(1)==0
             %             continue
@@ -149,14 +158,15 @@ for nn = 0:29
             Kbar(nn+1,:,:) = Kbar_v;
             
             %     figure(1)
-            %     plot(Data)
-            %     view(0,90)
-            %     xlim([tof(1) tof(end)])
-            %     ylim([y(1) y(end)])
+%             plot(Data)
+%             view(0,90)
+%             xlim([tof(1) tof(end)])
+%             ylim([y(1) y(end)])
             %     figure(1)
 %             plot(Q,DeltaE,'.','color',[0,nn,nn]*0.02)
 %             
 %             a = surf(Q,DeltaE,I);
+%             shading interp
 %             colormap jet
 %             colorbar
 %             a.EdgeColor='none';
@@ -165,15 +175,20 @@ for nn = 0:29
 %             
             %     xlim([0 1])
             
-            s=surf(Hbar_v,Kbar_v,I);
-            % %         colorMap = [linspace(0,1,256)',zeros(256,2)];
-            %         colormap(colorMap); colorbar;
-            %colormap(flipud(jet))
-            colorbar
+            %s=surf(Hbar_s,Kbar_s,E_lem);
+            %s=surf(Hbar_v,Kbar_v,DeltaE);
             s.EdgeColor='none';
+            shading interp
+             %slice(In,Hbar_v,Kbar_v,DeltaE)
+
+%             % %         colorMap = [linspace(0,1,256)',zeros(256,2)];
+%             %         colormap(colorMap); colorbar;
+%             %colormap(flipud(jet))
+%             colorbar
+%             s.EdgeColor='none';
             %plot(Hbar_v,Kbar_v,'.','color',[0,nn,nn]*0.02)
-            xlabel('Q_H [Å^{-1}]')
-            ylabel('Q_K [Å^{-1}]')
+             xlabel('Q_H [Å^{-1}]')
+             ylabel('Q_K [Å^{-1}]')
 %             title('Allah u akhbar')
             %         zlabel('\Delta E [meV]')
         end

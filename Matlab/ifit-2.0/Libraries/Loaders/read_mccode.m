@@ -1,6 +1,7 @@
 function data = read_mccode(filename)
 % read_mccode: load a McCode (McStas/McXtrace) simulation result
 %   data = read_mccode(filename)
+warning('off')
 %
 % This function imports a McCode simulation result
 % It returns the McStas simulation structures. 

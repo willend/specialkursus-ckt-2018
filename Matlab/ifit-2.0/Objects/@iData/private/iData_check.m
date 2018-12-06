@@ -1,6 +1,6 @@
 function in = iData_check(in)
 % iData_check: make consistency checks on iData object
-
+warning('off')
 if numel(in) > 1
   for index = 1:numel(in)
     in(index) = iData_check(in(index));
