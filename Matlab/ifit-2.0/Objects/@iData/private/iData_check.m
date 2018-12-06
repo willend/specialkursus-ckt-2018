@@ -1,6 +1,6 @@
 function in = iData_check(in)
 % iData_check: make consistency checks on iData object
-
+warning('off')
 if numel(in) > 1
   for index = 1:numel(in)
     in(index) = iData_check(in(index));
@@ -143,7 +143,7 @@ if ~isempty(in.Data) && (isempty(in.Alias.Values{1}) || isempty(in.Alias.Axis))
 
       % index: is the field and dimension index to assign the Signal
       if dims > 0
-        disp([ 'iData: Setting Signal="' fields '" with length ' num2str(dims) ' in object ' in.Tag ' "' in.Title '".' ]);
+        %disp([ 'iData: Setting Signal="' fields '" with length ' num2str(dims) ' in object ' in.Tag ' "' in.Title '".' ]);
         in.Alias.Values{1} = fields;
         
         % get potential attribute (in Data.Attributes fields)
@@ -204,7 +204,7 @@ if ~isempty(in.Data) && (isempty(in.Alias.Values{1}) || isempty(in.Alias.Axis))
           else
             label(in, index, fields_all{ax});
           end
-          disp([ 'iData: Setting Axis{' num2str(index) '} ="' fields_all{ax} '" with length ' num2str(sz(index)) ' in object ' in.Tag ' "' in.Title '".' ]);
+          %disp([ 'iData: Setting Axis{' num2str(index) '} ="' fields_all{ax} '" with length ' num2str(sz(index)) ' in object ' in.Tag ' "' in.Title '".' ]);
           clear val
         else
           break; % all previous axes must be defined. If one misses, we end the search

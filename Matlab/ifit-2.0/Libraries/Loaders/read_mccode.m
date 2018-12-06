@@ -1,6 +1,7 @@
 function data = read_mccode(filename)
 % read_mccode: load a McCode (McStas/McXtrace) simulation result
 %   data = read_mccode(filename)
+warning('off')
 %
 % This function imports a McCode simulation result
 % It returns the McStas simulation structures. 
@@ -253,7 +254,7 @@ function structure=mcplot_load_mccode(filename)
   
   if isempty(isMcCode), return; end % also returns when filename is empty
   
-  disp([ 'Loading ' filename ' (McCode format)' ]);
+  %disp([ 'Loading ' filename ' (McCode format)' ]);
   % with scilab, a call to fscanfMat will extract data and header
   fid = fopen(filename);
   if fid == -1, return; end % also returns when filename is empty
@@ -476,7 +477,7 @@ function data=mcplot_load_matlab(filename)
   end
   cd(cur_dir);
   data.filename = filename;
-  disp([ 'Loading ' filename ' (Matlab format)' ]);
+  %disp([ 'Loading ' filename ' (Matlab format)' ]);
 
   [data, parameters] = mcplot_load_structure(data);   % extract monitors recursively
 
@@ -512,7 +513,7 @@ function [data,parameters]=mcplot_load_structure(s,parameters)
   if isfield(s,'data') && isnumeric(s.data)                  % found 'data': we keep that
     data = s;
     data.Param = parameters;
-    disp([ 'Loading ' data.filename ]);
+    %disp([ 'Loading ' data.filename ]);
     data = { data };
     % return it as a structure
   elseif isfield(s,'name') && strcmp(s.name, 'parameters')
@@ -551,7 +552,7 @@ function data=mcplot_load_sim(filename)
   if isempty(isSimFile)
     return  % also returns when filename is empty
   end
-  disp([ 'Loading ' filename ' (McCode simulation overview)' ]);
+  %disp([ 'Loading ' filename ' (McCode simulation overview)' ]);
   % search for 'filename:' tags, and extract links to other files
   filenameReferences = mcplot_filestrfind(filename, 'filename:');
   filenameLines      = mcplot_filefgetl  (filename, filenameReferences+length('filename:'));
@@ -605,7 +606,7 @@ function data = mcplot_split_multiarray(structure)
   % first check if this is a multiarray
   if isempty(strmatch('multiarray_1d',structure.type)), return; end
   
-  disp([ 'Loading ' structure.filename ' (extracting McCode scan steps)' ]);
+  %disp([ 'Loading ' structure.filename ' (extracting McCode scan steps)' ]);
   
   % extract all column labels (each word is reversed to ease _I and _ERR search)
   column_labels = flipud(strread(fliplr(structure.variables),'%s'));  % reverse string so that _I and _ERR start words
@@ -649,7 +650,7 @@ function data = mcplot_split_multiarray(structure)
     this_data.errors=errors;
     this_data.events=events;
     data = { data{:} this_data };
-    disp([ 'Loading ' this_data.filename '#' this_monitor ' (scan steps)' ]);
+    %disp([ 'Loading ' this_data.filename '#' this_monitor ' (scan steps)' ]);
   end
 end % mcplot_split_multiarray
 
