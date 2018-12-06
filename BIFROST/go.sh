@@ -3,5 +3,5 @@
 #mcrun --mpi=16 Full_simple.instr INCOH=1 -n1e8  Omega=0 -dVrun
 #mcrun --mpi=16 Full_simple.instr INCOH=1 INCOHspread=1 -n1e8 -dVrun_inel
 # Magnon-scan, 46 points over 90 degrees
-mcrun --mpi=16 Full_simple.instr INCOH=0 -n1e8  Omega=0,90 -N46 TwoTheta=10 -dMagnon_rerun_events_A
-mcrun --mpi=16 Full_simple.instr INCOH=0 -n1e8  Omega=0,90 -N46 TwoTheta=20 -dMagnon_rerun_events_B
+mcrun --mpi=16 Full_simple.instr INCOH=0 -n1e8 focus_EF=0 Omega=0,90 -N46 TwoTheta=10 -dMagnon_rerun_events_A_noEfocus
+mcrun --mpi=16 Full_simple.instr INCOH=0 -n1e8 focus_EF=0 Omega=0,90 -N46 TwoTheta=20 -dMagnon_rerun_events_B_noEfocus
