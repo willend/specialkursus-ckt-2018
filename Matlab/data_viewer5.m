@@ -2,15 +2,20 @@
 close all
 %clear all
 
+PW=pwd;
+
 NuN=NaN;
-matl_path='/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab';
+matl_path=[PW '/../Matlab/'];
 %addpath(genpath('/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab'))       %replace with own path
 addpath(genpath(matl_path))
 %path = '/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Krystal_sim/Analy_crystal_20181105_102130';      %path of simulation
 cd(matl_path) 
 data=matfile('data_fil60.mat','Writable',true);
-path2 = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_B';      %path of simulation
-path = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_A';      %path of simulation
+%path2 = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_B';      %path of simulation
+%path = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_A';      %path of simulation
+
+path = [PW '/../BIFROST/Magnon_rerun_A_gcc-4.9'];
+path2 = [PW '/../BIFROST/Magnon_rerun_B_gcc-4.9'];
 
 %5 meV short dimensions in SI
 Ef = 5e-3*1.602e-19; %
@@ -38,8 +43,12 @@ tic
 figure(1)
 hold on
 
+Qqh=[];
+Qqk=[];
+Eee=[];
+Iii=[];
 
-for nn = 0:6
+for nn = 0:34
     
     for iii=0:0
         if mod(iii,2)==0
@@ -97,7 +106,8 @@ for nn = 0:6
             %     I(find(t==0))=NuN;
             %I(I == 0) = NuN;
             In(nn+1,:,:)=I;
-            t1(find(I==0))=NuN;
+            idxt1=find(I==0);
+            t1(idxt1)=NuN;
             
             
             %Incoming neutrons wavevector and energy
@@ -158,31 +168,45 @@ for nn = 0:6
             %     xlim([0 1])
             
             %s=surf(Hbar_s,Kbar_s,E_lem);
-            s=surf(Hbar_v,Kbar_v,I);
+            
+            s=surf(Hbar_v,Kbar_v,DeltaE,I);
             s.EdgeColor='none';
             shading interp
-             %slice(In,Hbar_v,Kbar_v,DeltaE)
-
-%             % %         colorMap = [linspace(0,1,256)',zeros(256,2)];
-%             %         colormap(colorMap); colorbar;
-%             %colormap(flipud(jet))
-%             colorbar
-%             s.EdgeColor='none';
-            %plot(Hbar_v,Kbar_v,'.','color',[0,nn,nn]*0.02)
-             xlabel('Q_H [Å^{-1}]')
-             ylabel('Q_K [Å^{-1}]')
-%             title('Allah u akhbar')
-            %         zlabel('\Delta E [meV]')
+            xlabel('Q_H [Å^{-1}]')
+            ylabel('Q_K [Å^{-1}]')
+            
+            Qhtmp=reshape(Hbar_v,30*256,1);
+            Qktmp=reshape(Kbar_v,30*256,1);
+            Etmp=reshape(DeltaE,30*256,1);
+            Itmp=reshape(I,30*256,1);
+                        
+            idxNan=isnan(Qhtmp);
+            Qhtmp(idxNan)=[];
+            Qktmp(idxNan)=[];
+            Etmp(idxNan)=[];
+            Itmp(idxNan)=[];            
+           
+            Qqh=[Qqh;Qhtmp];
+            Qqk=[Qqk;Qktmp];
+            Eee=[Eee;Etmp];
+            Iii=[Iii;Itmp];
         end
     end
-    
 end
 
 toc
-
+cd(PW)
 data.Hbar = Hbar_bob;
 data.Kbar = Kbar_bob;
 data.dEmatrix = deltaE_bob;
 data.I_matrix = I_bob;
 data.Qmatrix = Q_bob;
 
+
+% Define scattered interpolant in collected sparse dataset
+
+F = scatteredInterpolant(Qqh,Qqk,Eee,Iii)
+[Qa,Qb,eE]=meshgrid(linspace(0.5,3.5,100),linspace(-2,2,100),linspace(1,5,100));
+iI=F(Qa,Qb,eE);
+
+save workspace
