@@ -1,0 +1,1861 @@
+McStas simulation description file for EGCESE.
+Date:    Thu Dec  6 00:50:19 2018
+Program: McStas 2.5beta01 - Nov. 03, 2018
+
+begin instrument: EGCESE
+  File: Magnon_rerun_B_gcc-4.9/17/mccode
+  Source: Full_simple.instr
+  Parameters:  WaveMin(double) WaveMax(double) E_0(double) L_0(double) chopPulseOpening(double) DivSlit0_width(double) DivSlit1_width(double) DivSlit2_width(double) DivSlit3_width(double) Npulse(double) print(int) makeVirtualSource(int) printMValues(int) power(double) BWopen(double) OMA(double) TTA(double) OMA2(double) TTA2(double) phi(double) dphi(double) MCPLfile(string) ax(double) ay(double) az(double) bx(double) by(double) bz(double) cx(double) cy(double) cz(double) Omega(double) TwoTheta(double) lambda(double) dlambda(double) Rotation(double) inelastic(double) aa(double) sample_J1(double) sample_J2(double) TT(double) FerroMagnet(double) Verbose(double) imultiplier(double) INCOH(double) INCOHspread(double) sample_focusW(double) sample_focusH(double) focus_EF(double) TOFmin(double) TOFmax(double) TOFbins(int)
+  Trace_enabled: yes
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation: Magnon_rerun_B_gcc-4.9/17
+  Format: McCode with text headers
+  URL: http://www.mccode.org
+  Creator: McStas 2.5beta01 - Nov. 03, 2018
+  Instrument: Full_simple.instr
+  Ncount: 100000000
+  Trace: no
+  Gravitation: no
+  Seed: 1544124781
+  Directory: Magnon_rerun_B_gcc-4.9/17
+  Nodes: 16
+  Param: WaveMin=2.75
+  Param: WaveMax=4.4
+  Param: E_0=4
+  Param: L_0=0
+  Param: chopPulseOpening=0.004
+  Param: DivSlit0_width=0.1
+  Param: DivSlit1_width=0.1
+  Param: DivSlit2_width=0.1
+  Param: DivSlit3_width=0.1
+  Param: Npulse=1
+  Param: print=0
+  Param: makeVirtualSource=0
+  Param: printMValues=0
+  Param: power=2
+  Param: BWopen=161
+  Param: OMA=37.072
+  Param: TTA=74.1432
+  Param: OMA2=30.628
+  Param: TTA2=61.256
+  Param: phi=37
+  Param: dphi=0.332
+  Param: MCPLfile=BIFROST_mcpl.gz
+  Param: ax=0
+  Param: ay=2.14
+  Param: az=-1.24
+  Param: bx=0
+  Param: by=0
+  Param: bz=2.47
+  Param: cx=6.71
+  Param: cy=0
+  Param: cz=0
+  Param: Omega=34
+  Param: TwoTheta=20
+  Param: lambda=10
+  Param: dlambda=9.9
+  Param: Rotation=0
+  Param: inelastic=1
+  Param: aa=6.28319
+  Param: sample_J1=1.5
+  Param: sample_J2=0
+  Param: TT=300
+  Param: FerroMagnet=0
+  Param: Verbose=0
+  Param: imultiplier=1
+  Param: INCOH=0
+  Param: INCOHspread=0
+  Param: sample_focusW=2.1
+  Param: sample_focusH=0.15
+  Param: focus_EF=5
+  Param: TOFmin=0.1172
+  Param: TOFmax=0.186
+  Param: TOFbins=256
+end simulation
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: Div2d_sample_B
+  position: 0 0 -0.00499
+  title: Divergence monitor
+  Ncount: 100000000
+  filename: Div2d_sample_B.dat
+  statistics: X0=8.2084e-05; dX=0.433; Y0=-1.02746e-05; dY=0.43303;
+  signal: Min=75557.9; Max=93036; Mean=84815.7;
+  values: 3.39263e+09 429130 6.25023e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.75 0.75 -0.75 0.75
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: Div2d_sample
+  position: 0 0 -0.00498
+  title: Divergence monitor
+  Ncount: 100000000
+  filename: Div2d_sample.dat
+  statistics: X0=-8.17407e-06; dX=0.519559; Y0=-2.0486e-05; dY=0.577441;
+  signal: Min=0; Max=792380; Mean=135696;
+  values: 5.42783e+09 542792 9.99967e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2.25 2.25 -2.25 2.25
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(60, 60)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_sample_large
+  position: 0 0 -0.00497
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_sample_large.dat
+  statistics: X0=4.0782e-05; dX=0.287225; Y0=1.3841e-05; dY=0.287243;
+  signal: Min=0; Max=5.44126e+07; Mean=1.50778e+06;
+  values: 5.42801e+09 542801 1e+08
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -3 3 -3 3
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(20, 20)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_sample_small
+  position: 0 0 -0.00496
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_sample_small.dat
+  statistics: X0=3.83236e-05; dX=0.2883; Y0=1.5523e-05; dY=0.288315;
+  signal: Min=1.34932e+07; Max=1.3672e+07; Mean=1.35691e+07;
+  values: 5.42764e+09 542782 9.99933e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.5 0.5 -0.5 0.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(100)
+  Source: EGCESE (Full_simple.instr)
+  component: HPSD_sample
+  position: 0 0 -0.00495
+  title: Linear PSD monitor
+  Ncount: 100000000
+  filename: HPSD_sample.dat
+  statistics: X0=4.04504e-07; dX=0.00289131;
+  signal: Min=0; Max=2.17348e+08; Mean=5.42776e+07;
+  values: 5.42776e+09 542789 9.99955e+07
+  xvar: x
+  yvar: (I,I_err)
+  xlabel: x-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: x I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(100)
+  Source: EGCESE (Full_simple.instr)
+  component: VPSD_sample
+  position: 0 0 -0.00494
+  title: Linear PSD (y) monitor
+  Ncount: 100000000
+  filename: VPSD_sample.dat
+  statistics: X0=1.56589e-07; dX=0.00289144;
+  signal: Min=0; Max=2.17332e+08; Mean=5.42775e+07;
+  values: 5.42775e+09 542788 9.99953e+07
+  xvar: y
+  yvar: (I,I_err)
+  xlabel: y-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: y I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(200)
+  Source: EGCESE (Full_simple.instr)
+  component: Hdiv_sample
+  position: 0 0 -0.00493
+  title: horizontal divergence monitor
+  Ncount: 100000000
+  filename: Hdiv_sample.dat
+  statistics: X0=-7.54367e-06; dX=0.519554;
+  signal: Min=0; Max=6.79817e+07; Mean=2.71368e+07;
+  values: 5.42737e+09 542769 9.99882e+07
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: horizontal divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(200)
+  Source: EGCESE (Full_simple.instr)
+  component: Vdiv_sample
+  position: 0 0 -0.00492
+  title: vertical divergence monitor
+  Ncount: 100000000
+  filename: Vdiv_sample.dat
+  statistics: X0=-2.04546e-05; dX=0.577433;
+  signal: Min=0; Max=6.11944e+07; Mean=2.71364e+07;
+  values: 5.42728e+09 542764 9.99866e+07
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: vertical divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: acceptance_x_divx
+  position: 0 0 -0.00491
+  title: Position-divergence monitor
+  Ncount: 100000000
+  filename: acceptance_x_divx.dat
+  statistics: X0=3.99335e-07; dX=0.00288656; Y0=-6.56655e-06; dY=0.519583;
+  signal: Min=0; Max=470228; Mean=135689;
+  values: 5.42757e+09 542779 9.9992e+07
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: acceptance_y_divy
+  position: 0 0 -0.0049
+  title: Position-divergence (y) monitor
+  Ncount: 100000000
+  filename: acceptance_y_divy.dat
+  statistics: X0=1.44342e-07; dX=0.00288669; Y0=-1.96139e-05; dY=0.5774;
+  signal: Min=0; Max=425501; Mean=135690;
+  values: 5.42758e+09 542779 9.99922e+07
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(300)
+  Source: EGCESE (Full_simple.instr)
+  component: Lmon_sample_B
+  position: 0 0 -0.00489
+  title: Wavelength monitor
+  Ncount: 100000000
+  filename: Lmon_sample_B.dat
+  statistics: X0=3.57497; dX=0.476354;
+  signal: Min=0; Max=5.48791e+07; Mean=1.13073e+07;
+  values: 3.39219e+09 429102 6.24942e+07
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 0.01 8
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: Div2d_sample_maxdiv
+  position: 0 0 -0.00488
+  title: Divergence monitor
+  Ncount: 100000000
+  filename: Div2d_sample_maxdiv.dat
+  statistics: X0=-7.57793e-06; dX=0.519548; Y0=-2.10136e-05; dY=0.577429;
+  signal: Min=0; Max=792163; Mean=135673;
+  values: 5.42693e+09 542747 9.99801e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X divergence [deg]
+  ylabel: Y divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2.25 2.25 -2.25 2.25
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_sample_maxdiv
+  position: 0 0 -0.00487
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_sample_maxdiv.dat
+  statistics: X0=4.95422e-05; dX=0.288723; Y0=5.42778e-05; dY=0.288729;
+  signal: Min=0; Max=783858; Mean=84816.9;
+  values: 3.39267e+09 429132 6.25031e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -1.5 1.5 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(100)
+  Source: EGCESE (Full_simple.instr)
+  component: HPSD_sample_maxdiv
+  position: 0 0 -0.00486
+  title: Linear PSD monitor
+  Ncount: 100000000
+  filename: HPSD_sample_maxdiv.dat
+  statistics: X0=4.9313e-07; dX=0.00289131;
+  signal: Min=0; Max=1.35842e+08; Mean=3.39237e+07;
+  values: 3.39237e+09 429113 6.24975e+07
+  xvar: x
+  yvar: (I,I_err)
+  xlabel: x-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: x I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(100)
+  Source: EGCESE (Full_simple.instr)
+  component: VPSD_sample_maxdiv
+  position: 0 0 -0.00485
+  title: Linear PSD (y) monitor
+  Ncount: 100000000
+  filename: VPSD_sample_maxdiv.dat
+  statistics: X0=5.4881e-07; dX=0.00289136;
+  signal: Min=0; Max=1.35827e+08; Mean=3.39234e+07;
+  values: 3.39234e+09 429111 6.2497e+07
+  xvar: y
+  yvar: (I,I_err)
+  xlabel: y-Position [m]
+  ylabel: Intensity
+  xlimits: -0.02 0.02
+  variables: y I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(200)
+  Source: EGCESE (Full_simple.instr)
+  component: Hdiv_sample_maxdiv
+  position: 0 0 -0.00484
+  title: horizontal divergence monitor
+  Ncount: 100000000
+  filename: Hdiv_sample_maxdiv.dat
+  statistics: X0=4.09791e-05; dX=0.519519;
+  signal: Min=0; Max=5.0983e+07; Mean=2.03497e+07;
+  values: 4.06994e+09 470017 7.49803e+07
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: horizontal divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(200)
+  Source: EGCESE (Full_simple.instr)
+  component: Vdiv_sample_maxdiv
+  position: 0 0 -0.00483
+  title: vertical divergence monitor
+  Ncount: 100000000
+  filename: Vdiv_sample_maxdiv.dat
+  statistics: X0=-1.50856e-06; dX=0.577408;
+  signal: Min=0; Max=5.09842e+07; Mean=2.26116e+07;
+  values: 4.52233e+09 495452 8.33147e+07
+  xvar: divergence
+  yvar: (I,I_err)
+  xlabel: vertical divergence [deg]
+  ylabel: Intensity
+  xlimits: -2.25 2.25
+  variables: divergence I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: acceptance_x_divx_maxdiv
+  position: 0 0 -0.00482
+  title: Position-divergence monitor
+  Ncount: 100000000
+  filename: acceptance_x_divx_maxdiv.dat
+  statistics: X0=5.91233e-07; dX=0.00288656; Y0=4.0936e-05; dY=0.519558;
+  signal: Min=0; Max=354395; Mean=101760;
+  values: 4.0704e+09 470044 7.49888e+07
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(200, 200)
+  Source: EGCESE (Full_simple.instr)
+  component: acceptance_y_divy_maxdiv
+  position: 0 0 -0.00481
+  title: Position-divergence (y) monitor
+  Ncount: 100000000
+  filename: acceptance_y_divy_maxdiv.dat
+  statistics: X0=2.6958e-07; dX=0.00288663; Y0=5.86762e-07; dY=0.577386;
+  signal: Min=0; Max=356186; Mean=113073;
+  values: 4.52294e+09 495485 8.36221e+07
+  xvar: po
+  yvar: di
+  xlabel: pos [m]
+  ylabel: divergence [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -0.01 0.01 -1.5 1.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(2000)
+  Source: EGCESE (Full_simple.instr)
+  component: ToFatSample
+  position: 0 0 -0.0048
+  title: Time-of-flight monitor
+  Ncount: 100000000
+  filename: ToFatSample.dat
+  statistics: X0=149099; dX=18417;
+  signal: Min=0; Max=1.93753e+07; Mean=2.714e+06;
+  values: 5.42801e+09 542801 1e+08
+  xvar: t
+  yvar: (I,I_err)
+  xlabel: Time-of-flight [\gms]
+  ylabel: Intensity
+  xlimits: 0 452537
+  variables: t I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(400)
+  Source: EGCESE (Full_simple.instr)
+  component: Lmon_sample
+  position: 0 0 -0.00479
+  title: Wavelength monitor
+  Ncount: 100000000
+  filename: Lmon_sample.dat
+  statistics: X0=3.57498; dX=0.476293;
+  signal: Min=0; Max=3.30411e+07; Mean=1.35653e+07;
+  values: 5.42611e+09 542706 9.9965e+07
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 2 6
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(500, 500)
+  Source: EGCESE (Full_simple.instr)
+  component: TofLambdaSampleZoomOut
+  position: 0 0 -0.00479
+  title:  Intensity Wavelength Time_Of_Flight Monitor (Square) per bin
+  Ncount: 100000000
+  filename: TofLambdaSampleZoomOut.dat
+  statistics: X0=3.57453; dX=0.485115; Y0=0.149012; dY=0.0186082;
+  signal: Min=0; Max=7.86069e+08; Mean=21704.4;
+  values: 5.42611e+09 542706 9.9965e+07
+  xvar: Wa
+  yvar: TO
+  xlabel: Wavelength [Angs]
+  ylabel: TOF [s]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.5 120 0 5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_1d(1000)
+  Source: EGCESE (Full_simple.instr)
+  component: L_monSampleZoomout
+  position: 0 0 -0.00478
+  title: Wavelength monitor
+  Ncount: 100000000
+  filename: L_monsampleZoomOut.dat
+  statistics: X0=3.57728; dX=0.478231;
+  signal: Min=0; Max=6.53885e+08; Mean=5.42801e+06;
+  values: 5.42801e+09 542801 1e+08
+  xvar: L
+  yvar: (I,I_err)
+  xlabel: Wavelength [AA]
+  ylabel: Intensity
+  xlimits: 1.3528 200
+  variables: L I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:12 2018 (1544054532)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E Sum
+  Ncount: 100000000
+  filename: qa_vs_qb_Sum.dat
+  statistics: X0=-0.961767; dX=1.23268; Y0=-0.207103; dY=0.592813;
+  signal: Min=0; Max=3.74705e+06; Mean=3813.57;
+  values: 6.13226e+08 247874 1.53598e+07
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 0 ~ -10 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_0.dat
+  statistics: X0=-1.26322; dX=0.764432; Y0=-0.503102; dY=0.576424;
+  signal: Min=0; Max=524929; Mean=166.77;
+  values: 2.68168e+07 91998.7 952103
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 1 ~ -9.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_1.dat
+  statistics: X0=-1.13554; dX=0.86413; Y0=-0.485434; dY=0.581306;
+  signal: Min=0; Max=644604; Mean=161.41;
+  values: 2.59549e+07 85793.7 348237
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 2 ~ -9 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_2.dat
+  statistics: X0=-0.998964; dX=0.982865; Y0=-0.463389; dY=0.559937;
+  signal: Min=0; Max=997643; Mean=191.088;
+  values: 3.07272e+07 81757.4 300372
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 3 ~ -8.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_3.dat
+  statistics: X0=-0.892153; dX=1.06022; Y0=-0.437759; dY=0.534676;
+  signal: Min=0; Max=1.31528e+06; Mean=245.831;
+  values: 3.95299e+07 79913.8 472049
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 4 ~ -8 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_4.dat
+  statistics: X0=-0.77659; dX=1.10065; Y0=-0.427713; dY=0.50862;
+  signal: Min=0; Max=1.49012e+06; Mean=330.656;
+  values: 5.31698e+07 86264.4 782303
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 5 ~ -7.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_5.dat
+  statistics: X0=-0.782988; dX=1.0953; Y0=-0.381411; dY=0.487751;
+  signal: Min=0; Max=1.52835e+06; Mean=421.509;
+  values: 6.7779e+07 74553.1 1.31162e+06
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 6 ~ -7 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_6.dat
+  statistics: X0=-0.830182; dX=1.10279; Y0=-0.305067; dY=0.473404;
+  signal: Min=0; Max=1.84632e+06; Mean=542.177;
+  values: 8.71826e+07 72866 2.24046e+06
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 7 ~ -6.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_7.dat
+  statistics: X0=-0.785129; dX=1.15014; Y0=-0.2495; dY=0.462349;
+  signal: Min=0; Max=1.93164e+06; Mean=655.177;
+  values: 1.05353e+08 73075.3 3.29996e+06
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:13 2018 (1544054533)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 8 ~ -6 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_8.dat
+  statistics: X0=-0.729669; dX=1.26351; Y0=-0.166572; dY=0.480349;
+  signal: Min=0; Max=2.88415e+06; Mean=476.542;
+  values: 7.66284e+07 63199.7 2.53801e+06
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 9 ~ -5.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_9.dat
+  statistics: X0=-1.5389; dX=0.89691; Y0=0.175242; dY=0.371814;
+  signal: Min=0; Max=1.0874e+06; Mean=215.536;
+  values: 3.46585e+07 47629 1.17841e+06
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 10 ~ -5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_10.dat
+  statistics: X0=-1.73495; dX=0.498157; Y0=0.257232; dY=0.291253;
+  signal: Min=0; Max=902121; Mean=131.905;
+  values: 2.12105e+07 34201.2 1.04307e+06
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 11 ~ -4.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_11.dat
+  statistics: X0=-1.77021; dX=0.371025; Y0=0.309238; dY=0.218661;
+  signal: Min=0; Max=605505; Mean=55.5706;
+  values: 8.9358e+06 20975.4 386480
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 12 ~ -4 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_12.dat
+  statistics: X0=-1.8369; dX=0.0217472; Y0=0.371747; dY=0.0270593;
+  signal: Min=0; Max=147749; Mean=4.27156;
+  values: 686871 5919.8 14795
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 13 ~ -3.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_13.dat
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 14 ~ -3 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_14.dat
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 15 ~ -2.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_15.dat
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 16 ~ -2 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_16.dat
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:14 2018 (1544054534)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 17 ~ -1.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_17.dat
+  statistics: X0=-1.17926; dX=0.02288; Y0=0.251577; dY=0.0207166;
+  signal: Min=0; Max=15037.4; Mean=0.497269;
+  values: 79961.3 603.763 31307
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 18 ~ -1 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_18.dat
+  statistics: X0=-1.15136; dX=0.0399297; Y0=0.269673; dY=0.0445658;
+  signal: Min=0; Max=27349.9; Mean=1.0326;
+  values: 166042 701.884 91843
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 19 ~ -0.5 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_19.dat
+  statistics: X0=-1.13405; dX=0.17138; Y0=0.330972; dY=0.217617;
+  signal: Min=0; Max=9303.67; Mean=0.299712;
+  values: 48194 342.049 29611
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(401, 401)
+  Source: EGCESE (Full_simple.instr)
+  component: Sqqw
+  position: 0 0 0
+  title: qa vs qb monitor E slice 20 ~ 0 meV
+  Ncount: 100000000
+  filename: qa_vs_qb_20.dat
+  statistics: X0=1.10698; dX=0.157164; Y0=0.34015; dY=0.0428397;
+  signal: Min=0; Max=89670.7; Mean=13.3551;
+  values: 2.14751e+06 10785.9 42988
+  xvar: qa
+  yvar: qb
+  xlabel: qa [AA^-1]
+  ylabel: qb [AA^-1]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -4.5 4.5 -4.5 4.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(360, 180)
+  Source: EGCESE (Full_simple.instr)
+  component: det
+  position: 0 0 0
+  title: 4PI PSD monitor
+  Ncount: 100000000
+  filename: psd.dat
+  statistics: X0=22.2535; dX=29.3582; Y0=0.499799; dY=2.07395;
+  signal: Min=0; Max=7.40411e+06; Mean=24724.9;
+  values: 1.60217e+09 482890 1e+08
+  xvar: Lo
+  yvar: La
+  xlabel: Longitude [deg]
+  ylabel: Lattitude [deg]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -180 180 -90 90
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(360, 60)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_outgoing
+  position: 0 0 0
+  title:  Intensity Angle Position Monitor (Banana) [out] per bin
+  Ncount: 100000000
+  filename: PSD_outgoing_1544053820.th_y
+  statistics: X0=56.7223; dX=29.0157; Y0=-3.89488e-06; dY=0.053949;
+  signal: Min=0; Max=875639; Mean=73569.4;
+  values: 1.5891e+09 482155 9.97592e+07
+  xvar: Lo
+  yvar: y 
+  xlabel: Longitude [deg]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0 180 -0.15 0.15
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out1
+  position: 0.528079 0 1.45089
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana1.dat
+  statistics: X0=-3.44468; dX=7.70068; Y0=0.00160769; dY=4.35384;
+  signal: Min=6519.28; Max=63013.6; Mean=18662.4;
+  values: 1.86624e+08 133313 1.34436e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out2
+  position: 0.8115 0 1.40556
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana2.dat
+  statistics: X0=1.6232; dX=8.26746; Y0=0.00192423; dY=3.95259;
+  signal: Min=6767.56; Max=50704.3; Mean=19180.5;
+  values: 1.91805e+08 185926 8.36043e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out3
+  position: 1.09338 0 1.30304
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana3.dat
+  statistics: X0=-0.743429; dX=8.10189; Y0=0.001911; dY=3.58932;
+  signal: Min=2630.74; Max=60340.1; Mean=20904.9;
+  values: 2.09049e+08 319325 5.93335e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out4
+  position: 1.18277 0 0.992464
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana4.dat
+  statistics: X0=-1.28544; dX=8.82912; Y0=0.00231308; dY=4.3753;
+  signal: Min=5353.25; Max=28414; Mean=11397.7;
+  values: 1.13977e+08 119293 6.24891e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out5
+  position: 1.40556 0 0.8115
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana5.dat
+  statistics: X0=-1.96639; dX=7.75311; Y0=0.00588713; dY=4.35984;
+  signal: Min=2852.58; Max=17904.2; Mean=10293;
+  values: 1.0293e+08 116554 5.39744e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out6
+  position: 1.59842 0 0.581776
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana6.dat
+  statistics: X0=-0.351303; dX=8.97803; Y0=-0.00063098; dY=4.36768;
+  signal: Min=1796.63; Max=4149.46; Mean=2574.06;
+  values: 2.57406e+07 18649.8 5.14794e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out7
+  position: 1.52054 0 0.268113
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana7.dat
+  statistics: X0=4.71792; dX=7.9503; Y0=-0.00424403; dY=4.32821;
+  signal: Min=2803.71; Max=22322.5; Mean=8370.19;
+  values: 8.37019e+07 73638 7.20466e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out8
+  position: 1.623 0 0
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana8.dat
+  statistics: X0=-0.755945; dX=8.62524; Y0=0.00266612; dY=4.41629;
+  signal: Min=10876.9; Max=31585.5; Mean=14862.2;
+  values: 1.48622e+08 87914.9 8.35248e+06
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(100, 100)
+  Source: EGCESE (Full_simple.instr)
+  component: PSD_out9
+  position: 1.67516 0 -0.295376
+  title: PSD monitor
+  Ncount: 100000000
+  filename: PSD_before_ana9.dat
+  statistics: X0=1.13089; dX=8.67253; Y0=0.00198697; dY=4.33948;
+  signal: Min=9990.52; Max=25148.1; Mean=14479.2;
+  values: 1.44792e+08 81698.8 1.10531e+07
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -15 15 -7.5 7.5
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor1
+  position: 0.679751 -1.56124 1.8676
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser1_psd.dat
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -14.88 14.88
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor2
+  position: 1.03323 -1.56124 1.78961
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser2_psd.dat
+  statistics: X0=0.0390441; dX=1.09226; Y0=-4.74166; dY=6.83767;
+  signal: Min=0; Max=4465.19; Mean=490.893;
+  values: 3.97623e+06 27382 37072
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -15.24 15.24
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor3
+  position: 1.37843 -1.56124 1.64275
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser3_psd.dat
+  statistics: X0=1.15877; dX=0.62386; Y0=-12.0311; dY=2.94246;
+  signal: Min=0; Max=258.365; Mean=7.89044;
+  values: 63912.5 1236.57 2892
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -15.595 15.595
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor4
+  position: 1.52248 -1.56124 1.27751
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser4_psd.dat
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -14.88 14.88
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor5
+  position: 1.78961 -1.56124 1.03323
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser5_psd.dat
+  statistics: X0=-0.0992029; dX=1.09142; Y0=-0.395405; dY=8.61628;
+  signal: Min=0; Max=571.963; Mean=149.471;
+  values: 1.21071e+06 5935.5 61049
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -15.24 15.24
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor6
+  position: 2.01513 -1.56124 0.733448
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser6_psd.dat
+  statistics: X0=-1.61613; dX=0.32429; Y0=-13.5655; dY=1.58733;
+  signal: Min=0; Max=19.7903; Mean=0.103114;
+  values: 835.221 70.3239 153
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -15.595 15.595
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor7
+  position: 1.95726 -1.56124 0.345119
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser7_psd.dat
+  statistics: X0=-0.431282; dX=0.93733; Y0=5.21556; dY=5.21285;
+  signal: Min=0; Max=269.163; Mean=38.7785;
+  values: 314106 2008.31 26654
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -14.88 14.88
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor8
+  position: 2.06646 -1.56124 0
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser8_psd.dat
+  statistics: X0=0.311316; dX=0.412715; Y0=-15.0707; dY=2.38419e-07;
+  signal: Min=0; Max=3.4559; Mean=0.000704625;
+  values: 5.70746 4.21165 2
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -15.24 15.24
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(90, 90)
+  Source: EGCESE (Full_simple.instr)
+  component: psd_monitor9
+  position: 2.11188 -1.56124 -0.372381
+  title: PSD monitor
+  Ncount: 100000000
+  filename: analyser9_psd.dat
+  statistics: X0=0.0870266; dX=1.10649; Y0=-4.23988; dY=8.83828;
+  signal: Min=0; Max=333.614; Mean=59.827;
+  values: 484599 1678.1 97196
+  xvar: X 
+  yvar: Y 
+  xlabel: X position [cm]
+  ylabel: Y position [cm]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: -2 2 -15.595 15.595
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor1
+  position: 0.679751 -1.56124 1.8676
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser1_tmon.t_y
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.1488 0.1488
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor2
+  position: 1.03323 -1.56124 1.78961
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser2_tmon.t_y
+  statistics: X0=0.142117; dX=0.00336615; Y0=-0.0473733; dY=0.0683604;
+  signal: Min=0; Max=17153.6; Mean=517.738;
+  values: 3.97623e+06 27382 37072
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.1524 0.1524
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor3
+  position: 1.37843 -1.56124 1.64275
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser3_tmon.t_y
+  statistics: X0=0.134388; dX=0.000815177; Y0=-0.120101; dY=0.0294074;
+  signal: Min=0; Max=1951.52; Mean=8.32194;
+  values: 63912.5 1236.57 2892
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.15595 0.15595
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor4
+  position: 1.52248 -1.56124 1.27751
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser4_tmon.t_y
+  statistics: X0=0; dX=0; Y0=0; dY=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.1488 0.1488
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor5
+  position: 1.78961 -1.56124 1.03323
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser5_tmon.t_y
+  statistics: X0=0.133975; dX=0.00268082; Y0=-0.00398851; dY=0.0861241;
+  signal: Min=0; Max=4143.39; Mean=157.645;
+  values: 1.21071e+06 5935.5 61049
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.1524 0.1524
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor6
+  position: 2.01513 -1.56124 0.733448
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser6_tmon.t_y
+  statistics: X0=0.128338; dX=0.000384638; Y0=-0.13521; dY=0.0150202;
+  signal: Min=0; Max=90.3745; Mean=0.108753;
+  values: 835.221 70.3239 153
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.15595 0.15595
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor7
+  position: 1.95726 -1.56124 0.345119
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser7_tmon.t_y
+  statistics: X0=0.135918; dX=0.00139926; Y0=0.0521359; dY=0.0521765;
+  signal: Min=0; Max=1975.51; Mean=40.8992;
+  values: 314106 2008.31 26654
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.1488 0.1488
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor8
+  position: 2.06646 -1.56124 0
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser8_tmon.t_y
+  statistics: X0=0.134697; dX=0.000131349; Y0=-0.14732; dY=0;
+  signal: Min=0; Max=3.4559; Mean=0.000743159;
+  values: 5.70746 4.21165 2
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.1524 0.1524
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_2d(256, 30)
+  Source: EGCESE (Full_simple.instr)
+  component: t_monitor9
+  position: 2.11188 -1.56124 -0.372381
+  title:  Intensity Time_Of_Flight Position Monitor (Square) per bin
+  Ncount: 100000000
+  filename: analyser9_tmon.t_y
+  statistics: X0=0.133481; dX=0.00258725; Y0=-0.0423307; dY=0.0882919;
+  signal: Min=0; Max=2318.46; Mean=63.0988;
+  values: 484599 1678.1 97196
+  xvar: TO
+  yvar: y 
+  xlabel: TOF [s]
+  ylabel: y [m]
+  zvar: I
+  zlabel: Signal per bin
+  xylimits: 0.1172 0.186 -0.15595 0.15595
+  variables: I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor1
+  position: 0.679751 -1.56124 1.8676
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser1_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor2
+  position: 1.03323 -1.56124 1.78961
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser2_emon.E
+  statistics: X0=5.00517; dX=0.0466791;
+  signal: Min=0; Max=227680; Mean=31064.3;
+  values: 3.97623e+06 27382 37072
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor3
+  position: 1.37843 -1.56124 1.64275
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser3_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor4
+  position: 1.52248 -1.56124 1.27751
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser4_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor5
+  position: 1.78961 -1.56124 1.03323
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser5_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor6
+  position: 2.01513 -1.56124 0.733448
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser6_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor7
+  position: 1.95726 -1.56124 0.345119
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser7_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor8
+  position: 2.06646 -1.56124 0
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser8_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
+
+begin data
+  Date: Thu Dec  6 01:02:15 2018 (1544054535)
+  type: array_1d(128)
+  Source: EGCESE (Full_simple.instr)
+  component: e_monitor9
+  position: 2.11188 -1.56124 -0.372381
+  title: Energy [meV] monitor
+  Ncount: 100000000
+  filename: analyser9_emon.E
+  statistics: X0=0; dX=0;
+  signal: Min=0; Max=0; Mean=0;
+  values: 0 0 0
+  xvar: E
+  yvar: (I,I_err)
+  xlabel: Energy [meV]
+  ylabel: Intensity [n/s/bin]
+  xlimits: 4.5 5.5
+  variables: E I I_err N
+end data
