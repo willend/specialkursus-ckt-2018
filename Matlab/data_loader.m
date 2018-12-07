@@ -2,7 +2,7 @@ close all
 clear all
 
 %load data
-matl_path='C:\Users\kedde\Documents\GitHub\specialkursus-ckt-2018\Matlab';
+matl_path='/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab';
 cd(matl_path);
 data=matfile('data_fil60.mat','Writable',false);
 
@@ -13,8 +13,7 @@ If = data.I_matrix;
 
 figure
 hold on
-for ii=1:5
-    ii
+for ii=1:30
     Kbar=Kbarf{ii};
     Hbar=Hbarf{ii};
     dE=dEf{ii};
@@ -25,6 +24,6 @@ for ii=1:5
     surf(Hbar,Kbar,dE)
 %     s.EdgeColor='none';
     shading interp
-    xlabel('Q_H [Å^{-1}]')
-    ylabel('Q_K [Å^{-1}]')
+    xlabel('Q_H [Ã…^{-1}]')
+    ylabel('Q_K [Ã…^{-1}]')
 end
