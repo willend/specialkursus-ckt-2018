@@ -3,14 +3,14 @@ close all
 %clear all
 
 NuN=NaN;
-matl_path='C:\Users\kedde\Documents\GitHub\specialkursus-ckt-2018\Matlab';
+matl_path='/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab';
 %addpath(genpath('/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab'))       %replace with own path
 addpath(genpath(matl_path))
 %path = '/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Krystal_sim/Analy_crystal_20181105_102130';      %path of simulation
 cd(matl_path) 
 data=matfile('data_fil60.mat','Writable',true);
-path = 'C:\Users\kedde\Documents\Magnon_rerun_B\';      %path of simulation
-path2 = 'C:\Users\kedde\Documents\Magnon_rerun_A\';      %path of simulation
+path2 = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_B';      %path of simulation
+path = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_A';      %path of simulation
 
 %5 meV short dimensions in SI
 Ef = 5e-3*1.602e-19; %
@@ -31,14 +31,6 @@ Lad = 1.623; %distance from analyser to detector
 wd = [0.2976 0.3048 0.3119];
 wad = wd.*Lsa./(Lsa + Lad);
 
-
-% Qmatrix = zeros(30,30,256);
-% dEmatrix = zeros(30,30,256);
-% 
-% %The scattering plane coordinates for the magnon sample.
-% Hbar = zeros(30,30,256);  %The symmetric Q_H direction with the Miller index H.
-% Kbar = zeros(30,30,256);  %The symmetric Q_L direction with the Miller index L.
-
 %Empty intensity matrix
 In = zeros(30,30,256);
 
@@ -47,7 +39,7 @@ figure(1)
 hold on
 
 
-for nn = 0:4
+for nn = 0:6
     
     for iii=0:0
         if mod(iii,2)==0
@@ -130,18 +122,10 @@ for nn = 0:4
 %             Kbar_v = ((ki - kf.*cos(TwoTheta + deg2rad(kkk*10) +deg2rad(iii*5)+ alpha)').*sin(deg2rad(nn*2)) + kf.*sin(TwoTheta + deg2rad(kkk*10)+deg2rad(iii*5) + alpha)'.*cos(deg2rad(nn*2)))./1e10;
             Hbar_v = Q.*cos(beta-phi);
             Kbar_v = Q.*sin(beta-phi);
-            %Hbar_v = Q.*cos(beta).*cos(phi) + Q.*sin(beta).*sin(phi);
-            %Kbar_v = Q.*cos(beta).*sin(phi) - Q.*sin(beta).*cos(phi);
-            %Hbar_v = Q.*sin(TwoTheta + deg2rad(kkk*10) + alpha)'.*cos(deg2rad(2*nn)) + Q.*cos(TwoTheta + deg2rad(kkk*10) + alpha)'.*sin(deg2rad(2*nn));
-            %Kbar_v = Q.*sin(TwoTheta + deg2rad(kkk*10) + alpha)'.*sin(deg2rad(2*nn)) - Q.*cos(TwoTheta + deg2rad(kkk*10) + alpha)'.*cos(deg2rad(2*nn));
-            
-            DeltaE(find(t==0))=NuN;
-            Q(find(t==0))=NuN;
-            Hbar_v(find(t==0))=NuN;
-            Kbar_v(find(t==0))=NuN;
-            
+
 %             Hbar_s=zeros(30,256);Kbar_s=zeros(30,256);I_sis=zeros(30,256);E_lem=zeros(30,256);
 % 
+            %selecting E values         wtf? 
 %             vals = [2.7 2.8];
 %             Hbar_s(find(DeltaE>vals(1) & DeltaE<vals(2)))=Hbar_v(find(DeltaE>vals(1) & DeltaE<vals(2)));
 %             Kbar_s(find(DeltaE>vals(1) & DeltaE<vals(2)))=Kbar_v(find(DeltaE>vals(1) & DeltaE<vals(2)));
@@ -162,45 +146,19 @@ for nn = 0:4
             I_bob{nn+1}=I;
             Q_bob{nn+1}=Q;
             deltaE_bob{nn+1}=DeltaE;
-            
-            data.Hbar = Hbar_bob;
-            data.Kbar = Kbar_bob;
-            data.dEmatrix = deltaE_bob;
-            data.I_matrix = I_bob;
-            data.Qmatrix = Q_bob;
-            
-%             
-%             data.Hbar(nn+1,:,:)=Hbar_v;
-%             data.Kbar(nn+1,:,:)=Kbar_v;
-%             data.I_matrix(nn+1,:,:)=I;
-%             data.Qmatrix(nn+1,:,:)=Q;
-%             data.dEmatrix(nn+1,:,:)=DeltaE;
-%             
-%             Qmatrix(nn+1,:,:) = Q;
-%             dEmatrix(nn+1,:,:) = DeltaE;
-%             Hbar(nn+1,:,:) = Hbar_v;
-%             Kbar(nn+1,:,:) = Kbar_v;
-%             
-            %     figure(1)
-%             plot(Data)
-%             view(0,90)
-%             xlim([tof(1) tof(end)])
-%             ylim([y(1) y(end)])
-            %     figure(1)
-%             plot(Q,DeltaE,'.','color',[0,nn,nn]*0.02)
-%             
+
 %             a = surf(Q,DeltaE,I);
 %             shading interp
 %             colormap jet
 %             colorbar
 %             a.EdgeColor='none';
-%             xlabel('Q [Å^{-1}]')
+%             xlabel('Q [ï¿½^{-1}]')
 %             ylabel('\Delta E [meV]')
 %             
             %     xlim([0 1])
             
             %s=surf(Hbar_s,Kbar_s,E_lem);
-            s=surf(Hbar_v,Kbar_v,DeltaE);
+            s=surf(Hbar_v,Kbar_v,I);
             s.EdgeColor='none';
             shading interp
              %slice(In,Hbar_v,Kbar_v,DeltaE)
@@ -211,8 +169,8 @@ for nn = 0:4
 %             colorbar
 %             s.EdgeColor='none';
             %plot(Hbar_v,Kbar_v,'.','color',[0,nn,nn]*0.02)
-             xlabel('Q_H [Å^{-1}]')
-             ylabel('Q_K [Å^{-1}]')
+             xlabel('Q_H [Ã…^{-1}]')
+             ylabel('Q_K [Ã…^{-1}]')
 %             title('Allah u akhbar')
             %         zlabel('\Delta E [meV]')
         end
@@ -220,15 +178,11 @@ for nn = 0:4
     
 end
 
-%plot(Hbar(nn+1,:,:),Kbar(nn+1,:,:))
-%     plot(Qmatrix(40,:,:),dEmatrix(40,:,:),'.','color',[0,0,0])
-%     xlabel('Q [Å^{-1}]')
-%     ylabel('Energy [meV]')
 toc
 
-% data.Hbar = Hbar_bob;
-% data.Kbar = Kbar_bob;
-% data.dEmatrix = deltaE_bob;
-% data.I_matrix = I_bob;
-% data.Qmatrix = Q_bob;
+data.Hbar = Hbar_bob;
+data.Kbar = Kbar_bob;
+data.dEmatrix = deltaE_bob;
+data.I_matrix = I_bob;
+data.Qmatrix = Q_bob;
 
