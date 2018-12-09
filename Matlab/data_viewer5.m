@@ -2,20 +2,20 @@
 close all
 %clear all
 
-PW=pwd;
+%PW=pwd;
 
 NuN=NaN;
-matl_path=[PW '/../Matlab/'];
-%addpath(genpath('/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab'))       %replace with own path
+matl_path='/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab';
+addpath(genpath('/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Matlab'))       %replace with own path
 addpath(genpath(matl_path))
 %path = '/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/Krystal_sim/Analy_crystal_20181105_102130';      %path of simulation
 cd(matl_path) 
 data=matfile('data_fil60.mat','Writable',true);
-%path2 = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_B';      %path of simulation
+path = '/Users/TummasN/Documents/GitHub/specialkursus-ckt-2018/BIFROST/Magnon_rerun_events_A_noEfocus_noSqq';      %path of simulation
 %path = '/Users/TummasN/Documents/OneDrive - Danmarks Tekniske Universitet/DTU/5. semester/Mcstas/Magnon_rerun_A';      %path of simulation
 
-path = [PW '/../BIFROST/Magnon_rerun_A_gcc-4.9'];
-path2 = [PW '/../BIFROST/Magnon_rerun_B_gcc-4.9'];
+% path = [PW '/../BIFROST/Magnon_rerun_A_gcc-4.9'];
+% path2 = [PW '/../BIFROST/Magnon_rerun_B_gcc-4.9'];
 
 %5 meV short dimensions in SI
 Ef = 5e-3*1.602e-19; %
@@ -48,7 +48,7 @@ Qqk=[];
 Eee=[];
 Iii=[];
 
-for nn = 0:34
+for nn = 0:90
     
     for iii=0:0
         if mod(iii,2)==0
