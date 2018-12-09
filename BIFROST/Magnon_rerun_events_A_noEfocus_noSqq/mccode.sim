@@ -1,0 +1,27 @@
+begin instrument:
+  Creator: mcstas 2.5beta01
+  Source: Full_simple_noSqq.instr
+  Parameters:  Omega
+  Trace_enabled: no
+  Default_main: yes
+  Embedded_runtime: yes
+end instrument
+
+begin simulation
+Date: Sat Dec 08 08 48 2018
+Ncount: 100000000
+Numpoints: 2
+Param: Omega = 0, Omega = 90
+end simulation
+
+begin data
+type: multiarray_1d(2)
+title: Scan of Omega
+xvars: Omega
+yvars: (Div2d_sample_B_I,Div2d_sample_B_ERR) (Div2d_sample_I,Div2d_sample_ERR) (PSD_sample_large_I,PSD_sample_large_ERR) (PSD_sample_small_I,PSD_sample_small_ERR) (HPSD_sample_I,HPSD_sample_ERR) (VPSD_sample_I,VPSD_sample_ERR) (Hdiv_sample_I,Hdiv_sample_ERR) (Vdiv_sample_I,Vdiv_sample_ERR) (acceptance_x_divx_I,acceptance_x_divx_ERR) (acceptance_y_divy_I,acceptance_y_divy_ERR) (Lmon_sample_B_I,Lmon_sample_B_ERR) (Div2d_sample_maxdiv_I,Div2d_sample_maxdiv_ERR) (PSD_sample_maxdiv_I,PSD_sample_maxdiv_ERR) (HPSD_sample_maxdiv_I,HPSD_sample_maxdiv_ERR) (VPSD_sample_maxdiv_I,VPSD_sample_maxdiv_ERR) (Hdiv_sample_maxdiv_I,Hdiv_sample_maxdiv_ERR) (Vdiv_sample_maxdiv_I,Vdiv_sample_maxdiv_ERR) (acceptance_x_divx_maxdiv_I,acceptance_x_divx_maxdiv_ERR) (acceptance_y_divy_maxdiv_I,acceptance_y_divy_maxdiv_ERR) (ToFatSample_I,ToFatSample_ERR) (Lmon_sample_I,Lmon_sample_ERR) (TofLambdaSampleZoomOut_I,TofLambdaSampleZoomOut_ERR) (L_monSampleZoomout_I,L_monSampleZoomout_ERR) (det_I,det_ERR) (PSD_outgoing_I,PSD_outgoing_ERR) (PSD_out1_I,PSD_out1_ERR) (PSD_out2_I,PSD_out2_ERR) (PSD_out3_I,PSD_out3_ERR) (PSD_out4_I,PSD_out4_ERR) (PSD_out5_I,PSD_out5_ERR) (PSD_out6_I,PSD_out6_ERR) (PSD_out7_I,PSD_out7_ERR) (PSD_out8_I,PSD_out8_ERR) (PSD_out9_I,PSD_out9_ERR) (psd_monitor1_I,psd_monitor1_ERR) (psd_monitor2_I,psd_monitor2_ERR) (psd_monitor3_I,psd_monitor3_ERR) (psd_monitor4_I,psd_monitor4_ERR) (psd_monitor5_I,psd_monitor5_ERR) (psd_monitor6_I,psd_monitor6_ERR) (psd_monitor7_I,psd_monitor7_ERR) (psd_monitor8_I,psd_monitor8_ERR) (psd_monitor9_I,psd_monitor9_ERR) (t_monitor1_I,t_monitor1_ERR) (t_monitor2_I,t_monitor2_ERR) (t_monitor3_I,t_monitor3_ERR) (t_monitor4_I,t_monitor4_ERR) (t_monitor5_I,t_monitor5_ERR) (t_monitor6_I,t_monitor6_ERR) (t_monitor7_I,t_monitor7_ERR) (t_monitor8_I,t_monitor8_ERR) (t_monitor9_I,t_monitor9_ERR) (e_monitor1_I,e_monitor1_ERR) (e_monitor2_I,e_monitor2_ERR) (e_monitor3_I,e_monitor3_ERR) (e_monitor4_I,e_monitor4_ERR) (e_monitor5_I,e_monitor5_ERR) (e_monitor6_I,e_monitor6_ERR) (e_monitor7_I,e_monitor7_ERR) (e_monitor8_I,e_monitor8_ERR) (e_monitor9_I,e_monitor9_ERR)
+xlabel: 'Omega'
+ylabel: 'Intensity'
+xlimits: 0 90
+filename: mccode.dat
+variables: Omega Div2d_sample_B_I Div2d_sample_B_ERR Div2d_sample_I Div2d_sample_ERR PSD_sample_large_I PSD_sample_large_ERR PSD_sample_small_I PSD_sample_small_ERR HPSD_sample_I HPSD_sample_ERR VPSD_sample_I VPSD_sample_ERR Hdiv_sample_I Hdiv_sample_ERR Vdiv_sample_I Vdiv_sample_ERR acceptance_x_divx_I acceptance_x_divx_ERR acceptance_y_divy_I acceptance_y_divy_ERR Lmon_sample_B_I Lmon_sample_B_ERR Div2d_sample_maxdiv_I Div2d_sample_maxdiv_ERR PSD_sample_maxdiv_I PSD_sample_maxdiv_ERR HPSD_sample_maxdiv_I HPSD_sample_maxdiv_ERR VPSD_sample_maxdiv_I VPSD_sample_maxdiv_ERR Hdiv_sample_maxdiv_I Hdiv_sample_maxdiv_ERR Vdiv_sample_maxdiv_I Vdiv_sample_maxdiv_ERR acceptance_x_divx_maxdiv_I acceptance_x_divx_maxdiv_ERR acceptance_y_divy_maxdiv_I acceptance_y_divy_maxdiv_ERR ToFatSample_I ToFatSample_ERR Lmon_sample_I Lmon_sample_ERR TofLambdaSampleZoomOut_I TofLambdaSampleZoomOut_ERR L_monSampleZoomout_I L_monSampleZoomout_ERR det_I det_ERR PSD_outgoing_I PSD_outgoing_ERR PSD_out1_I PSD_out1_ERR PSD_out2_I PSD_out2_ERR PSD_out3_I PSD_out3_ERR PSD_out4_I PSD_out4_ERR PSD_out5_I PSD_out5_ERR PSD_out6_I PSD_out6_ERR PSD_out7_I PSD_out7_ERR PSD_out8_I PSD_out8_ERR PSD_out9_I PSD_out9_ERR psd_monitor1_I psd_monitor1_ERR psd_monitor2_I psd_monitor2_ERR psd_monitor3_I psd_monitor3_ERR psd_monitor4_I psd_monitor4_ERR psd_monitor5_I psd_monitor5_ERR psd_monitor6_I psd_monitor6_ERR psd_monitor7_I psd_monitor7_ERR psd_monitor8_I psd_monitor8_ERR psd_monitor9_I psd_monitor9_ERR t_monitor1_I t_monitor1_ERR t_monitor2_I t_monitor2_ERR t_monitor3_I t_monitor3_ERR t_monitor4_I t_monitor4_ERR t_monitor5_I t_monitor5_ERR t_monitor6_I t_monitor6_ERR t_monitor7_I t_monitor7_ERR t_monitor8_I t_monitor8_ERR t_monitor9_I t_monitor9_ERR e_monitor1_I e_monitor1_ERR e_monitor2_I e_monitor2_ERR e_monitor3_I e_monitor3_ERR e_monitor4_I e_monitor4_ERR e_monitor5_I e_monitor5_ERR e_monitor6_I e_monitor6_ERR e_monitor7_I e_monitor7_ERR e_monitor8_I e_monitor8_ERR e_monitor9_I e_monitor9_ERR
+end data
