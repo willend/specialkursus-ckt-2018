@@ -1,0 +1,1832 @@
+DEFINE INSTRUMENT EGCESE(
+WaveMin=2.75, // Minimum wavelength from moderator
+WaveMax=4.4, // Maximum wavelength from moderator
+E_0=4.0, // Lowest energy in wavelength band.
+L_0=0, // Alternative: Lowest wavelength in wavelength band
+chopPulseOpening=0.004, // Opening time of pulse shapping chopper [s]
+DivSlit0_width=0.1, // opening of Divergence Slit nr 0
+DivSlit1_width=0.1,  // opening of Divergence Slit nr 1
+DivSlit2_width=0.1,  // opening of Divergence Slit nr 2
+DivSlit3_width=0.1,  // opening of Divergence Slit nr 3
+Npulse=1,
+int print=0, // print values of interest for debugging. McTrace does not work when this is set to 1.
+int makeVirtualSource=0, // if 1 print all neutrons to virtual source file 
+int printMValues=0,
+double power = 2.0,
+double BWopen=161,
+OMA=37.072,// our values 
+TTA=74.1432,
+OMA2=30.628,
+TTA2=61.256,
+phi=37, 
+dphi=0.3320,
+string MCPLfile="BIFROST_mcpl.gz",
+ax=0,      ay=2.14,   az=-1.24,
+bx = 0,    by = 0,    bz =  2.47,
+cx = 6.71, cy = 0,    cz =  0,
+Omega=0,
+TwoTheta=40,
+lambda=10, dlambda=9.9, Rotation=0, inelastic=1, aa=6.283185307179586,
+sample_J1=1.5, sample_J2=0, TT=300, FerroMagnet=0, Verbose=0, imultiplier=1,
+INCOH=1,INCOHspread=0,sample_focusW=2.1,sample_focusH=0.15,focus_EF=0,
+TOFmin=0.1172,TOFmax=0.186,int TOFbins=256)
+
+/* TOFmax calculated from:
+   Latest sample arrival time ~181000 \mu s = 0,181 s @ WL mand 2.75-4.4A 
+   + 1.5 * travel time for longest flight path for a 5meV neutron. V=sqrt(E)*SE2V = 978.04 m/s. 1.5 *  (1.701 + 1.623 m) / ( 987.04 m/s) = 0.005 s
+   ~ 0.186 s */
+
+DECLARE
+%{
+// M-value and element length arrays
+double elementLength6S[150];
+double mValues6verticalS[150];
+double mValues6horizontalS[150];
+double elementLength3S[150];
+double mValues3verticalS[150];
+double mValues3horizontalS[150];
+double elementLength1S[150];
+double mValues1verticalS[150];
+double mValues1horizontalS[150];
+
+
+// Transferred parameters
+double chopPulseFrequencyOrder=14; // Number of chopper pulses pr moderator pulse. It will automatically be reduced when nesesary and a warning will be written in the promt. 
+double sampleSizeX=0.010; // Width of monitors at sample position. Guide optimized for up to 0.015, intruments optimized for 0.001 to 0.01.
+double sampleSizeY=0.010; // Height of monitors at sample position. Guide optimized for up to 0.015, intruments optimized for 0.001 to 0.01.
+double chopBWPos=78;  // Distance from pulse shapping choppers to BW Chopper
+double PscOff=0.0306;
+double discD=0.04;
+double monigap_length = 0.02; // Length of the moni-gap
+double FOCopen1=38.26;
+double FOCopen2=52.01;
+
+//Chopper translation parameters adjusting for engineering margins
+
+//The precise values relate to the FOC chopper document, the value 'u' is calculated from the guide width, and
+//the engineering margin is 3 mm
+
+// u for the bunker = 0.00031 
+// u for the traight section = 0.00123 
+
+//Add engineering margin to this and get. 
+
+double ChopTransBunker=0.00331; //To accomodate floor deformations in the bunker
+double ChopTransE2=0.00423; //To accomodate floor deformations in the E02 hall (piles)
+
+
+
+
+
+
+
+double x_div;
+double y_div;
+int flag;
+double u = 1e-5;
+
+/*************************************** Chopper Variables  *******************************************/
+
+double lambda_0; double lambda_1;
+double v_0; double v_1;
+double InstLength;
+double chopPulseOffset;  double chopPulsePhaseOffset;  double chopPulseDist; double chopPulseOpen; 
+double chopPulse2PhaseOffset;
+double chopFrameOverlap1Offset;   double chopFrameOverlap1PhaseOffset; //double chopFrameOverlap1Pos; 
+double chopFrameOverlap1Open;
+double chopFrameOverlap2Offset;   double chopFrameOverlap2PhaseOffset; //double chopFrameOverlap2Pos; 
+double chopFrameOverlap2Open;
+double chopBWOffset;   double chopBWPhaseOffset; //double chopBWPos; 
+double chopBWOpen;
+double t_samp_center; double t_samp_0; double t_samp_1;
+double chopBW_t0; double  chopBW_t1;
+
+double PulseHighFluxOffset;
+double WavelengthBand;
+double ModPulseLengthHighF;
+double chopPulsePossibleOpening;
+
+
+/////  Martin's cutting parameters:
+double sample_dist = 0.5;
+double startXposition_straight = 49.303484;
+
+
+double length5 = 17.995800;
+//double benderStartXposition =6.380700;
+double benderStartXposition =24.376254 ;
+
+// straiht:
+double length2 = 90.0;
+
+// Focus ellipse:
+double length1 = 22.114200;
+double Linx1 = 24.364542;
+double Loutx1 = 2.250342;
+double Liny1 = 23.034433;
+double Louty1 = 0.920233;
+double alpha1 = 3.1;
+double Qc1 = 0.021700;
+double R01 = 0.990000;
+double smallaxis_y1 = 0.090000/2;
+double smallaxis_x1 = 0.060000/2;
+
+
+
+double elementLength1_part_1[50]; 
+double mValues1vertical_part_1[50]; 
+double mValues1horizontal_part_1[50];
+double elementLength1_part_2[5]; 
+double mValues1vertical_part_2[5]; 
+double mValues1horizontal_part_2[5];
+double elementLength1_part_3[5]; 
+double mValues1vertical_part_3[5]; 
+double mValues1horizontal_part_3[5];
+double elementLength1_part_4[5]; 
+double mValues1vertical_part_4[5]; 
+double mValues1horizontal_part_4[5];
+
+int counter = 0;
+
+double chopper_coordinate_offset = 4.439;
+
+
+double curve_rot = 0; // has to be either 180 or -180. Determines curve to left or right
+
+double chopFrameOverlap1Pos;
+double chopFrameOverlap2Pos;
+
+// These parameters are no longer safe to change
+double DivSlit0Gap=0.02; // Hole in guide required for Divergence slit nr 0 (at the end of guide)
+double DivSlit1Gap=0.02; // Hole in guide required for Divergence slit nr 1
+double DivSlit2Gap=0.02; // Hole in guide required for Divergence slit nr 2
+double DivSlit3Gap=0.02; // Hole in guide required for Divergence slit nr 3
+
+double DivSlit1Pos=1.0814;  // Position of Divergence Slit nr 1
+double DivSlit2Pos=1.661; // Position of Divergence Slit nr 2
+double DivSlit3Pos=2.961; // Position of Divergence Slit nr 3
+// Old divJaw pos:
+//double DivSlit1Pos=1.191;  // Position of Divergence Slit nr 1
+//double DivSlit2Pos=1.661; // Position of Divergence Slit nr 2
+//double DivSlit3Pos=2.961; // Position of Divergence Slit nr 3
+double chopGap=0.04;
+double BW_chopGap=0.04;
+double chopFrameOverlap1Pos= 8.530;    // Distance from moderator to first frame owerlap chopper
+double chopFrameOverlap2Pos= 14.973;    // Distance from moderator to second frame owerlap chopper
+
+double benderAngle = 0.01886551; // Mads numbers = 0.0183513513514;
+double DM         = 3.355;   /* Monochromator d-spacing in Angs */
+double wi1		  = 0.013; 	/* Monochromator width*/
+double wi2		  = 0.0135; 	/* Monochromator width*/
+double wi3		  = 0.014; 	/* Monochromator width*/
+ 
+int i;
+double Samplechoice;
+int scatt_5meV;
+ double Lthis;
+ double Tmin,Tmax;
+ int flag_sample;
+ double FourUpPosX1,FourUpPosY1,ThreeUpPosX1,ThreeUpPosY1,TwoUpPosX1,TwoUpPosY1,OneUpPosX1,OneUpPosY1;
+ double FourDownPosX1,FourDownPosY1,ThreeDownPosX1,ThreeDownPosY1,TwoDownPosX1,TwoDownPosY1,OneDownPosX1,OneDownPosY1;
+ double FourUpPosX2,FourUpPosY2,ThreeUpPosX2,ThreeUpPosY2,TwoUpPosX2,TwoUpPosY2,OneUpPosX2,OneUpPosY2;
+ double FourDownPosX2,FourDownPosY2,ThreeDownPosX2,ThreeDownPosY2,TwoDownPosX2,TwoDownPosY2,OneDownPosX2,OneDownPosY2;
+ double FourUpPosX3,FourUpPosY3,ThreeUpPosX3,ThreeUpPosY3,TwoUpPosX3,TwoUpPosY3,OneUpPosX3,OneUpPosY3;
+ double FourDownPosX3,FourDownPosY3,ThreeDownPosX3,ThreeDownPosY3,TwoDownPosX3,TwoDownPosY3,OneDownPosX3,OneDownPosY3;
+ char monopts1[128];
+ char monopts2[128];
+ char monopts3[128];
+ char monoptsevent[128];
+
+%}
+
+INITIALIZE
+%{
+
+
+// If there is set a value of L_0, overwrite E_0 and calculate E_0 from L_0 
+if (L_0>0){
+	E_0=81.82/(L_0*L_0);
+}
+
+
+
+// Following is all the m-values for the entire guide hardcoaded in arrays along with the element lengths for each m-value. 
+// It is important to note that the naming convention here goes the opposite way of the neutron path, meaning that mValues1 describes the m-values on the element closest to the sample and mValues6 are closest to the source.
+
+ //// Part 1 //// 
+ elementLength1_part_1[0] = 0.50000; 
+ mValues1vertical_part_1[0] = 1.50; 
+ mValues1horizontal_part_1[0] = 1.50;
+
+ elementLength1_part_1[1] = 0.50000; 
+ mValues1vertical_part_1[1] = 1.50; 
+ mValues1horizontal_part_1[1] = 1.50;
+
+ elementLength1_part_1[2] = 0.50000; 
+ mValues1vertical_part_1[2] = 1.50; 
+ mValues1horizontal_part_1[2] = 1.50;
+
+ elementLength1_part_1[3] = 0.50000; 
+ mValues1vertical_part_1[3] = 1.50; 
+ mValues1horizontal_part_1[3] = 1.50;
+
+ elementLength1_part_1[4] = 0.50000; 
+ mValues1vertical_part_1[4] = 1.50; 
+ mValues1horizontal_part_1[4] = 1.50;
+
+ elementLength1_part_1[5] = 0.50000; 
+ mValues1vertical_part_1[5] = 1.50; 
+ mValues1horizontal_part_1[5] = 1.50;
+
+ elementLength1_part_1[6] = 0.50000; 
+ mValues1vertical_part_1[6] = 1.50; 
+ mValues1horizontal_part_1[6] = 1.50;
+
+ elementLength1_part_1[7] = 0.50000; 
+ mValues1vertical_part_1[7] = 1.50; 
+ mValues1horizontal_part_1[7] = 1.50;
+
+ elementLength1_part_1[8] = 0.50000; 
+ mValues1vertical_part_1[8] = 1.50; 
+ mValues1horizontal_part_1[8] = 1.50;
+
+ elementLength1_part_1[9] = 0.50000; 
+ mValues1vertical_part_1[9] = 1.50; 
+ mValues1horizontal_part_1[9] = 1.50;
+
+ elementLength1_part_1[10] = 0.50000; 
+ mValues1vertical_part_1[10] = 1.50; 
+ mValues1horizontal_part_1[10] = 1.50;
+
+ elementLength1_part_1[11] = 0.50000; 
+ mValues1vertical_part_1[11] = 1.50; 
+ mValues1horizontal_part_1[11] = 1.50;
+
+ elementLength1_part_1[12] = 0.50000; 
+ mValues1vertical_part_1[12] = 1.50; 
+ mValues1horizontal_part_1[12] = 1.50;
+
+ elementLength1_part_1[13] = 0.50000; 
+ mValues1vertical_part_1[13] = 1.50; 
+ mValues1horizontal_part_1[13] = 1.50;
+
+ elementLength1_part_1[14] = 0.50000; 
+ mValues1vertical_part_1[14] = 1.50; 
+ mValues1horizontal_part_1[14] = 1.50;
+
+ elementLength1_part_1[15] = 0.50000; 
+ mValues1vertical_part_1[15] = 1.50; 
+ mValues1horizontal_part_1[15] = 1.50;
+
+ elementLength1_part_1[16] = 0.50000; 
+ mValues1vertical_part_1[16] = 1.50; 
+ mValues1horizontal_part_1[16] = 1.50;
+
+ elementLength1_part_1[17] = 0.50000; 
+ mValues1vertical_part_1[17] = 1.50; 
+ mValues1horizontal_part_1[17] = 1.50;
+
+ elementLength1_part_1[18] = 0.50000; 
+ mValues1vertical_part_1[18] = 1.50; 
+ mValues1horizontal_part_1[18] = 1.50;
+
+ elementLength1_part_1[19] = 0.50000; 
+ mValues1vertical_part_1[19] = 1.50; 
+ mValues1horizontal_part_1[19] = 1.50;
+
+ elementLength1_part_1[20] = 0.50000; 
+ mValues1vertical_part_1[20] = 1.50; 
+ mValues1horizontal_part_1[20] = 1.50;
+
+ elementLength1_part_1[21] = 0.50000; 
+ mValues1vertical_part_1[21] = 1.50; 
+ mValues1horizontal_part_1[21] = 1.50;
+
+ elementLength1_part_1[22] = 0.50000; 
+ mValues1vertical_part_1[22] = 2.00; 
+ mValues1horizontal_part_1[22] = 1.50;
+
+ elementLength1_part_1[23] = 0.50000; 
+ mValues1vertical_part_1[23] = 2.00; 
+ mValues1horizontal_part_1[23] = 1.50;
+
+ elementLength1_part_1[24] = 0.50000; 
+ mValues1vertical_part_1[24] = 2.00; 
+ mValues1horizontal_part_1[24] = 1.50;
+
+ elementLength1_part_1[25] = 0.50000; 
+ mValues1vertical_part_1[25] = 2.00; 
+ mValues1horizontal_part_1[25] = 1.50;
+
+ elementLength1_part_1[26] = 0.50000; 
+ mValues1vertical_part_1[26] = 2.00; 
+ mValues1horizontal_part_1[26] = 1.50;
+
+ elementLength1_part_1[27] = 0.50000; 
+ mValues1vertical_part_1[27] = 2.00; 
+ mValues1horizontal_part_1[27] = 1.50;
+
+ elementLength1_part_1[28] = 0.50000; 
+ mValues1vertical_part_1[28] = 2.00; 
+ mValues1horizontal_part_1[28] = 1.50;
+
+ elementLength1_part_1[29] = 0.50000; 
+ mValues1vertical_part_1[29] = 2.00; 
+ mValues1horizontal_part_1[29] = 1.50;
+
+ elementLength1_part_1[30] = 0.50000; 
+ mValues1vertical_part_1[30] = 2.00; 
+ mValues1horizontal_part_1[30] = 1.50;
+
+ elementLength1_part_1[31] = 0.50000; 
+ mValues1vertical_part_1[31] = 2.00; 
+ mValues1horizontal_part_1[31] = 1.50;
+
+ elementLength1_part_1[32] = 0.50000; 
+ mValues1vertical_part_1[32] = 2.00; 
+ mValues1horizontal_part_1[32] = 2.00;
+
+ elementLength1_part_1[33] = 0.50000; 
+ mValues1vertical_part_1[33] = 2.00; 
+ mValues1horizontal_part_1[33] = 2.00;
+
+ elementLength1_part_1[34] = 0.50000; 
+ mValues1vertical_part_1[34] = 2.00; 
+ mValues1horizontal_part_1[34] = 2.00;
+
+ elementLength1_part_1[35] = 0.50000; 
+ mValues1vertical_part_1[35] = 2.00; 
+ mValues1horizontal_part_1[35] = 2.00;
+
+ elementLength1_part_1[36] = 0.01580;  // Gap 
+ mValues1vertical_part_1[36] = 0.00; 
+ mValues1horizontal_part_1[36] = 0.00;
+
+ elementLength1_part_1[37] = 0.48420; 
+ mValues1vertical_part_1[37] = 2.00; 
+ mValues1horizontal_part_1[37] = 2.00;
+
+ elementLength1_part_1[38] = 0.50000; 
+ mValues1vertical_part_1[38] = 2.00; 
+ mValues1horizontal_part_1[38] = 2.50;
+
+ elementLength1_part_1[39] = 0.50000; 
+ mValues1vertical_part_1[39] = 2.50; 
+ mValues1horizontal_part_1[39] = 2.50;
+
+ elementLength1_part_1[40] = 0.14320; 
+ mValues1vertical_part_1[40] = 2.50; 
+ mValues1horizontal_part_1[40] = 2.50;
+
+ 
+ //// Part 2 //// 
+ elementLength1_part_2[0] = 0.31680; 
+ mValues1vertical_part_2[0] = 2.50; 
+ mValues1horizontal_part_2[0] = 2.50;
+
+ elementLength1_part_2[1] = 0.50000; 
+ mValues1vertical_part_2[1] = 3.00; 
+ mValues1horizontal_part_2[1] = 3.00;
+
+ elementLength1_part_2[2] = 0.46320; 
+ mValues1vertical_part_2[2] = 3.00; 
+ mValues1horizontal_part_2[2] = 3.00;
+
+ 
+ //// Part 3 //// 
+ elementLength1_part_3[0] = 0.0596; 
+ mValues1vertical_part_3[0] = 3.00; 
+ mValues1horizontal_part_3[0] = 3.00;
+
+ elementLength1_part_3[1] = 0.500; 
+ mValues1vertical_part_3[1] = 3.50; 
+ mValues1horizontal_part_3[1] = 3.00;
+
+ 
+ //// Part 4 //// 
+ elementLength1_part_4[0] = 0.06670 ; 
+ mValues1vertical_part_4[0] = 3.50; 
+ mValues1horizontal_part_4[0] = 3.00;
+
+ elementLength1_part_4[1] = 0.50000; 
+ mValues1vertical_part_4[1] = 3.50; 
+ mValues1horizontal_part_4[1] = 3.5;
+
+// A bit extra due to mismatch in coating lengths after rounding element length to 0.5 meters:
+// 0.47 cm of this is applied in last tested version (sep 12 2018)
+ elementLength1_part_4[2] = 0.0047;  
+ mValues1vertical_part_4[2] = 3.50; 
+ mValues1horizontal_part_4[2] = 3.5;
+
+elementLength3S[0]=0.50;
+mValues3verticalS[0]=2.000000;
+mValues3horizontalS[0]=2.500000;
+elementLength3S[1]=0.50;
+mValues3verticalS[1]=2.000000;
+mValues3horizontalS[1]=2.500000;
+elementLength3S[2]=0.50;
+mValues3verticalS[2]=2.000000;
+mValues3horizontalS[2]=2.500000;
+elementLength3S[3]=0.50;
+mValues3verticalS[3]=2.000000;
+mValues3horizontalS[3]=2.500000;
+elementLength3S[4]=0.50;
+mValues3verticalS[4]=2.000000;
+mValues3horizontalS[4]=2.500000;
+elementLength3S[5]=0.50;
+mValues3verticalS[5]=2.000000;
+mValues3horizontalS[5]=2.500000;
+elementLength3S[6]=0.50;
+mValues3verticalS[6]=2.000000;
+mValues3horizontalS[6]=2.500000;
+
+// Moni gap
+elementLength3S[7]=monigap_length;
+mValues3verticalS[7]=0;
+mValues3horizontalS[7]=0;
+
+
+elementLength3S[7+1]=0.50-monigap_length;
+mValues3verticalS[7+1]=2.000000;
+mValues3horizontalS[7+1]=2.000000;
+elementLength3S[8+1]=0.50;
+mValues3verticalS[8+1]=2.000000;
+mValues3horizontalS[8+1]=2.000000;
+elementLength3S[9+1]=0.50;
+mValues3verticalS[9+1]=2.000000;
+mValues3horizontalS[9+1]=2.000000;
+elementLength3S[10+1]=0.50;
+mValues3verticalS[10+1]=2.000000;
+mValues3horizontalS[10+1]=2.000000;
+elementLength3S[11+1]=0.50;
+mValues3verticalS[11+1]=2.000000;
+mValues3horizontalS[11+1]=2.000000;
+elementLength3S[12+1]=0.50;
+mValues3verticalS[12+1]=2.000000;
+mValues3horizontalS[12+1]=2.000000;
+elementLength3S[13+1]=0.50;
+mValues3verticalS[13+1]=1.500000;
+mValues3horizontalS[13+1]=2.000000;
+elementLength3S[14+1]=0.50;
+mValues3verticalS[14+1]=1.500000;
+mValues3horizontalS[14+1]=2.000000;
+elementLength3S[15+1]=0.50;
+mValues3verticalS[15+1]=1.500000;
+mValues3horizontalS[15+1]=2.000000;
+elementLength3S[16+1]=0.50;
+mValues3verticalS[16+1]=1.500000;
+mValues3horizontalS[16+1]=2.000000;
+elementLength3S[17+1]=0.50;
+mValues3verticalS[17+1]=1.500000;
+mValues3horizontalS[17+1]=2.000000;
+elementLength3S[18+1]=0.50;
+mValues3verticalS[18+1]=1.500000;
+mValues3horizontalS[18+1]=2.000000;
+elementLength3S[19+1]=0.50;
+mValues3verticalS[19+1]=1.500000;
+mValues3horizontalS[19+1]=2.000000;
+elementLength3S[20+1]=0.50;
+mValues3verticalS[20+1]=1.500000;
+mValues3horizontalS[20+1]=2.000000;
+elementLength3S[21+1]=0.50;
+mValues3verticalS[21+1]=1.500000;
+mValues3horizontalS[21+1]=2.000000;
+elementLength3S[22+1]=0.50;
+mValues3verticalS[22+1]=1.500000;
+mValues3horizontalS[22+1]=2.000000;
+elementLength3S[23+1]=0.50;
+mValues3verticalS[23+1]=1.500000;
+mValues3horizontalS[23+1]=1.500000;
+elementLength3S[24+1]=0.50;
+mValues3verticalS[24+1]=1.500000;
+mValues3horizontalS[24+1]=1.500000;
+elementLength3S[25+1]=0.50;
+mValues3verticalS[25+1]=1.500000;
+mValues3horizontalS[25+1]=1.500000;
+elementLength3S[26+1]=0.50;
+mValues3verticalS[26+1]=1.500000;
+mValues3horizontalS[26+1]=1.500000;
+elementLength3S[27+1]=0.50;
+mValues3verticalS[27+1]=1.500000;
+mValues3horizontalS[27+1]=1.500000;
+elementLength3S[28+1]=0.50;
+mValues3verticalS[28+1]=1.500000;
+mValues3horizontalS[28+1]=1.500000;
+elementLength3S[29+1]=0.50;
+mValues3verticalS[29+1]=1.500000;
+mValues3horizontalS[29+1]=1.500000;
+elementLength3S[30+1]=0.50;
+mValues3verticalS[30+1]=1.500000;
+mValues3horizontalS[30+1]=1.500000;
+elementLength3S[31+1]=0.50;
+mValues3verticalS[31+1]=1.500000;
+mValues3horizontalS[31+1]=1.500000;
+elementLength3S[32+1]=0.50;
+mValues3verticalS[32+1]=1.500000;
+mValues3horizontalS[32+1]=1.500000;
+elementLength3S[33+1]=0.50;
+mValues3verticalS[33+1]=1.500000;
+mValues3horizontalS[33+1]=1.500000;
+elementLength3S[34+1]=0.50;
+mValues3verticalS[34+1]=1.500000;
+mValues3horizontalS[34+1]=1.500000;
+elementLength3S[35+1]=0.50;
+mValues3verticalS[35+1]=1.500000;
+mValues3horizontalS[35+1]=1.500000;
+elementLength3S[36+1]=0.50;
+mValues3verticalS[36+1]=1.500000;
+mValues3horizontalS[36+1]=1.500000;
+elementLength3S[37+1]=0.50;
+mValues3verticalS[37+1]=1.500000;
+mValues3horizontalS[37+1]=1.500000;
+elementLength3S[38+1]=0.50;
+mValues3verticalS[38+1]=1.500000;
+mValues3horizontalS[38+1]=1.500000;
+elementLength3S[39+1]=0.50;
+mValues3verticalS[39+1]=1.500000;
+mValues3horizontalS[39+1]=1.500000;
+elementLength3S[40+1]=0.50;
+mValues3verticalS[40+1]=1.500000;
+mValues3horizontalS[40+1]=1.500000;
+elementLength3S[41+1]=0.50;
+mValues3verticalS[41+1]=1.500000;
+mValues3horizontalS[41+1]=1.500000;
+elementLength3S[42+1]=0.50;
+mValues3verticalS[42+1]=1.500000;
+mValues3horizontalS[42+1]=1.500000;
+elementLength3S[43+1]=0.50;
+mValues3verticalS[43+1]=1.500000;
+mValues3horizontalS[43+1]=1.500000;
+elementLength3S[44+1]=0.50;
+mValues3verticalS[44+1]=1.500000;
+mValues3horizontalS[44+1]=1.500000;
+elementLength3S[45+1]=0.50;
+mValues3verticalS[45+1]=1.500000;
+mValues3horizontalS[45+1]=1.500000;
+elementLength3S[46+1]=0.50;
+mValues3verticalS[46+1]=1.500000;
+mValues3horizontalS[46+1]=1.500000;
+elementLength3S[47+1]=0.50;
+mValues3verticalS[47+1]=1.500000;
+mValues3horizontalS[47+1]=1.500000;
+elementLength3S[48+1]=0.50;
+mValues3verticalS[48+1]=1.500000;
+mValues3horizontalS[48+1]=1.500000;
+elementLength3S[49+1]=0.50 - 0.0712; // Slightly shorter segment last
+mValues3verticalS[49+1]=1.500000;
+mValues3horizontalS[49+1]=1.500000;
+
+
+elementLength6S[0]=0.488444444444444;
+mValues6verticalS[0]=3.500000;
+mValues6horizontalS[0]=3.000000;
+elementLength6S[1]=0.488444444444444;
+mValues6verticalS[1]=3.500000;
+mValues6horizontalS[1]=3.000000;
+elementLength6S[2]=0.488444444444444;
+mValues6verticalS[2]=3.000000;
+mValues6horizontalS[2]=2.500000;
+elementLength6S[3]=0.488444444444444;
+mValues6verticalS[3]=3.000000;
+mValues6horizontalS[3]=2.500000;
+elementLength6S[4]=0.488444444444444;
+mValues6verticalS[4]=2.500000;
+mValues6horizontalS[4]=2.500000;
+elementLength6S[5]=0.488444444444444;
+mValues6verticalS[5]=2.500000;
+mValues6horizontalS[5]=2.000000;
+elementLength6S[6]=0.488444444444444;
+mValues6verticalS[6]=2.500000;
+mValues6horizontalS[6]=1.500000;
+
+elementLength6S[7]=0.061218888888892 ; // Shorter due to window #1
+mValues6verticalS[7]=2.500000;
+mValues6horizontalS[7]=1.500000;
+
+elementLength6S[8]=0.02349; // feeder window #1
+mValues6verticalS[8]=0;
+mValues6horizontalS[8]=0;
+
+elementLength6S[9]=0.488444444444444 - 0.061218888888892 - 0.02349; // End of piece 7 (the window and start of the mirror si substracted from its length)
+mValues6verticalS[9]=2.000000;
+mValues6horizontalS[9]=1.500000;
+
+elementLength6S[10]=0.076264444; // shorter due to window #2
+mValues6verticalS[10]=2.000000;
+mValues6horizontalS[10]=1.500000;
+
+elementLength6S[11]=0.015; // feeder window #2
+mValues6verticalS[11]=0;
+mValues6horizontalS[11]=0;
+
+elementLength6S[12]=0.488444444444444 - 0.015 - 0.076264444 - 0.00047; // End of Feeder (after window 2)
+mValues6verticalS[12]=2.0;
+mValues6horizontalS[12]=1.5;
+
+/************************************************/
+/*                  Chopper calculations                    */
+/************************************************/
+ 
+PulseHighFluxOffset=2.0e-4; // Time from T0 to high pulse.
+ModPulseLengthHighF=2.86e-3; // width of high pulse
+
+InstLength=162.0;
+chopPulseDist= 4.41+0.032+2.0-0.1;  // Distance fro moderator to Pulse chapping chopper
+//chopFrameOverlap1Pos= 2.0;    // Distance from pulse shapping choppers to first frame owerlap chopper
+//chopFrameOverlap2Pos=7.0;     // Distance from pulse shapping choppers to second frame owerlap chopper
+//chopBWPos=71.4403;           // Distance from pulse shapping choppers to tail romval chopper
+
+if  (chopPulseFrequencyOrder*chopPulseOpening > 170.0/360.0/14.0) {    /******* Check if pulse shapping chopper opening is large enough for requested frequency or reduce frequency *******/
+	 chopPulseFrequencyOrder=floor(170.0/360.0/14.0/chopPulseOpening);
+	printf(" \n \n Warning: Impossible combination of chopPulseFrequencyOrder and chopPulseOpening chosen, chopPulseFrequencyOrder reduced to: %f  \n", chopPulseFrequencyOrder);
+}
+
+lambda_1=1.0/(0.1106*sqrt(E_0));  /**** general chopper calculations **********/
+WavelengthBand = 1/(InstLength-chopPulseDist)/14.0/2.528e-4;
+lambda_0=lambda_1-WavelengthBand;
+v_0=3956.0/lambda_1;  
+v_1=3956.0/lambda_0;
+
+t_samp_center=PulseHighFluxOffset+ModPulseLengthHighF/2.0+(InstLength/v_1+InstLength/v_0)/2.0;
+t_samp_0=t_samp_center-1.0/14.0/2.0;
+t_samp_1=t_samp_center+1.0/14.0/2.0;
+
+/***********  Pulse shaping chopper calculations **********/
+chopPulseOffset=(chopPulseDist/v_1+chopPulseDist/v_0)/2.0+ModPulseLengthHighF/2.0+PulseHighFluxOffset;
+chopPulsePossibleOpening=chopPulseDist/v_0-chopPulseOffset;
+chopPulsePhaseOffset=  (chopPulseOffset+ chopPulseOpening/2.0)*14.0*chopPulseFrequencyOrder*360.0-170.0/2.0;
+chopPulse2PhaseOffset= chopPulsePhaseOffset- 360.0*(chopPulseOpening*14.0*chopPulseFrequencyOrder)+170.0;
+
+if  (chopPulseFrequencyOrder == 0) { 
+	chopPulsePhaseOffset= 0;
+	chopPulse2PhaseOffset= 0;
+		printf(" \n \n Warning: Pulse shaping chopper parked! Setting the offsets to zero");
+}
+
+
+/*********** Frame Overlap chopper calculations ******************/
+chopFrameOverlap1Open= 1.0/14.0/InstLength*(chopFrameOverlap1Pos)*1.5 ;
+chopFrameOverlap1Offset=(  ( (chopFrameOverlap1Pos)/v_1+(chopFrameOverlap1Pos)/v_0)/2.0+PulseHighFluxOffset+ModPulseLengthHighF/2.0) ;
+chopFrameOverlap1PhaseOffset=  (chopFrameOverlap1Offset)*14.0*360.0;
+
+chopFrameOverlap2Open= 1.0/14.0/InstLength*(chopFrameOverlap2Pos)*1.65 ;
+chopFrameOverlap2Offset=(  ( (chopFrameOverlap2Pos)/v_1+(chopFrameOverlap2Pos)/v_0)/2.0+PulseHighFluxOffset+ModPulseLengthHighF/2.0) ;
+chopFrameOverlap2PhaseOffset=  (chopFrameOverlap2Offset)*14.0*360.0;
+
+/********** Bandwidth chopper calculations ****************/
+
+//chopBW_t0= chopPulseOffset-chopPulseOpening/2.0 + (t_samp_0-(chopPulseOffset-chopPulseOpening/2.0)) / (InstLength-chopPulseDist) * (InstLength-chopBWPos) ;
+//chopBW_t1= chopPulseOffset+chopPulseOpening/2.0 + (t_samp_1-(chopPulseOffset+chopPulseOpening/2.0)) / (InstLength-chopPulseDist) * (InstLength-chopBWPos);
+chopBW_t0= PulseHighFluxOffset+ModPulseLengthHighF/2.0 + chopBWPos/v_1;
+chopBW_t1=  PulseHighFluxOffset+ModPulseLengthHighF/2.0 + chopBWPos/v_0;
+
+chopBWOpen= 360.0/InstLength*(chopBWPos-chopPulseDist*1); //Here Jonas put a multiplier on the choppulsedist
+chopBWOffset=(chopBW_t0+chopBW_t1)/2.0;
+chopBWPhaseOffset=  (chopBWOffset)*14.0*360.0;
+
+if (printMValues==1) {
+	// Will print all coating values to a file if this is toggled on 
+	FILE* fp = fopen("CoatingDistributions.txt", "w");
+	fprintf(fp,"Coating Distributions. From moderator towards sample:\n");
+	fprintf(fp,"m_horizontal , m_vertical , elementlength:\n");
+	fprintf(fp,"NBOA:\n");
+	for (i = 0 ; i < 13 ; i++){
+		fprintf(fp,"%f , %f , %f\n",mValues6horizontalS[i],mValues6verticalS[i],elementLength6S[i]);
+	}
+
+	fprintf(fp,"\nCurved section:\n");
+	fprintf(fp,"(%f,%f) , %f , %f\n",3.000000,3.500000,2.500000,18.0);
+	
+	fprintf(fp,"\nExpanding ellipse:\n");
+	for (i = 0 ; i < 51 ; i++){
+		fprintf(fp,"%f , %f , %f\n",mValues3horizontalS[i],mValues3verticalS[i],elementLength3S[i]);
+	}
+	
+	fprintf(fp,"\nLong Straight Section\n");
+	fprintf(fp,"%f , %f , %f\n",1.500000,1.000000,90.0);
+
+	fprintf(fp,"\nFocusing Ellipse\n");
+	for (i = 0 ; i < 41 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_1[i], mValues1vertical_part_1[i],elementLength1_part_1[i]);
+	}
+	fprintf(fp,"2 cm gap for divJaw 3\n");
+	for (i = 0 ; i < 3 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_2[i], mValues1vertical_part_2[i],elementLength1_part_2[i]);
+	}
+	fprintf(fp,"2 cm gap for divJaw 2\n");
+	for (i = 0 ; i < 2 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_3[i], mValues1vertical_part_3[i],elementLength1_part_3[i]);
+	}
+fprintf(fp,"2 cm gap for divJaw 1 \n");
+	for (i = 0 ; i < 3 ; i++){
+		fprintf(fp,"%f , %f , %f\n", mValues1horizontal_part_4[i], mValues1vertical_part_4[i],elementLength1_part_4[i]);
+	}
+
+
+fclose(fp);
+}
+
+
+printf("\n part 3 length: %f\n",DivSlit2Pos-DivSlit1Gap/2.0-DivSlit2Gap/2.0-DivSlit1Pos);
+printf("\n part 4 length: %f\n",DivSlit1Pos-DivSlit1Gap/2.0-sample_dist);
+/* Spatial positions for the mono blades - module 1*/
+FourUpPosX1 = -50.007;
+FourUpPosY1 = 34.582;
+ThreeUpPosX1 = -37.356;
+ThreeUpPosY1 = 26.154;
+TwoUpPosX1 = -24.803;
+TwoUpPosY1 = 17.581;
+OneUpPosX1 = -12.351;
+OneUpPosY1 = 8.862;
+OneDownPosX1 = 12.247;
+OneDownPosY1 = -9.004;
+TwoDownPosX1 = 24.390;
+TwoDownPosY1 = -18.150;
+ThreeDownPosX1 = 36.426;
+ThreeDownPosY1 = -27.435;
+FourDownPosX1 = 48.353;
+FourDownPosY1 = -36.859;
+ 
+/* Spatial positions for the mono blades - module 2*/
+FourUpPosX2 = -50.550;
+FourUpPosY2 = 36.386;
+ThreeUpPosX2 = -37.756;
+ThreeUpPosY2 = 27.509;
+TwoUpPosX2 = -25.065;
+TwoUpPosY2 = 18.485;
+OneUpPosX2 = -12.479;
+OneUpPosY2 = 9.315;
+OneDownPosX2 = 12.370;
+OneDownPosY2 = -9.459;
+TwoDownPosX2 = 24.630;
+TwoDownPosY2 = -19.060;
+ThreeDownPosX2 = 36.778;
+ThreeDownPosY2 = -28.802;
+FourDownPosX2 = 48.813;
+FourDownPosY2 = -38.685;
+
+/* Spatial positions for the mono blades - module 3*/
+FourUpPosX3 = -51.087;
+FourUpPosY3 = 38.165;
+ThreeUpPosX3 = -38.15;
+ThreeUpPosY3 = 28.846;
+TwoUpPosX3 = -25.323;
+TwoUpPosY3 = 19.378;
+OneUpPosX3 = -12.605;
+OneUpPosY3 = 9.762;
+OneDownPosX3 = 12.492;
+OneDownPosY3 = -9.907;
+TwoDownPosX3 = 24.868;
+TwoDownPosY3 = -19.958;
+ThreeDownPosX3 = 37.127;
+ThreeDownPosY3 = -30.152;
+FourDownPosX3 = 49.267;
+FourDownPosY3 = -40.487;
+ 
+sprintf(monopts1,"TOF limits=[%g %g] bins=%i, y bins=%i ",TOFmin,TOFmax,TOFbins,30);
+sprintf(monopts2,"TOF limits=[%g %g] bins=%i, y bins=%i ",TOFmin,TOFmax,TOFbins,30);
+sprintf(monopts3,"TOF limits=[%g %g] bins=%i, y bins=%i ",TOFmin,TOFmax,TOFbins,30);
+
+sprintf(monoptsevent,"TOF, y, user1,list all neutrons");
+
+%}
+TRACE
+
+COMPONENT Origin = Progress_bar()
+ AT (0,0,0) ABSOLUTE
+
+
+
+  COMPONENT Source=Source_div(xwidth=0.01,yheight=0.01,focus_aw=1.8,focus_ah=2,lambda0=(WaveMax+WaveMin)/2,dlambda=(WaveMax-WaveMin)/2)
+  AT (0,0,-0.005) ABSOLUTE
+EXTEND %{
+  Lthis = (2*PI/V2K)/sqrt(vx*vx + vy*vy + vz*vz);
+  Tmin=117200.0/1e6;
+  Tmax=181000/1e6;
+
+  /* Create the arrival time proportional to inverse wavelength */
+  t=Tmin+(Tmax-Tmin)*(Lthis-mcipWaveMin)/(mcipWaveMax-mcipWaveMin);
+  p*=3e12;
+%}
+COMPONENT Div2d_sample_B = Divergence_monitor(
+    nh = 200, nv = 200, filename = "Div2d_sample_B", xwidth = sampleSizeX,
+    yheight = sampleSizeY, maxdiv_h = 0.750000, maxdiv_v = 0.750000,restore_neutron=1)
+  AT (0,0, u) RELATIVE PREVIOUS
+  EXTEND
+    %{
+    x_div = RAD2DEG*atan2(vx,vz);
+    y_div = RAD2DEG*atan2(vy,vz);
+    if (SCATTERED) flag=1; else flag=0;
+    %}
+
+COMPONENT Div2d_sample = Divergence_monitor(
+    nh = 200, nv = 200, filename = "Div2d_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, maxdiv_h = 2.250000, maxdiv_v = 2.250000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT PSD_sample_large = PSD_monitor(
+    nx = 60, ny = 60, filename = "PSD_sample_large", restore_neutron=1,
+    xwidth = 6*sampleSizeX, yheight = 6*sampleSizeY)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT PSD_sample_small = PSD_monitor(
+    nx = 20, ny = 20, filename = "PSD_sample_small", restore_neutron=1,
+    xwidth = sampleSizeX, yheight = sampleSizeY)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT HPSD_sample = PSDlin_monitor(
+    nx = 100, filename="HPSD_sample",xwidth = 4*sampleSizeX, yheight = sampleSizeY, restore_neutron=1)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT VPSD_sample = PSDlin_y_monitor(
+    ny = 100, filename="VPSD_sample",xwidth = sampleSizeX, yheight = 4*sampleSizeY, restore_neutron=1)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Hdiv_sample = Hdiv_monitor(
+    nh = 200, filename = "Hdiv_sample", xwidth = sampleSizeX,
+    yheight = sampleSizeY, h_maxdiv = 2.250000, restore_neutron=1)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Vdiv_sample = Vdiv_monitor(
+    nv = 200, filename = "Vdiv_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, v_maxdiv = 2.250000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_x_divx = DivPos_monitor(
+   nh = 200, ndiv = 200, filename = "acceptance_x_divx",
+   xwidth = 2*sampleSizeX, yheight = sampleSizeY, maxdiv_h = 1.500000, restore_neutron=1)
+ AT (0, 0, u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_y_divy = DivPos_y_monitor(
+   npos = 200, ndiv = 200, filename = "acceptance_y_divy",
+   xwidth = sampleSizeX, yheight = 2*sampleSizeY, maxdiv = 1.500000, restore_neutron=1)
+ AT (0, 0, u) RELATIVE PREVIOUS
+
+COMPONENT Lmon_sample_B = L_monitor(
+    nL = 300, filename = "Lmon_sample_B", xwidth = 0.010000, restore_neutron=1,
+    yheight = 0.010000, Lmin = sampleSizeY, Lmax = 8.000000) WHEN flag
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Div2d_sample_maxdiv = Divergence_monitor(
+    nh = 200, nv = 200, filename = "Div2d_sample_maxdiv", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, maxdiv_h = 2.250000, maxdiv_v = 2.250000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT PSD_sample_maxdiv = PSD_monitor(
+    nx = 200, ny = 200, filename = "PSD_sample_maxdiv", restore_neutron=1,
+    xwidth = 3*sampleSizeX, yheight = 3*sampleSizeY) WHEN (x_div<0.750000 && x_div>-0.750000 && y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT HPSD_sample_maxdiv = PSDlin_monitor(
+    nx = 100, filename="HPSD_sample_maxdiv",xwidth = 4*sampleSizeX, yheight = sampleSizeY, restore_neutron=1)
+  WHEN (x_div<0.750000 && x_div>-0.750000 && y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT VPSD_sample_maxdiv = PSDlin_y_monitor(
+    ny = 100, filename="VPSD_sample_maxdiv",xwidth = sampleSizeX, yheight = 4*sampleSizeY, restore_neutron=1)
+  WHEN (x_div<0.750000 && x_div>-0.750000 && y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Hdiv_sample_maxdiv = Hdiv_monitor(
+    nh = 200, filename = "Hdiv_sample_maxdiv", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, h_maxdiv = 2.250000) WHEN (y_div<0.750000 && y_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT Vdiv_sample_maxdiv = Vdiv_monitor(
+    nv = 200, filename = "Vdiv_sample_maxdiv", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, v_maxdiv = 2.250000) WHEN (x_div<0.750000 && x_div>-0.750000)
+  AT (0, 0,u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_x_divx_maxdiv = DivPos_monitor(
+   nh = 200, ndiv = 200, filename = "acceptance_x_divx_maxdiv", restore_neutron=1,
+   xwidth = 2*sampleSizeX, yheight = sampleSizeY, maxdiv_h = 1.500000) WHEN (y_div<0.750000 && y_div>-0.750000)
+ AT (0, 0, u) RELATIVE PREVIOUS
+
+COMPONENT acceptance_y_divy_maxdiv = DivPos_y_monitor(
+   npos = 200, ndiv = 200, filename = "acceptance_y_divy_maxdiv", restore_neutron=1,
+   xwidth = sampleSizeX, yheight = 2*sampleSizeY, maxdiv = 1.500000) WHEN (x_div<0.750000 && x_div>-0.750000)
+ AT (0, 0, u) RELATIVE PREVIOUS
+  
+ COMPONENT ToFatSample = TOF_monitor(
+    nt = 2000, filename = "ToFatSample.dat",restore_neutron=1, xwidth = 0.1,
+    yheight = 0.1, tmax = 5.5*72.0*1e6/v_0)
+  AT (0, 0, u) RELATIVE  PREVIOUS
+  
+COMPONENT Lmon_sample = L_monitor(
+    nL = 400, filename = "Lmon_sample", xwidth = sampleSizeX, restore_neutron=1,
+    yheight = sampleSizeY, Lmin = 2, Lmax = 6)
+  AT (0, 0,u) RELATIVE PREVIOUS
+  
+COMPONENT TofLambdaSampleZoomOut = Monitor_nD( /* Check frame overlap. Remember to simulata a wide wavelength band and type "l" in pgplot to see the result on a logaritmic scale */
+    options="Lambda bins=500 limits=[0.5 120] TOF bins=500 limits=[0 5]",
+    filename = "TofLambdaSampleZoomOut.dat", xwidth = sampleSizeX,restore_neutron=1,
+    yheight = sampleSizeY)
+  AT (0, 0, 0) RELATIVE PREVIOUS
+  
+  COMPONENT L_monSampleZoomout = L_monitor(
+    nL = 1000, filename = "L_monsampleZoomOut.dat",restore_neutron=1, xwidth = 0.2,
+    yheight = 0.2, Lmin = lambda_0/2.0, Lmax = 200)
+  AT (0, 0, u) RELATIVE PREVIOUS
+
+
+COMPONENT SamplePos = Arm()
+AT (0, 0, 0) RELATIVE Origin
+EXTEND %{
+  Samplechoice=rand01();
+  flag_sample=0;
+%}
+  
+ 
+//V-sample
+COMPONENT v_sample = Incoherent(
+   radius=0.005, 
+   //thickness=0.002,
+   yheight = 0.01,
+   target_index=11,
+   focus_xw=sample_focusW, 
+   focus_yh=sample_focusH)
+WHEN (INCOH) AT (0, 0, 0.0) RELATIVE SamplePos
+  ROTATED (0,Omega,0) RELATIVE SamplePos
+EXTEND %{
+  if (mcipINCOH && mcipINCOHspread) {
+    double scale=rand01();
+    vx=vx*(1+scale);
+    vy=vy*(1+scale);
+    vz=vz*(1+scale);
+  }
+  if(SCATTERED) flag_sample=1;
+  %}
+  
+COMPONENT Magnon = Magnon_bcc(
+    radius=0.005,
+    yheight=0.01,
+    sigma_abs=0, 
+    sigma_inc=1, 
+    a=aa,  
+    J1=sample_J1, 
+    J2=sample_J2,
+    D=0.0,
+    s=1,
+    DW=1,
+    verbose=Verbose, 
+    T=TT, 
+    FM = FerroMagnet,
+    target_index=10,
+    focus_xw=sample_focusW, 
+    focus_yh=sample_focusH,focus_ef=focus_EF)
+  //focus_aw=180, /* For statistics considerations, only a small angular */
+  //focus_ah=20)   /* band arround sample is illuminated */
+  WHEN (!INCOH && inelastic>0 && Samplechoice<inelastic)  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0, Omega, 0) RELATIVE SamplePos
+EXTEND %{
+   p/=mcipinelastic;
+   p*=mcipimultiplier;
+   if(SCATTERED) flag_sample=2;
+%}
+
+
+COMPONENT Lattice = Single_crystal(order=1, 
+     reflections = "BCC_fake.lau", mosaic=30, radius = 0.005, yheight = 0.01,   delta_d_d=1e-3,
+     ax =-aa , ay = 0, az =0 , bx =0 , by =0, bz = aa , cx =0 , cy = aa , cz =0, barns=1)
+  WHEN (!INCOH && inelastic<1 && Samplechoice>=inelastic) AT ( 0, 0, 0) RELATIVE SamplePos
+  ROTATED (0, Omega, 0) RELATIVE SamplePos
+EXTEND %{
+   p/=(1-mcipinelastic);
+   // Remove direct beam
+   if(SCATTERED) flag_sample=3;
+%}
+
+COMPONENT RemoveDirect = Arm()
+AT (0,0,0) RELATIVE Magnon
+EXTEND %{
+  //if(!flag_sample) ABSORB;
+%}  
+
+  COMPONENT Sqqw = Arm()
+  //Sqq_w_monitor(filename="qa_vs_qb",nE=21,nqa=401,nqb=401,qamin=-4.5,qamax=4.5,qbmin=-4.5,qbmax=4.5,index=-5,Emin=-10, Emax=10, yheight=0.1)
+  AT (0,0,0) RELATIVE Magnon ROTATED (0,0,0) RELATIVE Magnon
+  
+COMPONENT det= PSD_monitor_4PI(radius=2.1, nx=360,ny=180,filename="psd", restore_neutron=1)
+AT (0,0,0) RELATIVE Magnon ROTATED (0,0,0) RELATIVE Magnon
+
+COMPONENT Sample_out1 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta,0) RELATIVE SamplePos
+
+  COMPONENT Sample_out2 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+10,0) RELATIVE SamplePos
+
+COMPONENT Sample_out3 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+20,0) RELATIVE SamplePos
+
+COMPONENT Sample_out4 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+30,0) RELATIVE SamplePos
+
+  COMPONENT Sample_out5 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+40,0) RELATIVE SamplePos
+
+    COMPONENT Target_focus=Arm()
+  AT (0,0,1) RELATIVE Sample_out5
+    
+COMPONENT Sample_out6 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+50,0) RELATIVE SamplePos
+
+COMPONENT Sample_out7 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+60,0) RELATIVE SamplePos
+
+  COMPONENT Sample_out8 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+70,0) RELATIVE SamplePos
+
+COMPONENT Sample_out9 = Arm()
+  AT (0,0,0) RELATIVE SamplePos
+  ROTATED (0,TwoTheta+80,0) RELATIVE SamplePos
+
+COMPONENT PSD_outgoing = Monitor_nD(radius=1.5, yheight= 0.3, options="banana theta bins=360 limits=[0 180] y bins=60")
+  AT (0,0,0) RELATIVE SamplePos
+  
+COMPONENT PSD_out1 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana1", restore_neutron=1)
+AT (0.0,0.0,1.544) RELATIVE Sample_out1
+  //GROUP outgoing
+  
+COMPONENT PSD_out2 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana2", restore_neutron=1)
+AT (0.0,0.0,1.623) RELATIVE Sample_out2
+  //GROUP outgoing
+
+COMPONENT PSD_out3 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana3", restore_neutron=1)
+AT (0.0,0.0,1.701) RELATIVE Sample_out3
+//GROUP outgoing
+
+  COMPONENT PSD_out4 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana4", restore_neutron=1)
+AT (0.0,0.0,1.544) RELATIVE Sample_out4
+  //GROUP outgoing
+  
+COMPONENT PSD_out5 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana5", restore_neutron=1)
+AT (0.0,0.0,1.623) RELATIVE Sample_out5
+  //GROUP outgoing
+
+COMPONENT PSD_out6 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana6", restore_neutron=1)
+AT (0.0,0.0,1.701) RELATIVE Sample_out6
+//GROUP outgoing
+
+  COMPONENT PSD_out7 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana7", restore_neutron=1)
+AT (0.0,0.0,1.544) RELATIVE Sample_out7
+  //GROUP outgoing
+  
+COMPONENT PSD_out8 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana8", restore_neutron=1)
+AT (0.0,0.0,1.623) RELATIVE Sample_out8
+  //GROUP outgoing
+
+COMPONENT PSD_out9 = PSD_monitor(xwidth=0.3, yheight=0.15, nx=100, ny=100, filename="PSD_before_ana9", restore_neutron=1)
+AT (0.0,0.0,1.701) RELATIVE Sample_out9
+//GROUP outgoing
+
+
+ 
+COMPONENT Zrot1 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE Sample_out1
+
+COMPONENT Mono_Cradle1 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot1
+  ROTATED (0,0,90) RELATIVE Zrot1
+
+COMPONENT Zrot2 = Arm()
+  AT (0.0, 0.0, 1.623) RELATIVE Sample_out2
+
+COMPONENT Mono_Cradle2 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot2
+  ROTATED (0,0,90) RELATIVE Zrot2
+
+COMPONENT Zrot3 = Arm()
+  AT (0.0, 0.0, 1.701) RELATIVE Sample_out3
+
+COMPONENT Mono_Cradle3 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot3
+  ROTATED (0,0,90) RELATIVE Zrot3
+
+COMPONENT Zrot4 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE Sample_out4
+
+COMPONENT Mono_Cradle4 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot4
+  ROTATED (0,0,90) RELATIVE Zrot4
+
+COMPONENT Zrot5 = Arm()
+  AT (0.0, 0.0, 1.623) RELATIVE Sample_out5
+
+COMPONENT Mono_Cradle5 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot5
+  ROTATED (0,0,90) RELATIVE Zrot5
+
+COMPONENT Zrot6 = Arm()
+  AT (0.0, 0.0, 1.701) RELATIVE Sample_out6
+
+COMPONENT Mono_Cradle6 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot6
+  ROTATED (0,0,90) RELATIVE Zrot6
+
+COMPONENT Zrot7 = Arm()
+  AT (0.0, 0.0, 1.544) RELATIVE Sample_out7
+
+COMPONENT Mono_Cradle7 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot7
+  ROTATED (0,0,90) RELATIVE Zrot7
+
+COMPONENT Zrot8 = Arm()
+  AT (0.0, 0.0, 1.623) RELATIVE Sample_out8
+
+COMPONENT Mono_Cradle8= Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot8
+  ROTATED (0,0,90) RELATIVE Zrot8
+
+COMPONENT Zrot9 = Arm()
+  AT (0.0, 0.0, 1.701) RELATIVE Sample_out9
+
+COMPONENT Mono_Cradle9 = Arm()
+  AT (0.0, 0.0, 0) RELATIVE Zrot9
+  ROTATED (0,0,90) RELATIVE Zrot9
+  
+
+COMPONENT monochromator_1_1 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (FourUpPosY1*0.001,  0, FourUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle1
+
+  
+COMPONENT monochromator_1_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (ThreeUpPosY1*0.001,  0, ThreeUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle1
+
+COMPONENT monochromator_1_3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (TwoUpPosY1*0.001,  0, TwoUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle1
+
+
+  COMPONENT monochromator_1_4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (OneUpPosY1*0.001,  0, OneUpPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle1
+  
+
+COMPONENT monochromator_1_5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0, 0, 0) RELATIVE Mono_Cradle1 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle1
+
+COMPONENT monochromator_1_6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (OneDownPosY1*0.001,  0, OneDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle1
+
+  COMPONENT monochromator_1_7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (TwoDownPosY1*0.001,  0, TwoDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle1
+
+
+  COMPONENT monochromator_1_8 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (ThreeDownPosY1*0.001,  0, ThreeDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle1
+
+  
+  COMPONENT monochromator_1_9 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi1,
+    yheight=0.1744,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (FourDownPosY1*0.001,  0, FourDownPosX1*0.001) RELATIVE Mono_Cradle1 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle1
+
+
+
+COMPONENT monochromator_2_1 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (FourUpPosY2*0.001,  0, FourUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle2
+
+  
+COMPONENT monochromator_2_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (ThreeUpPosY2*0.001,  0, ThreeUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle2
+
+COMPONENT monochromator_2_3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (TwoUpPosY2*0.001,  0, TwoUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle2
+
+
+  COMPONENT monochromator_2_4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (OneUpPosY2*0.001,  0, OneUpPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle2
+  
+
+COMPONENT monochromator_2_5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0, 0, 0) RELATIVE Mono_Cradle2 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle2
+
+COMPONENT monochromator_2_6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (OneDownPosY2*0.001,  0, OneDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle2
+
+  COMPONENT monochromator_2_7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (TwoDownPosY2*0.001,  0, TwoDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle2
+
+
+  COMPONENT monochromator_2_8 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (ThreeDownPosY2*0.001,  0, ThreeDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle2
+
+  
+  COMPONENT monochromator_2_9 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi2,
+    yheight=0.1816,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (FourDownPosY2*0.001,  0, FourDownPosX2*0.001) RELATIVE Mono_Cradle2 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle2
+
+  
+
+
+COMPONENT monochromator_3_1 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (FourUpPosY3*0.001,  0, FourUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle3
+
+  
+COMPONENT monochromator_3_2 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (ThreeUpPosY3*0.001,  0, ThreeUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle3
+
+COMPONENT monochromator_3_3 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (TwoUpPosY3*0.001,  0, TwoUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle3
+
+
+  COMPONENT monochromator_3_4 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (OneUpPosY3*0.001,  0, OneUpPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle3
+  
+
+COMPONENT monochromator_3_5 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+  AT (0, 0, 0) RELATIVE Mono_Cradle3 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle3
+
+COMPONENT monochromator_3_6 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (OneDownPosY3*0.001,  0, OneDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle3
+
+  COMPONENT monochromator_3_7 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (TwoDownPosY3*0.001,  0, TwoDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle3
+
+
+  COMPONENT monochromator_3_8 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (ThreeDownPosY3*0.001,  0, ThreeDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle3
+
+  
+  COMPONENT monochromator_3_9 = Monochromator_curved(
+    mosaich=60, 
+    mosaicv=60,
+    zwidth=wi3,
+    yheight=0.1886,
+    NH=1,
+    NV=1,
+    r0=0.7, 
+    DM=DM)
+AT (FourDownPosY3*0.001,  0, FourDownPosX3*0.001) RELATIVE Mono_Cradle3 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle3
+
+
+
+COMPONENT monochromator_4_1 = COPY(monochromator_1_1)
+  AT (FourUpPosY1*0.001,  0, FourUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle4
+  
+COMPONENT monochromator_4_2 = COPY(monochromator_1_2)
+  AT (ThreeUpPosY1*0.001,  0, ThreeUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle4
+
+COMPONENT monochromator_4_3 = COPY(monochromator_1_3)
+  AT (TwoUpPosY1*0.001,  0, TwoUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_4_4 = COPY(monochromator_1_4)
+AT (OneUpPosY1*0.001,  0, OneUpPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle4  
+
+COMPONENT monochromator_4_5 = COPY(monochromator_1_5)
+  AT (0, 0, 0) RELATIVE Mono_Cradle4 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_4_6 = COPY(monochromator_1_6)
+AT (OneDownPosY1*0.001,  0, OneDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle4
+
+
+  COMPONENT monochromator_4_7 = COPY(monochromator_1_7)
+AT (TwoDownPosY1*0.001,  0, TwoDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_4_8 = COPY(monochromator_1_8)
+AT (ThreeDownPosY1*0.001,  0, ThreeDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_4_9 = COPY(monochromator_1_9)
+AT (FourDownPosY1*0.001,  0, FourDownPosX1*0.001) RELATIVE Mono_Cradle4 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle4
+
+  COMPONENT monochromator_5_1 = COPY(monochromator_2_1)
+  AT (FourUpPosY2*0.001,  0, FourUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle5
+COMPONENT monochromator_5_2 = COPY(monochromator_2_2)
+  AT (ThreeUpPosY2*0.001,  0, ThreeUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle5
+
+COMPONENT monochromator_5_3 = COPY(monochromator_2_3)
+  AT (TwoUpPosY2*0.001,  0, TwoUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_4 = COPY(monochromator_2_4)
+AT (OneUpPosY2*0.001,  0, OneUpPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle5
+  
+COMPONENT monochromator_5_5 = COPY(monochromator_2_5)
+   AT (0, 0, 0) RELATIVE Mono_Cradle5 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_6 = COPY(monochromator_2_6)
+AT (OneDownPosY2*0.001,  0, OneDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_7 = COPY(monochromator_2_7)
+AT (TwoDownPosY2*0.001,  0, TwoDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_8 = COPY(monochromator_2_8)
+AT (ThreeDownPosY2*0.001,  0, ThreeDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle5
+
+  COMPONENT monochromator_5_9 = COPY(monochromator_2_9)
+AT (FourDownPosY2*0.001,  0, FourDownPosX2*0.001) RELATIVE Mono_Cradle5 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle5
+
+COMPONENT monochromator_6_1 = COPY(monochromator_3_1)
+  AT (FourUpPosY3*0.001,  0, FourUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle6
+  
+COMPONENT monochromator_6_2 = COPY(monochromator_3_2)
+  AT (ThreeUpPosY3*0.001,  0, ThreeUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle6
+
+COMPONENT monochromator_6_3 = COPY(monochromator_3_3)
+  AT (TwoUpPosY3*0.001,  0, TwoUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle6
+
+  COMPONENT monochromator_6_4 = COPY(monochromator_3_4)
+AT (OneUpPosY3*0.001,  0, OneUpPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle6
+  
+COMPONENT monochromator_6_5 = COPY(monochromator_3_5)
+  AT (0, 0, 0) RELATIVE Mono_Cradle6 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle6
+
+  COMPONENT monochromator_6_6 = COPY(monochromator_3_6)
+AT (OneDownPosY3*0.001,  0, OneDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle6
+
+  COMPONENT monochromator_6_7 = COPY(monochromator_3_7)
+AT (TwoDownPosY3*0.001,  0, TwoDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle6
+
+  COMPONENT monochromator_6_8 = COPY(monochromator_3_8)
+AT (ThreeDownPosY3*0.001,  0, ThreeDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle6
+
+
+  COMPONENT monochromator_6_9 = COPY(monochromator_3_9)
+AT (FourDownPosY3*0.001,  0, FourDownPosX3*0.001) RELATIVE Mono_Cradle6 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle6
+
+
+COMPONENT monochromator_7_1 = COPY(monochromator_1_1)
+  AT (FourUpPosY1*0.001,  0, FourUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle7
+  
+COMPONENT monochromator_7_2 = COPY(monochromator_1_2)
+  AT (ThreeUpPosY1*0.001,  0, ThreeUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle7
+
+COMPONENT monochromator_7_3 = COPY(monochromator_1_3)
+  AT (TwoUpPosY1*0.001,  0, TwoUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_7_4 = COPY(monochromator_1_4)
+AT (OneUpPosY1*0.001,  0, OneUpPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle7  
+
+COMPONENT monochromator_7_5 = COPY(monochromator_1_5)
+  AT (0, 0, 0) RELATIVE Mono_Cradle7 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_7_6 = COPY(monochromator_1_6)
+AT (OneDownPosY1*0.001,  0, OneDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle7
+
+
+  COMPONENT monochromator_7_7 = COPY(monochromator_1_7)
+AT (TwoDownPosY1*0.001,  0, TwoDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_7_8 = COPY(monochromator_1_8)
+AT (ThreeDownPosY1*0.001,  0, ThreeDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_7_9 = COPY(monochromator_1_9)
+AT (FourDownPosY1*0.001,  0, FourDownPosX1*0.001) RELATIVE Mono_Cradle7 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle7
+
+  COMPONENT monochromator_8_1 = COPY(monochromator_2_1)
+  AT (FourUpPosY2*0.001,  0, FourUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle8
+COMPONENT monochromator_8_2 = COPY(monochromator_2_2)
+  AT (ThreeUpPosY2*0.001,  0, ThreeUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle8
+
+COMPONENT monochromator_8_3 = COPY(monochromator_2_3)
+  AT (TwoUpPosY2*0.001,  0, TwoUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_4 = COPY(monochromator_2_4)
+AT (OneUpPosY2*0.001,  0, OneUpPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle8
+  
+COMPONENT monochromator_8_5 = COPY(monochromator_2_5)
+   AT (0, 0, 0) RELATIVE Mono_Cradle8 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_6 = COPY(monochromator_2_6)
+AT (OneDownPosY2*0.001,  0, OneDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_7 = COPY(monochromator_2_7)
+AT (TwoDownPosY2*0.001,  0, TwoDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_8 = COPY(monochromator_2_8)
+AT (ThreeDownPosY2*0.001,  0, ThreeDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle8
+
+  COMPONENT monochromator_8_9 = COPY(monochromator_2_9)
+AT (FourDownPosY2*0.001,  0, FourDownPosX2*0.001) RELATIVE Mono_Cradle8 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle8
+
+COMPONENT monochromator_9_1 = COPY(monochromator_3_1)
+  AT (FourUpPosY3*0.001,  0, FourUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-4*dphi),0) RELATIVE Mono_Cradle9
+  
+COMPONENT monochromator_9_2 = COPY(monochromator_3_2)
+  AT (ThreeUpPosY3*0.001,  0, ThreeUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-3*dphi),0) RELATIVE Mono_Cradle9
+
+COMPONENT monochromator_9_3 = COPY(monochromator_3_3)
+  AT (TwoUpPosY3*0.001,  0, TwoUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-2*dphi),0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_4 = COPY(monochromator_3_4)
+AT (OneUpPosY3*0.001,  0, OneUpPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA-dphi),0) RELATIVE Mono_Cradle9
+  
+COMPONENT monochromator_9_5 = COPY(monochromator_3_5)
+  AT (0, 0, 0) RELATIVE Mono_Cradle9 ROTATED (0,-OMA,0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_6 = COPY(monochromator_3_6)
+AT (OneDownPosY3*0.001,  0, OneDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+dphi),0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_7 = COPY(monochromator_3_7)
+AT (TwoDownPosY3*0.001,  0, TwoDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+2*dphi),0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_8 = COPY(monochromator_3_8)
+AT (ThreeDownPosY3*0.001,  0, ThreeDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+3*dphi),0) RELATIVE Mono_Cradle9
+
+  COMPONENT monochromator_9_9 = COPY(monochromator_3_9)
+AT (FourDownPosY3*0.001,  0, FourDownPosX3*0.001) RELATIVE Mono_Cradle9 ROTATED (0,-(OMA+4*dphi),0) RELATIVE Mono_Cradle9
+
+  
+
+   
+COMPONENT Mono_Out1 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle1 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle1
+
+COMPONENT Mono_Out2 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle2 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle2
+
+COMPONENT Mono_Out3 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle3 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle3
+
+  COMPONENT Mono_Out4 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle4 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle4
+
+    COMPONENT Mono_Out5 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle5 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle5
+
+  COMPONENT Mono_Out6 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle6 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle6
+
+  COMPONENT Mono_Out7 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle7 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle7
+
+  COMPONENT Mono_Out8 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle8 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle8
+
+  COMPONENT Mono_Out9 = Arm()
+AT (0,0,0) RELATIVE Mono_Cradle9 ROTATED(0,-TTA,0) RELATIVE Mono_Cradle9
+
+  
+/* 1st Shell of components around first set of analysers */
+/* Catching the scattered beam... */
+
+  
+COMPONENT psd_monitor1 = PSD_monitor(
+    filename="analyser1_psd", 
+    xwidth=0.04,
+    yheight=0.2976,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+ GROUP shell1
+  
+COMPONENT psd_monitor2 = PSD_monitor(
+    filename="analyser2_psd", 
+    xwidth=0.04,
+    yheight=0.3048,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell1
+  
+COMPONENT psd_monitor3 = PSD_monitor(
+    filename="analyser3_psd", 
+    xwidth=0.04,
+    yheight=0.3119,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell1
+
+  COMPONENT psd_monitor4 = COPY(psd_monitor1)(filename="analyser4_psd")
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+  GROUP shell1
+
+    COMPONENT psd_monitor5 = COPY(psd_monitor2)(filename="analyser5_psd")
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+  GROUP shell1
+
+    COMPONENT psd_monitor6 = COPY(psd_monitor3)(filename="analyser6_psd")
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+  GROUP shell1
+
+  COMPONENT psd_monitor7 = COPY(psd_monitor1)(filename="analyser7_psd")
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+  GROUP shell1
+
+    COMPONENT psd_monitor8 = COPY(psd_monitor2)(filename="analyser8_psd")
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+  GROUP shell1
+
+    COMPONENT psd_monitor9 = COPY(psd_monitor3)(filename="analyser9_psd")
+AT (0, 0, 1.623) RELATIVE Mono_Out9
+  GROUP shell1
+
+COMPONENT t_monitor1 = Monitor_nD(
+    filename="analyser1_tmon", 
+    xwidth=0.04,
+    yheight=0.2976,options=monopts1,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+GROUP shell3
+
+COMPONENT t_monitor2 = Monitor_nD(
+    filename="analyser2_tmon", 
+    xwidth=0.04,
+    yheight=0.3048,options=monopts2,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell3
+
+  COMPONENT t_monitor3 = Monitor_nD(
+    filename="analyser3_tmon", 
+    xwidth=0.04,
+    yheight=0.3119,options=monopts3,restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell3
+
+  COMPONENT t_monitor4 = COPY(t_monitor1)(filename="analyser4_tmon") 
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+GROUP shell3
+
+  COMPONENT t_monitor5 = COPY(t_monitor2)(filename="analyser5_tmon") 
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell3
+
+    COMPONENT t_monitor6 = COPY(t_monitor3)(filename="analyser6_tmon") 
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell3
+
+  COMPONENT t_monitor7 = COPY(t_monitor1)(filename="analyser7_tmon") 
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+GROUP shell3
+
+  COMPONENT t_monitor8 = COPY(t_monitor2)(filename="analyser8_tmon") 
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell3
+
+    COMPONENT t_monitor9 = COPY(t_monitor3)(filename="analyser9_tmon") 
+AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell3
+  
+  
+COMPONENT e_monitor1 = Monitor_nD(
+    filename="analyser1_emon", 
+    xwidth=0.04,
+    yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out1
+   GROUP shell2
+  
+COMPONENT e_monitor2 = Monitor_nD(
+    filename="analyser2_emon", 
+    xwidth=0.04,
+    yheight=0.3048,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out2
+GROUP shell2
+  
+COMPONENT e_monitor3 = Monitor_nD(
+    filename="analyser3_emon", 
+    xwidth=0.04,
+    yheight=0.3119,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out3
+GROUP shell2
+ 
+COMPONENT e_monitor4 = Monitor_nD(
+    filename="analyser4_emon", 
+    xwidth=0.04,
+   yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out4
+  GROUP shell2
+  
+COMPONENT e_monitor5 = Monitor_nD(
+    filename="analyser5_emon", 
+    xwidth=0.04,
+    yheight=0.3048,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out5
+GROUP shell2
+  
+COMPONENT e_monitor6 = Monitor_nD(
+    filename="analyser6_emon", 
+    xwidth=0.04,
+    yheight=0.3119,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out6
+GROUP shell2
+
+  COMPONENT e_monitor7 = Monitor_nD(
+    filename="analyser7_emon", 
+    xwidth=0.04,
+    yheight=0.2976,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out7
+  GROUP shell2
+  
+COMPONENT e_monitor8 = Monitor_nD(
+    filename="analyser8_emon", 
+    xwidth=0.04,
+    yheight=0.3048,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+AT (0, 0, 1.623) RELATIVE Mono_Out8
+GROUP shell2
+  
+COMPONENT e_monitor9 = Monitor_nD(
+    filename="analyser9_emon", 
+    xwidth=0.04,
+    yheight=0.3119,options="E bins=128 limits=[4.5 5.5]",restore_neutron=1)
+    AT (0, 0, 1.623) RELATIVE Mono_Out9
+GROUP shell2
+  
+FINALLY
+%{
+%}
+END
+
