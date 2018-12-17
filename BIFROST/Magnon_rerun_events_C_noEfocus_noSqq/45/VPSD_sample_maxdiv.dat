@@ -1,0 +1,179 @@
+# Format: McCode with text headers
+# URL: http://www.mccode.org
+# Creator: McStas 2.5beta01 - Nov. 03, 2018
+# Instrument: Full_simple_noSqq.instr
+# Ncount: 6250000
+# Trace: no
+# Gravitation: no
+# Seed: 1544458709
+# Directory: Magnon_rerun_events_C_noEfocus_noSqq/45
+# Nodes: 16
+# Param: WaveMin=2.75
+# Param: WaveMax=4.4
+# Param: E_0=4
+# Param: L_0=0
+# Param: chopPulseOpening=0.004
+# Param: DivSlit0_width=0.1
+# Param: DivSlit1_width=0.1
+# Param: DivSlit2_width=0.1
+# Param: DivSlit3_width=0.1
+# Param: Npulse=1
+# Param: print=0
+# Param: makeVirtualSource=0
+# Param: printMValues=0
+# Param: power=2
+# Param: BWopen=161
+# Param: OMA=37.072
+# Param: TTA=74.1432
+# Param: OMA2=30.628
+# Param: TTA2=61.256
+# Param: phi=37
+# Param: dphi=0.332
+# Param: MCPLfile=BIFROST_mcpl.gz
+# Param: ax=0
+# Param: ay=2.14
+# Param: az=-1.24
+# Param: bx=0
+# Param: by=0
+# Param: bz=2.47
+# Param: cx=6.71
+# Param: cy=0
+# Param: cz=0
+# Param: Omega=45
+# Param: TwoTheta=15
+# Param: lambda=10
+# Param: dlambda=9.9
+# Param: Rotation=0
+# Param: inelastic=1
+# Param: aa=6.28319
+# Param: sample_J1=1.5
+# Param: sample_J2=0
+# Param: TT=300
+# Param: FerroMagnet=0
+# Param: Verbose=0
+# Param: imultiplier=1
+# Param: INCOH=0
+# Param: INCOHspread=0
+# Param: sample_focusW=2.1
+# Param: sample_focusH=0.15
+# Param: focus_EF=0
+# Param: TOFmin=0.1172
+# Param: TOFmax=0.186
+# Param: TOFbins=256
+# Date: Mon Dec 10 06:40:15 2018 (1544420415)
+# type: array_1d(100)
+# Source: EGCESE (Full_simple_noSqq.instr)
+# component: VPSD_sample_maxdiv
+# position: 0 0 -0.00485
+# title: Linear PSD (y) monitor
+# Ncount: 100000000
+# filename: VPSD_sample_maxdiv.dat
+# statistics: X0=3.71956e-07; dX=0.00289132;
+# signal: Min=0; Max=1.3583e+08; Mean=3.39197e+07;
+# values: 3.39197e+09 429088 6.24902e+07
+# xvar: y
+# yvar: (I,I_err)
+# xlabel: y-Position [m]
+# ylabel: Intensity
+# xlimits: -0.02 0.02
+# variables: y I I_err N
+-0.0198 0 0 0 
+-0.0194 0 0 0 
+-0.019 0 0 0 
+-0.0186 0 0 0 
+-0.0182 0 0 0 
+-0.0178 0 0 0 
+-0.0174 0 0 0 
+-0.017 0 0 0 
+-0.0166 0 0 0 
+-0.0162 0 0 0 
+-0.0158 0 0 0 
+-0.0154 0 0 0 
+-0.015 0 0 0 
+-0.0146 0 0 0 
+-0.0142 0 0 0 
+-0.0138 0 0 0 
+-0.0134 0 0 0 
+-0.013 0 0 0 
+-0.0126 0 0 0 
+-0.0122 0 0 0 
+-0.0118 0 0 0 
+-0.0114 0 0 0 
+-0.011 0 0 0 
+-0.0106 0 0 0 
+-0.0102 0 0 0 
+-0.0098 0 0 0 
+-0.0094 0 0 0 
+-0.009 0 0 0 
+-0.0086 0 0 0 
+-0.0082 0 0 0 
+-0.0078 0 0 0 
+-0.0074 0 0 0 
+-0.007 0 0 0 
+-0.0066 0 0 0 
+-0.0062 0 0 0 
+-0.0058 0 0 0 
+-0.0054 0 0 0 
+-0.005 67767036.91 60649.80951 1248470 
+-0.0046 135565610.5 85781.76149 2497521 
+-0.0042 135759716.1 85843.15153 2501097 
+-0.0038 135651915.9 85809.06282 2499111 
+-0.0034 135638074.4 85804.68489 2498856 
+-0.003 135694254.3 85822.45275 2499891 
+-0.0026 135642634 85806.12705 2498940 
+-0.0022 135794835.3 85854.25405 2501744 
+-0.0018 135685949.5 85819.82643 2499738 
+-0.0014 135569681.5 85783.04948 2497596 
+-0.001 135830497.3 85865.52669 2502401 
+-0.0006 135594813.2 85791.00027 2498059 
+-0.0002 135611043 85796.1344 2498358 
+0.0002 135636120.4 85804.06681 2498820 
+0.0006 135774914.5 85847.9565 2501377 
+0.001 135640571.3 85805.47465 2498902 
+0.0014 135675853.4 85816.63354 2499552 
+0.0018 135695122.8 85822.72739 2499907 
+0.0022 135673030.8 85815.74088 2499500 
+0.0026 135645456.5 85807.01981 2498992 
+0.003 135675093.4 85816.39321 2499538 
+0.0034 135786204.7 85851.52574 2501585 
+0.0038 135665051.6 85813.21735 2499353 
+0.0042 135811119.3 85859.40156 2502044 
+0.0046 135707173 85826.53798 2500129 
+0.005 67781204.01 60656.14878 1248731 
+0.0054 0 0 0 
+0.0058 0 0 0 
+0.0062 0 0 0 
+0.0066 0 0 0 
+0.007 0 0 0 
+0.0074 0 0 0 
+0.0078 0 0 0 
+0.0082 0 0 0 
+0.0086 0 0 0 
+0.009 0 0 0 
+0.0094 0 0 0 
+0.0098 0 0 0 
+0.0102 0 0 0 
+0.0106 0 0 0 
+0.011 0 0 0 
+0.0114 0 0 0 
+0.0118 0 0 0 
+0.0122 0 0 0 
+0.0126 0 0 0 
+0.013 0 0 0 
+0.0134 0 0 0 
+0.0138 0 0 0 
+0.0142 0 0 0 
+0.0146 0 0 0 
+0.015 0 0 0 
+0.0154 0 0 0 
+0.0158 0 0 0 
+0.0162 0 0 0 
+0.0166 0 0 0 
+0.017 0 0 0 
+0.0174 0 0 0 
+0.0178 0 0 0 
+0.0182 0 0 0 
+0.0186 0 0 0 
+0.019 0 0 0 
+0.0194 0 0 0 
+0.0198 0 0 0 
